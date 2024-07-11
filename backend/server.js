@@ -20,61 +20,61 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 // קריאת הנתונים מקובץ האקסל
-// const workbook = xlsx.readFile('backend/employeesUpdated.xlsx');
-// const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-// const data = xlsx.utils.sheet_to_json(worksheet);
+const workbook = xlsx.readFile('C:/Users/benal/Desktop/‏‏themeforest-psinWIdw-smarthr-react-an-template - עותק/react/template/backend/employeesUpdated.xlsx');
+const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+const data = xlsx.utils.sheet_to_json(worksheet);
 
-// // סכמה של עובד
-// const employeeSchema = new mongoose.Schema({
-//   fullName: String,
-//   employeeOfManagerId: String,
-//   id: String,
-//   role: String,
-//   DataOfBirth: String,
-//   PlaceOfResidence: String,
-//   FamilyStatus: String,
-//   NumOfChildren: Number,
-//   YearsInTheCompany: Number,
-//   Anniversary: String,
-//   LastestActivity: Array,
-//   InterestingFact: String,
-//   ClosestPersonalEvent: Array,
-//   singers: Array,
-//   FoodAndDrinks: Array,
-//   Restaurants: Array,
-//   Hobbys: Array,
-//   TopInsights: Array,
-//   LatestInfo: Array,
-// });
+// סכמה של עובד
+const employeeSchema = new mongoose.Schema({
+  fullName: String,
+  employeeOfManagerId: String,
+  id: String,
+  role: String,
+  DataOfBirth: String,
+  PlaceOfResidence: String,
+  FamilyStatus: String,
+  NumOfChildren: Number,
+  YearsInTheCompany: Number,
+  Anniversary: String,
+  LastestActivity: Array,
+  InterestingFact: String,
+  ClosestPersonalEvent: Array,
+  singers: Array,
+  FoodAndDrinks: Array,
+  Restaurants: Array,
+  Hobbys: Array,
+  TopInsights: Array,
+  LatestInfo: Array,
+});
 
-// const Employee = mongoose.model('Employee', employeeSchema);
+const Employee = mongoose.model('Employee', employeeSchema);
 
-// הוספת הנתונים מהאקסל למסד הנתונים
-// data.forEach(async (row) => {
-//   const employee = new Employee({
-//     fullName: row.fullName,
-//     employeeOfManagerId: row.employeeOfManagerId,
-//     id: row.id,
-//     role: row.role,
-//     DataOfBirth: row.DataOfBirth,
-//     PlaceOfResidence: row.PlaceOfResidence,
-//     FamilyStatus: row.FamilyStatus,
-//     NumOfChildren: row.NumOfChildren,
-//     YearsInTheCompany: row.YearsInTheCompany,
-//     Anniversary: row.Anniversary,
-//     LastestActivity: row.LastestActivity || [],
-//     InterestingFact: row.InterestingFact,
-//     ClosestPersonalEvent: row.ClosestPersonalEvent || [],
-//     singers: row.singers ,
-//     FoodAndDrinks: row.FoodAndDrinks || [],
-//     Restaurants: row.Restaurants || [],
-//     Hobbys: row.Hobbys || [],
-//     TopInsights: row.TopInsights || [],
-//     LatestInfo: row.LatestInfo || []
-//   });
+הוספת הנתונים מהאקסל למסד הנתונים
+data.forEach(async (row) => {
+  const employee = new Employee({
+    fullName: row.fullName,
+    employeeOfManagerId: row.employeeOfManagerId,
+    id: row.id,
+    role: row.role,
+    DataOfBirth: row.DataOfBirth,
+    PlaceOfResidence: row.PlaceOfResidence,
+    FamilyStatus: row.FamilyStatus,
+    NumOfChildren: row.NumOfChildren,
+    YearsInTheCompany: row.YearsInTheCompany,
+    Anniversary: row.Anniversary,
+    LastestActivity: row.LastestActivity || [],
+    InterestingFact: row.InterestingFact,
+    ClosestPersonalEvent: row.ClosestPersonalEvent || [],
+    singers: row.singers ,
+    FoodAndDrinks: row.FoodAndDrinks || [],
+    Restaurants: row.Restaurants || [],
+    Hobbys: row.Hobbys || [],
+    TopInsights: row.TopInsights || [],
+    LatestInfo: row.LatestInfo || []
+  });
 
-//   await employee.save();
-// });
+  await employee.save();
+});
 
 // יצירת מודל של מנהל
 const Manager = mongoose.model("User", {
