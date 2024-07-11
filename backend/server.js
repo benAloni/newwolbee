@@ -7,6 +7,7 @@ const cors = require("cors");
 app.use(cors());
 const path = require('path');
 const xlsx = require('xlsx');
+const fs = require('fs'); // הוספת ייבוא המודול fs
 
 // התחברות לבסיס הנתונים
 const dbURL = "mongodb+srv://benaloni230:asdf123123@cluster0.3kuoij5.mongodb.net/wolbeedb'";
