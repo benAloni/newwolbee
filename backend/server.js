@@ -15,7 +15,7 @@ mongoose.connect(dbURL, { useNewUrlParser: true, useUnifiedTopology: true })
   .catch((error) => console.error("Error connecting to DB:", error));
 
 const corsOptions = {
-  origin: 'http://www.wolbee.com/,https://wolbee-front-gkfchuwp6q-uc.a.run.app' // Replace this with your frontend URL
+ origin: ['http://www.wolbee.com', 'https://wolbee-front-gkfchuwp6q-uc.a.run.app'] // Replace this with your frontend URL
 };
 app.use(cors(corsOptions));
 
