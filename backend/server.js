@@ -20,9 +20,16 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 // קריאת הנתונים מקובץ האקסל
-const workbook = xlsx.readFile('C:/Users/benal/Desktop/‏‏themeforest-psinWIdw-smarthr-react-an-template - עותק/react/template/backend/employeesUpdated.xlsx');
+const filePath = path.join(__dirname, 'employeesUpdated.xlsx');
+if (!fs.existsSync(filePath)) {
+  console.error('File not found:', filePath);
+  process.exit(1);
+}
+
+const workbook = xlsx.readFile(filePath);
 const worksheet = workbook.Sheets[workbook.SheetNames[0]];
 const data = xlsx.utils.sheet_to_json(worksheet);
+
 
 // סכמה של עובד
 const employeeSchema = new mongoose.Schema({
