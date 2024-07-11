@@ -49,7 +49,7 @@ const employeeSchema = new mongoose.Schema({
 
 const Employee = mongoose.model('Employee', employeeSchema);
 
-הוספת הנתונים מהאקסל למסד הנתונים
+// הוספת הנתונים מהאקסל למסד הנתונים
 data.forEach(async (row) => {
   const employee = new Employee({
     fullName: row.fullName,
