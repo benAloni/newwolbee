@@ -28,32 +28,38 @@ export const ProjectDetails = () => {
   }
 
   const circleContainerStyle = {
-    width: '120px',
-    margin: '10px',
+    width: '120px', // הגדלת הגודל
+    height: '120px', // הגדלת הגודל
+    margin: '15px', // התאמת המרווח
     position: 'relative',
     transition: 'transform 0.3s ease',
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
     borderRadius: '50%',
     overflow: 'hidden',
   };
-
+  
   const circleTextStyle = {
-    fontSize: '12px',
+    fontSize: '14px', // הגדלת גודל הפונט
     color: '#333',
     textAlign: 'center',
     fontWeight: 'bold',
-    height:'20px',
-    marginTop:'30px'
-    
+    marginBottom: '10px',
   };
-
+  
   const wrapperStyle = {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     flexWrap: 'wrap',
-    gap: '20px',
+    gap: '25px', // התאמת המרווח
   };
+  
+  // const getColor = (value) => {
+  //   if (value > 75) return '#f44336';
+  //   if (value > 50) return '#8bc34a';
+  //   if (value > 25) return '#9c27b0';
+  //   return '#03a9f4';
+  // };
 
   const experienceData = [
     {
@@ -123,6 +129,19 @@ export const ProjectDetails = () => {
     borderRadius:'10px'
   };
 
+  const getValue = (importance) => {
+  switch (importance) {
+    case 'High':
+      return 100; // מלא
+    case 'Medium':
+      return 50; // חצי מלא
+    case 'Low':
+      return 25; // רבע מלא
+    default:
+      return 0; // ריק
+  }
+};
+
 
   return (
     <div className="tab-content">
@@ -173,139 +192,138 @@ export const ProjectDetails = () => {
         
            </div>
           </div>
-    
+
           <div className="col-md-6 d-flex" style={{ width: '450px' }}>
-            <div className="card profile-box flex-fill">
-              <div className="card-body">
-              <h3 style={titleStyle}>Lastest Activity</h3>
-<hr />
-
-    <div className="experience-box">
-    <div style={{marginLeft: '15px'}}>
-           {selectedEmployee.LastestActivity.map((insight, index) => {
-                  let parsedInsigh;
-                  try {
-                    parsedInsigh = JSON.parse(insight);
-                  } catch (error) {
-                    console.error("Failed to parse TopInsights JSON:", error);
-                    parsedInsigh = {}; // או כל ברירת מחדל
-                  }
-                  return Object.values(parsedInsigh).map((info, i) => (
-                    <div key={`${index}-${i}`} >
-                    <br ></br>
-                     <span className="arrow">▼</span>
-                      {info}</div>
-                  ));
-                })}
-           </div>
- </div>
-
- {/* <ul className="experience-list">
-    {selectedEmployee.LastestActivity.map((item, index) => (
-      <li key={index}>
-        <div className="experience-user">
-          <div className="before-circle" />
-        </div>
-        <div className="experience-content">
-          <div className="timeline-content">
-            <Link to="/" className="name">
-              {item.date}
-            </Link>
-            <span className="time">{item.Activity}</span>
-          </div>
-        </div>
-      </li>
-    ))}
-  </ul> */}
-
-              </div>
+      <div className="card profile-box flex-fill">
+        <div className="card-body">
+          <h3 style={{ fontWeight: 'bold', fontSize: '24px' }}>Latest Activity</h3>
+          <hr />
+          <div className="experience-box">
+            <div style={{ marginLeft: '15px' }}>
+              {selectedEmployee.LastestActivity.map((insight, index) => {
+                let parsedInsight;
+                try {
+                  parsedInsight = JSON.parse(insight);
+                } catch (error) {
+                  console.error("Failed to parse TopInsights JSON:", error);
+                  parsedInsight = {}; // או כל ברירת מחדל
+                }
+                const entries = Object.entries(parsedInsight);
+                return entries.map(([key, value], i) => (
+                  <div key={`${index}-${i}`} style={{ marginBottom: (i % 2 === 1) ? '20px' : '0', display: 'flex', alignItems: 'center' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginRight: '10px' }}>
+                      <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#000' }}></div>
+                      {i % 2 === 0 && i < entries.length - 1 && (
+                        <div style={{ width: '2px', height: '20px', backgroundColor: '#000' }}></div>
+                      )}
+                    </div>
+                    <div>
+                      {i % 2 === 0 ? (
+                        <div style={{ fontWeight: 'bold' }}>{value}</div>
+                      ) : (
+                        <div>{value}</div>
+                      )}
+                    </div>
+                  </div>
+                ));
+              })}
             </div>
-          </div>
-        </div>
-        <div style={wrapperStyle}>
-          <div style={circleContainerStyle}>
-            <h4 style={circleTextStyle}>Management</h4>
-            <CircularProgressbar
-              value={100}
-              text={importanceLevels.management}
-              styles={buildStyles({
-                textSize: '10px',
-                textColor: 'black',
-                pathColor: getColor(importanceLevels.management),
-                trailColor: '#d6d6d6',
-                pathTransitionDuration: 0.5,
-                trailTransitionDuration: 0.5,
-                pathTransition: 'stroke-dashoffset 0.5s ease 0s',
-              })}
-            />
-          </div>
-          <div style={circleContainerStyle}>
-            <h4 style={circleTextStyle}>Turnover</h4>
-            <CircularProgressbar
-              value={100}
-              text={importanceLevels.turnover}
-              styles={buildStyles({
-                textSize: '10px',
-                textColor: 'black',
-                pathColor: getColor(importanceLevels.turnover),
-                trailColor: '#d6d6d6',
-                pathTransitionDuration: 0.5,
-                trailTransitionDuration: 0.5,
-                pathTransition: 'stroke-dashoffset 0.5s ease 0s',
-              })}
-            />
-          </div>
-          <div style={circleContainerStyle}>
-            <h4 style={circleTextStyle}>Work-Life</h4>
-            <CircularProgressbar
-              value={100}
-              text={importanceLevels.workLifeBalance}
-              styles={buildStyles({
-                textSize: '10px',
-                textColor: 'black',
-                pathColor: getColor(importanceLevels.workLifeBalance),
-                trailColor: '#d6d6d6',
-                pathTransitionDuration: 0.5,
-                trailTransitionDuration: 0.5,
-                pathTransition: 'stroke-dashoffset 0.5s ease 0s',
-              })}
-            />
-          </div>
-          <div style={circleContainerStyle}>
-            <h4 style={circleTextStyle}>Managerial</h4>
-            <CircularProgressbar
-              value={100}
-              text={importanceLevels.managerialAttention}
-              styles={buildStyles({
-                textSize: '10px',
-                textColor: 'black',
-                pathColor: getColor(importanceLevels.managerialAttention),
-                trailColor: '#d6d6d6',
-                pathTransitionDuration: 0.5,
-                trailTransitionDuration: 0.5,
-                pathTransition: 'stroke-dashoffset 0.5s ease 0s',
-              })}
-            />
-          </div>
-          <div style={circleContainerStyle}>
-            <h4 style={circleTextStyle}>Professional</h4>
-            <CircularProgressbar
-              value={100}
-              text={importanceLevels.professionalism}
-              styles={buildStyles({
-                textSize: '10px',
-                textColor: 'black',
-                pathColor: getColor(importanceLevels.professionalism),
-                trailColor: '#d6d6d6',
-                pathTransitionDuration: 0.5,
-                trailTransitionDuration: 0.5,
-                pathTransition: 'stroke-dashoffset 0.5s ease 0s',
-              })}
-            />
           </div>
         </div>
       </div>
     </div>
+
+
+
+
+
+
+        </div>
+        <div style={wrapperStyle}>
+            <div style={{ textAlign: 'center' }}>
+              <h4 style={circleTextStyle}>Management</h4>
+              <div style={circleContainerStyle}>
+                <CircularProgressbar
+                  value={getValue(importanceLevels.management)}
+                  text={`${importanceLevels.management}`}
+                  styles={buildStyles({
+                    textSize: '20px',
+                    textColor: getColor(importanceLevels.management),
+                    pathColor: getColor(importanceLevels.management),
+                    trailColor: '#d6d6d6',
+                    pathTransitionDuration: 0.5,
+                  })}
+                />
+              </div>
+            </div>
+            <div style={{ textAlign: 'center' }}>
+              <h4 style={circleTextStyle}>Turnover</h4>
+              <div style={circleContainerStyle}>
+                <CircularProgressbar
+                  value={getValue(importanceLevels.turnover)}
+                  text={`${importanceLevels.turnover}`}
+                  styles={buildStyles({
+                    textSize: '20px',
+                    textColor: getColor(importanceLevels.turnover),
+                    pathColor: getColor(importanceLevels.turnover),
+                    trailColor: '#d6d6d6',
+                    pathTransitionDuration: 0.5,
+                  })}
+                />
+              </div>
+            </div>
+            <div style={{ textAlign: 'center' }}>
+              <h4 style={circleTextStyle}>Work-Life</h4>
+              <div style={circleContainerStyle}>
+                <CircularProgressbar
+                  value={getValue(importanceLevels.workLifeBalance)}
+                  text={`${importanceLevels.workLifeBalance}`}
+                  styles={buildStyles({
+                    textSize: '20px',
+                    textColor: getColor(importanceLevels.workLifeBalance),
+                    pathColor: getColor(importanceLevels.workLifeBalance),
+                    trailColor: '#d6d6d6',
+                    pathTransitionDuration: 0.5,
+                  })}
+                />
+              </div>
+            </div>
+            <div style={{ textAlign: 'center' }}>
+              <h4 style={circleTextStyle}>Managerial</h4>
+              <div style={circleContainerStyle}>
+                <CircularProgressbar
+                  value={getValue(importanceLevels.managerialAttention)}
+                  text={`${importanceLevels.managerialAttention}`}
+                  styles={buildStyles({
+                    textSize: '20px',
+                    textColor: getColor(importanceLevels.managerialAttention),
+                    pathColor: getColor(importanceLevels.managerialAttention),
+                    trailColor: '#d6d6d6',
+                    pathTransitionDuration: 0.5,
+                  })}
+                />
+              </div>
+            </div>
+            <div style={{ textAlign: 'center' }}>
+              <h4 style={circleTextStyle}>Professional</h4>
+              <div style={circleContainerStyle}>
+                <CircularProgressbar
+                  value={getValue(importanceLevels.professionalism)}
+                  text={`${importanceLevels.professionalism}`}
+                  styles={buildStyles({
+                    textSize: '20px',
+                    textColor: getColor(importanceLevels.professionalism),
+                    pathColor: getColor(importanceLevels.professionalism),
+                    trailColor: '#d6d6d6',
+                    pathTransitionDuration: 0.5,
+                  })}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  
   );
 };
 
