@@ -15,13 +15,13 @@ import {
 
 
 const linechartdata = [
-  { y: "Jan", "Sick Leave": 4, "Vacation Days": 5, "Average Arrivel on Time": 20, "Number 2": 15 },
-  { y: "Feb", "Sick Leave": 2, "Vacation Days": 2, "Average Arrivel on Time": 24, "Number 2": 13 },
-  { y: "March", "Sick Leave": 0, "Vacation Days": 3, "Average Arrivel on Time": 22, "Number 2": 16 },
-  { y: "April", "Sick Leave": 0, "Vacation Days": 0, "Average Arrivel on Time": 21, "Number 2": 14 },
-  { y: "May", "Sick Leave": 0, "Vacation Days": 1, "Average Arrivel on Time": 20, "Number 2": 16 },
-  { y: "June", "Sick Leave": 0, "Vacation Days": 6, "Average Arrivel on Time": 21, "Number 2": 18 },
-  { y: "July", "Sick Leave": 0, "Vacation Days": 0, "Average Arrivel on Time": 26, "Number 2": 19 },
+  { y: "Jan", "Sick Leave": 4, "Vacation Days": 5, "Average Arrivel on Time": 20},
+  { y: "Feb", "Sick Leave": 2, "Vacation Days": 2, "Average Arrivel on Time": 24},
+  { y: "March", "Sick Leave": 0, "Vacation Days": 3, "Average Arrivel on Time": 22},
+  { y: "April", "Sick Leave": 0, "Vacation Days": 0, "Average Arrivel on Time": 21},
+  { y: "May", "Sick Leave": 0, "Vacation Days": 1, "Average Arrivel on Time": 20},
+  { y: "June", "Sick Leave": 0, "Vacation Days": 6, "Average Arrivel on Time": 2 },
+  { y: "July", "Sick Leave": 0, "Vacation Days": 0, "Average Arrivel on Time": 26},
 ];
 
 
@@ -69,7 +69,7 @@ const JohnStatistics = () => {
                         dot={{ r: 3 }}
                         activeDot={{ r: 7 }}
                       />
-                      <Line
+                      {/* <Line
                         type="monotone"
                         dataKey="Number 2"
                         stroke="#fc6075"
@@ -77,7 +77,7 @@ const JohnStatistics = () => {
                         strokeWidth={3}
                         dot={{ r: 3 }}
                         activeDot={{ r: 7 }}
-                      />
+                      /> */}
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
