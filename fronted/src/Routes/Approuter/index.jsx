@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import {BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import AppContainer from "../Appcontainer";
 import store from "../../store";
 import { Provider } from "react-redux";
@@ -36,7 +36,6 @@ import Spinners from "../../views/pages/Ui_Interface/Components/Spinners";
 import SweetAlert from "../../views/pages/Ui_Interface/Components/SweetAlert";
 import Tabs from "../../views/pages/Ui_Interface/Components/Tabs";
 import Toats from "../../views/pages/Ui_Interface/Components/Toats";
-// import Tooltip from "../../views/pages/Ui_Interface/Components/Tooltip";
 import Sidebar from "../../views/layout/Sidebar";
 import Typography from "../../views/pages/Ui_Interface/Components/Typography";
 import Videos from "../../views/pages/Ui_Interface/Components/Videos";
@@ -57,9 +56,10 @@ import { SidebarData } from "../../views/layout/sidebardata";
 import PopUp from "../../views/pages/Employees/PopUp";
 import UserSettings from "../../views/pages/Authentication/UserSettings";
 import MyDashboard from "../../views/pages/MainPages/Dashboard/AdminDashboard/MyDashboard";
+
 const ScrollToTop = () => {
   const { pathname } = useLocation();
-
+  
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
@@ -67,74 +67,82 @@ const ScrollToTop = () => {
   return null;
 };
 
+const AppContent = () => {
+  const location = useLocation();
+
+  return (
+    <>
+      {location.pathname !== '/' && <PopUp />}
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/myDashboard" element={<MyDashboard />} />
+        <Route path="/change-password" element={<ChangePassword />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/otp" element={<Otp />} />
+        <Route path="/error-404" element={<Error404 />} />
+        <Route path="/error-500" element={<Error500 />} />
+        <Route path="/coming-soon" element={<ComingSoon />} />
+        <Route path="/under-maintenance" element={<UnderManitenance />} />
+        <Route path="/sidebar" element={<Sidebar />} data={SidebarData} />
+        <Route path="/job-list" element={<JobList />} />
+        <Route path="/job-view" element={<JobView />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/lock-screen" element={<LockScreen />} />
+        <Route path="/accordion" element={<Accordions />} />
+        <Route path="/alerts" element={<Alerts />} />
+        <Route path="/breadcrumbs" element={<Breadcrumbs />} />
+        <Route path="/avatar" element={<Avatar />} />
+        <Route path="/badges" element={<Badges />} />
+        <Route path="/buttons" element={<ButtonCard />} />
+        <Route path="/buttongroup" element={<ButtonGroup />} />
+        <Route path="/cards" element={<Cards />} />
+        <Route path="/dropdowns" element={<Dropdowns />} />
+        <Route path="/grid" element={<Grid />} />
+        <Route path="/images" element={<Images />} />
+        <Route path="/media" element={<Media />} />
+        <Route path="/modal" element={<Modals />} />
+        <Route path="/offcanvas" element={<Offcanvas />} />
+        <Route path="/pagination" element={<Pagination />} />
+        <Route path="/popover" element={<Popover />} />
+        <Route path="/progress" element={<Progress />} />
+        <Route path="/placeholders" element={<Placeholder />} />
+        <Route path="/rangeslider" element={<RangeSlider />} />
+        <Route path="/spinners" element={<Spinners />} />
+        <Route path="/sweetalert" element={<SweetAlert />} />
+        <Route path="/nav-tabs" element={<Tabs />} />
+        <Route path="/toastr" element={<Toats />} />
+        <Route path="/tooltips" element={<Tooltips />} />
+        <Route path="/typography" element={<Typography />} />
+        <Route path="/video" element={<Videos />} />
+        <Route path="/lightbox" element={<Lightbox />} />
+        <Route path="/carousel" element={<Carousel />} />
+        <Route path="/borders" element={<Borders />} />
+        <Route path="/breadcrumb" element={<Breadcrumb />} />
+        <Route path="/colors" element={<Colors />} />
+        <Route path="/modals" element={<UiModals />} />
+        <Route path="/spinner" element={<Spinner />} />
+        <Route path="/*" element={<AppContainer />} />
+        <Route path="*" element={<Navigate to="/" />} />
+        <Route path="/settings" element={<UserSettings />} />
+        <Route path="/foremployee" element={<GiftForEmployee />} />
+      </Routes>
+    </>
+  );
+};
+
 const AppRouter = () => {
   useEffect(() => {
     localStorage.setItem("email", "admin@dreamstechnologies.com");
     localStorage.setItem("password", "123456");
   }, []);
+
   return (
-    <div>
-      <Provider store={store}>
-        <BrowserRouter >
-          <ScrollToTop />
-          <PopUp/>
-          <Routes>
-            <Route path="/" element={<Login />} />
-            <Route path="/myDashboard" element={<MyDashboard></MyDashboard>}/> 
-            <Route path="/change-password" element={<ChangePassword />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/otp" element={<Otp />} />
-            <Route path="/error-404" element={<Error404 />} />
-            <Route path="/error-500" element={<Error500 />} />
-            <Route path="/coming-soon" element={<ComingSoon />} />
-            <Route path="/under-maintenance" element={<UnderManitenance />} />
-            <Route path="/sidebar" element={<Sidebar></Sidebar>}  data={SidebarData}/>
-            <Route path="/job-list" element={<JobList />} />
-            <Route path="/job-view" element={<JobView />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/lock-screen" element={<LockScreen />} />
-            <Route path="/accordion" element={<Accordions />} />
-            <Route path="/alerts" element={<Alerts />} />
-            <Route path="/breadcrumbs" element={<Breadcrumbs />} />
-            <Route path="/avatar" element={<Avatar />} />
-            <Route path="/badges" element={<Badges />} />
-            <Route path="/buttons" element={<ButtonCard />} />
-            <Route path="/buttongroup" element={<ButtonGroup />} />
-            <Route path="/cards" element={<Cards />} />
-            <Route path="/dropdowns" element={<Dropdowns />} />
-            <Route path="/grid" element={<Grid />} />
-            <Route path="/images" element={<Images />} />
-            <Route path="/media" element={<Media />} />
-            <Route path="/modal" element={<Modals />} />
-            <Route path="/offcanvas" element={<Offcanvas />} />
-            <Route path="/pagination" element={<Pagination />} />
-            <Route path="/popover" element={<Popover />} />
-            <Route path="/progress" element={<Progress />} />
-            <Route path="/placeholders" element={<Placeholder />} />
-            <Route path="/rangeslider" element={<RangeSlider />} />
-            <Route path="/spinners" element={<Spinners />} />
-            <Route path="/sweetalert" element={<SweetAlert />} />
-            <Route path="/nav-tabs" element={<Tabs />} />
-            <Route path="/toastr" element={<Toats />} />
-            <Route path="/tooltips" element={<Tooltips />} />
-            <Route path="/typography" element={<Typography />} />
-            <Route path="/video" element={<Videos />} />
-            <Route path="/lightbox" element={<Lightbox />} />
-            <Route path="/carousel" element={<Carousel />} />
-            <Route path="/carousel" element={<Carousel />} />
-            <Route path="/borders" element={<Borders />} />
-            <Route path="/breadcrumb" element={<Breadcrumb />} />
-            <Route path="/colors" element={<Colors />} />
-            <Route path="/modals" element={<UiModals />} />
-            <Route path="/spinner" element={<Spinner />} />
-            <Route path="/*" element={<AppContainer />} />
-            <Route path="*" element={<Navigate to="/" />} />
-            <Route path="/settings" element={<UserSettings/>}/>
-            <Route path='/foremployee' element={<GiftForEmployee></GiftForEmployee>}> </Route>
-          </Routes>
-        </BrowserRouter>
-      </Provider>
-    </div>
+    <Provider store={store}>
+      <BrowserRouter>
+        <ScrollToTop />
+        <AppContent />
+      </BrowserRouter>
+    </Provider>
   );
 };
 
