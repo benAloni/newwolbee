@@ -117,10 +117,10 @@ const Header = (props) => {
   return (
     <div className="header" style={{ right: "0px" }}>
       <div className="header-left">
-        <Link to="/admin-dashboard" className="logo">
+        <Link to="/myDashboard" className="logo">
         <img src={Applogo} alt="img" style={{height:'42px',marginTop:'-12px'}} /> 
         </Link>
-        <Link to="/admin-dashboard" className="logo2">
+        <Link to="/myDashboard" className="logo2">
           <img src={Applogo} width={40} height={40} alt="img" />
         </Link>
       </div>
@@ -140,7 +140,7 @@ const Header = (props) => {
         <i className="fa fa-bars" />
       </Link>
       <ul className="nav user-menu">
-        <li className="nav-item">
+        {/* <li className="nav-item">
           <div className="top-nav-search">
             <Link to="#" className="responsive-search">
               <i className="fa fa-search" />
@@ -152,7 +152,7 @@ const Header = (props) => {
               </button>
             </form>
           </div>
-        </li>
+        </li> */}
         <li className="nav-item dropdown has-arrow flag-nav">
           <Link className="nav-link dropdown-toggle" data-bs-toggle="dropdown" to="#" role="button">
             <img src={flagImage} alt="Flag" height="20" /> {t(i18n.language)}
