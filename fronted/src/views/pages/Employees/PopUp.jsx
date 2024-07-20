@@ -121,7 +121,7 @@ export default function PopUp() {
     cursor: 'pointer',
     border: 'none',
     zIndex: 1000,
-    animation: 'spin 10s linear infinite',  
+    // animation: 'spin 10s linear infinite',  
   };
 
   return (
