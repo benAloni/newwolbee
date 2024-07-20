@@ -30,7 +30,7 @@ import personalTime from '../../../../../imgs/personalTime.jpeg'
 import additionalTime from '../../../../../imgs/additionalTime.jpeg'
 import family from '../../../../../imgs/family.jpeg'
 import publicR from '../../../../../imgs/publicR.jpeg'
-
+import john from '../../../../../imgs/avatar_6.JPG'
 const ContactContents = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState(null);
@@ -88,7 +88,7 @@ const ContactContents = () => {
       importance: "Medium",
       priorityNumber: 2,
       message: "Jacob used over 20 days of sick days in the last quarter. Let him know he has reached his limit.",
-      link: "/departments",
+      link: "#",
       read: false,
       viewed: false,
       dismissed: false,
@@ -103,6 +103,7 @@ const ContactContents = () => {
       read: false,
       dismissed: false,
       viewed: false,
+      image: john
     },
     {
       id: 7,
@@ -776,13 +777,21 @@ const openModalYes = (notification) => {
 <div >
       {modalOpenYes && modalContentYes && (
         <Modal onCancel={closeModalYes}  visible={modalOpenYes} footer={null}   >
-         <ul style={ulStyle}>
-<li style={listItemStyle}>
-<h4> First, it's important to understand why John is working so many hours and whether it's due to his regular assignments, a new temporary project or other personal issue. and it's crucial to show our appreciation for the extra time he's putting in. Talk to John to acknowledge his efforts and let him know that you are aware of the change. Additionally, you can consider the following actions</h4> 
-<br/>
-
-</li>
- </ul>
+     <ul style={ulStyle}>
+  <li style={listItemStyle}>
+    <h4 style={{ 
+        margin: '0', 
+        padding: '0', 
+        lineHeight: '1.6', /* Adjust line height for spacing */
+        marginBottom: '1rem' /* Add space below the heading */
+    }}>
+      John is currently working on a big project, and it’s crucial to show our appreciation for the
+      extra time he's putting in. Talk to John to acknowledge his efforts and let him know that
+      you are aware of the change. Additionally, you can consider the following actions:
+    </h4>
+    <br/>
+  </li>
+</ul>
    
  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
    <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
@@ -852,7 +861,7 @@ const openModalYes = (notification) => {
             </div>
             <div
               className="project-card"
-              style={smallprojectCardStyle}
+              style={jhonAnswer}
               onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.05)')}
               onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
             >
@@ -877,7 +886,12 @@ const openModalYes = (notification) => {
         <Modal onCancel={closeModalNo}  visible={modalOpenNo} footer={null}   >
          <ul style={ulStyle}>
 <li style={listItemStyle}>
-<h4> First, it's important to understand why John is working so many hours and whether it's due to his regular assignments, a new temporary project or other personal issue. and it's crucial to show our appreciation for the extra time he's putting in. Talk to John to acknowledge his efforts and let him know that you are aware of the change. Additionally, you can consider the following actions</h4> 
+<h4 style={{ 
+        margin: '0', 
+        padding: '0', 
+        lineHeight: '1.6', /* Adjust line height for spacing */
+        marginBottom: '1rem' /* Add space below the heading */
+    }}> First, it's important to understand why John is working so many hours and whether it's due to his regular assignments, a new temporary project or other personal issue. and it's crucial to show our appreciation for the extra time he's putting in. Talk to John to acknowledge his efforts and let him know that you are aware of the change. Additionally, you can consider the following actions</h4> 
 <br />
 
 </li>
@@ -951,7 +965,7 @@ const openModalYes = (notification) => {
             </div>
             <div
               className="project-card"
-              style={smallprojectCardStyle}
+              style={jhonAnswer}
               onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.05)')}
               onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
             >
@@ -975,7 +989,7 @@ const openModalYes = (notification) => {
 <li style={listItemStyle}>
   <h2 style={{width:'100%'}}>We are celebrating!</h2>
   <br />
-<h5> The annual Fourth of July celebration is just one month away! Please
+<h5 > The annual Fourth of July celebration is just one month away! Please
 keep in mind that some of your team members have special food
 preferences. This is a wonderful opportunity to show your appreciation
 by making sure they have their favorite foods available. </h5> 
