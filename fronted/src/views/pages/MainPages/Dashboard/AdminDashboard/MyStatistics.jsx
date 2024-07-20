@@ -26,7 +26,7 @@ import justin from '../../../../../imgs/avatar_9.JPG'
 import selena from '../../../../../imgs/avatar_10.JPG'
 import emma from '../../../../../imgs/avatar_11.JPG'
 import sofia from '../../../../../imgs/avatar_12.JPG'
-
+import ProgressBar from "./ProgressBar";
 export default function MyStatistics() {
   const PieChartWithPercentage = ({ percentage }) => {
     const data = [
@@ -209,7 +209,7 @@ export default function MyStatistics() {
 
   const EmployeeList = () => {
     const employees = [
-      { id: 1, name: "Lisa", hours: 40, image: lisa },
+      { id: 1, name: "Lisa", hours: 60, image: lisa },
       {
         id: 2,
         name: "Tom",
@@ -231,13 +231,13 @@ export default function MyStatistics() {
       {
         id: 5,
         name: "Brad",
-        hours: 101,
+        hours: 112,
         image: brad,
       },
       {
         id: 6,
         name: "John",
-        hours: 101,
+        hours: 70,
         image: john,
       },
     ];
@@ -258,12 +258,12 @@ export default function MyStatistics() {
           className="card-img-left"
           src={employee.image}
           alt={employee.name}
-          style={{ height: '50px', width: '50px', marginRight: '15px' }}
+          style={{ height: '50px', width: '50px', marginRight: '15px',borderRadius:'10px' }}
         />
         <div>
           <h3 style={{ margin: 0 }}>{employee.name}</h3>
           {employee.hours > 100 && (
-            <span className="badge badge-danger">Over 100% Hours</span>
+            <span className="badge badge-danger" style={{fontSize:'12px'}}> {employee.hours} hours</span>
           )}
         </div>
       </div>
@@ -309,7 +309,7 @@ export default function MyStatistics() {
   const styles = {
     images: {
       monthly: {
-        src: "https://cdn0.iconfinder.com/data/icons/3d-hands-gestures/256/Point_left.png",
+        src: "https://img.icons8.com/?size=100&id=T9DcCf4lJ6ip&format=png&color=000000",
       },
       personal: {
         src: "https://cdn1.iconfinder.com/data/icons/artist-design-2/123/Idea_Brain_business_creative_new_business_start_up-1024.png",
@@ -318,13 +318,13 @@ export default function MyStatistics() {
         src: "https://cdn0.iconfinder.com/data/icons/3d-hands-gestures/256/Point_left.png",
       },
       sick: {
-        src: "https://cdn0.iconfinder.com/data/icons/covid-19-3d/256/Fever.png",
+        src: "https://img.icons8.com/?size=100&id=rvpJEBQUZDHK&format=png&color=000000",
       },
       vacation: {
-        src: "https://cdn2.iconfinder.com/data/icons/new-year-resolutions/64/resolutions-25-128.png",
+        src: "https://img.icons8.com/?size=100&id=f2Yti8MWlBDa&format=png&color=000000",
       },
       growth: {
-        src: "https://cdn2.iconfinder.com/data/icons/online-education-soft-fill/60/Brain-Growth-elearning-grow-knowledge-128.png",
+        src: "https://img.icons8.com/?size=100&id=IhMqtsZbnS3O&format=png&color=000000",
       },
       converction: {
         src: "https://cdn0.iconfinder.com/data/icons/job-seeker/256/conversation_job_seeker_employee_unemployee_work-64.png",
@@ -370,7 +370,7 @@ export default function MyStatistics() {
         "linear-gradient(90deg, hsla(180, 54%, 44%, 1) 17%, hsla(319, 48%, 82%, 1) 92%)",
     },
     bgVacation: {
-      height:'190px',
+      height:'150px',
       background:
         "linear-gradient(90deg, hsla(251, 54%, 44%, 1) 26%, hsla(264, 44%, 46%, 1) 46%, hsla(282, 35%, 49%, 1) 63%, hsla(319, 44%, 60%, 1) 92%)",
     },
@@ -393,6 +393,9 @@ export default function MyStatistics() {
     height: `${height}px`,
   });
 
+  const customWidth = (width) => ({
+    width: `${width}px`,
+  });
   return (
     <>
       <div class="container-fluid ">
@@ -405,16 +408,22 @@ export default function MyStatistics() {
               <div className="row g-0">
                 <div className="col-md-8">
                   <div className="card-body ">
-                    <h5 className="card-title">Monthly Team-Building</h5>
-                    <h5 className="card-title">Activities </h5>
-                    <h1>0</h1>
+                  <h5 className="card-title" style={{ color: 'black', textAlign: 'center' }}>
+  <span style={{ whiteSpace: 'nowrap' }}>Monthly Team-Building</span>
+  <br />
+  <div style={{marginLeft: '50px'}}>
+  Activities
+  </div>
+</h5>                    
+                    <h1 style={{ color: 'black', textAlign: 'center' ,marginLeft: '50px'}}>0</h1>
                   </div>
                 </div>
-                <div className="col-md-4">
+                <div className="col-md-4" style={{marginTop:'50px'}}>
                   <img
                     src={styles.images.monthly.src}
                     className="img-fluid rounded-start"
                     alt="..."
+                    style={{height:'80px'}}
                   />
                 </div>
               </div>
@@ -425,12 +434,12 @@ export default function MyStatistics() {
             >
               <div className="row g-0">
                 <div className="col-md-8">
-                  <div className="card-body " style={{ ...customHeight(250) }}>
-                    <h5 className="card-title"> Personal Development plan</h5>
-                    <h1>4/8</h1>
+                  <div className="card-body " style={{ ...customHeight(260) }}>
+                    <h5 className="card-title" style={{ color: 'black', textAlign: 'center' }}> Personal Development plan</h5>
+                    <h1 style={{ color: 'black', textAlign: 'center' }}>4/8</h1>
                   </div>
                 </div>
-                <div className="col-md-4">
+                <div className="col-md-4" style={{marginTop:'50px'}}>
                   <img
                     src={styles.images.personal.src}
                     className="img-fluid rounded-start"
@@ -442,41 +451,63 @@ export default function MyStatistics() {
             <div className="col-sm-12 col-md-12 col-lg-12">
               <div
                 className="card  mb-3"
-                style={{ ...styles.bgBirthdays, ...customHeight(320) }}
+                style={{ ...styles.bgBirthdays, ...customHeight(265) }}
               >
-                <div className="row g-0">
-                  <div className="col-md-8">
-                    <div className="card-body">
-                      <h5 className="card-title">Upcoming Birthdays</h5>
-                      <div className="d-flex">
-                        <div className="">
-                          <div>img</div>
-                          <div>
-                            <h2>7/18</h2>
-                          </div>
-                          <div>
-                            <h2>(27)</h2>
-                          </div>
-                        </div>
-                        <div>
-                          <div>img</div>
-                          <div>
-                            <h2>7/18</h2>
-                          </div>
-                          <div>
-                            <h2>(27)</h2>
-                          </div>
-                        </div>
-                        <div>
-                          <div> img</div>
-                          <div>
-                            <h2>7/18</h2>
-                          </div>
-                          <div>
-                            <h2>(27)</h2>
-                          </div>
-                        </div>
-                      </div>
+                <div className="row g-0" >
+                  <div className="col-md-8"  >
+                    <div className="card-body" style={{width:'290px'}}>
+                      <h5 className="card-title" style={{ color: 'black', textAlign: 'center' }} >Upcoming Birthdays</h5>
+                      <div className="d-flex" >
+  <div style={{ marginRight: '40px' }}>
+    <div className="col-4">
+      <img
+        src={brad}
+        width={50}
+        alt=""
+        style={{ borderRadius: '10px' }}
+      />
+    </div>
+    
+    <div>
+      <h3 style={{marginLeft:'5px'}}>2/9</h3>
+    </div>
+    <div>
+      <h2>(31)</h2>
+    </div>
+  </div>
+  <div style={{ marginRight: '40px' }}>
+    <div className="col-4">
+      <img
+        src={tom}
+        width={50}
+        alt=""
+        style={{ borderRadius: '10px' }}
+      />
+    </div>
+    <div>
+      <h3 style={{marginLeft:'5px'}}>2/18</h3>
+    </div>
+    <div>
+      <h2>(26)</h2>
+    </div>
+  </div>
+  <div>
+    <div className="col-4">
+      <img
+        src={lisa}
+        width={50}
+        alt=""
+        style={{ borderRadius: '10px' }}
+      />
+    </div>
+    <div>
+      <h3 style={{marginLeft:'5px'}}>2/27</h3>
+    </div>
+    <div>
+      <h2>(43)</h2>
+    </div>
+  </div>
+</div>
                     </div>
                   </div>
                 </div>
@@ -499,19 +530,21 @@ export default function MyStatistics() {
             </div>
 
             <div className="col-sm-12 col-md-12 col-lg-12">
-              <div className="card mb-3" style={styles.bgSick}>
+              <div className="card mb-3" style={styles.bgSick }>
                 <div className="row g-0">
                   <div className="col-md-8">
-                    <div className="card-body">
-                      <h5 className="card-title">Frequent Sick Leave</h5>
-                      <h5 className="card-title">3/8</h5>
+                    <div className="card-body" >
+                      <h5 className="card-title" style={{ color: 'black', textAlign: 'center' , fontSize:'20px'}}>Frequent Sick Leave</h5>
+                      <h2  style={{ color: 'black', textAlign: 'center' , fontSize:'40px'}}>3/8</h2>
                     </div>
+                 
                   </div>
                   <div className="col-md-4">
                     <img
                       src={styles.images.sick.src}
                       className="img-fluid rounded-start"
                       alt="..."
+                      style={{marginTop:'20px'}}
                     />
                   </div>
                 </div>
@@ -520,20 +553,21 @@ export default function MyStatistics() {
 
             <div className="col-sm-12 col-md-12 col-lg-12" style={{height:'100px'}}>
               <div className="card mb-3 " style={styles.bgVacation}>
-                <div className="row g-0">
+                <div className="row g-0" >
                   <div className="col-md-8">
-                    <div className="card-body d-flex">
-                      <h5 className="card-title">Low Vacation Leave</h5>
-                      <div>
-                        <h1 className="card-title">3/8</h1>
-                      </div>
+                    <div className="card-body">
+                      <h5 className="card-title"  style={{ color: 'black', textAlign: 'center' }}>Low Vacation Leave</h5>
+                      <h1   style={{ color: 'black', textAlign: 'center', fontSize:'40px' }}>1/8</h1>
+
                     </div>
+                   
                   </div>
                   <div className="col-md-4">
                     <img
                       src={styles.images.vacation.src}
                       className="img-fluid rounded-start"
                       alt="..."
+                      style={{marginTop:'20px'}}
                     />
                   </div>
                 </div>
@@ -544,122 +578,113 @@ export default function MyStatistics() {
           <div className="col-sm-12 col-md-6 col-lg-3 ">
             <div class="card " style={{ ...styles.bgSatisfaction }}>
               <div class="card-body m-2">
-                <h5 class="card-title">Low Employees Satisfaction</h5>
+              <h5 className="card-title" style={{ color: 'black', textAlign: 'center' }}>Low Employees Satisfaction</h5>
                 <div className="row">
                   <div className="col-4">
                     <img
-                      src="https://cdn3.iconfinder.com/data/icons/feather-5/24/user-128.png"
+                      src={lisa}
                       width={50}
                       alt=""
+                      style={{borderRadius:'10px'}}
                     />
                   </div>
-                  <div className="col">
-                    <div
-                      style={{
-                        borderTop: "2px solid red",
-                        marginTop: "40px",
-                        minWidth: "60px",
-                      }}
-                    ></div>
+                  <div className="col"  >
+                    <div>
+                     {<ProgressBar></ProgressBar>}
+                    </div>
                   </div>
                   <div className="col">
-                    <h4>45</h4>
+                    <h4 style={{marginLeft: "35px"}}>59</h4>
                   </div>
                 </div>
+                <br />
                 <div className="row">
                   <div className="col-4">
                     <img
-                      src="https://cdn3.iconfinder.com/data/icons/feather-5/24/user-128.png"
+                      src={tom}
                       width={50}
                       alt=""
+                      style={{borderRadius:'10px'}}
                     />
                   </div>
-                  <div className="col">
-                    <div
-                      style={{
-                        borderTop: "2px solid red",
-                        marginTop: "40px",
-                        minWidth: "60px",
-                      }}
-                    ></div>
+                  <div className="col"  >
+                    <div>
+                     {<ProgressBar></ProgressBar>}
+                    </div>
                   </div>
                   <div className="col">
-                    <h4>45</h4>
+                    <h4 style={{marginLeft: "35px"}}>43</h4>
                   </div>
                 </div>
+                <br />
                 <div className="row">
                   <div className="col-4">
                     <img
-                      src="https://cdn3.iconfinder.com/data/icons/feather-5/24/user-128.png"
+                      src={brad}
                       width={50}
                       alt=""
+                      style={{borderRadius:'10px'}}
                     />
                   </div>
-                  <div className="col">
-                    <div
-                      style={{
-                        borderTop: "2px solid red",
-                        marginTop: "40px",
-                        minWidth: "60px",
-                      }}
-                    ></div>
+                  <div className="col"  >
+                    <div>
+                     {<ProgressBar></ProgressBar>}
+                    </div>
                   </div>
                   <div className="col">
-                    <h4>45</h4>
+                    <h4 style={{marginLeft: "35px"}}>75</h4>
                   </div>
                 </div>
+                <br />
                 <div className="row">
                   <div className="col-4">
                     <img
-                      src="https://cdn3.iconfinder.com/data/icons/feather-5/24/user-128.png"
+                      src={david}
                       width={50}
                       alt=""
+                      style={{borderRadius:'10px'}}
                     />
                   </div>
-                  <div className="col">
-                    <div
-                      style={{
-                        borderTop: "2px solid red",
-                        marginTop: "40px",
-                        minWidth: "60px",
-                      }}
-                    ></div>
+                  <div className="col"  >
+                    <div>
+                     {<ProgressBar></ProgressBar>}
+                    </div>
                   </div>
                   <div className="col">
-                    <h4>45</h4>
+                    <h4 style={{marginLeft: "35px"}}>95</h4>
                   </div>
                 </div>
+                <br />
                 <div className="row">
                   <div className="col-4">
                     <img
-                      src="https://cdn3.iconfinder.com/data/icons/feather-5/24/user-128.png"
+                      src={nicole}
                       width={50}
                       alt=""
+                      style={{borderRadius:'10px'}}
                     />
                   </div>
-                  <div className="col">
-                    <div
-                      style={{
-                        borderTop: "2px solid red",
-                        marginTop: "40px",
-                        minWidth: "60px",
-                      }}
-                    ></div>
+                  <div className="col"  >
+                    <div>
+                     {<ProgressBar></ProgressBar>}
+                    </div>
                   </div>
                   <div className="col">
-                    <h4>45</h4>
+                    <h4 style={{marginLeft: "35px"}}>45</h4>
                   </div>
                 </div>
               </div>
             </div>
             <div
               className="card justify-content-center  mb-3 "
-              style={{ ...styles.bgGrowth, ...customHeight(420) }}
+              style={{ ...styles.bgGrowth, ...customHeight(220) }}
             >
               <div className="row g-0">
-                <div className="col-md-8">
-                  <div className="card-body ">
-                    <h5 className="card-title ">Personal Growth Programs</h5>
+                <div className="col-md-8" >
+                  <div className="card-body" style={{width:'220px'}}>
+                    <h5 className="card-title" style={{ color: 'black', textAlign: 'center', marginBottom:'20px'}}>Personal Growth Programs</h5>
+                 
+                    <h1   style={{ color: 'black', textAlign: 'center', fontSize:'40px' }}>4/8</h1>
                   </div>
                 </div>
                 <div className="col-md-4">
@@ -667,6 +692,7 @@ export default function MyStatistics() {
                     src={styles.images.growth.src}
                     className="img-fluid rounded-start"
                     alt="..."
+                    style={{marginTop:'50px'}}
                   />
                 </div>
               </div>
@@ -710,7 +736,7 @@ export default function MyStatistics() {
             <div className="col">
               <div
                 class="card"
-                style={{ ...styles.bgTeamSatisfaction, ...customHeight(380) }}
+                style={{ ...styles.bgTeamSatisfaction, ...customHeight(200) }}
               >
                 <div class="card-body text-center">
                   <TeamSatisfaction />
@@ -722,12 +748,12 @@ export default function MyStatistics() {
               <div className="row">
                 <div className="col">
                   <div
-                    className="card justify-content-center  mb-3"
+                    className="card justify-content-center  mb-3" 
                     // style={{ ...styles.bgPersonal }}
                   >
-                    <div className="row g-0">
+                    <div className="row g-0" >
                       <div className="col-md-12">
-                        <div className="card-body ">
+                        <div className="card-body"  >
                           <EmployeeSatisfactionChart />
                         </div>
                       </div>
@@ -741,8 +767,9 @@ export default function MyStatistics() {
                         <div className="col-md-8">
                           <div
                             className="card-body "
-                            style={{ ...customHeight(250) }}
+                            style={{ ...customHeight(200) ,}}
                           >
+                            <br />
                             <h1>4/8</h1>
                             <h5 className="card-title"> Conversations 1:1</h5>
                           </div>
@@ -752,6 +779,7 @@ export default function MyStatistics() {
                             src={styles.images.converction.src}
                             className="img-fluid rounded-start"
                             alt="..."
+                            style={{marginTop:'50px'}}
                           />
                         </div>
                       </div>
