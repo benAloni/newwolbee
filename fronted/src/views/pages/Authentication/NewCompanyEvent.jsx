@@ -5,6 +5,11 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 import Sidebar from '../../layout/Sidebar';
 import Header from '../../layout/Header';
 import PlanEvent from './PlanEvent';
+import { FaArrowRight } from 'react-icons/fa';
+import Department from '../Employees/Department';
+import Hrsrvicecompany from '../Employees/Projects/Hrsrvicecompany';
+import PopUp from '../Employees/PopUp';
+
 
 // import './App.css';
 // import hagalil from './hagalil.jpg'
@@ -21,7 +26,7 @@ export default function NewCompanyEvent() {
     const [selectedLocation, setSelectedLocation] = useState('');
     const [selectedTime, setSelectedTime] = useState('');
     const [createEvent,setCreateEvent] = useState([])
-    
+    const [isHovered, setIsHovered] = useState(false);
     const [tasks, setTasks] = useState([
       { id: 1, text: 'Confirm the venue booking and layout', completed: false },
       { id: 2, text: 'Arrange for yoga mats, sound system, and other equipment', completed: false },
@@ -36,6 +41,24 @@ export default function NewCompanyEvent() {
       { id: 11, text: 'Review the event and note areas for improvement', completed: false }
     ]);
   
+
+    const styles = {
+      button: {
+        height: '20px',
+        position: 'absolute',
+        top: '5px',
+        right: '30px',
+        background: 'white',
+        border: 'none', // מבטל את הגבול
+        cursor: 'pointer', // עדיין מאפשר ללחוץ על הכפתור
+        padding: 0, // מבטל רווח פנימי שיכול להשפיע על העיצוב
+      },
+      icon: {
+        fontSize: '16px',
+        color: '#000',
+      }
+    };
+
     const toggleTaskCompletion = (taskId) => {
       setTasks(tasks.map(task =>
         task.id === taskId ? { ...task, completed: !task.completed } : task
@@ -119,7 +142,7 @@ export default function NewCompanyEvent() {
         datalabels: {
           formatter: (value, context) => {
             const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
-            const percentage = ((value / total) * 100).toFixed(2) + '%';
+            const percentage = Math.round((value / total) * 100) + '%'; // עיגול למספר שלם
             return percentage;
           },
           color: 'black',
@@ -130,6 +153,35 @@ export default function NewCompanyEvent() {
         },
       },
     };
+    
+
+    const h1style = {
+      textAlign: 'center',
+      marginBottom: '20px',
+    };
+    
+    const h2style = {
+      textAlign: 'center',
+      fontWeight: 'bold',
+    };
+    const buttonStyle = {
+      width: '300px',
+      height: '60px',
+      border: '3px solid ',
+      borderRadius: '45px',
+      transition: 'all 0.3s',
+      cursor: 'pointer',
+      backgroundColor: 'white',
+      fontSize: '1.2em',
+      fontWeight: 550,
+      fontFamily: "'Montserrat', sans-serif",
+    };
+  
+    const hoverStyle = {
+      backgroundColor: '#F19F29',
+      color: 'white',
+      fontSize: '1.4em',
+    };
   
     return (
       <div className="page-wrapper">
@@ -137,21 +189,36 @@ export default function NewCompanyEvent() {
         <Sidebar></Sidebar>
  <Header></Header>
  <h1 style={{ textAlign: 'center', direction: 'rtl' }}>
-    your company plan's
+     company plan's
 </h1>
 
-        <button onClick={() => setCurrentPopup(1)}>Plan New Company Event</button>
+        <button 
+        style={isHovered ? { ...buttonStyle, ...hoverStyle } : buttonStyle}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+       onClick={() => setCurrentPopup(1)}>Plan New Company Event
+       </button>
+       <br />
+       <br />
+       <br />
         <PlanEvent createEvent={createEvent}/>
 
         {currentPopup !== 0 && (
           <div className="modal">
-            <div className="modal-content">
+            <div className="modal-content" style={{width:'45%'}}>
               <span className="close" onClick={closePopup}>&times;</span>
-  
+        <button 
+      className="eventButton" 
+      onClick={prevPopup} 
+      style={styles.button}
+      aria-label="חזרה למסך הקודם"
+    >
+      <FaArrowRight style={styles.icon} />
+    </button>
               {currentPopup === 1 && (
                 <>
-                  <h1>Let's Plan!</h1>
-                  <h2>When?</h2>
+                  <h1 style={h1style}>Let's Plan!</h1>
+                  <h2 style={h2style}>When?</h2>
                   <div className="button-container">
                     <button className="eventButton" onClick={() => handleTimeSelect('This month')}>This month</button>
                     <button className="eventButton" onClick={() => handleTimeSelect('Choose special dates')}>Choose special dates</button>
@@ -159,26 +226,27 @@ export default function NewCompanyEvent() {
                     <button className="eventButton" onClick={() => handleTimeSelect('As soon as possible')}>As soon as possible</button>
                     <button className="eventButton" onClick={() => handleTimeSelect('Seasonal')}>Seasonal</button>
                     <button className="eventButton" onClick={() => handleTimeSelect('Help me decide')}>Help me decide</button>
+                    {/* <button className="eventButton" onClick={prevPopup}>Back</button> */}
                   </div>
                 </>
               )}
   
               {currentPopup === 2 && (
                 <>
-                  <h1>Let's Plan!</h1>
-                  <h2>Where?</h2>
+                  <h1 style={h1style}>Let's Plan!</h1>
+                  <h2 style={h2style}>Where?</h2>
                   <div className="button-container">
                     <button className="eventButton" onClick={() => handleLocationSelect('On site')}>On site</button>
                     <button className="eventButton" onClick={() => handleLocationSelect('Outside')}>Outside</button>
                     <button className="eventButton"  onClick={() => handleLocationSelect('Help me decide')}>Help me decide</button>
                   </div>
-                  <button className="eventButton" onClick={prevPopup}>Back</button>
+                  {/* <button className="eventButton" onClick={prevPopup}>Back</button> */}
                 </>
               )}
   
               {currentPopup === 3 && (
                 <>
-                  <h1>Budget</h1>
+                  <h1 style={h2style}>Budget</h1>
                   <div className="slider-container">
                     <input
                       type="range"
@@ -187,17 +255,27 @@ export default function NewCompanyEvent() {
                       value={selectedRangeBudget}
                       onChange={handleRangeChangeBudget}
                       className="slider"
+                      style={{
+                        display: "block",
+                        margin: "0 auto", // Centers the input horizontally
+                      }}
                     />
-                    <div className="slider-value">{selectedRangeBudget} ₪</div>
-                    <button className="eventButton" onClick={prevPopup}>Back</button>
+                    <div style={h2style} className="slider-value">{selectedRangeBudget} ₪</div>
+                    <div style={{
+    display: "flex",
+    justifyContent: "center",
+    gap: "10px", // Optional for spacing between buttons
+  }}>
+                    {/* <button className="eventButton" onClick={prevPopup}>Back</button> */}
                     <button className="eventButton" onClick={nextPopup}>Next</button>
+                    </div>
                   </div>
                 </>
               )}
   
               {currentPopup === 4 && (
                 <>
-                  <h1>How many employees</h1>
+                  <h1 style={h2style} >How many employees</h1>
                   <div className="slider-container">
                     <input
                       type="range"
@@ -206,19 +284,34 @@ export default function NewCompanyEvent() {
                       value={selectedRangeEmployee}
                       onChange={handleRangeChangeEmployee}
                       className="slider"
+                      style={{
+                        display: "block",
+                        margin: "0 auto", // Centers the input horizontally
+                      }}
                     />
-                    <div className="slider-value">{selectedRangeEmployee}</div>
-                    <button className="eventButton" onClick={prevPopup}>Back</button>
+                    <div style={h2style} className="slider-value">{selectedRangeEmployee}</div>
+                    <div  style={{
+    display: "flex",
+    justifyContent: "center",
+    gap: "10px", // Optional for spacing between buttons
+  }}>
+                    {/* <button className="eventButton" onClick={prevPopup}>Back</button> */}
                     <button className="eventButton" onClick={nextPopup}>Next</button>
+                    </div>
                   </div>
                 </>
               )}
   
               {currentPopup === 5 && (
                 <>
-                  <h1>Choose theme</h1>
+                  <h1 style={h2style}>Choose theme</h1>
+                  <div style={{display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',}}>
+                    <button  className="eventButton" style={{width:'100%'}}  onClick={() => handleThemeSelect('Choose for me')}>Choose for me</button>
+                    </div>
                   <div className="button-container">
-                    <button className="eventButton"  onClick={() => handleThemeSelect('Choose for me')}>Choose for me</button>
+                    
                     <button className="eventButton"  onClick={() => handleThemeSelect('Special date')}>Special date</button>
                     <button className="eventButton"  onClick={() => handleThemeSelect('Team building')}>Team building</button>
                     <button className="eventButton"  onClick={() => handleThemeSelect('Nature')}>Nature</button>
@@ -228,26 +321,47 @@ export default function NewCompanyEvent() {
                     <button className="eventButton"  onClick={() => handleThemeSelect('Learning')}>Learning</button>
                     <button className="eventButton"  onClick={() => handleThemeSelect('Culinary')}>Culinary</button>
                   </div>
-                  <button className="eventButton" onClick={prevPopup}>Back</button>
+                  {/* <button className="eventButton" onClick={prevPopup}>Back</button> */}
                 </>
               )}
   
-              {currentPopup === 6 && (
-                <>
-                  <h1>What your employee wish for</h1>
-                  <h2>Preferred Location</h2>
-                  <div className="popup">
-                    <div className="popup-content">
-                      <span className="close" onClick={closePopup}>&times;</span>
-                      <Pie data={pieDataLocation} options={pieOptions} />
-                      <button className="eventButton" onClick={prevPopup}>Back</button>
-                      <button className="eventButton" onClick={nextPopup}>Next</button>
+  {currentPopup === 6 && (
+  <>
+    <h1 style={h1style}>What your employee wish for</h1>
+    <h2 style={h2style}>Preferred Location & Time</h2>
+    <br />
+    <div className="popup">
+      <div className="popup-content">
+        <span className="close" onClick={closePopup}>&times;</span>
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100%', // גובה מלא של הקונטיינר כדי לאפשר מרכוז אנכי
+          flexDirection: 'row', // סידור הגרפים מימין לשמאל
+        }}>
+          <div style={{width: '50%', height: '50%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+            <Pie data={pieDataLocation} options={pieOptions} />
+          </div>
+          <div style={{width: '50%', height: '50%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+            <Pie data={pieData} options={pieOptions} />
+          </div>
+        </div>
+        <div style={{
+    display: "flex",
+    justifyContent: "center",
+    gap: "10px", // Optional for spacing between buttons
+  }}>
+                    {/* <button className="eventButton" onClick={prevPopup}>Back</button> */}
+                    <button className="eventButton" onClick={nextPopup}>Next</button>
                     </div>
-                  </div>
-                </>
-              )}
+      </div>
+    </div>
+  </>
+)}
+
   
-              {currentPopup === 7 && (
+              {/* {currentPopup === 7 && (
                 <>
                   <h1>What your employee wish for</h1>
                   <h2>Preferred time</h2>
@@ -260,40 +374,46 @@ export default function NewCompanyEvent() {
                     </div>
                   </div>
                 </>
+              )} */}
+  
+  {currentPopup === 7 && (
+                <>
+                  <h1>What your employee wish for</h1>
+                  <div className="button-container">
+                    <button className="eventButton" >Engage & Inspire:<br /><br />A Day of Enlightening Talks</button>
+                    <button className="eventButton" >Laugh It Up:<br /><br />A Day of Comedy and Relaxation</button>
+                    <button className="eventButton" onClick={nextPopup}>Zen at Work:<br /><br />A Day of Yoga and Wellness</button>
+                  </div>
+                  {/* <button className="eventButton" onClick={prevPopup}>Back</button> */}
+                </>
               )}
   
   {currentPopup === 8 && (
                 <>
-                  <h1>What your employee wish for</h1>
-                  <div className="button-container">
-                    <button className="eventButton" onClick={nextPopup}>Engage & Inspire:<br /><br />A Day of Enlightening Talks</button>
-                    <button className="eventButton" onClick={nextPopup}>Laugh It Up:<br /><br />A Day of Comedy and Relaxation</button>
-                    <button className="eventButton" onClick={nextPopup}>Zen at Work:<br /><br />A Day of Yoga and Wellness</button>
-                  </div>
-                  <button className="eventButton" onClick={prevPopup}>Back</button>
-                </>
-              )}
-  
-  {currentPopup === 9 && (
-                <>
-                  <h1>Zen at work</h1>
-                  <h2 style={{ textAlign: 'left' }}>A Day of yoga and wellness</h2>
-                  <p style={{ textAlign: 'left' }}>Promote wellness, reduse stress, and foster team bonding through a day dedicated to yoga and mindfulness activities</p>
+                  <h1 style={h1style}>Zen at work</h1>
+                  <h2 style={h2style} >A Day of yoga and wellness</h2>
+                  <br />
+                  <p style={{textAlign:'center'}} >Promote wellness, reduse stress, and foster team bonding through a day dedicated to yoga and mindfulness activities</p>
                   <div className="button-container">
                     <button className="eventButton" >Total estimated cost: <br/><br/>2500$</button>
                     <button className="eventButton" >Time needed for planning: <br/><br/>1 month</button>
                     <button className="eventButton" >Activity time: <br/><br/>4-6 hours</button>
                   </div>
+                   <br />
                   <div style={{ textAlign: 'left' }}>
-                    <h2>Overview:</h2>
+                     
+                    <h2>Overview</h2>
+                  <hr />
                     <p>The event is designed to enhance employee well-being and foster a sense of community through yoga and mindfulness
                       practices. Activities include both introductory and advanced yoga sessions, a welness workshop
                       and relaxation time.
                       </p>
-                      <h3>Venue:</h3>
+                      <h3>Venue</h3>
+                      <hr />
                       <p>Company premises or a local wellness center</p>
-                      <h3>Key Element:</h3>
-                      <ul>
+                      <h3>Key Element</h3>
+                      <hr />
+                      <ul style={{listStyleType:'disc'}}>
                         <li>Welcome and registration 30 min</li>
                         <li>Opening a yoga session 1 hour</li>
                         <li>Refershment break 30 min</li>
@@ -303,115 +423,143 @@ export default function NewCompanyEvent() {
                         <li>Refershment break 30 min</li>
                         <li>Relaxation and closing session 30 min</li>
                       </ul>
-                    <div className="button-container">
+                    <div style={{
+    display: "flex",
+    justifyContent: "center",
+    gap: "10px", // Optional for spacing between buttons
+  }} className="button-container">
+
                     <button className="eventButton" onClick={nextPopup} >Keep Planing</button>
                     <button className="eventButton" >Show Me More Options</button>
                     
                   </div>
                   </div>
-                  <button className="eventButton" onClick={prevPopup}>Back</button>
+                  {/* <button className="eventButton" onClick={prevPopup}>Back</button> */}
                 </>
               )}
   
-  {currentPopup === 10 && (
+  {currentPopup === 9 && (
                 <>
-                  <h1>Zen at work
-                    <br/><br/>
-                    A day of yoga and wellness 
-                  </h1>
+                  <h1 style={h1style}>Zen at work </h1>
+                   <h2 style={h2style}> A day of yoga and wellness </h2>
+                   <br />
+                 
                   
                   <div className="popup">
                     <div className="popup-content">
                       <span className="close" onClick={closePopup}>&times;</span>
   
-                      <p>Promote wellness, reduce stress and foster team bonding through a day dedicated
+                      <p style={{textAlign:'center'}}>Promote wellness, reduce stress and foster team bonding through a day dedicated
                         to yoga and mindfulness activities.
                       </p>
-                     
-                      <button className="eventButton" onClick={() => setCurrentPopup(11)}>Detailed Schedule</button>
-                      <button className="eventButton"  onClick={() => setCurrentPopup(13)}>Service Providers</button>
-                      <button className="eventButton"  onClick={() => setCurrentPopup(12)}>To Do List</button>
+                     <div style={{display:'flex',}}>
+                      <button className="eventButton" onClick={() => setCurrentPopup(10)}>Detailed Schedule</button>
+                      <button className="eventButton"  onClick={() => setCurrentPopup(12)}>Service Providers</button>
+                      <button className="eventButton"  onClick={() => setCurrentPopup(11)}>To-Do List</button>
+                      </div>
                     </div>
                   </div>
   
-                  <div>
-                  <button className="eventButton" onClick={prevPopup}>Back</button>
-                  <button className="eventButton"  onClick={() => setCurrentPopup(14)}>Next</button>
+                  <div style={{
+    display: "flex",
+    justifyContent: "center",
+    gap: "10px", // Optional for spacing between buttons
+  }}>
+                  {/* <button className="eventButton" onClick={prevPopup}>Back</button> */}
+                  <button className="eventButton"  onClick={() => setCurrentPopup(13)}>Next</button>
                   </div>
                 </>
               )}
   
-  {currentPopup === 11 && (
+  {currentPopup === 10 && (
     <>
       <div  >
-        <h1>Zen at Work: <br/><br/> A Day of Yoga and Wellness</h1>
+        <h1 style={h1style}>Zen at Work</h1>
+        <h2 style={h2style} >A Day of Yoga and Wellness</h2>
+        <br />
+        <h3>Detailed Schedule:</h3>
+        <br />
         <div style={{ textAlign: 'left' }} className="popup-content">
-          <h2>Welcome and Registration: 10:00 - 10:30</h2>
-          <ul>
+          <h3 >Welcome and Registration: 10:00 - 10:30</h3>
+         <hr />
+          <ul style={{listStyleType:'disc'}}>
             <li>Set up reception desk with name tags.</li>
             <li>Provide energy shake for each attendee.</li>
             <li>Distribute a kit with daily schedule, yoga benefits, and a personal water bottle.</li>
           </ul>
-  
-          <h2>Opening Yoga Session: 10:30 - 11:30</h2>
-          <ul>
+  <br />
+          <h3>Opening Yoga Session: 10:30 - 11:30</h3>
+          <hr />
+          <ul style={{listStyleType:'disc'}}>
             <li>Ensure yoga mats are laid out.</li>
             <li>Brief introduction to the session and instructor.</li>
             <li>Conduct a 60-minute beginner-friendly yoga session.</li>
           </ul>
-  
-          <h2>Refreshment Break: 11:30 - 12:00</h2>
-          <ul>
+  <br />
+          <h3>Refreshment Break: 11:30 - 12:00</h3>
+          <hr />
+          <ul style={{listStyleType:'disc'}}>
             <li>Set up a snack station with healthy options.</li>
             <li>Provide water and herbal teas.</li>
             <li>Allow attendees to socialize and relax.</li>
           </ul>
-  
-          <h2>Workshop - "Benefits of Yoga and Mindfulness": 12:00 - 13:00</h2>
-          <ul>
+          <br />
+          <h3>Workshop - "Benefits of Yoga and Mindfulness": 12:00 - 13:00</h3>
+          <hr />
+          <ul style={{listStyleType:'disc'}}>
             <li>Prepare a presentation on the benefits of yoga and mindfulness.</li>
             <li>Engage attendees with interactive discussions.</li>
             <li>Provide handouts or digital materials for further reading.</li>
           </ul>
-  
-          <h2>Lunch Break: 13:00 - 14:00:</h2>
-          <ul>
+          <br />
+          <h3>Lunch Break: 13:00 - 14:00:</h3>
+          <hr />
+          <ul style={{listStyleType:'disc'}}>
             <li>Arrange a catered healthy lunch.</li>
             <li>Set up seating areas for relaxed dining.</li>
             <li>Ensure a variety of dietary options are available.</li>
           </ul>
-  
-          <h2>Advanced Yoga Session: 14:00 - 15:00</h2>
-          <ul>
+          <br />
+          <h3>Advanced Yoga Session: 14:00 - 15:00</h3>
+          <hr />
+          <ul style={{listStyleType:'disc'}}>
             <li>Brief attendees on advanced techniques.</li>
             <li>Conduct a 60-minute advanced yoga session.</li>
             <li>Encourage participants to challenge themselves safely.</li>
           </ul>
-  
-          <h2>Refreshment Break: 15:00 - 15:30</h2>
-          <ul>
+          <br />
+          <h3>Refreshment Break: 15:00 - 15:30</h3>
+          <hr />
+          <ul style={{listStyleType:'disc'}}>
             <li>Offer a selection of fresh fruits and light snacks.</li>
             <li>Provide water and smoothies.</li>
             <li>Allow time for relaxation and informal networking.</li>
-          </ul>
+          </ul>  
+          <br />
   
-          <h2>Relaxation and Closing Session: 15:30 - 16:00</h2>
-          <ul>
+          <h3>Relaxation and Closing Session: 15:30 - 16:00</h3>
+          <hr />
+          <ul style={{listStyleType:'disc'}}>
             <li>Conduct a guided relaxation or meditation session.</li>
             <li>Summarize the day's activities and benefits.</li>
             <li>Provide closing remarks and thank attendees for participating.</li>
           </ul>
         </div>
-        <button className="eventButton"  onClick={() => setCurrentPopup(10)}>Back</button>
+        {/* <button className="eventButton"  onClick={() => setCurrentPopup(10)}>Back</button> */}
         
       </div>
     </>
   )}
   
-  {currentPopup === 12 && (
+  {currentPopup === 11 && (
           <>
             <div className="popup-content">
-              <h1>To-Do List: <br/><br/> Zen at Work</h1>
+              <h1 style={h1style}>Zen at Work</h1>
+              <h2 style={h2style}>A Day of Yoga and Wellness</h2> <br/><br/> 
+              
+              <h3>To-Do List</h3>
+              <hr />
+             
               <div className="popup-content">
                 {tasks.map(task => (
                   <div style={{ textAlign: 'left' }} key={task.id}>
@@ -426,14 +574,20 @@ export default function NewCompanyEvent() {
                   </div>
                 ))}
               </div>
-              <button className="eventButton"  onClick={() => setCurrentPopup(10)}>Back</button>
-              <button className="eventButton"  onClick={() => setCurrentPopup(14)}>Next</button>
+              <div style={{
+    display: "flex",
+    justifyContent: "center",
+    gap: "10px", // Optional for spacing between buttons
+  }}>
+              {/* <button className="eventButton"  onClick={() => setCurrentPopup(10)}>Back</button> */}
+              <button className="eventButton"  onClick={() => setCurrentPopup(13)}>Next</button>
+              </div>
             </div>
           </>
         )}
   
   
-  {currentPopup === 13 && (
+  {currentPopup === 12 && (
                 <>
                   <h1>
                   Service Providers
@@ -443,59 +597,35 @@ export default function NewCompanyEvent() {
                     <div className="popup-content">
                       <span className="close" onClick={closePopup}>&times;</span>
   
-                      <button className="eventButton">
-                       <a href="https://buyme.co.il/supplier/752649?gad_source=1&gclid=CjwKCAjw2dG1BhB4EiwA998cqMdgg2DaU22LNJyQ8_l9ph-JTOH-8KEgS0xW8WOcn5gsUB2tuq-MbxoCs70QAvD_BwE" 
-                       target="_blank" rel="noopener noreferrer">
-                      <img src={''} alt="Buy Me Chef" />
-            
-                       </a>
-                    </button>
-  
-                    <button className="eventButton">
-                       <a href="https://shop.westgalil.org.il/" target="_blank" rel="noopener noreferrer">
-                      <img src={''} alt="hagalil" style={{ width: '150px', height: '125px' }} />
-            
-                       </a>
-                    </button>
-  
-                    <button className="eventButton">
-                       <a href="https://www.anastasiatlv.co.il/?gad_source=1&gclid=CjwKCAjw2dG1BhB4EiwA998cqJOPO0z7jYmJ8YILCgokTEiDgFMBBzmN7tbohoK2Iw5YPN1BXlhsSRoCR-oQAvD_BwE"  
-                       target="_blank" rel="noopener noreferrer">
-    
-                      <img src={''} alt="anastasia" style={{ width: '190px', height: '135px' }}  />
-            
-                       </a>
-                    </button>
-  
-                    <button className="eventButton">
-                       <a href="https://hagehalim.co.il/" target="_blank" rel="noopener noreferrer" >
-                      <img src={''} alt="gehalim" style={{ width: '150px', height: '135px' }} />
-            
-                       </a>
-                    </button>
+                     <div style={{marginLeft:'-90px'}}>
+                    <Hrsrvicecompany></Hrsrvicecompany>
+</div>
                     <div>
-                    <button className="eventButton"  onClick={() => setCurrentPopup(10)}>Back</button>
+                    {/* <button className="eventButton"  onClick={() => setCurrentPopup(10)}>Back</button> */}
                     </div>
                     </div>
                   </div>
                 </>
               )}
   
-  {currentPopup === 14 && (
+  {currentPopup === 13 && (
     <>
-      <h1 style={{ textAlign: 'left' }}>Your Plan!</h1>
-      <p style={{ textAlign: 'left' }}>Based on your preferences:</p>
-      <p style={{ textAlign: 'left' }}>- Budget: {selectedRangeBudget} ₪</p>
-      <p style={{ textAlign: 'left' }}>- Employees: {selectedRangeEmployee}</p>
-      <p style={{ textAlign: 'left' }}>- Theme: {selectedTheme}</p>
-      <p style={{ textAlign: 'left' }}>- Location: {selectedLocation}</p>
-      <p style={{ textAlign: 'left' }}>- Time: {selectedTime}</p>
+      <h1 style={h1style}>Your Plan!</h1>
+      <h2 style={h2style}>Based on your preferences</h2>
+      <hr />
+      <ul style={{listStyleType: "disc", fontSize:'20px'}}>
+      <li >Budget: {selectedRangeBudget}₪</li>
+      <li>Employees: {selectedRangeEmployee}</li>
+      <li>Theme: {selectedTheme}</li>
+      <li>Location: {selectedLocation}</li>
+      <li>Time: {selectedTime}</li>
+      </ul>
       <div className="button-container" style={{ textAlign: 'center' }}>
-                    
+         </div>           
         <button className="eventButton" onClick={() => setCurrentPopup(1)}>Keep Planning</button>
-      </div>
+      
       <button className="eventButton" onClick={handleSubmitEvent}>Submit Event</button>
-      <button className="eventButton" onClick={prevPopup}>Back</button>
+      {/* <button className="eventButton" onClick={prevPopup}>Back</button> */}
     </>
   )}
   
@@ -611,6 +741,7 @@ export default function NewCompanyEvent() {
             }
           `}
         </style>
+        
       </div>
       </div>
     );

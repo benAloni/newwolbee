@@ -200,6 +200,7 @@ import NewCompanyEvent from "../../views/pages/Authentication/NewCompanyEvent";
 
 import RetentionStatistics from "../../views/pages/MainPages/Dashboard/AdminDashboard/RetentionStatistics.jsx";
 import GiftForEmployee from "../../views/pages/Employees/ForEmployee/GiftForEmployee.jsx";
+import NotificationsBirth from "../../views/pages/MainPages/Apps/contacts/mainNotifications/ShowNotifications/NotificationsBirth.jsx";
 
 const AppContainer = () => {
   useEffect(() => {
@@ -923,6 +924,11 @@ const AppContainer = () => {
       id: 133,
       path: "foremployee",
       element: <GiftForEmployee />,
+    },
+    {
+      id: 134,
+      path: "NotificationsBirth/:userId",
+      element: <NotificationsBirth />,
     },
   ];
 

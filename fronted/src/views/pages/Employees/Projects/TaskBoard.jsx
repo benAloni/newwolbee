@@ -202,6 +202,7 @@ const TaskBoard = () => {
     flexWrap: 'wrap',
     justifyContent: 'center',
     gap: '20px',
+    marginTop:'40px'
   };
   
   const h3Style = {
@@ -249,76 +250,93 @@ const TaskBoard = () => {
 
           {/* _________________יום הפיצה הבין לאומי כללי __________________ */}
           
-         <div
-              className="project-card"
-              style={projectCardStyle}
-              onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
-              onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
-              onClick={openModal}
-            >
-              <div className="image-container" style={imageContainerStyle}>
-                <img src={pizza} alt="Project One" style={imgStyle} />
-              </div>
-              <div className="project-details" style={projectDetailsTextStyle}>
-                <h1 style={h3Style}>International Pizza Day</h1>
-                <h4 style={pStyle}>10.6.2024</h4>
-               
-              </div>
-              <div className="dropdown profile-action" style={{border: 'none'}}>
-                <button
-                  className="action-icon dropdown-toggle"
-                  type="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                  style={{border: 'none', backgroundColor: 'transparent'}}
-                >
-                  <img
-                    src={remind}
-                    alt="תמונה"
-                    style={{
-                      width: '40px',
-                      height: '40px',
-                      borderRadius: '50%', // עיגול כדי ליצור תמונה עגולה
-                    }}
-                  />
-                </button>
-                
-                <div className="dropdown-menu dropdown-menu-right">
-                  <button
-                    className="dropdown-item"
-                    onClick={() => handleOption("in3Days")}
-                  >
-                    Postpone for 3 days
-                  </button>
-                  <button
-                    className="dropdown-item"
-                    onClick={() => handleOption("in1Week")}
-                  >
-Postpone for a week
-                  </button>
-                  <button
-                    className="dropdown-item"
-                    onClick={() => handleOption("schedule")}
-                  >
-Set a time 
-                  </button>
-                </div>
-              </div>
-              {showDatePicker && (
-                <div style={datePickerContainerStyle} onClick={handleDatePickerClick}>
-                  <DatePicker
-                    selected={selectedDate}
-                    onChange={(date) => setSelectedDate(date)}
-                    inline
-                    calendarClassName="custom-calendar"
-                    
-                  />
-                
-                  <button onClick={() => setShowDatePicker(false)}>close</button>
-                </div>
-                
-              )}
-            </div>
+          <div
+  className="project-card"
+  style={{ ...projectCardStyle, position: 'relative' }} // Ensure relative positioning
+  onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+  onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+  onClick={openModal}
+>
+  {/* Small Banner */}
+  <div style={{
+    position: 'absolute',
+    top: '-0.5rem', // Position above the card
+    left: '50%',
+    transform: 'translateX(-50%)',
+    backgroundColor: 'green',
+    color: 'white',
+    textAlign: 'center',
+    padding: '0.2rem 0.5rem',
+    fontWeight: 'bold',
+    borderRadius: '4px',
+    zIndex: 1,
+    fontSize: '0.8rem', // Smaller font size
+    whiteSpace: 'nowrap', // Prevent text wrapping
+    marginTop:'5px'
+  }}>
+    closest event
+  </div>
+
+  <div className="image-container" style={imageContainerStyle}>
+    <img src={pizza} alt="Project One" style={imgStyle} />
+  </div>
+  <div className="project-details" style={projectDetailsTextStyle}>
+    <h1 style={h3Style}>International Pizza Day</h1>
+    <h4 style={pStyle}>10.6.2024</h4>
+  </div>
+  <div className="dropdown profile-action" style={{ border: 'none' }}>
+    <button
+      className="action-icon dropdown-toggle"
+      type="button"
+      data-bs-toggle="dropdown"
+      aria-expanded="false"
+      style={{ border: 'none', backgroundColor: 'transparent' }}
+    >
+      <img
+        src={remind}
+        alt="Reminder"
+        style={{
+          width: '40px',
+          height: '40px',
+          borderRadius: '50%', // Circular image
+        }}
+      />
+    </button>
+    
+    <div className="dropdown-menu dropdown-menu-right">
+      <button
+        className="dropdown-item"
+        onClick={() => handleOption("in3Days")}
+      >
+        Postpone for 3 days
+      </button>
+      <button
+        className="dropdown-item"
+        onClick={() => handleOption("in1Week")}
+      >
+        Postpone for a week
+      </button>
+      <button
+        className="dropdown-item"
+        onClick={() => handleOption("schedule")}
+      >
+        Set a time
+      </button>
+    </div>
+  </div>
+  {showDatePicker && (
+    <div style={datePickerContainerStyle} onClick={handleDatePickerClick}>
+      <DatePicker
+        selected={selectedDate}
+        onChange={(date) => setSelectedDate(date)}
+        inline
+        calendarClassName="custom-calendar"
+      />
+      <button onClick={() => setShowDatePicker(false)}>Close</button>
+    </div>
+  )}
+</div>
+
         
        
       
@@ -349,7 +367,7 @@ Set a time
         }}
       >
         {/*\\\\\\\\\\\\\\\\\\\\\\\יום הפיצה הבין לאומי הצעות \\\\\\\\\\\\\\\\\\\\\\\\\\\\\ */}
-        <h1 style={{
+        {/* <h1 style={{
   fontSize: "36px", // גודל טקסט גדול
   fontWeight: "bold", // עובי הטקסט
   color: "#4CAF50", // צבע ירוק
@@ -363,7 +381,7 @@ Set a time
   boxShadow: "0 4px 8px 0 rgba(0,0,0,0.2)" // אפקט צל
 }}>
   This is the most close event!!!
-</h1>
+</h1> */}
 
       <br />
         <div style={rowStyle} >

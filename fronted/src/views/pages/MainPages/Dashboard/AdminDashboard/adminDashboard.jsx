@@ -27,7 +27,7 @@ const AdminDashboard = () => {
       <div className="page-wrapper">
         <div className="content container-fluid">
           {/* Page Header */}
-          <Breadcrumbs maintitle="Wallet!" title="Dashboard"/>
+          <Breadcrumbs maintitle="Wallet" title="Dashboard"/>
           {/* /Page Header */}
           <div className="row">
             {Array.isArray(users) && users.length > 0 ? (

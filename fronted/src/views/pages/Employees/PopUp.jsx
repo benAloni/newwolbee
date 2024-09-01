@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Avatar_01, Avatar_02, Avatar_03 } from '../../../Routes/ImagePath';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -13,9 +13,20 @@ import finance from '../../../imgs/finance.png';
 import Celebratory from '../../../imgs/Celebratory.png';
 import gift from '../../../imgs/gift.png';
 import Sharing from '../../../imgs/Sharing.png';
+import rings from '../../../imgs/rings.png';
+import sick from '../../../imgs/sick.png';
+import baby from '../../../imgs/baby.png';
+import house from '../../../imgs/house.png';
+import flight from '../../../imgs/flight.png';
+
+import chase from '../../../imgs/chase.png';
 
 import Temporary from '../../../imgs/Temporary.png';
-
+import vacation from '../../../imgs/off.png'
+import { useSelector } from 'react-redux';
+import axios from 'axios';
+import { useQuery } from '@tanstack/react-query';
+import './popup.css'; // Import the CSS file for styling
 
 export default function PopUp() {
   const [isOpen, setIsOpen] = useState(false);
@@ -27,8 +38,40 @@ export default function PopUp() {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedCountry, setSelectedCountry] = useState(null);
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null); 
   const [showModal, setShowModal] = useState(false);
+  const [employee, setEvents] = useState([]);
+// get notifications
+const user = useSelector((state) => state.user.user);
+
+  // Fetch data using React Query
+  
+  const fetchData = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/api/getEmployees", {
+        headers: { Authorization: `Bearer ${user.token}` },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      return []; 
+    }
+  };
+
+  const { data, error, isLoading } = useQuery({
+    queryKey: ['employeeData'],
+    queryFn: fetchData,
+    staleTime: 0,
+    refetchInterval: 0,
+    refetchOnWindowFocus: true,
+  });
+
+  useEffect(() => {
+    if (data) {
+      setEvents(data);
+    }
+  }, [data]);
+
 
   const europeanCountries = [
     { value: 'albania', label: 'Albania' },
@@ -82,16 +125,34 @@ export default function PopUp() {
     { value: 'vatican', label: 'Vatican City' }
   ];
 
-  const data = [
-    { id: 1, image: Avatar_02, name: "John Doe", role: "Web Designer", jobtitle: "Web Designer", department: "Development" },
-    { id: 2, image: Avatar_01, name: "Richard Miles", role: "Web Developer", jobtitle: "Web Developer", department: "Designing" },
-    { id: 3, image: Avatar_03, name: "John Smith", role: "Android Developer", jobtitle: "Android Developer", department: "Android" },
-    { id: 4, image: Avatar_03, name: "Ben Aloni", role: "Android Developer", jobtitle: "Android Developer", department: "Android" },
-    { id: 5, image: Avatar_03, name: "Viki Haim Shimoni", role: "Android Developer", jobtitle: "Android Developer", department: "Android" },
-    { id: 6, image: Avatar_03, name: "Ido Shimon", role: "Android Developer", jobtitle: "Android Developer", department: "Android" },
-    { id: 7, image: Avatar_03, name: "Ofek Shimoni", role: "Android Developer", jobtitle: "Android Developer", department: "Android" },
-    { id: 8, image: Avatar_03, name: "Matan Ben David", role: "Android Developer", jobtitle: "Android Developer", department: "Android" },
+  const events = [
+    { id: 1, name: 'Engagement', imageUrl: rings, onClick: () => openSubModal('engagement') },
+    { id: 2, name: 'Sick leave', imageUrl: sick, onClick: null },
+    { id: 3, name: 'Vacation leave', imageUrl: vacation, onClick: () => openSubModal('vacation') },
+    { id: 4, name: 'Personal Celebrations', imageUrl: gift, onClick: null },
+    { id: 5, name: 'ChildcareIssues', imageUrl: chase, onClick: null },
+    { id: 6, name: 'Pregnancy', imageUrl: baby, onClick: null },
+    { id: 7, name: 'Housing Issues', imageUrl: house, onClick: null },
+    { id: 8, name: 'Flight', imageUrl: flight, onClick: null },
   ];
+
+  // const data1 = [
+  //   { id: 1, image: Avatar_02, name: "Brad Jones", role: "UX/UI Designer", jobtitle: "Web Designer", department: "Development" },
+  //   { id: 2, image: Avatar_01, name: "John Perkins", role: "Chief Scientist", jobtitle: "Web Developer", department: "Designing" },
+  //   { id: 3, image: Avatar_03, name: "Lisa Robinson", role: "Data Analystr", jobtitle: "Android Developer", department: "Android" },
+  //   { id: 4, image: Avatar_03, name: "Tom Hill", role: "Data Analyst", jobtitle: "Android Developer", department: "Android" },
+  //   { id: 5, image: Avatar_03, name: "David Lee", role: "Product Manager", jobtitle: "Android Developer", department: "Android" },
+  //   { id: 6, image: Avatar_03, name: "Nicole Miller", role: "UX/UI Designer", jobtitle: "Android Developer", department: "Android" },
+  //   { id: 7, image: Avatar_03, name: "Sofia Garcia", role: "Business Development Manager", jobtitle: "Android Developer", department: "Android" },
+  //   { id: 8, image: Avatar_03, name: "Emma Carter", role: "Research Engineer", jobtitle: "Android Developer", department: "Android" },
+  //   { id: 9, image: Avatar_03, name: "Mark Morris", role: "Research Engineer", jobtitle: "Android Developer", department: "Android" },
+  //   { id: 10, image: Avatar_03, name: "Josh Williams", role: "Data Analyst", jobtitle: "Android Developer", department: "Android" },
+  //   { id: 11, image: Avatar_03, name: "Selena Ramos", role: "Data Analyst", jobtitle: "Android Developer", department: "Android" },
+  //   { id: 12, image: Avatar_03, name: "Justin Smith", role: "Data Analyst", jobtitle: "Android Developer", department: "Android" },
+  // ];
+
+  
+
 
   const openModal = () => setIsOpen(true);
   const closeModal = () => {
@@ -147,6 +208,11 @@ export default function PopUp() {
     setShowModal(false);
   };
 
+  const h1style = {
+    textAlign: 'center',
+    marginBottom: '20px',
+  };
+
   const overlayStyle = {
     position: 'fixed',
     top: 0,
@@ -175,193 +241,127 @@ export default function PopUp() {
   return (
     <div className="App">
       <style>
-        {`
-          .modal {
-            display: ${isOpen ? 'block' : 'none'};
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.4);
-          }
-
-          .modal-content {
-            position: relative;
-            background-color: #ffffff;
-            margin: 5% auto;
-            padding: 40px;
-            border: 1px solid #888;
-            width: 90%;
-            max-width: 900px;
-            border-radius: 10px;
-          }
-
-          .close {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            color: #aaa;
-            font-size: 32px;
-            font-weight: bold;
-            cursor: pointer;
-          }
-
-          .button-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-          }
-
-          .eventButton {
-            padding: 20px;
-            border-radius: 12px;
-            border: 2px solid #ddd;
-            background-color: #f0f0f0;
-            color: #333;
-            cursor: pointer;
-            text-align: center;
-            font-size: 18px;
-            font-weight: bold;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: background-color 0.3s, transform 0.3s;
-          }
-
-          .eventButton:hover {
-            background-color: #e0e0e0;
-            transform: scale(1.05);
-          }
-
-          .sub-modal {
-            display: block;
-            position: fixed;
-            z-index: 2;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            width: 90%;
-            max-width: 900px;
-            background-color: #ffffff;
-            padding: 30px;
-            border: 1px solid #888;
-            border-radius: 12px;
-            overflow: auto;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-          }
-
-          .floatingButton {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background-color: #FF902F;
-            color: white;
-            font-size: 36px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            border: none;
-            z-index: 1000;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-          }
-
-          @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-          }
-
-          @keyframes fadeOut {
-            from { opacity: 1; }
-            to { opacity: 0; }
-          }
-
-          @keyframes slideIn {
-            from { transform: translateY(-50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-          }
-
-          @keyframes slideOut {
-            from { transform: translateY(0); opacity: 1; }
-            to { transform: translateY(-50px); opacity: 0; }
-          }
-        `}
+        {
+      `.modal {
+      display: ${isOpen ? 'block' : 'none'};
+      position: f;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.4);
+   }` }
+        
       </style>
       <div className="floatingButton" onClick={openModal}>
         +
       </div>
       <div className={`modal ${isOpen ? 'open' : ''}`}>
         <div className="modal-content">
-          <h1>Please choose type of event</h1>
+          <h1 style={h1style}>Please choose type of event</h1>
           <span className="close" onClick={closeModal}>
             &times;
           </span>
-          <div className="button-container">
-            <button className="eventButton" onClick={() => openSubModal('engagement')}>Engagement</button>
-            <button className="eventButton" onClick={() => openSubModal('sickLeave')}>Sick leave</button>
-            <button className="eventButton" onClick={() => openSubModal('vacation')}>Vacation</button>
-            <button className="eventButton" onClick={() => openSubModal('renovation')}>Renovation</button>
-            <button className="eventButton" onClick={() => openSubModal('pregnancy')}>Pregnancy</button>
-            <button className="eventButton" onClick={() => openSubModal('anniversary')}>Anniversary</button>
-            <button className="eventButton" onClick={() => openSubModal('carAccident')}>Car accident</button>
-            <button className="eventButton" onClick={() => openSubModal('deathOfRelative')}>Death of a relative</button>
-          </div>
+          <div className="button-container" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px' }}>
+      {events.map(event => (
+        <button
+          key={event.id}
+          className="eventButton"
+          onClick={event.onClick}
+          style={{
+            width: '150px',
+            height: '150px',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '10px',
+            border: '1px solid #ccc',
+            borderRadius: '8px',
+            cursor: event.onClick ? 'pointer' : 'default',
+            backgroundColor: '#f9f9f9'
+          }}
+        >
+          <img src={event.imageUrl} alt={event.name} style={{ marginBottom: '10px', width: '80px', height: '80px' }} />
+          <span style={h1style}>{event.name}</span>
+        </button>
+      ))}
+    </div>
 
           {/* Event modals */}
           {currentEventType && (
             <div className="sub-modal">
-              <h2>{currentEventType.charAt(0).toUpperCase() + currentEventType.slice(1)}</h2>
+              <h2 style={h1style}>{currentEventType.charAt(0).toUpperCase() + currentEventType.slice(1)}</h2>
+              <br />
               <span className="close" onClick={closeModal}>
                 &times;
               </span>
-              <div className="button-container">
-                {data.map(employee => (
-                  <div key={employee.id} onClick={() => handleEmployeeClick(employee)}>
-                    <div className="eventButton">
-                      {employee.name}<br/>
-                      {employee.jobtitle}<br/>
-                      {employee.id}<br/>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <div className="button-container" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px', height: '500px' }}>
+      {data.map(employee => (
+        <div key={employee.id} onClick={() => handleEmployeeClick(employee)} style={{ cursor: 'pointer' }}>
+         
+          <div className="eventButton" style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '10px',
+            border: '1px solid #ccc',
+            borderRadius: '8px',
+            backgroundColor: '#f9f9f9',
+            height: '30%'
+          }}>
+            
+            <img src={employee.imageUrl} alt={employee.name} style={{ marginBottom: '10px', width: '80px', height: '80px', borderRadius: '50%' }} />
+            <span style={{ fontWeight: 'bold', marginBottom: '5px' }}>{employee.FullName}</span>
+            <span style={{ fontSize: '12px', color: '#666' }}>{employee.Role}</span>
+          </div>
+        </div>
+      ))}
+    </div>
             </div>
           )}
 
           {/* Employee details modal */}
           {showEmployeeDetails && selectedEmployee && (
-            <div className="sub-modal">
+            <div className="sub-modal" >
              
 
-             <h2>{selectedEmployee.name}</h2>
+           
               <span className="close" onClick={() => setShowEmployeeDetails(false)}>
                 &times;
               </span>
-
+              <h2 style={h1style}>{selectedEmployee.FullName} Engagement</h2>
+            
               {/* <img src={selectedEmployee.image} alt={selectedEmployee.name} style={{ width: '100px', borderRadius: '50%' }} /> */}
+              
               <p className="engagement-text">
-                Engagement is a joyful and significant milestone in a couple's journey together. It marks the formal commitment of two individuals
-                to marry and often involves a special proposal where one partner asks the other to spend their life together. This proposal is 
-                usually accompanied by the giving of an engagement ring, symbolizing the promise of marriage.
-                The engagement period is a time of excitement and anticipation, filled with planning and preparation for the upcoming wedding.
-                During this time, couples may announce their engagement to family and friends, often celebrating with an engagement party.
-                It is a period for building deeper connections, discussing future plans, and aligning life goals.
-                Traditionally, engagements can vary in length, depending on personal preferences and cultural practices.
-                Some may last a few months, while others can extend over several years. Regardless of the duration, 
-                the engagement period is a special time for the couple to strengthen their bond and enjoy the prospect of their future life together.
-                Engagements are celebrated differently around the world, with unique customs and traditions reflecting the rich diversity of cultures.
-                From elaborate ceremonies to intimate gatherings, each engagement is a personal and meaningful expression of love and
-              </p>
+  The journey from engagement through the wedding and into the first years of marriage is a
+  significant period in Noah’s life. As a manager, you have a critical role in supporting him during this transformative time, and
+  doing so can yield substantial benefits for both Noah and the company.
+</p>
+
+<p className="engagement-text">
+  From engagement onward, Noah will juggle wedding planning with work responsibilities,
+  often leading to stress. By offering understanding and flexibility, you can help him manage
+  stress and navigate his work commitments effectively.
+</p>
+
+<p className="engagement-text" style={{ fontWeight: 'bold' }}>
+  Don't wait for Noah to come to you. Proactively reach out, initiate a conversation, and work
+  together to decide how best to support him during this time.
+</p>
+
+
+
               <div className="square-buttons-container">
                 {Array(1).fill().map((_, index) => (
                   <div key={index} className="square-button">
                     <img src={giftoff} alt="Icon" className="square-button-image" />
-                    <p className="square-button-text" style={{fontSize:'12px'}}>Flexible Work Hours:
+                    <p style={{ fontWeight: 'bold' }}>Flexible Work Hours</p>
+                    <p className="square-button-text" style={{fontSize:'12px'}}>
 
 Allow flexibility in Noah's
 schedule to attend
@@ -373,6 +373,7 @@ and manage other tasks</p>
 {Array(1).fill().map((_, index) => (
                   <div key={index} className="square-button">
                     <img src={workhome} alt="Icon" className="square-button-image" />
+                    <p style={{ fontWeight: 'bold' }}>Remote Work Options</p>
                     <p className="square-button-text" style={{fontSize:'12px'}}>Remote Work Options:
 
 Offer Noah the option to
@@ -383,7 +384,8 @@ needed</p>
                 {Array(1).fill().map((_, index) => (
                   <div key={index} className="square-button">
                     <img src={additionalTime} alt="Icon" className="square-button-image" />
-                    <p className="square-button-text" style={{fontSize:'12px'}}>Additional Time Off:
+                    <p style={{ fontWeight: 'bold' }}>Additional Time Off</p>
+                    <p className="square-button-text" style={{fontSize:'12px'}}>
 Provide extra leave days
 specifically for Noah’s
 wedding preparation</p>
@@ -392,7 +394,8 @@ wedding preparation</p>
                 {Array(1).fill().map((_, index) => (
                   <div key={index} className="square-button">
                     <img src={finance} alt="Icon" className="square-button-image" />
-                    <p className="square-button-text" style={{fontSize:'12px'}}>Financial Planning Assistance:
+                    <p style={{ fontWeight: 'bold' }}>Financial Planning Assistance</p>
+                    <p className="square-button-text" style={{fontSize:'12px'}}>
 
 Discussions about financial
 planning and benefits related
@@ -403,7 +406,8 @@ financial planning workshops</p>
                 {Array(1).fill().map((_, index) => (
                   <div key={index} className="square-button">
                     <img src={Celebratory} alt="Icon" className="square-button-image" />
-                    <p className="square-button-text" style={{fontSize:'12px'}}>Celebratory Gestures:
+                    <p style={{ fontWeight: 'bold' }}>Celebratory Gestures</p>
+                    <p className="square-button-text" style={{fontSize:'12px'}}>
 Celebrate Noah’s
 engagement with a
 congratulatory email or a
@@ -413,7 +417,8 @@ small office celebration</p>
                 {Array(1).fill().map((_, index) => (
                   <div key={index} className="square-button">
                     <img src={gift} alt="Icon" className="square-button-image" />
-                    <p className="square-button-text" style={{fontSize:'12px'}}>Engagement Gift:
+                    <p style={{ fontWeight: 'bold' }}>Engagement Gift</p>
+                    <p className="square-button-text" style={{fontSize:'12px'}}>
 
 Celebrate Noah’s engagement
 with a small gift, showing that
@@ -424,7 +429,8 @@ personal milestones</p>
                 {Array(1).fill().map((_, index) => (
                   <div key={index} className="square-button">
                     <img src={finance} alt="Icon" className="square-button-image" />
-                    <p className="square-button-text" style={{fontSize:'12px'}}>Career Planning:
+                    <p style={{ fontWeight: 'bold' }}>Career Planning</p>
+                    <p className="square-button-text" style={{fontSize:'12px'}}>:
 
 Discuss career opportunities
 with Noah and how these
@@ -435,8 +441,8 @@ long-term goals</p>
                 {Array(1).fill().map((_, index) => (
                   <div key={index} className="square-button">
                     <img src={Temporary} alt="Icon" className="square-button-image" />
-                    <p className="square-button-text" style={{fontSize:'12px'}}>Temporary Role
-Adjustments:
+                    <p style={{ fontWeight: 'bold' }}>Temporary Role Adjustments</p>
+                    <p className="square-button-text" style={{fontSize:'12px'}}>
 
 Consider temporary
 adjustments to Noah’s role or
@@ -447,7 +453,8 @@ workload and stress</p>
                 {Array(1).fill().map((_, index) => (
                   <div key={index} className="square-button">
                     <img src={Sharing} alt="Icon" className="square-button-image" />
-                    <p className="square-button-text" style={{fontSize:'12px'}}>Resource Sharing:
+                    <p style={{ fontWeight: 'bold' }}>Resource Sharing</p>
+                    <p className="square-button-text" style={{fontSize:'12px'}}>
 
 Invite team members to share
 recommendations, including
@@ -458,61 +465,8 @@ planning tools</p>
               </div>
               
 
-              <style>
-                {`
-                  .sub-modal {
-                    overflow-y: auto; /* Enable vertical scroll if content overflows */
-                    max-height: 80vh; /* Adjust height as needed */
-                    padding: 20px;
-                  }
-    
-                  .engagement-text {
-                    text-align: center; /* Center align the text */
-                    line-height: 1.8; /* Add spacing between lines */
-                    margin: 20px 0; /* Add margin above and below the paragraph */
-                  }
-    
-                  .square-buttons-container {
-                    display: flex;
-                    flex-wrap: wrap;
-                    gap: 20px;
-                    margin-top: 20px;
-                    justify-content: center; /* Center align the buttons */
-                  }
-    
-                  .square-button {
-                    background-color: #f9f9f9;
-                    border: 1px solid #ddd;
-                    border-radius: 12px;
-                    padding: 30px; /* Increased padding for larger buttons */
-                    text-align: center;
-                    cursor: pointer;
-                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                    transition: background-color 0.3s, transform 0.3s;
-                    width: 200px; /* Adjust width for larger buttons */
-                  }
-    
-                  .square-button:hover {
-                    background-color: #e0e0e0;
-                    transform: scale(1.05);
-                  }
-    
-                  .square-button-image {
-                    width: 60px; /* Adjust image size */
-                    height: 60px; /* Adjust image size */
-                    border-radius: 50%;
-                    margin-bottom: 10px;
-                  }
-    
-                  .square-button-text {
-                    font-size: 18px; /* Adjust font size */
-                    color: #333;
-                    margin: 10px 0 0; /* Adjust margin for spacing */
-                    line-height: 1.5; /* Add spacing between lines of text */
-                    text-align: center; /* Center align the text */
-                  }
-                `}
-              </style>
+             
+              
             </div>
           )}
 
@@ -525,7 +479,7 @@ planning tools</p>
               </span>
               {/* Add content for vacation modal here */}
 
-              <div style={{ height: '450px', overflowY: 'scroll', padding: '20px', border: '1px solid #ccc', textAlign: 'center' }}>
+              <div style={{width:'800px', height: '500px', overflowY: 'scroll', padding: '20px', border: '1px solid #ccc', textAlign: 'center' }}>
       <h2 style={{ marginBottom: '20px' }}>Purpose</h2>
       <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', flexWrap: 'wrap' }}>
         <div

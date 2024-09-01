@@ -9,10 +9,10 @@ import Hol from "./Hol";
 import axios from "axios";
 import CalendarModal from "../../../../../components/modelpopup/calendar/CalendarModal";
 import CalendarEventsPopup from "../../../../../components/modelpopup/calendar/calendarEventsPopup";
-import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import "./calen.css";
+
 
 const Calendar = (props) => {
   const [events, setEvents] = useState([]);
@@ -21,7 +21,6 @@ const Calendar = (props) => {
   const [countryCode, setCountryCode] = useState("IL"); // Default country code
   const [countryHolidays, setCountryHolidays] = useState({}); // Store holidays by country
   const [showHolidays, setShowHolidays] = useState(false);
-  const location = useLocation();
   const linkRef = useRef(null);
   const calendarRef = useRef(null);
   const user = useSelector((state) => state.user.user);
@@ -86,6 +85,7 @@ const Calendar = (props) => {
 
       const foodHolidayEvents = data.foodHolidays.map((val) => ({
         title: val.name,
+        img: val.img,
         className: "bg-pink",
         rrule: {
           freq: "YEARLY",
@@ -173,24 +173,44 @@ const Calendar = (props) => {
                 Calendar
               </h3>
               <div>
-        <label htmlFor="country-select">Select Country: </label>
-        <select
-          id="country-select"
-          value={countryCode}
-          onChange={handleCountryChange}
-        >
-          <option value="IL">Israel</option>
-          <option value="US">United States</option>
-          <option value="RU">Russia</option>
-          <option value="JP">Japan</option>
-          <option value="CN">China</option>
-          <option value="CA">Canada</option>
-          <option value="FR">France</option>
-          <option value="DE">Germany</option>
-          <option value="UA">Ukraine</option>
-          <option value="GE">Georgia</option>
-          <option value="GB">United Kingdom</option>
-        </select>
+              <label htmlFor="country-select">Select Country: </label>
+  <select
+    id="country-select"
+    value={countryCode}
+    onChange={handleCountryChange}
+    style={{
+      width: '100%',
+      maxWidth: '300px',
+      padding: '10px',
+      border: '2px solid #ccc',
+      borderRadius: '5px',
+      fontSize: '16px',
+      color: '#333',
+      backgroundColor: '#f8f8f8',
+      cursor: 'pointer',
+      transition: 'border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out'
+    }}
+    onFocus={(e) => {
+      e.target.style.borderColor = '#007bff';
+      e.target.style.boxShadow = '0 0 5px rgba(0, 123, 255, 0.5)';
+    }}
+    onBlur={(e) => {
+      e.target.style.borderColor = '#ccc';
+      e.target.style.boxShadow = 'none';
+    }}
+  >
+    <option value="IL">Israel</option>
+    <option value="US">United States</option>
+    <option value="RU">Russia</option>
+    <option value="JP">Japan</option>
+    <option value="CN">China</option>
+    <option value="CA">Canada</option>
+    <option value="FR">France</option>
+    <option value="DE">Germany</option>
+    <option value="UA">Ukraine</option>
+    <option value="GE">Georgia</option>
+    <option value="GB">United Kingdom</option>
+  </select>
       </div>
             </div>
             <div className="col-auto float-end ms-auto">

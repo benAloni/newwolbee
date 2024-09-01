@@ -108,7 +108,7 @@ const AppRouter = () => {
     <div>
       <BrowserRouter>
         <ScrollToTop />
-        <PopUp />
+        
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/myDashboard" element={<MyDashboard />} />

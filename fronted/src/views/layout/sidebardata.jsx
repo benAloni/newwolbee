@@ -76,6 +76,14 @@ export const SidebarData = [
     icon: "la la-user",
     // style: getMenuItemStyle('Team Dashboard'),
       },
+ {
+        menuValue: 'Notifications',
+        hasSubRoute: false,
+        showSubRoute: false,
+        route: "/contacts",
+        icon: "las la-bell",
+        // style: getMenuItemStyle('Upcoming events'),
+      },
       {
         menuValue: 'Team Dashboard',
         hasSubRoute: false,
@@ -101,14 +109,16 @@ export const SidebarData = [
         icon: "la la-ticket",
         // style: getMenuItemStyle('Upcoming events'),
       },
-      {
-        menuValue: 'Notifications',
+       {
+        menuValue: 'Calendar',
         hasSubRoute: false,
         showSubRoute: false,
-        route: "/contacts",
-        icon: "las la-bell",
-        // style: getMenuItemStyle('Upcoming events'),
+        route: "/events",
+        icon: "la la-calendar",
+    
+        // style: getMenuItemStyle('Calendar'),
       },
+     
       {
         menuValue: '1 X 1',
         hasSubRoute: false,
@@ -133,15 +143,7 @@ export const SidebarData = [
         icon: "la la-info",
         // style: getMenuItemStyle('Useful information'),
       },
-      {
-        menuValue: 'Calendar',
-        hasSubRoute: false,
-        showSubRoute: false,
-        route: "/events",
-        icon: "la la-calendar",
-    
-        // style: getMenuItemStyle('Calendar'),
-      },
+     
       {
         menuValue: 'Create new event',
         hasSubRoute: false,
@@ -150,14 +152,14 @@ export const SidebarData = [
         icon: "la la-calendar-plus",
         // style: getMenuItemStyle('Calendar'),
       },
-      {
-        menuValue: 'Retention Statistics',
-        hasSubRoute: false,
-        showSubRoute: false,
-        route: "RetentionStatistics",
-        icon: "la la-bar-chart",
-        // style: getMenuItemStyle('Calendar'),
-      },
+  //     {
+  //       menuValue: 'Retention Statistics',
+  //       hasSubRoute: false,
+  //       showSubRoute: false,
+  //       route: "RetentionStatistics",
+  //       icon: "la la-bar-chart",
+  //       // style: getMenuItemStyle('Calendar'),
+  //     },
 
 
     ],

@@ -11,6 +11,8 @@ import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import dayjs from "dayjs";
+import BoxSelector from "./Barsettings";
+import manager from "../../../imgs/managerProfilePic.jpg";
 
 const UserSettings = () => {
   const [updateProfilePic, setUpdateProfilePic] = useState(""); //get profile pic from local storage
@@ -57,7 +59,198 @@ const UserSettings = () => {
     }, 100);
   };
   return (
+    <div style={{
+      marginTop: '20px', /* או כל ערך אחר שמתאים לך */
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '100vh' /* מתקן את הגובה של העמוד כדי למרכז את הדיב אנכית */
+    }}>
+      
+      <div className="page-wrapper">
+  <div className="content container-fluid">
+    <Header />
+    <Sidebar />
+  </div>
+</div>
+<div className="settings-page-container">
+  <div className="user-profile-container">
+    <div className="profile-pic-wrapper">
+      
+      <input
+        type="file"
+        accept="/image/*"
+        id="profile-pic"
+        className="profile-pic-container"
+        name="profile_pic"
+        onChange={handleUpdateProfile}
+      />
+     <label
+  htmlFor="profile-pic"
+  className="profile-pic-label"
+  style={{
+    backgroundImage: `url(${manager})`,
+    width: '120px', // או כל ערך שמתאים
+    height: '120px', // או כל ערך שמתאים
+    backgroundSize: 'cover', // מכסה את התווית בתמונה
+    backgroundPosition: 'center', // ממקם את התמונה במרכז התווית
+  }}
+></label>
+      <div className="icon plus">
+        <CiCirclePlus size={24} onClick={triggerFileInput} />
+      </div>
+      <div className="icon trash" onClick={() => setRemovePicPopup(true)}>
+        <CiTrash size={24} />
+      </div>
+    </div>
     <div>
+      <h2>Mike Ross</h2>
+      <p>Product Development Manager</p>
+    </div>
+  </div>
+
+
+
+        {/* ____________________________________ */}
+        <div className="settings-container" style={{
+    scrollbarColor: 'black',
+    maxHeight: '400px', // גובה מקסימלי לדיב
+    overflowY: 'auto', // פס גלילה אנכי כאשר התוכן חורג
+    overflowX: 'hidden' // מסתיר פס גלילה אופקי
+  }} >
+          <h1>Settings</h1>
+          <div className="tabs-container" >
+            <div
+              className={`tab ${activeTab === "Notifications" ? "active" : ""}`}
+              onClick={() => handleTabClick("Notifications")}
+            >
+              Notifications
+            </div>
+            <div
+              className={`tab ${activeTab === "Language" ? "active" : ""}`}
+              onClick={() => handleTabClick("Language")}
+            >
+              Language
+            </div>
+            <div
+              className={`tab ${
+                activeTab === "App Preferences" ? "active" : ""
+              }`}
+              onClick={() => handleTabClick("App Preferences")}
+            >
+              App Preferences
+            </div>
+          </div>
+          <animated.div style={slideProps}>
+            {activeTab === "Notifications" && (
+              <div className="notifications-selection">
+                <div className="toggle-container">
+                  <span>Email Notifications</span>
+                  <input type="checkbox" id="toggle1" className="toggle" />
+                  <label htmlFor="toggle1" className="toggle-label"></label>
+                </div>
+                <div className="toggle-container">
+                  <span>Desktop Notifications</span>
+                  <input type="checkbox" id="toggle2" className="toggle" />
+                  <label htmlFor="toggle2"></label>
+                </div>
+                <div className="toggle-container">
+                  <span>Phone Notifications</span>
+                  <input type="checkbox" id="toggle3" className="toggle" />
+                  <label htmlFor="toggle3"></label>
+                </div>
+
+                <div className="d-flex align-items-center justify-content-between">
+                  <span>Notification Frequency</span>
+                  <Select
+                    value={frequency}
+                    onChange={(e) => setFrequency(e.target.value)}
+                    displayEmpty
+                    sx={{ minWidth: 120, ml: 2 }}
+                  >
+                    <MenuItem value="Daily">Daily</MenuItem>
+                    <MenuItem value="Weekly">Weekly</MenuItem>
+                    <MenuItem value="Monthly">Monthly</MenuItem>
+                  </Select>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <TimePicker
+                      label="Select Time"
+                      defaultValue={dayjs("2024-04-17T15:30")}
+                      renderInput={(params) => (
+                        <TextField {...params} sx={{ minWidth: 120 }} />
+                      )}
+                      value={selectedTime}
+                      onChange={(newValue) => setSelectedTime(newValue)}
+                    />
+                  </LocalizationProvider>
+                </div>
+                <div className="d-flex align-items-center justify-content-between">
+                  <span>Notification Repeats</span>
+                  <Select
+                    value={notificationRepeat}
+                    onChange={(e) => setNotificationRepeat(e.target.value)}
+                    displayEmpty
+                    sx={{ minWidth: 120 }}
+                  >
+                    <MenuItem value="2 Times">2 Times</MenuItem>
+                    <MenuItem value="3 Times">3 Times</MenuItem>
+                    <MenuItem value="4 Times">4 Times</MenuItem>
+                  </Select>
+                </div>
+
+                <h3>Notifications Selection</h3>
+               
+                <br></br>
+                <BoxSelector></BoxSelector>
+                <div className="notification-settings"   style={{
+    textAlign: 'center',
+    marginTop: '20px'
+  }}>
+                
+                  <div className="checkbox-group"  style={{
+      display: 'flex',
+      flexWrap: 'wrap',
+      justifyContent: 'center',
+      gap: '20px',
+      marginBottom: '20px',
+    }}>
+                   <label style={{ display: 'flex', alignItems: 'center' }}>
+      <input type="checkbox" />
+      <span style={{ marginLeft: '8px' }}>Every Employee</span>
+    </label>
+    <label style={{ display: 'flex', alignItems: 'center' }}>
+      <input type="checkbox" />
+      <span style={{ marginLeft: '8px' }}>Only Managers</span>
+    </label>
+    <label style={{ display: 'flex', alignItems: 'center' }}>
+      <input type="checkbox" />
+      <span style={{ marginLeft: '8px' }}>No Managerial Attention</span>
+    </label>
+    <label style={{ display: 'flex', alignItems: 'center' }}>
+      <input type="checkbox" />
+      <span style={{ marginLeft: '8px' }}>Only Milestone</span>
+    </label>
+                  </div>
+                  <button style={{backgroundColor:'#f19f29'}}>OK</button>
+                </div>
+              </div>
+            )}
+            {activeTab === "Language" && <div>Language Settings</div>}
+            {activeTab === "App Preferences" && (
+              <div>App Preferences Settings</div>
+            )}
+          </animated.div>
+        </div>
+      </div>
+      {removePicPopup && (
+        <>
+          <div className="popup">
+            <p>Remove Profile Picture?</p>
+            <button onClick={handleRemoveProfile}>Yes</button>
+            <button onClick={() => setRemovePicPopup(false)}>Cancel</button>
+          </div>
+        </>
+      )}
       <style>
         {`
             .settings-page-container {
@@ -260,176 +453,6 @@ const UserSettings = () => {
 }
       `}
       </style>
-      <div className="page-wrapper">
-        <div className="content container-fluid">
-          <Header />
-          <Sidebar />
-        </div>
-      </div>
-      <div className="settings-page-container">
-        <div className="user-profile-container">
-          <div className="profile-pic-wrapper">
-            <input
-              type="file"
-              accept="/image/*"
-              id="profile-pic"
-              className="profile-pic-container"
-              name="profile_pic"
-              onChange={handleUpdateProfile}
-            />
-            <label
-              htmlFor="profile-pic"
-              className="profile-pic-label"
-              style={{
-                backgroundImage: updateProfilePic
-                  ? `url(${updateProfilePic})`
-                  : `url('/user-profile-icon.jpg')`,
-              }}
-            ></label>
-            <div className="icon plus">
-              <CiCirclePlus size={24} onClick={triggerFileInput} />
-            </div>
-            <div className="icon trash" onClick={() => setRemovePicPopup(true)}>
-              <CiTrash size={24} />
-            </div>
-          </div>
-          <div>
-            <h2>Mike Ross</h2>
-            <p>Product Development Manager</p>
-          </div>
-        </div>
-        <div className="settings-container">
-          <h1>Settings</h1>
-          <div className="tabs-container">
-            <div
-              className={`tab ${activeTab === "Notifications" ? "active" : ""}`}
-              onClick={() => handleTabClick("Notifications")}
-            >
-              Notifications
-            </div>
-            <div
-              className={`tab ${activeTab === "Language" ? "active" : ""}`}
-              onClick={() => handleTabClick("Language")}
-            >
-              Language
-            </div>
-            <div
-              className={`tab ${
-                activeTab === "App Preferences" ? "active" : ""
-              }`}
-              onClick={() => handleTabClick("App Preferences")}
-            >
-              App Preferences
-            </div>
-          </div>
-          <animated.div style={slideProps}>
-            {activeTab === "Notifications" && (
-              <div className="notifications-selection">
-                <div className="toggle-container">
-                  <span>Email Notifications</span>
-                  <input type="checkbox" id="toggle1" className="toggle" />
-                  <label htmlFor="toggle1" className="toggle-label"></label>
-                </div>
-                <div className="toggle-container">
-                  <span>Desktop Notifications</span>
-                  <input type="checkbox" id="toggle2" className="toggle" />
-                  <label htmlFor="toggle2"></label>
-                </div>
-                <div className="toggle-container">
-                  <span>Phone Notifications</span>
-                  <input type="checkbox" id="toggle3" className="toggle" />
-                  <label htmlFor="toggle3"></label>
-                </div>
-
-                <div className="d-flex align-items-center justify-content-between">
-                  <span>Notification Frequency</span>
-                  <Select
-                    value={frequency}
-                    onChange={(e) => setFrequency(e.target.value)}
-                    displayEmpty
-                    sx={{ minWidth: 120, ml: 2 }}
-                  >
-                    <MenuItem value="Daily">Daily</MenuItem>
-                    <MenuItem value="Weekly">Weekly</MenuItem>
-                    <MenuItem value="Monthly">Monthly</MenuItem>
-                  </Select>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <TimePicker
-                      label="Select Time"
-                      defaultValue={dayjs("2024-04-17T15:30")}
-                      renderInput={(params) => (
-                        <TextField {...params} sx={{ minWidth: 120 }} />
-                      )}
-                      value={selectedTime}
-                      onChange={(newValue) => setSelectedTime(newValue)}
-                    />
-                  </LocalizationProvider>
-                </div>
-                <div className="d-flex align-items-center justify-content-between">
-                  <span>Notification Repeats</span>
-                  <Select
-                    value={notificationRepeat}
-                    onChange={(e) => setNotificationRepeat(e.target.value)}
-                    displayEmpty
-                    sx={{ minWidth: 120 }}
-                  >
-                    <MenuItem value="2 Times">2 Times</MenuItem>
-                    <MenuItem value="3 Times">3 Times</MenuItem>
-                    <MenuItem value="4 Times">4 Times</MenuItem>
-                  </Select>
-                </div>
-
-                <h3>Notifications Selection</h3>
-                <div className="d-flex ">
-                  <div className="icon">Birthdays</div>
-                  <div className="icon">Pregnancy</div>
-                  <div className="icon">Sick Leave</div>
-                  <div className="icon">Vacation Leave</div>
-                  <div className="icon">Engagement</div>
-                  <div className="icon">Work Routine Changes</div>
-                  <div className="icon">Important Dates and Events</div>
-                  <div className="icon">Important Life Events</div>
-                </div>
-                <div className="notification-settings">
-                  <h3>Birthdays</h3>
-                  <div className="checkbox-group">
-                    <label>
-                      <input type="checkbox" />
-                      Every Employee
-                    </label>
-                    <label>
-                      <input type="checkbox" />
-                      Only Managers
-                    </label>
-                    <label>
-                      <input type="checkbox" />
-                      No Managerial Attention
-                    </label>
-                    <label>
-                      <input type="checkbox" />
-                      Only Milestone
-                    </label>
-                  </div>
-                  <button>OK</button>
-                </div>
-              </div>
-            )}
-            {activeTab === "Language" && <div>Language Settings</div>}
-            {activeTab === "App Preferences" && (
-              <div>App Preferences Settings</div>
-            )}
-          </animated.div>
-        </div>
-      </div>
-      {removePicPopup && (
-        <>
-          <div className="popup">
-            <p>Remove Profile Picture?</p>
-            <button onClick={handleRemoveProfile}>Yes</button>
-            <button onClick={() => setRemovePicPopup(false)}>Cancel</button>
-          </div>
-        </>
-      )}
     </div>
   );
 };

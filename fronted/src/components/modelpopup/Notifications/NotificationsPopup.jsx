@@ -7,17 +7,24 @@ export default function NotificationsPopup() {
   const user = useSelector((state) => state.user.user);
 
   const [events, setEvents] = useState([]);
-  const [day, setDay] = useState(1);
   const [eventsTomorrow, setEventsTomorrow] = useState([]);
 
   const fetchData = async () => {
-    const response = await axios.get("http://localhost:5000/api/getAllNotifications", {
-      headers: { Authorization: `Bearer ${user.token}` },
-    });
-    return response.data;
-  };
+    const [AllNotification, employeesResponse] =
+      await Promise.all([
+        axios.get("http://localhost:5000/api/getAllNotifications", {
+          headers: { Authorization: `Bearer ${user.token}` },
+        }),
+        axios.get("http://localhost:5000/api/getEmployees", {
+          headers: { Authorization: `Bearer ${user.token}` },
+        }),
+      ]);
+  
+      setEvents([...AllNotification.data, ...employeesResponse.data]);
+      
+    };
 
-  const { data, error, isLoading } = useQuery({
+  const {error, isLoading } = useQuery({
     queryKey: ["AllNotificationsData"],
     queryFn: fetchData,
     staleTime: 0, // 3 minutes
@@ -26,28 +33,53 @@ export default function NotificationsPopup() {
   });
 
   useEffect(() => {
-    if (data && !isLoading) {
-      console.log("Data fetched:", data);
-      const newEvents = data.map((val) => ({
-        title: val.title,
-        date: val.start,
-        className: val.className,
-      }));
-      console.log("Parsed events:", newEvents);
+    if (events.length > 0 && !isLoading) {
+      const newEvents = events.map((val) => {
+        // Check if DataOfBirth exists, and set title accordingly
+        if (val.DataOfBirth) {
+          return {
+            title: `Happy Birthday ${val.FullName}`, // Assuming employees have FullName
+            date: val.DataOfBirth,
+            className: `Birthday`,
+          };
+        } else {
+          return {
+            title: val.title,
+            date: val.start,
+            className: val.className,
+          };
+        }
+      });
   
-      setEvents(newEvents);
-  
+      // Function to get events for tomorrow or 3 days before for Birthday events
       const getEventsForTomorrow = () => {
         const today = new Date();
-        const tomorrow = new Date(today);
-        tomorrow.setDate(today.getDate() + 1);
-
-        const tomorrowMonth = tomorrow.getMonth() + day; // Months are 0-based in JavaScript
-        const tomorrowDate = tomorrow.getDate();
   
         return newEvents.filter(event => {
           const eventDate = new Date(event.date);
-          return eventDate.getDate() === tomorrowDate && (eventDate.getMonth() + 1) === tomorrowMonth;
+          
+          // If the event is a Birthday, check for 3 days before
+          if (event.className === 'Birthday') {
+            const threeDaysBefore = new Date(eventDate);
+            threeDaysBefore.setDate(eventDate.getDate() - 3);
+  
+            // Show the event if today is between 3 days before and the event date
+            return (
+              today >= threeDaysBefore && today <= eventDate
+            );
+          }
+  
+          // Otherwise, check for tomorrow's events
+          const tomorrow = new Date(today);
+          tomorrow.setDate(today.getDate() + 1);
+  
+          const tomorrowMonth = tomorrow.getMonth() + 1; // Months are 0-based in JavaScript
+          const tomorrowDate = tomorrow.getDate();
+  
+          return (
+            eventDate.getDate() === tomorrowDate && 
+            (eventDate.getMonth() + 1) === tomorrowMonth
+          );
         });
       };
   
@@ -60,7 +92,8 @@ export default function NotificationsPopup() {
     if (error) {
       console.error("Error fetching data:", error);
     }
-  }, [data, isLoading, error]);
+  }, [events, isLoading, error]);
+  
   
 
   return (

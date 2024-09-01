@@ -20,6 +20,8 @@ const CalendarEventsPopup = ({ show, handleClose, event, onDelete }) => {
       onDelete(event.id);
     }
   };
+  console.log(event);
+  
 
   return (
     <Modal show={show} onHide={handleClose}>
@@ -29,7 +31,7 @@ const CalendarEventsPopup = ({ show, handleClose, event, onDelete }) => {
       <Modal.Body>
         {event ? (
           <>
-            <h5>{event.title}</h5>
+            <h5>{event.title} <img src={event.extendedProps.img}   style={{ width: "20px", height: "20px", borderRadius: "50%" }} /></h5>
             <p>
               <strong>Start:</strong> {new Date(event.start).toLocaleString()}
             </p>

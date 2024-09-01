@@ -20,6 +20,14 @@ export const managerSideBarData = [
         icon: "la la-users",
       },
       {
+        menuValue: 'Notifications',
+        hasSubRoute: false,
+        showSubRoute: false,
+        route: "/contacts",
+        icon: "las la-bell",
+        // style: getMenuItemStyle('Upcoming events'),
+      },
+      {
         menuValue: "Upcoming events",
         hasSubRoute: false,
         showSubRoute: false,
