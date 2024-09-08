@@ -64,7 +64,7 @@ const AllEmployee = () => {
       if (!user) return;
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/getEmployees",
+          "https://newwolbee-l7cc.onrender.com/api/getEmployees",
           {
             headers: {
               Authorization: `Bearer ${user.token}`,
@@ -93,7 +93,7 @@ const AllEmployee = () => {
     const fetchTeams = async () => {
       if (!user) return;
       try {
-        const response = await axios.get("http://localhost:5000/api/teams", {
+        const response = await axios.get("https://newwolbee-l7cc.onrender.com/api/teams", {
           headers: {
             Authorization: `Bearer ${user.token}`,
           },

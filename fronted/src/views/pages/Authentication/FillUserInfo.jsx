@@ -28,7 +28,7 @@ const FillUserInfo = () => {
       const token = await auth.currentUser.getIdToken();
 
       const response = await axios.post(
-        "http://localhost:5000/api/fill-info",
+        "https://newwolbee-l7cc.onrender.com/api/fill-info",
         {
           civilId: data.id,
         },

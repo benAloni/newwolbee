@@ -13,7 +13,7 @@ const PersonalInformationModelPopup = ({selectedEmployee}) => {
 
 
   const fetchEmployees = async () => {
-    const response = await axios.get("http://localhost:5000/api/getEmployees", {
+    const response = await axios.get("https://newwolbee-l7cc.onrender.com/api/getEmployees", {
       headers: { Authorization: `Bearer ${user.token}` },
     });
     return response.data;

@@ -53,7 +53,7 @@ console.log(selectedCountry);
   // Fetch data using React Query
   const updateVacation = async () => {
     try {
-        const response = await fetch('http://localhost:5000/api/updateEmployeeVacation', {
+        const response = await fetch('https://newwolbee-l7cc.onrender.com/api/updateEmployeeVacation', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -90,7 +90,7 @@ console.log(selectedCountry);
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/getEmployees", {
+      const response = await axios.get("https://newwolbee-l7cc.onrender.com/api/getEmployees", {
         headers: { Authorization: `Bearer ${user.token}`},
       });
       return response.data;

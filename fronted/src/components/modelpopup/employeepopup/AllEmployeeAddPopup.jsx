@@ -123,7 +123,7 @@ const AllEmployeeAddPopup = (props) => {
       try {
         setIsSubmitting(true); // Disable the submit button when submission starts
         const response = await axios.post(
-          "http://localhost:5000/api/addEmployees",
+          "https://newwolbee-l7cc.onrender.com/api/addEmployees",
           employeeData,
           {
             headers: {
@@ -168,7 +168,7 @@ const AllEmployeeAddPopup = (props) => {
 const addNotificationMutation = useMutation({
   mutationFn: async (eventData) => {
     const response = await axios.post(
-      "http://localhost:5000/api/addAllNotifications",
+      "https://newwolbee-l7cc.onrender.com/api/addAllNotifications",
       { notificationsData: [eventData] }, // Wrap eventData in an array
       {
         headers: {

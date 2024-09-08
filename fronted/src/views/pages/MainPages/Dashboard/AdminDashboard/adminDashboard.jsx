@@ -15,7 +15,7 @@ const AdminDashboard = () => {
 // what is this ?
   useEffect(() => {
     axios
-      .get(base_url + "http://localhost:5000")
+      .get(base_url + "https://newwolbee-l7cc.onrender.com")
       .then((res) => setUsers(res.data))
       .catch((error) => {
         console.error("There was an error fetching the data!", error);

@@ -28,7 +28,7 @@ const CalendarModal = ({ addEvent }) => {
 const addEventMutation = useMutation({
   mutationFn: async ({ eventName, selectedDate, category }) => {
     const response = await axios.post(
-      "http://localhost:5000/api/addEvent",
+      "https://newwolbee-l7cc.onrender.com/api/addEvent",
       {
         eventData: {
           title: eventName,
@@ -72,7 +72,7 @@ const addEventMutation = useMutation({
 const addNotificationMutation = useMutation({
   mutationFn: async (eventData) => {
     const response = await axios.post(
-      "http://localhost:5000/api/addAllNotifications",
+      "https://newwolbee-l7cc.onrender.com/api/addAllNotifications",
       { notificationsData: [eventData] }, // Wrap eventData in an array
       {
         headers: {

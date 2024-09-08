@@ -73,7 +73,7 @@ export default function HrStatistics() {
   useEffect(() => { //need to fetch the teams once 
     const fetchTeams = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/teams",{
+        const response = await axios.get("https://newwolbee-l7cc.onrender.com/api/teams",{
           headers: {
             Authorization: `Bearer ${await auth.currentUser.getIdToken()}`,
           },

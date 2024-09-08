@@ -41,7 +41,7 @@ export default function DevOps() {
   useEffect(() => {
     const fetchTeams = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/teams");
+        const response = await axios.get("https://newwolbee-l7cc.onrender.com/api/teams");
         setValues(response.data);
       } catch (error) {
         console.error("Error fetching team :", error);

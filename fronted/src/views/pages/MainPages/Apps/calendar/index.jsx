@@ -29,13 +29,13 @@ const Calendar = (props) => {
   const fetchData = async () => {
     const [eventsResponse, foodHolidaysResponse, employeesResponse] =
       await Promise.all([
-        axios.get("http://localhost:5000/api/getEvents", {
+        axios.get("https://newwolbee-l7cc.onrender.com/api/getEvents", {
           headers: { Authorization: `Bearer ${user.token}` },
         }),
-        axios.get("http://localhost:5000/api/getFoodHoliday", {
+        axios.get("https://newwolbee-l7cc.onrender.com/api/getFoodHoliday", {
           headers: { Authorization: `Bearer ${user.token}` },
         }),
-        axios.get("http://localhost:5000/api/getEmployees", {
+        axios.get("https://newwolbee-l7cc.onrender.com/api/getEmployees", {
           headers: { Authorization: `Bearer ${user.token}` },
         }),
       ]);
@@ -58,7 +58,7 @@ const Calendar = (props) => {
 
   const addEventMutation = useMutation({
     mutationFn: async (newEvent) => {
-      await axios.post("http://localhost:5000/api/addEvent", newEvent, {
+      await axios.post("https://newwolbee-l7cc.onrender.com/api/addEvent", newEvent, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
     },

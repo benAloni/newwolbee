@@ -15,7 +15,7 @@ const Profile = () => {
   const fetchEmployees = async () => {
     if (!user) return [];
     try {
-      const response = await axios.get("http://localhost:5000/api/getEmployees", {
+      const response = await axios.get("https://newwolbee-l7cc.onrender.com/api/getEmployees", {
         headers: {
           Authorization: `Bearer ${user.token}`,
         },
