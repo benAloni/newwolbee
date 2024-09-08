@@ -69,17 +69,6 @@ const Contacts = () => {
                           </div>
                         </div>
                         <ul className="nav float-end custom-menu">
-                          <li className="nav-item dropdown dropdown-action">
-                            <Link
-                              to="#"
-                              className="nav-link dropdown-toggle"
-                              data-bs-toggle="dropdown"
-                              aria-expanded="false"
-                            >
-                              <i className="fa fa-cog" />
-                            </Link>
-                           
-                          </li>
                         </ul>
                       </div>
                     </div>

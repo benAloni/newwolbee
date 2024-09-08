@@ -1,5 +1,8 @@
 import React, { useState,useEffect } from 'react';
+import { useMutation } from '@tanstack/react-query';
+
 import { Avatar_01, Avatar_02, Avatar_03 } from '../../../Routes/ImagePath';
+import { useSelector } from "react-redux";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import Select from 'react-select';
@@ -23,7 +26,7 @@ import chase from '../../../imgs/chase.png';
 
 import Temporary from '../../../imgs/Temporary.png';
 import vacation from '../../../imgs/off.png'
-import { useSelector } from 'react-redux';
+
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
 import './popup.css'; // Import the CSS file for styling
@@ -35,21 +38,60 @@ export default function PopUp() {
   const [showEmployeeDetails, setShowEmployeeDetails] = useState(false);
   const [showNewModal, setShowNewModal] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [showStartDatePicker, setShowStartDatePicker] = useState(false);
+  const [showEndDatePicker, setShowEndDatePicker] = useState(false);
+  const [selectedStartDate, setSelectedStartDate] = useState(null);
+  const [selectedEndDate, setSelectedEndDate] = useState(null);
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null); 
   const [showModal, setShowModal] = useState(false);
   const [employee, setEvents] = useState([]);
 // get notifications
 const user = useSelector((state) => state.user.user);
+console.log(selectedCountry);
 
   // Fetch data using React Query
-  
+  const updateVacation = async () => {
+    try {
+        const response = await fetch('http://localhost:5000/api/updateEmployeeVacation', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${user.token}`, // Add the token here
+            },
+            body: JSON.stringify({
+                Id: selectedEmployee._id, // Employee ID
+                name: selectedCountry.label, // Event name
+                startDate: selectedStartDate, // Start date
+                endDate: selectedEndDate, // End date
+            }),
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(`Server error: ${errorData.message || response.statusText}`);
+        }
+
+        // Display success alert
+        alert('Vacation update successful!');
+        
+        // Return the response JSON if needed
+        return response.json();
+    } catch (error) {
+        // Handle error and display an alert or message if needed
+        alert(`Error: ${error.message}`);
+        throw error; // Re-throw the error after handling it
+    }
+};
+
+
+
+
+
   const fetchData = async () => {
     try {
       const response = await axios.get("http://localhost:5000/api/getEmployees", {
-        headers: { Authorization: `Bearer ${user.token}` },
+        headers: { Authorization: `Bearer ${user.token}`},
       });
       return response.data;
     } catch (error) {
@@ -183,7 +225,11 @@ const user = useSelector((state) => state.user.user);
   };
 
   const handleDateClick = () => {
-    setShowDatePicker(!showDatePicker);
+    setShowStartDatePicker(!showStartDatePicker);
+  };
+  // ___
+  const handleEndDateClick = () => {
+    setShowEndDatePicker(!showEndDatePicker);
   };
 
   const handleImageClick = (image) => {
@@ -191,12 +237,22 @@ const user = useSelector((state) => state.user.user);
   };
 
   const handleDateChange = (date) => {
-    setSelectedDate(date);
-    setShowDatePicker(false); // Close the date picker after selection
+    setSelectedStartDate(date);
+    setShowStartDatePicker(false); // Close the date picker after selection
   };
 
-  const formatDate = (date) => {
-    if (!date) return "Choose date";
+  const handleEndDateChange = (date) => {
+    setSelectedEndDate(date);
+    setShowEndDatePicker(false); // Close the date picker after selection
+  };
+
+  const formatStartDate = (date) => {
+    if (!date) return "Choose Start date";
+    return date.toLocaleDateString('he-IL'); // Format date in Hebrew format
+  };
+
+  const formatEndDate = (date) => {
+    if (!date) return "Choose End date";
     return date.toLocaleDateString('he-IL'); // Format date in Hebrew format
   };
 
@@ -520,19 +576,47 @@ planning tools</p>
           cursor: 'pointer'
         }}
       >
-        {formatDate(selectedDate)}
-      </button>
 
-      {showDatePicker && (
+       
+        {formatStartDate(selectedStartDate)}
+      </button>
+      <br />
+       <p>To</p>       
+       {/* <p>.</p>        */}
+       
+      
+      <button
+        onClick={handleEndDateClick}
+        style={{
+          padding: '10px 20px',
+          borderRadius: '5px',
+          border: '1px solid #ccc',
+          cursor: 'pointer'
+        }}
+      >
+        {formatEndDate(selectedEndDate)}
+      </button>
+{/* 
+-------------- */}
+      {showStartDatePicker && (
         <div style={{ marginTop: '20px' }}>
           <DatePicker
-            selected={selectedDate}
+            selected={selectedStartDate}
             onChange={handleDateChange}
             inline
           />
         </div>
       )}
-
+{/* ________________ */}
+{showEndDatePicker && (
+        <div style={{ marginTop: '20px' }}>
+          <DatePicker
+            selected={selectedEndDate}
+            onChange={handleEndDateChange}
+            inline
+          />
+        </div>
+      )}
       <h2 style={{ marginTop: '30px', marginBottom: '10px' }}>Where to?</h2>
       <Select
         options={europeanCountries}
@@ -628,7 +712,7 @@ planning tools</p>
       </div>
 
       <button
-        onClick={handleSubmit}
+        onClick={updateVacation}
         style={{
           marginTop: '30px',
           padding: '10px 20px',
@@ -647,7 +731,8 @@ planning tools</p>
           <div style={modalContentStyle}>
             <h2>Event Registration Successful</h2>
             <p><strong>Purpose:</strong> {selectedOption === 'option1' ? "Business" : selectedOption === 'option2' ? "Pleasure" : 'No reason selected'}</p>
-            <p><strong>Date:</strong> {formatDate(selectedDate)}</p>
+            <p><strong>Date:</strong> {formatStartDate(selectedStartDate)}</p>
+            <p><strong>Date:</strong> {formatEndDate(selectedEndDate)}</p>
             <p><strong>Country:</strong> {selectedCountry ? selectedCountry.label : "No country selected"}</p>
             {/* <p><strong>With:</strong> {selectedImage ? `Image ${selectedImage.replace('image', '')}` : 'No image selected'}</p> */}
             <button

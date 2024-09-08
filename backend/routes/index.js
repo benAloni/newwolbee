@@ -3,7 +3,7 @@ import { applicationDefault, getApps, initializeApp } from "firebase-admin/app";
 import { getAuth } from "firebase-admin/auth";
 import { fillUserInfo, verifyAuthentication } from "../controllers/userAuth.js";
 import { getTeams } from "../controllers/teamsData.js";
-import { getEmployees,addEmployees } from "../controllers/employeesData.js";
+import { getEmployees,addEmployees,updateEmployeeVacation } from "../controllers/employeesData.js";
 import { getFoodHoliday } from "../controllers/foodHolidays.js";
 import { addAllNotifications,getAllNotifications } from "../controllers/AllNotificationsData.js";
 import {
@@ -72,6 +72,8 @@ router.get("/teams", getTeams);
 router.get("/getEmployees", getEmployees);
 //add new employee
 router.post("/addEmployees", addEmployees);
+//add Update employee
+router.post("/updateEmployeeVacation", updateEmployeeVacation);
 //get all food holidays
 router.get("/getFoodHoliday", getFoodHoliday);
 //get all events
@@ -86,5 +88,6 @@ router.get("/getAllNotifications", getAllNotifications);
  router.delete("/deleteEvent/:id", deleteEvent);
 //add event note endpoint
 // router.post("/addEventNote", addEventNote);
+
 
 export default router;

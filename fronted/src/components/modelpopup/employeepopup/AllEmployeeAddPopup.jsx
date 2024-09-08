@@ -33,6 +33,7 @@ const AllEmployeeAddPopup = (props) => {
     Hobbies: [{ Hobby1: "", Hobby2: "", Hobby3: "" }],
     TopInsights: [''],
     LatestInfo: [''],
+    Vacation:[{name:"" , startDate:"" , endDate: ""}]
   });
 
   const [errors, setErrors] = useState({});

@@ -101,8 +101,35 @@ const Calendar = (props) => {
           dtstart: val.DataOfBirth,
         },
       }));
+      const employeeVacationEvents = data.employees.flatMap((val) => {
+        if (val.Vacation && val.Vacation.length > 0) {
+            const vacation = val.Vacation[0]; 
+            return [
+                {
+                    title: `${val.FullName} flies to ${vacation.name}`,
+                    className: "bg-purple",
+                    start: vacation.startDate,
+                    end: vacation.startDate,
+                },
+                {
+                    title: `${val.FullName} back to Israel`,
+                    className: "bg-purple",
+                    start: vacation.endDate,
+                    end: vacation.endDate,
+                }
+            ];
+        } else {
+            return [];
+        }
+    });
+
+
+
+      console.log(events);
+      
 
       setEvents((prevEvents) => [
+        ...employeeVacationEvents,
         ...newEvents,
         ...employeeBirthdayEvents,
         ...foodHolidayEvents,
@@ -173,44 +200,24 @@ const Calendar = (props) => {
                 Calendar
               </h3>
               <div>
-              <label htmlFor="country-select">Select Country: </label>
-  <select
-    id="country-select"
-    value={countryCode}
-    onChange={handleCountryChange}
-    style={{
-      width: '100%',
-      maxWidth: '300px',
-      padding: '10px',
-      border: '2px solid #ccc',
-      borderRadius: '5px',
-      fontSize: '16px',
-      color: '#333',
-      backgroundColor: '#f8f8f8',
-      cursor: 'pointer',
-      transition: 'border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out'
-    }}
-    onFocus={(e) => {
-      e.target.style.borderColor = '#007bff';
-      e.target.style.boxShadow = '0 0 5px rgba(0, 123, 255, 0.5)';
-    }}
-    onBlur={(e) => {
-      e.target.style.borderColor = '#ccc';
-      e.target.style.boxShadow = 'none';
-    }}
-  >
-    <option value="IL">Israel</option>
-    <option value="US">United States</option>
-    <option value="RU">Russia</option>
-    <option value="JP">Japan</option>
-    <option value="CN">China</option>
-    <option value="CA">Canada</option>
-    <option value="FR">France</option>
-    <option value="DE">Germany</option>
-    <option value="UA">Ukraine</option>
-    <option value="GE">Georgia</option>
-    <option value="GB">United Kingdom</option>
-  </select>
+        <label htmlFor="country-select">Select Country: </label>
+        <select
+          id="country-select"
+          value={countryCode}
+          onChange={handleCountryChange}
+        >
+          <option value="IL">Israel</option>
+          <option value="US">United States</option>
+          <option value="RU">Russia</option>
+          <option value="JP">Japan</option>
+          <option value="CN">China</option>
+          <option value="CA">Canada</option>
+          <option value="FR">France</option>
+          <option value="DE">Germany</option>
+          <option value="UA">Ukraine</option>
+          <option value="GE">Georgia</option>
+          <option value="GB">United Kingdom</option>
+        </select>
       </div>
             </div>
             <div className="col-auto float-end ms-auto">

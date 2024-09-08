@@ -6,8 +6,14 @@ import "react-circular-progressbar/dist/styles.css";
 import { TiPin } from "react-icons/ti";
 import { useParams } from "react-router-dom";
 import { logo3 } from "../../../Routes/ImagePath";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { useSelector } from "react-redux";
 
-export const ProjectDetails = ({selectedEmployee}) => {
+import EditInsightsActivity from "./EditInsightsActivity";
+
+export const ProjectDetails = ({ selectedEmployee }) => {
+  const [popupEdit, setPopupEdit] = useState(0);
   const [importanceLevels, setImportanceLevels] = useState({
     management: "High",
     turnover: "Medium",
@@ -16,31 +22,25 @@ export const ProjectDetails = ({selectedEmployee}) => {
     professionalism: "Low",
   });
 
-  
   if (!selectedEmployee) {
     return <div></div>;
   }
   selectedEmployee.LatestInfo.map((val) => {
-   return console.log(val.info);
-
-
-  })
-
-
+    return console.log(val.info);
+  });
 
   const getValue = (importance) => {
     switch (importance) {
-      case 'High':
+      case "High":
         return 100; // מלא
-      case 'Medium':
+      case "Medium":
         return 50; // חצי מלא
-      case 'Low':
+      case "Low":
         return 25; // רבע מלא
       default:
         return 0; // ריק
     }
   };
-
 
   const circleContainerStyle = {
     width: "120px",
@@ -99,12 +99,6 @@ export const ProjectDetails = ({selectedEmployee}) => {
     fontSize: "16px",
   };
 
-  const iconStyle = {
-    position: "absolute",
-    left: "35px",
-    color: "#FF902F",
-  };
-
   const pinIconSize = 24;
 
   const getColor = (importance) => {
@@ -119,7 +113,6 @@ export const ProjectDetails = ({selectedEmployee}) => {
         return "#000000";
     }
   };
-
 
   const containerStyle = {
     display: "flex",
@@ -136,166 +129,264 @@ export const ProjectDetails = ({selectedEmployee}) => {
     borderRadius: "10px",
   };
 
+  const openModal1 = () => {
+    setPopupEdit(1);
+  };
+  const openModal2 = () => {
+    setPopupEdit(2);
+  };
+  const openModal3 = () => {
+    setPopupEdit(3);
+  };
+
+  const closeModal = () => {
+    setPopupEdit(0);
+  };
 
   return (
     <div className="tab-content">
+      {popupEdit >= 1 && (
+        <EditInsightsActivity isOpen={popupEdit} closeModal={closeModal} />
+      )}
+
       <div className="pro-overview tab-pane fade show active" id="emp_assets">
         <div style={containerStyle}>
           <div style={boxStyle}>
+            <button
+              onClick={openModal1}
+              className="edit-icon"
+              style={{
+                width: "auto",
+                display: "inline-flex",
+                padding: "5px 10px",
+              }}
+            >
+              <i className="fa-solid fa-pencil" />
+            </button>
+
             <h3 style={titleStyle}>Wolbee’s Top Insights</h3>
             <hr />
             <div style={{ marginLeft: "15px" }}>
-              {selectedEmployee.TopInsights.map((val,index) => {
-                     return <div key={`${index}`}>
-                     <br />
-                     <TiPin style={iconStyle} size={pinIconSize}></TiPin> {val.Insight}
-                   </div>
-                      })
-                    }
-
-            </div>
-          </div>
-          <div style={boxStyle}>
-            <h3 style={titleStyle}>Latest Insights</h3>
-            <hr />
-            <div style={{ marginLeft: "15px" }}>
-              {selectedEmployee.LatestInfo.map((val,index) => {
-                     return <div key={`${index}`}>
-                     <br />
-                     <TiPin
-                       style={{
-                         position: "relative",
-                        //  left: "390px",
-                         color: "#FF902F",
-                       }}
-                       size={pinIconSize}
-                     ></TiPin>{' '}
-                     {val.Info}
-                   </div>
-                      })
-                    }
-
-
-
-            </div>
-          </div>
-
-          <div className="col-md-6 d-flex" style={{ width: '450px' }}>
-      <div className="card profile-box flex-fill">
-        <div className="card-body">
-          <h3 style={{ fontWeight: 'bold', fontSize: '24px' }}>Latest Activity</h3>
-          <hr />
-          <div className="experience-box">
-            <div style={{ marginLeft: '15px' }}>
-              {selectedEmployee.LatestActivity.map((val, index) => {
-                const entries = Object.entries(val);
-                return entries.map(([key, value], i) => (
-                  <div key={`${index}-${i}`} style={{ marginBottom: (i % 2 === 1) ? '20px' : '0', display: 'flex', alignItems: 'center' }}>
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginRight: '10px' }}>
-                      <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#000' }}></div>
-                      {i % 2 === 0 && i < entries.length - 1 && (
-                        <div style={{ width: '2px', height: '20px', backgroundColor: '#000' }}></div>
-                      )}
-                    </div>
-                    <div>
-                      {i % 2 === 0 ? (
-                        <div style={{ fontWeight: 'bold' }}>{value}</div>
-                      ) : (
-                        <div>{value}</div>
-                      )}
-                    </div>
+              {selectedEmployee.TopInsights.map((val, index) => {
+                return (
+                  <div
+                    key={`${index}`}
+                    style={{
+                      display: "flex",
+                      gap: "10px", // Space between the pin and text
+                    }}
+                  >
+                    <TiPin
+                      style={{
+                        color: "#FF902F",
+                        flexShrink: 0, // Prevent the icon from shrinking
+                        marginTop: "20px",
+                        alignSelf: "flex-start", // Align the icon at the top to match the text
+                      }}
+                      size={pinIconSize}
+                    />
+                    <div style={{ marginTop: "20px" }}>{val.Insight}</div>
                   </div>
-                ));
+                );
               })}
             </div>
           </div>
-        </div>
-      </div>
-    </div>
-        </div>
+          <div style={boxStyle}>
+            <button
+              onClick={openModal2}
+              className="edit-icon"
+              style={{
+                width: "auto",
+                display: "inline-flex",
+                padding: "5px 10px",
+              }}
+            >
+              <i className="fa-solid fa-pencil" />
+            </button>
+            <h3 style={titleStyle}>Latest Insights</h3>
+            <hr />
+            <div style={{ marginLeft: "15px" }}>
+              {selectedEmployee.LatestInfo.map((val, index) => {
+                return (
+                  <div
+                    key={`${index}`}
+                    style={{
+                      display: "flex",
+                      gap: "10px", // Space between the pin and text
+                    }}
+                  >
+                    <TiPin
+                      style={{
+                        color: "#FF902F",
+                        flexShrink: 0, // Prevent the icon from shrinking
+                        alignSelf: "flex-start", // Align the icon at the top to match the text
+                        marginTop: "20px",
+                      }}
+                      size={pinIconSize}
+                    />
+                    <div style={{ marginTop: "20px" }}>{val.Info}</div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
 
-        <div style={wrapperStyle}>
-            <div style={{ textAlign: 'center' }}>
-              <h4 style={circleTextStyle}>Management</h4>
-              <div style={circleContainerStyle}>
-                <CircularProgressbar
-                  value={getValue(importanceLevels.management)}
-                  text={`${importanceLevels.management}`}
-                  styles={buildStyles({
-                    textSize: '20px',
-                    textColor: getColor(importanceLevels.management),
-                    pathColor: getColor(importanceLevels.management),
-                    trailColor: '#d6d6d6',
-                    pathTransitionDuration: 0.5,
-                  })}
-                />
-              </div>
-            </div>
-            <div style={{ textAlign: 'center' }}>
-              <h4 style={circleTextStyle}>Turnover</h4>
-              <div style={circleContainerStyle}>
-                <CircularProgressbar
-                  value={getValue(importanceLevels.turnover)}
-                  text={`${importanceLevels.turnover}`}
-                  styles={buildStyles({
-                    textSize: '20px',
-                    textColor: getColor(importanceLevels.turnover),
-                    pathColor: getColor(importanceLevels.turnover),
-                    trailColor: '#d6d6d6',
-                    pathTransitionDuration: 0.5,
-                  })}
-                />
-              </div>
-            </div>
-            <div style={{ textAlign: 'center' }}>
-              <h4 style={circleTextStyle}>Work-Life</h4>
-              <div style={circleContainerStyle}>
-                <CircularProgressbar
-                  value={getValue(importanceLevels.workLifeBalance)}
-                  text={`${importanceLevels.workLifeBalance}`}
-                  styles={buildStyles({
-                    textSize: '20px',
-                    textColor: getColor(importanceLevels.workLifeBalance),
-                    pathColor: getColor(importanceLevels.workLifeBalance),
-                    trailColor: '#d6d6d6',
-                    pathTransitionDuration: 0.5,
-                  })}
-                />
-              </div>
-            </div>
-            <div style={{ textAlign: 'center' }}>
-              <h4 style={circleTextStyle}>Managerial</h4>
-              <div style={circleContainerStyle}>
-                <CircularProgressbar
-                  value={getValue(importanceLevels.managerialAttention)}
-                  text={`${importanceLevels.managerialAttention}`}
-                  styles={buildStyles({
-                    textSize: '20px',
-                    textColor: getColor(importanceLevels.managerialAttention),
-                    pathColor: getColor(importanceLevels.managerialAttention),
-                    trailColor: '#d6d6d6',
-                    pathTransitionDuration: 0.5,
-                  })}
-                />
-              </div>
-            </div>
-            <div style={{ textAlign: 'center' }}>
-              <h4 style={circleTextStyle}>Professional</h4>
-              <div style={circleContainerStyle}>
-                <CircularProgressbar
-                  value={getValue(importanceLevels.professionalism)}
-                  text={`${importanceLevels.professionalism}`}
-                  styles={buildStyles({
-                    textSize: '20px',
-                    textColor: getColor(importanceLevels.professionalism),
-                    pathColor: getColor(importanceLevels.professionalism),
-                    trailColor: '#d6d6d6',
-                    pathTransitionDuration: 0.5,
-                  })}
-                />
+          <div className="col-md-6 d-flex" style={{ width: "450px" }}>
+            <div className="card profile-box flex-fill">
+              <div className="card-body">
+                <button
+                  onClick={openModal3}
+                  className="edit-icon"
+                  style={{
+                    width: "auto",
+                    display: "inline-flex",
+                    padding: "5px 10px",
+                  }}
+                >
+                  <i className="fa-solid fa-pencil" />
+                </button>
+                <h3 style={{ fontWeight: "bold", fontSize: "24px" }}>
+                  Latest Activity
+                </h3>
+                <hr />
+                <div className="experience-box">
+                  <div style={{ marginLeft: "15px" }}>
+                    {selectedEmployee.LatestActivity.map((val, index) => {
+                      const entries = Object.entries(val);
+                      return entries.map(([key, value], i) => (
+                        <div
+                          key={`${index}-${i}`}
+                          style={{
+                            marginBottom: i % 2 === 1 ? "20px" : "0",
+                            display: "flex",
+                            alignItems: "center",
+                          }}
+                        >
+                          <div
+                            style={{
+                              display: "flex",
+                              flexDirection: "column",
+                              alignItems: "center",
+                              marginRight: "10px",
+                            }}
+                          >
+                            <div
+                              style={{
+                                width: "8px",
+                                height: "8px",
+                                borderRadius: "50%",
+                                backgroundColor: "#000",
+                              }}
+                            ></div>
+                            {i % 2 === 0 && i < entries.length - 1 && (
+                              <div
+                                style={{
+                                  width: "2px",
+                                  height: "20px",
+                                  backgroundColor: "#000",
+                                }}
+                              ></div>
+                            )}
+                          </div>
+                          <div>
+                            {i % 2 === 0 ? (
+                              <div style={{ fontWeight: "bold" }}>{value}</div>
+                            ) : (
+                              <div>{value}</div>
+                            )}
+                          </div>
+                        </div>
+                      ));
+                    })}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
+        </div>
+
+        <div style={wrapperStyle}>
+          <div style={{ textAlign: "center" }}>
+            <h4 style={circleTextStyle}>Management</h4>
+            <div style={circleContainerStyle}>
+              <CircularProgressbar
+                value={getValue(importanceLevels.management)}
+                text={`${importanceLevels.management}`}
+                styles={buildStyles({
+                  textSize: "20px",
+                  textColor: getColor(importanceLevels.management),
+                  pathColor: getColor(importanceLevels.management),
+                  trailColor: "#d6d6d6",
+                  pathTransitionDuration: 0.5,
+                })}
+              />
+            </div>
+          </div>
+          <div style={{ textAlign: "center" }}>
+            <h4 style={circleTextStyle}>Turnover</h4>
+            <div style={circleContainerStyle}>
+              <CircularProgressbar
+                value={getValue(importanceLevels.turnover)}
+                text={`${importanceLevels.turnover}`}
+                styles={buildStyles({
+                  textSize: "20px",
+                  textColor: getColor(importanceLevels.turnover),
+                  pathColor: getColor(importanceLevels.turnover),
+                  trailColor: "#d6d6d6",
+                  pathTransitionDuration: 0.5,
+                })}
+              />
+            </div>
+          </div>
+          <div style={{ textAlign: "center" }}>
+            <h4 style={circleTextStyle}>Work-Life</h4>
+            <div style={circleContainerStyle}>
+              <CircularProgressbar
+                value={getValue(importanceLevels.workLifeBalance)}
+                text={`${importanceLevels.workLifeBalance}`}
+                styles={buildStyles({
+                  textSize: "20px",
+                  textColor: getColor(importanceLevels.workLifeBalance),
+                  pathColor: getColor(importanceLevels.workLifeBalance),
+                  trailColor: "#d6d6d6",
+                  pathTransitionDuration: 0.5,
+                })}
+              />
+            </div>
+          </div>
+          <div style={{ textAlign: "center" }}>
+            <h4 style={circleTextStyle}>Managerial</h4>
+            <div style={circleContainerStyle}>
+              <CircularProgressbar
+                value={getValue(importanceLevels.managerialAttention)}
+                text={`${importanceLevels.managerialAttention}`}
+                styles={buildStyles({
+                  textSize: "20px",
+                  textColor: getColor(importanceLevels.managerialAttention),
+                  pathColor: getColor(importanceLevels.managerialAttention),
+                  trailColor: "#d6d6d6",
+                  pathTransitionDuration: 0.5,
+                })}
+              />
+            </div>
+          </div>
+          <div style={{ textAlign: "center" }}>
+            <h4 style={circleTextStyle}>Professional</h4>
+            <div style={circleContainerStyle}>
+              <CircularProgressbar
+                value={getValue(importanceLevels.professionalism)}
+                text={`${importanceLevels.professionalism}`}
+                styles={buildStyles({
+                  textSize: "20px",
+                  textColor: getColor(importanceLevels.professionalism),
+                  pathColor: getColor(importanceLevels.professionalism),
+                  trailColor: "#d6d6d6",
+                  pathTransitionDuration: 0.5,
+                })}
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

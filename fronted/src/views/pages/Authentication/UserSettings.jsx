@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from "react";
+import { app, auth, googleAuthProvider } from '../../../firebase/firebaseConfig'; // לא מייבא את storage כאן
+import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "firebase/storage"; // ייבוא של פונקציות חדשות
+import { CiCirclePlus } from 'react-icons/ci'; // או הספרייה שממנה הרכיב מגיע
+import { CiTrash } from 'react-icons/ci';
+
+
 import Sidebar from "../../layout/Sidebar";
 import Header from "../../layout/Header";
-import { CiCirclePlus } from "react-icons/ci";
-import { CiTrash } from "react-icons/ci";
-import { useSpring, animated } from "@react-spring/web";
+
+import { animated, useSpring } from '@react-spring/web';
+
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -13,24 +19,53 @@ import Select from "@mui/material/Select";
 import dayjs from "dayjs";
 import BoxSelector from "./Barsettings";
 import manager from "../../../imgs/managerProfilePic.jpg";
-
 const UserSettings = () => {
-  const [updateProfilePic, setUpdateProfilePic] = useState(""); //get profile pic from local storage
-  const [removePicPopup, setRemovePicPopup] = useState("");
+  const [updateProfilePic, setUpdateProfilePic] = useState(""); 
+  const [removePicPopup, setRemovePicPopup] = useState(false);
   const [activeTab, setActiveTab] = useState("Notifications");
   const [selectedTime, setSelectedTime] = useState(null);
   const [frequency, setFrequency] = useState("Daily");
   const [notificationRepeat, setNotificationRepeat] = useState("3 Times");
+  const [profilePicURL, setProfilePicURL] = useState("");
+  const [progress, setProgress] = useState(0);
+  const [profileName, setProfileName] = useState('');
+
+  const storage = getStorage(app); // קבלת מופע של storage
+
   const [slideProps, api] = useSpring(() => ({
     transform: "translateX(0%)",
-  }));
 
+  }));
+  // const slideProps = useSpring({
+  //   opacity: activeTab === 'Notifications' ? 1 : 0,
+  //   transform: activeTab === 'Notifications' ? 'translateX(0%)' : 'translateX(-100%)',
+  //   config: { duration: 300 }
+  // });
   useEffect(() => {
-    const currentProfilePic = localStorage.getItem("profilePic");
-    if (currentProfilePic) {
-      setUpdateProfilePic(currentProfilePic);
+    const user = auth.currentUser; // קבלת המשתמש המחובר
+    if (user) {
+      const name = user.displayName || "Admin"; // במידה ואין שם, ייכתב Admin
+      setProfileName(name);
     }
   }, []);
+
+
+  useEffect(() => {
+    const fetchProfilePic = async () => {
+      const user = auth.currentUser;
+      if (user) {
+        const storageRef = ref(storage, `profilePictures/${user.uid}/profilePic`);
+        try {
+          const url = await getDownloadURL(storageRef);
+          setProfilePicURL(url);
+        } catch (error) {
+          console.error('Error fetching profile pic:', error);
+        }
+      }
+    };
+    
+    fetchProfilePic();
+  }, [storage]);
 
   const triggerFileInput = () => {
     document.getElementById("profile-pic").click();
@@ -38,17 +73,35 @@ const UserSettings = () => {
 
   const handleUpdateProfile = (e) => {
     const file = e.target.files[0];
-    setUpdateProfilePic(file);
-    localStorage.setItem("profilePic", file);
+    if (!file) return;
+
+    const user = auth.currentUser;
+    if (!user) {
+      alert("User not logged in");
+      return;
+    }
+
+    const storageRef = ref(storage, `profilePictures/${user.uid}/profilePic`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+        setProgress(progress);
+      },
+      (error) => {
+        console.error('Upload error:', error);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then(url => {
+          setProfilePicURL(url);
+          localStorage.setItem("profilePic", url);
+        });
+      }
+    );
   };
 
-  const handleRemoveProfile = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-    setUpdateProfilePic(null);
-    // localStorage.removeItem("profilePic");
-    setRemovePicPopup(false);
-  };
 
   const handleTabClick = (tabName) => {
     setActiveTab(tabName);
@@ -58,68 +111,84 @@ const UserSettings = () => {
       api.start({ transform: "translateX(0%)" });
     }, 100);
   };
+  const handleRemoveProfile = async (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    
+    const user = auth.currentUser;
+    if (!user) return;
+
+    try {
+      const storageRef = ref(storage, `profilePictures/${user.uid}/profilePic`);
+      await deleteObject(storageRef);
+      setProfilePicURL('');
+      localStorage.removeItem("profilePic");
+    } catch (error) {
+      console.error('Error removing profile pic:', error);
+    }
+
+    setRemovePicPopup(false);
+  };
+
   return (
-    <div style={{
-      marginTop: '20px', /* או כל ערך אחר שמתאים לך */
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      height: '100vh' /* מתקן את הגובה של העמוד כדי למרכז את הדיב אנכית */
-    }}>
-      
+    <div className="container" style={{marginLeft:'220px'}}>
       <div className="page-wrapper">
-  <div className="content container-fluid">
-    <Header />
-    <Sidebar />
-  </div>
-</div>
-<div className="settings-page-container">
-  <div className="user-profile-container">
-    <div className="profile-pic-wrapper">
+        <div className="content container-fluid">
+          {/* Your Header and Sidebar components */}
+        </div>
+      </div>
       
-      <input
-        type="file"
-        accept="/image/*"
-        id="profile-pic"
-        className="profile-pic-container"
-        name="profile_pic"
-        onChange={handleUpdateProfile}
-      />
-     <label
-  htmlFor="profile-pic"
-  className="profile-pic-label"
-  style={{
-    backgroundImage: `url(${manager})`,
-    width: '120px', // או כל ערך שמתאים
-    height: '120px', // או כל ערך שמתאים
-    backgroundSize: 'cover', // מכסה את התווית בתמונה
-    backgroundPosition: 'center', // ממקם את התמונה במרכז התווית
-  }}
-></label>
-      <div className="icon plus">
-        <CiCirclePlus size={24} onClick={triggerFileInput} />
-      </div>
-      <div className="icon trash" onClick={() => setRemovePicPopup(true)}>
-        <CiTrash size={24} />
-      </div>
-    </div>
-    <div>
-      <h2>Mike Ross</h2>
-      <p>Product Development Manager</p>
-    </div>
-  </div>
+      <div className="settings-page-container">
+        <div className="user-profile-container">
+          <div className="profile-pic-wrapper">
+            <input
+              type="file"
+              accept="image/*"
+              id="profile-pic"
+              className="profile-pic-container"
+              name="profile_pic"
+              onChange={handleUpdateProfile}
+            />
+            <label
+              htmlFor="profile-pic"
+              className="profile-pic-label"
+              style={{
+                backgroundImage: `url(${profilePicURL || 'defaultImageUrl'})`,
+                width: '120px',
+                height: '120px',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+              }}
+            />
+            <div className="icon plus" onClick={triggerFileInput}>
+              <CiCirclePlus size={24} />
+            </div>
+            <div className="icon trash" onClick={() => setRemovePicPopup(true)}>
+              <CiTrash size={24} />
+            </div>
+          </div>
+          <div>
+            <h2> {profileName ? `${profileName}` : "Admin"}</h2>
+            <p>Product Development Manager</p>
+          </div>
+        </div>
 
+        {removePicPopup && (
+          <div className="popup">
+            <p>Remove Profile Picture?</p>
+            <button onClick={handleRemoveProfile}>Yes</button>
+            <button onClick={() => setRemovePicPopup(false)}>Cancel</button>
+          </div>
+        )}
 
-
-        {/* ____________________________________ */}
-        <div className="settings-container" style={{
+        <div className="settings-container"  style={{
     scrollbarColor: 'black',
     maxHeight: '400px', // גובה מקסימלי לדיב
     overflowY: 'auto', // פס גלילה אנכי כאשר התוכן חורג
     overflowX: 'hidden' // מסתיר פס גלילה אופקי
   }} >
           <h1>Settings</h1>
-          <div className="tabs-container" >
+          <div className="tabs-container">
             <div
               className={`tab ${activeTab === "Notifications" ? "active" : ""}`}
               onClick={() => handleTabClick("Notifications")}
@@ -133,14 +202,13 @@ const UserSettings = () => {
               Language
             </div>
             <div
-              className={`tab ${
-                activeTab === "App Preferences" ? "active" : ""
-              }`}
+              className={`tab ${activeTab === "App Preferences" ? "active" : ""}`}
               onClick={() => handleTabClick("App Preferences")}
             >
               App Preferences
             </div>
           </div>
+
           <animated.div style={slideProps}>
             {activeTab === "Notifications" && (
               <div className="notifications-selection">
@@ -199,58 +267,40 @@ const UserSettings = () => {
                 </div>
 
                 <h3>Notifications Selection</h3>
-               
-                <br></br>
-                <BoxSelector></BoxSelector>
-                <div className="notification-settings"   style={{
-    textAlign: 'center',
-    marginTop: '20px'
-  }}>
-                
-                  <div className="checkbox-group"  style={{
-      display: 'flex',
-      flexWrap: 'wrap',
-      justifyContent: 'center',
-      gap: '20px',
-      marginBottom: '20px',
-    }}>
-                   <label style={{ display: 'flex', alignItems: 'center' }}>
-      <input type="checkbox" />
-      <span style={{ marginLeft: '8px' }}>Every Employee</span>
-    </label>
-    <label style={{ display: 'flex', alignItems: 'center' }}>
-      <input type="checkbox" />
-      <span style={{ marginLeft: '8px' }}>Only Managers</span>
-    </label>
-    <label style={{ display: 'flex', alignItems: 'center' }}>
-      <input type="checkbox" />
-      <span style={{ marginLeft: '8px' }}>No Managerial Attention</span>
-    </label>
-    <label style={{ display: 'flex', alignItems: 'center' }}>
-      <input type="checkbox" />
-      <span style={{ marginLeft: '8px' }}>Only Milestone</span>
-    </label>
+                <br />
+                <BoxSelector />
+                <div className="notification-settings">
+                  <div className="checkbox-group">
+                    <label style={{ display: 'flex', alignItems: 'center' }}>
+                      <input type="checkbox" />
+                      <span style={{ marginLeft: '8px' }}>Every Employee</span>
+                    </label>
+                    <label style={{ display: 'flex', alignItems: 'center' }}>
+                      <input type="checkbox" />
+                      <span style={{ marginLeft: '8px' }}>Only Managers</span>
+                    </label>
+                    <label style={{ display: 'flex', alignItems: 'center' }}>
+                      <input type="checkbox" />
+                      <span style={{ marginLeft: '8px' }}>No Managerial Attention</span>
+                    </label>
+                    <label style={{ display: 'flex', alignItems: 'center' }}>
+                      <input type="checkbox" />
+                      <span style={{ marginLeft: '8px' }}>Only Milestone</span>
+                    </label>
                   </div>
-                  <button style={{backgroundColor:'#f19f29'}}>OK</button>
+                  <button>OK</button>
                 </div>
               </div>
             )}
             {activeTab === "Language" && <div>Language Settings</div>}
-            {activeTab === "App Preferences" && (
-              <div>App Preferences Settings</div>
-            )}
+            {activeTab === "App Preferences" && <div>App Preferences Settings</div>}
           </animated.div>
         </div>
+        <Sidebar></Sidebar>
+        <Header></Header>
       </div>
-      {removePicPopup && (
-        <>
-          <div className="popup">
-            <p>Remove Profile Picture?</p>
-            <button onClick={handleRemoveProfile}>Yes</button>
-            <button onClick={() => setRemovePicPopup(false)}>Cancel</button>
-          </div>
-        </>
-      )}
+
+      {/* Styles */}
       <style>
         {`
             .settings-page-container {
@@ -450,11 +500,11 @@ const UserSettings = () => {
             border-radius: 5px;
             background-color: #2196F3;
               }
-}
-      `}
+`}
+      
+      
       </style>
     </div>
   );
 };
-
-export default UserSettings;
+export default UserSettings

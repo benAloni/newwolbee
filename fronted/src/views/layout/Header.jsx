@@ -16,13 +16,15 @@ import { useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import i18n from "../../i18n";
 import manager from "../../imgs/managerProfilePic.jpg";
+import defultprofile from "../../imgs/DefultProfile.png";
 import { useDispatch, useSelector } from "react-redux";
 import { auth } from "../../firebase/firebaseConfig";
 import { logout } from "../../features/userSlice";
 import { signOut } from "firebase/auth";
 import { useQueryClient } from '@tanstack/react-query';
 import NotificationsPopup from "../../components/modelpopup/Notifications/NotificationsPopup";
-
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage"; // הייבוא הנכון
+import { app } from '../../firebase/firebaseConfig'; // ייבוא app
 const Header = (props) => {
   const queryClient = useQueryClient();
 
@@ -61,6 +63,43 @@ const Header = (props) => {
   const [profile, setProfile] = useState(false);
   const [flagImage, setFlagImage] = useState(lnEnglish);
   const notificationRef = useRef(null);
+  const [profileName, setProfileName] = useState('');
+const [profilePicURL, setProfilePicURL] = useState(null);
+  const storage = getStorage(app); // הגדרת משתנה storage
+
+  useEffect(() => {
+    const fetchProfilePic = async () => {
+      const user = auth.currentUser;
+      if (user) {
+        const storedProfilePicURL = localStorage.getItem("profilePic");
+        if (storedProfilePicURL) {
+          setProfilePicURL(storedProfilePicURL); // השתמש ב-URL שנשמר ב-LocalStorage
+        } else {
+          // אם לא נמצא URL ב-LocalStorage, שלוף אותו מ-Firebase Storage
+          const storageRef = ref(storage, `profilePictures/${user.uid}/profilePic`);
+          try {
+            const url = await getDownloadURL(storageRef);
+            setProfilePicURL(url);
+            localStorage.setItem("profilePic", url); // שמור את ה-URL ב-LocalStorage
+          } catch (error) {
+            console.error('שגיאה בשליפת תמונת פרופיל:', error);
+          }
+        }
+      }
+    };
+  
+    fetchProfilePic();
+  }, [storage]);
+
+
+  useEffect(() => {
+    const user = auth.currentUser; // קבלת המשתמש המחובר
+    if (user) {
+      const name = user.displayName || "Admin"; // במידה ואין שם, ייכתב Admin
+      setProfileName(name);
+    }
+  }, []);
+
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -182,17 +221,15 @@ const Header = (props) => {
           <span />
         </span>
       </Link> */}
-      <div className="page-title-box" style={{ marginTop: "5px" }}>
-        <h4>
-          {" "}
-          Hi{" "}
-          <span style={{ fontWeight: "bold", fontSize: "20px" }}>
-            {" "}
-            {ProfileName ? `${ProfileName}` : "Admin"}{" "}
-          </span>
-          welcome back to wolbee{" "}
-        </h4>
-      </div>
+     <div className="page-title-box" style={{ marginTop: "5px" }}>
+      <h4>
+        Hi{" "}
+        <span style={{ fontWeight: "bold", fontSize: "20px" }}>
+          {profileName ? `${profileName}` : "Admin"}
+        </span>{" "}
+        welcome back to wolbee
+      </h4>
+    </div>
       <Link
         id="mobile_btn"
         className="mobile_btn"
@@ -344,10 +381,10 @@ const Header = (props) => {
             onClick={handleProfile}
           >
             <span className="user-img me-1">
-              <img src={manager} alt="img" />
+            <img src={profilePicURL || defultprofile} alt="Profile" />
               <span className="status online" />
             </span>
-            <span>{ProfileName ? `${ProfileName}` : "Admin"}</span>
+            <span> {profileName ? `${profileName}` : "Admin"}</span>
           </Link>
           <div
             className={`dropdown-menu dropdown-menu-end ${
