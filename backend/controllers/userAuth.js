@@ -4,6 +4,7 @@ import { getAuth } from "firebase-admin/auth";
 //"register"
 export const fillUserInfo = async (req, res) => {
  const { civilId } = req.body
+ console.log(civilId)
  const {uid} = req
  let payload;
   try {
