@@ -23,6 +23,7 @@ app.use(
       "http://www.wolbee.com", 
       "https://wolbee-front-gkfchuwp6q-uc.a.run.app",
       "http://localhost:3000",
+      "https://newwolbee-l7cc.onrender.com"
     ],
     credentials: true,
   })
