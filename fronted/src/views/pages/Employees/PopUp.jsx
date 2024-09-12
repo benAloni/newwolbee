@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+pimport React, { useState,useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
 
 import { Avatar_01, Avatar_02, Avatar_03 } from '../../../Routes/ImagePath';
