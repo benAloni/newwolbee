@@ -5,11 +5,11 @@ import { Avatar_25, avatar19, avatar20, avatar21, avatar22, avatar23, avatar24, 
 import Select from 'react-select'
 import { Facebook, Mail, MessageSquare, Phone, PhoneCall, Star } from 'react-feather'
 import DateRangePicker from 'react-bootstrap-daterangepicker'
-import ExportLeads from '../../../components/modelpopup/Crm/ExportLeads'
-import DeleteContact from '../../../components/modelpopup/Crm/DeleteContact'
-import AddContact from '../../../components/modelpopup/Crm/AddContact'
-import EditContact from '../../../components/modelpopup/Crm/EditContact'
-import AddNotes from '../../../components/modelpopup/Crm/AddNotes'
+import ExportLeads from '../../../components/Modals/Crm/ExportLeads'
+import DeleteContact from '../../../components/Modals/Crm/DeleteContact'
+import AddContact from '../../../components/Modals/Crm/AddContact'
+import EditContact from '../../../components/Modals/Crm/EditContact'
+import AddNotes from '../../../components/Modals/Crm/AddNotes'
 
 
 const ContactList = () => {

@@ -1,6 +1,6 @@
 import React from "react";
 import Breadcrumbs from "../../../../../components/Breadcrumbs";
-import DeleteModal from "../../../../../components/modelpopup/deletePopup";
+import DeleteModal from "../../../../../components/Modals/deletePopup";
 import BudgetTable from "./BudgetTable";
 import AddModal from "./AddModal";
 import EditBudgetModal from "./EditBudgetModal";

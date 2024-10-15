@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import JobModelPopup from "../../../components/modelpopup/JobModelPopup";
+import JobModelPopup from "../../../components/Modals/JobModelPopup";
 import axios from "axios";
 import Breadcrumbs from "../../../components/Breadcrumbs";
-import ApplyJobModelPopup from "../../../components/modelpopup/ApplyJobModelPopup";
+import ApplyJobModelPopup from "../../../components/Modals/ApplyJobModelPopup";
 import { base_url } from "../../../base_urls";
 import Header from "../../layout/Header";
 

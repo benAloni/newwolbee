@@ -16,9 +16,9 @@ import {
   Avatar_11,
   Avatar_12,
 } from "../../../Routes/ImagePath";
-import DeleteModal from "../../../components/modelpopup/DeleteModal";
+import DeleteModal from "../../../components/Modals/DeleteModal";
 import Breadcrumbs from "../../../components/Breadcrumbs";
-import { AdminLeaveAddModelPopup } from "../../../components/modelpopup/AdminLeaveModelPopup";
+import { AdminLeaveAddModelPopup } from "../../../components/Modals/AdminLeaveModelPopup";
 import SearchBox from "../../../components/SearchBox";
 import LeaveFilter from "../../../components/LeaveFilter";
 const AdminLeave = () => {

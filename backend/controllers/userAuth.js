@@ -3,19 +3,23 @@ import { getAuth } from "firebase-admin/auth";
 
 //"register"
 export const fillUserInfo = async (req, res) => {
- const { civilId } = req.body
- console.log(civilId)
- const {uid} = req
+ const { fullName ,civilId } = req.body
+ const {user} = req
  let payload;
   try {
-  //add user's role with user claims
-   await getAuth().setCustomUserClaims(uid, {role: civilId == 0 ? "manager" : "otherUser", civilId})
+  //add user's details with user claims
+  await getAuth().setCustomUserClaims(user.uid, {
+    fullName,
+    email: user.email,
+    role: civilId == 0 ? "manager" : "otherUser",
+  });
   //save users role and civil id in db
   payload = {
     civilId,
-    uid,
-    role: civilId == 0 ? "manager" : "otherUser"
-  }
+    uid: user.uid,
+    fullName,
+    role: civilId == 0 ? "manager" : "otherUser",
+  };
   const createUser = new UserModel(payload);
     const savedNewUser = await createUser.save();
     return res.status(201).json(savedNewUser)
@@ -26,9 +30,9 @@ export const fillUserInfo = async (req, res) => {
 };
 //"login"
 export const verifyAuthentication = async (req, res) => {
-  const {uid} = req
+  const {user} = req
   try {
-    return res.status(200).json(uid);
+    return res.status(200).json(user.uid);
   } catch (error) {
 
     console.log(error.message);

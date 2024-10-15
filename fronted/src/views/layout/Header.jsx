@@ -19,18 +19,19 @@ import manager from "../../imgs/managerProfilePic.jpg";
 import defultprofile from "../../imgs/DefultProfile.png";
 import { useDispatch, useSelector } from "react-redux";
 import { auth } from "../../firebase/firebaseConfig";
-import { logout } from "../../features/userSlice";
+import { logout } from "../../features/authSlice";
 import { signOut } from "firebase/auth";
 import { useQueryClient } from '@tanstack/react-query';
-import NotificationsPopup from "../../components/modelpopup/Notifications/NotificationsPopup";
+import NotificationsPopup from "../../components/Modals/Notifications/NotificationsPopup";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage"; // הייבוא הנכון
-import { app } from '../../firebase/firebaseConfig'; // ייבוא app
+import { app } from '../../firebase/firebaseConfig'; 
+
 const Header = (props) => {
   const queryClient = useQueryClient();
 
   const dispatch = useDispatch();
   const navigate = useNavigate()
-
+  const userFullName = useSelector((state)=> state.auth.user?.fullName)
   const handleLogout = (() => {
     // Dispatch the logout action
     dispatch(logout());
@@ -93,10 +94,10 @@ const [profilePicURL, setProfilePicURL] = useState(null);
 
 
   useEffect(() => {
-    const user = auth.currentUser; // קבלת המשתמש המחובר
+    const user = auth.currentUser; 
     if (user) {
-      const name = user.displayName || "Admin"; // במידה ואין שם, ייכתב Admin
-      setProfileName(name);
+      const fullName = userFullName || "Admin"; 
+      setProfileName(fullName);
     }
   }, []);
 

@@ -2,9 +2,9 @@ import EventModel from "../models/EventModel.js";
 
 export const getEvents = async (req, res) => {
   let events;
-  const {uid} = req
+  const {user} = req
   try {
-    events = await EventModel.find({ uid })
+    events = await EventModel.find({ uid: user.uid })
   } catch (error) {
     console.error("Error getting events:", error);
     res
@@ -16,11 +16,11 @@ export const getEvents = async (req, res) => {
 
 export const addEvent = async (req, res) => {
   const { eventData } = req.body;
-  const {uid} = req
+  const {user} = req
   try {
     const newEvent = new EventModel({
         ...eventData,
-        uid,
+        uid: user.uid,
       })
    await newEvent.save()
    
@@ -36,8 +36,8 @@ export const addEvent = async (req, res) => {
 
 //delete event
 export const deleteEvent = async (req, res) => {
-  const { id } = req.params; // Get the event ID from the request parameters
-
+  const { id } = req.params; 
+  
   try {
     const deletedEvent = await EventModel.findByIdAndDelete(id);
 

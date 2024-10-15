@@ -13,7 +13,7 @@ import {
 } from "../../../Routes/ImagePath";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
-import ScheduleModelPopup from "../../../components/modelpopup/ScheduleModelPopup";
+import ScheduleModelPopup from "../../../components/Modals/ScheduleModelPopup";
 import ShiftSchedulingFilter from "../../../components/ShiftSchedulingFilter";
 dayjs.extend(customParseFormat);
 

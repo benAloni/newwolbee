@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import { Table } from "antd";
 import SearchBox from "../../../../components/SearchBox";
 import Breadcrumbs from "../../../../components/Breadcrumbs";
-import TrainingTypeModal from "../../../../components/modelpopup/TrainingTypeModal";
-import DeleteModal from "../../../../components/modelpopup/DeleteModal";
+import TrainingTypeModal from "../../../../components/Modals/TrainingTypeModal";
+import DeleteModal from "../../../../components/Modals/DeleteModal";
 const TrainingType = () => {
   const data = [
     {

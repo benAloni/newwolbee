@@ -5,7 +5,7 @@ import Breadcrumbs from "../../../../../components/Breadcrumbs";
 import { Link } from "react-router-dom";
 import { Table } from "antd";
 import SubCategoriesModal from "./subCategoryModal";
-import DeleteModal from "../../../../../components/modelpopup/deletePopup";
+import DeleteModal from "../../../../../components/Modals/deletePopup";
 
 const SubCategory = () => {
   const data = [

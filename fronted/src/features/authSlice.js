@@ -2,28 +2,23 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   user: null,
-  // isLoading: true,
-  header: false,
 };
 //signInWithEmailAndPassword
-export const userSlice = createSlice({
-  name: "user",
+export const authSlice = createSlice({
+  name: "auth",
   initialState,
   reducers: {
-    login: (state, action) => {
+    authenticate: (state, action) => {
       state.user = {
         uid: action.payload.uid,
+        fullName: action.payload.fullName,
         email: action.payload.email,
-        role: action.payload.role,
-        token: action.payload.token,
+        role: action.payload.role,    
       };
     },
     logout: (state) => {
       state.user = null;
     },
-    // setLoading: (state, action) => {
-    //   state.isLoading = action.payload;
-    // },
     setLayout: (state, { payload }) => {
       state.layout = payload;
     },
@@ -33,6 +28,6 @@ export const userSlice = createSlice({
   },
 });
 
-export const { login, logout, setLoading, setLayout, setToogleHeader } =
-  userSlice.actions;
-export default userSlice.reducer;
+export const { authenticate, logout, setLoading, setLayout, setToogleHeader } =
+authSlice.actions;
+export default authSlice.reducer;

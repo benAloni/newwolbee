@@ -2,10 +2,10 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Table } from "antd";
 import { Avatar_02 } from "../../../Routes/ImagePath/index";
-import DeleteModal from "../../../components/modelpopup/DeleteModal";
+import DeleteModal from "../../../components/Modals/DeleteModal";
 import Breadcrumbs from "../../../components/Breadcrumbs";
 import SearchBox from "../../../components/SearchBox";
-import ResignationModal from "../../../components/modelpopup/ResignationModal";
+import ResignationModal from "../../../components/Modals/ResignationModal";
 
 const Resignation = () => {
   const data = [

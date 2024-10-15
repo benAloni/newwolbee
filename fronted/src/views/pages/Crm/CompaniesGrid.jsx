@@ -3,7 +3,7 @@ import { avatar19, avatar20, avatar21, avatar22, avatar23, company_icon_01, comp
 import { Link } from 'react-router-dom';
 import Select from 'react-select';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
-import CompaniesModal from '../../../components/modelpopup/CompaniesModal';
+import CompaniesModal from '../../../components/Modals/CompaniesModal';
 
 
 

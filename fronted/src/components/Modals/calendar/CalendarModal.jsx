@@ -17,7 +17,7 @@ const CalendarModal = ({ addEvent }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [eventName, setEventName] = useState(neweventName);
   const [category, setCategory] = useState(null);
-  const user = useSelector((state) => state.user.user);
+  const user = useSelector((state) => state.auth.user);
 
   const handleDateChange = (date) => {
     setSelectedDate(date);

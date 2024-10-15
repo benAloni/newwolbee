@@ -5,12 +5,12 @@ import { Link } from "react-router-dom";
 import AdditionTable from "./AdditionTable";
 import OvertimeTable from "./OvertimeTable";
 import DeductionTable from "./DeductionTable";
-import AddAdditionModal from "../../../../../components/modelpopup/AddAdditionModal";
-import EditAdditionModal from "../../../../../components/modelpopup/EditAdditionModal";
-import AddandEditOvertime from "../../../../../components/modelpopup/AddandEditOvertime";
-import DeleteModal from "../../../../../components/modelpopup/deletePopup";
-import AddDeduction from "../../../../../components/modelpopup/AddDeduction";
-import EditDeduction from "../../../../../components/modelpopup/EditDeduction";
+import AddAdditionModal from "../../../../../components/Modals/AddAdditionModal";
+import EditAdditionModal from "../../../../../components/Modals/EditAdditionModal";
+import AddandEditOvertime from "../../../../../components/Modals/AddandEditOvertime";
+import DeleteModal from "../../../../../components/Modals/deletePopup";
+import AddDeduction from "../../../../../components/Modals/AddDeduction";
+import EditDeduction from "../../../../../components/Modals/EditDeduction";
 
 const PayrollItems = () => {
   return (

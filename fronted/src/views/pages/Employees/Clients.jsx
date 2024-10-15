@@ -12,8 +12,8 @@ import {
 } from "../../../Routes/ImagePath";
 import Breadcrumbs from "../../../components/Breadcrumbs";
 import ClientsFilter from "../../../components/ClientsFilter";
-import DeleteModal from "../../../components/modelpopup/DeleteModal";
-import { ClientModelPopup } from "../../../components/modelpopup/ClientModelPopup";
+import DeleteModal from "../../../components/Modals/DeleteModal";
+import { ClientModelPopup } from "../../../components/Modals/ClientModelPopup";
 
 const Clients = () => {
   const clientsData = [

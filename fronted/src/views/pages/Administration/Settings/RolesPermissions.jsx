@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import DeleteModal from "../../../../components/modelpopup/DeleteModal";
-import RolesPermissionsModal from "../../../../components/modelpopup/RolesPermissionsModal";
+import DeleteModal from "../../../../components/Modals/DeleteModal";
+import RolesPermissionsModal from "../../../../components/Modals/RolesPermissionsModal";
 import Breadcrumbs from "../../../../components/Breadcrumbs";
 
 const RolesPermissions = () => {

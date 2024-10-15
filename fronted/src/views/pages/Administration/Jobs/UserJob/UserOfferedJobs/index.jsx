@@ -2,7 +2,7 @@ import React from "react";
 
 import UserSearchFilter from "../../../../../../components/Administration/Jobs/UserJobs/UserSearchFilter";
 import UserDashboardHeader from "../../../../../../components/Administration/Jobs/UserJobs/UserDashboardHeader";
-import DeleteModal from "../../../../../../components/modelpopup/deletePopup";
+import DeleteModal from "../../../../../../components/Modals/deletePopup";
 import Breadcrumbs from "../../../../../../components/Breadcrumbs";
 import UserOfferedJobsTable from "./UserOfferedJobsTable";
 

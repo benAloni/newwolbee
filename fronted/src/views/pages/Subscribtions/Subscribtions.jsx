@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import SubscribtionModelPopup from "../../../components/modelpopup/SubscribtionModelPopup";
+import SubscribtionModelPopup from "../../../components/Modals/SubscribtionModelPopup";
 import axios from "axios";
 import { Table } from "antd";
 import Breadcrumbs from "../../../components/Breadcrumbs";

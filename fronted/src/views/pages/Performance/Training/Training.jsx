@@ -14,8 +14,8 @@ import {
 } from "../../../../Routes/ImagePath/index";
 import SearchBox from "../../../../components/SearchBox";
 import Breadcrumbs from "../../../../components/Breadcrumbs";
-import DeleteModal from "../../../../components/modelpopup/DeleteModal";
-import TrainingModal from "../../../../components/modelpopup/TrainingModal";
+import DeleteModal from "../../../../components/Modals/DeleteModal";
+import TrainingModal from "../../../../components/Modals/TrainingModal";
 
 const Training = () => {
   const data = [

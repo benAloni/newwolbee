@@ -3,8 +3,8 @@ import axios from "axios";
 import { Table } from "antd";
 import { Link } from "react-router-dom";
 import Breadcrumbs from "../../../components/Breadcrumbs";
-import DeleteModal from "../../../components/modelpopup/DeleteModal";
-import AddDesingnationModelPopup from "../../../components/modelpopup/AddDesingnationModelPopup";
+import DeleteModal from "../../../components/Modals/DeleteModal";
+import AddDesingnationModelPopup from "../../../components/Modals/AddDesingnationModelPopup";
 import SearchBox from "../../../components/SearchBox";
 import { base_url } from "../../../base_urls";
 

@@ -13,9 +13,9 @@ import {
   Avatar_16,
   User,
 } from "../../../../Routes/ImagePath";
-import TaskAssignee from "../../../../components/modelpopup/TaskAssignee";
-import TaskFollowersModelPopup from "../../../../components/modelpopup/TaskFollowersModelPopup";
-import ProjectModelPopup from "../../../../components/modelpopup/ProjectModelPopup";
+import TaskAssignee from "../../../../components/Modals/TaskAssignee";
+import TaskFollowersModelPopup from "../../../../components/Modals/TaskFollowersModelPopup";
+import ProjectModelPopup from "../../../../components/Modals/ProjectModelPopup";
 
 const Tasks = () => {
 

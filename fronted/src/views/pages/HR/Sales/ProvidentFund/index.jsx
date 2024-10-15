@@ -6,7 +6,7 @@ import Breadcrumbs from "../../../../../components/Breadcrumbs";
 import { Link } from "react-router-dom";
 import { Avatar_02 } from "../../../../../Routes/ImagePath";
 import { Table } from "antd";
-import DeleteModal from "../../../../../components/modelpopup/deletePopup";
+import DeleteModal from "../../../../../components/Modals/deletePopup";
 import EditPfModal from "./EditPfModal";
 import AddPfModal from "./AddPfModal";
 

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import {  PlaceHolder } from '../../../../Routes/ImagePath';
 import ProjectViewDetails from './ProjectViewDetails';
-import ProjectModelPopup from '../../../../components/modelpopup/ProjectModelPopup';
+import ProjectModelPopup from '../../../../components/Modals/ProjectModelPopup';
 import Breadcrumbs from '../../../../components/Breadcrumbs';
 const ProjectView = () => {
 

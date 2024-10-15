@@ -167,7 +167,7 @@ const ContactContents = () => {
   ]);
 
       // get notifications
-      const user = useSelector((state) => state.user.user);
+      const user = useSelector((state) => state.auth.user);
       const [events, setEvents] = useState([]);
     
       const fetchData = async () => {

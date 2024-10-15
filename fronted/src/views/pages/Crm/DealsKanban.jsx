@@ -5,7 +5,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 import Select from 'react-select';
 import { Avatar_15, Avatar_17, Avatar_20, Avatar_21, avatar1, avatar16, avatar19, avatar22, avatar23, avatar24, avatar25, avatar26 } from '../../../Routes/ImagePath';
-import DealsModal from '../../../components/modelpopup/DealsModal';
+import DealsModal from '../../../components/Modals/DealsModal';
 
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 

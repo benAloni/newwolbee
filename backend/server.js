@@ -12,7 +12,6 @@ import EmployeeModel from "./models/EmployeesModel.js";
 import { log } from "console";
 
 const app = express();
-app.use(cors());
 app.use(express.json());
 
 app.use(express.static("fronted"));
@@ -24,7 +23,7 @@ app.use(
       "https://wolbee-front-gkfchuwp6q-uc.a.run.app",
       "http://localhost:3000",
       "https://newwolbee-l7cc.onrender.com",
-      "216.24.57.252:443"
+      "https://216.24.57.252:443"
 
     ],
     credentials: true,

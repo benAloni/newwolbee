@@ -3,8 +3,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Breadcrumbs from "../../../components/Breadcrumbs";
-import DeleteModal from "../../../components/modelpopup/DeleteModal";
-import EmployeeLeaveModelPopup from "../../../components/modelpopup/EmployeeLeaveModelPopup";
+import DeleteModal from "../../../components/Modals/DeleteModal";
+import EmployeeLeaveModelPopup from "../../../components/Modals/EmployeeLeaveModelPopup";
 import SearchBox from "../../../components/SearchBox";
 import { base_url } from "../../../base_urls";
 

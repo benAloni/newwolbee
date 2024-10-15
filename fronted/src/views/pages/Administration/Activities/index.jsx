@@ -4,7 +4,7 @@ import Select from 'react-select';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Table } from 'antd';
-import ActivityModal from '../../../../components/modelpopup/ActivityModal';
+import ActivityModal from '../../../../components/Modals/ActivityModal';
 
 const Activities = () => {
 

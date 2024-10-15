@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 
 const PersonalInformationModelPopup = ({selectedEmployee}) => {
   const [selectedDate1, setSelectedDate1] = useState(null);
-  const user = useSelector((state) => state.user.user); // Get the user data from Redux
+  const user = useSelector((state) => state.auth.user); // Get the user data from Redux
 
 
   const fetchEmployees = async () => {

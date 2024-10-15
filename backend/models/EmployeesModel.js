@@ -1,124 +1,128 @@
 import mongoose from "mongoose";
 
-
-
 const employeeSchema = new mongoose.Schema({
-    FullName: {
-      type: String,
-      required: [true, "Please provide full name"]
-    },
-    EmployeeOfManagerId: {
-      type: String,
-      required: [true, "Please provide employee of manager id"]
-    },
-    EmployeeID: { 
-      type: String, 
-      unique: true, 
-      required: [true, "Please provide civil id"], 
-    },
-    Role: {
-      type: String,
-      required: [true, "Please provide role"]
-    },
-    Team: {
-      type: String,
-      required: [true, "Please provide team id"]
-    },
-    DataOfBirth: {
-      type: Date, 
-      required: [true, "Please provide date of birth"]
-    },
-    Address: {
-      type: String,
-      required: [true, "Please provide place of residence"]
-    },
-    Religion : {
-      type: String,
-    },
-    Passport : {
-      type: String,
-    },
-    Gender : {
-      type: String,
-    },
-    State : {
-      type: String,
-    },
-    Country : {
-      type: String,
-    },
-    PinCode : {
-      type: String,
-    },
-    Department  : {
-      type: String,
-    },
-    Designation   : {
-      type: String,
-    },
-    Email : {
-      type: String,
-    },
-    Phone: {
-      type: String,
-    },
-    MaritalStatus: {
-      type: String,
-    },
-    NumOfChildren: {
-      type: Number,
-    },
-    StartDay: {
-      type: Date, 
-      required: [true, "Please provide start date in the company"]
-    },
-    Anniversary: {
-      type: Date, 
-    },
-    LatestActivity: {
-      type: Array,
-    },
-    InterestingFacts: {
-      type: String,
-    },
-    ClosestPersonalEvent: {
-      type: [String],
-    },
-    Singers: {
-      type: [String],
-    },
-    FoodAndDrinks: [{
+  fullName: {
+    type: String,
+    required: [true, "Please provide full name"],
+  },
+  employeeOfManagerId: {
+    type: String,
+    required: [true, "Please provide the employee's manager Id"],
+  },
+  employeeId: {
+    type: String,
+    // unique: true,
+    required: [true, "Please provide civil id"],
+  },
+  role: {
+    type: String,
+    required: [true, "Please provide role"],
+  },
+  team: {
+    type: String,
+    required: [true, "Please provide team name"],
+  },
+  dateOfBirth: {
+    type: Date,
+    required: [true, "Please provide date of birth"],
+  },
+  address: {
+    type: String,
+    required: [true, "Please provide place of residence"],
+  },
+  religion: {
+    type: String,
+  },
+  passport: {
+    type: String,
+  },
+  gender: {
+    type: String,
+    required: [true, "Please provide a gender"],
+  },
+  state: {
+    type: String,
+  },
+  country: {
+    type: String,
+  },
+  pinCode: {
+    type: String,
+  },
+  department: {
+    type: String,
+  },
+  designation: {
+    type: String,
+  },
+  email: {
+    type: String,
+  },
+  phone: {
+    type: String,
+  },
+  maritalStatus: {
+    type: String,
+  },
+  children: {
+    type: String,
+  },
+  startDay: {
+    type: Date,
+    required: [true, "Please provide start date in the company"],
+  },
+  anniversary: {
+    type: Date,
+  },
+  latestActivity: {
+    type: Array,
+  },
+  interestingFact: {
+    type: String,
+  },
+  closestPersonalEvent: {
+    type: [String],
+  },
+  singers: {
+    type: [String],
+  },
+  foodAndDrinks: [
+    {
       food1: { type: String },
       food2: { type: String },
-      drink: { type: String }
-    }],
-    Restaurants: [{
+      drink: { type: String },
+    },
+  ],
+  restaurants: [
+    {
       restaurant1: { type: String },
-      restaurant2: { type: String }
-    }],
-    Hobbies: [{
+      restaurant2: { type: String },
+    },
+  ],
+  hobbies: [
+    {
       hobby1: { type: String },
       hobby2: { type: String },
-      hobby3: { type: String }
-    }],
-    TopInsights: {
-      type: Array,
+      hobby3: { type: String },
     },
-    LatestInfo: {
-      type: Array,
+  ],
+  topInsights: {
+    type: Array,
+  },
+  latestInfo: {
+    type: Array,
+  },
+  vacation: [
+    {
+      destination: { type: String },
+      purposeOfTrip: { type: String },
+      startDate: { type: Date },
+      endDate: { type: Date },
     },
-    Vacation: [{
-    name:{type:String},
-    startDate: {type: Date},
-     endDate: {type: Date },
-        }],
-     
-   
-    uid:
-    {type:String} ,
-  });
-  
-  const EmployeeModel = mongoose.model('Employee', employeeSchema);
-  
-  export default EmployeeModel;
-  
+  ],
+  uid: { type: String },
+});
+
+const EmployeeModel = mongoose.model("employee", employeeSchema);
+
+export default EmployeeModel;

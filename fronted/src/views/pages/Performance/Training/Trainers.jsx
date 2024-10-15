@@ -10,8 +10,8 @@ import {
 } from "../../../../Routes/ImagePath/index";
 import SearchBox from "../../../../components/SearchBox";
 import Breadcrumbs from "../../../../components/Breadcrumbs";
-import DeleteModal from "../../../../components/modelpopup/DeleteModal";
-import TrainersModal from "../../../../components/modelpopup/TrainersModal";
+import DeleteModal from "../../../../components/Modals/DeleteModal";
+import TrainersModal from "../../../../components/Modals/TrainersModal";
 
 const Trainers = () => {
   const data = [

@@ -1,8 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { userSlice } from "../features/userSlice"; // Make sure this import is correct
+import { authSlice } from "../features/authSlice"; // Make sure this import is correct
 
 const reducer = {
-  user: userSlice.reducer, // Access the 'reducer' property of the userSlice
+  auth: authSlice.reducer, // Access the 'reducer' property of the authSlice
 };
 
  export const store = configureStore({

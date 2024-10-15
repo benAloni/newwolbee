@@ -5,7 +5,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from "react-select";
 import EstimatesTable from "./estimatesTable";
-import DeleteModal from "../../../../../components/modelpopup/DeleteModal";
+import DeleteModal from "../../../../../components/Modals/DeleteModal";
 
 const Estimates = () => {
   const [selectedDate, setSelectedDate] = useState(null);

@@ -12,8 +12,8 @@ import { Link } from "react-router-dom";
 import { Table } from "antd";
 import EmployeeListFilter from "../../../components/EmployeeListFilter";
 import Breadcrumbs from "../../../components/Breadcrumbs";
-import AllEmployeeAddPopup from "../../../components/modelpopup/employeepopup/AllEmployeeAddPopup";
-import DeleteModal from "../../../components/modelpopup/DeleteModal";
+import AddEmployeeModal from "../../../components/Modals/employeepopup/AddEmployeeModal";
+import DeleteModal from "../../../components/Modals/DeleteModal";
 import SearchBox from "../../../components/SearchBox";
 
 const EmployeeList = () => {
@@ -226,7 +226,7 @@ const EmployeeList = () => {
           </div>
         </div>
         {/* /Page Content */}
-        <AllEmployeeAddPopup />
+        <AddEmployeeModal />
         <DeleteModal Name="Delete Employee" />
       </div>
     </div>

@@ -6,7 +6,7 @@ import {
   Avatar_02,
   Avatar_03,
 } from "../../../../../Routes/ImagePath";
-import DeleteModal from "../../../../../components/modelpopup/deletePopup";
+import DeleteModal from "../../../../../components/Modals/deletePopup";
 import AddJobResumes from "../../../../../components/Administration/Jobs/ManageResumes/AddJobResumes";
 
 const ManageJobResumesTable = () => {

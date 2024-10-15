@@ -5,7 +5,7 @@ import UserDashboardHeader from "../../../../../../components/Administration/Job
 import DashboardWidget from "./DashboardWidget";
 import DashboardGraph from "./DashboardGraph";
 import OfferedJobs from "./OfferedJobs";
-import DeleteModal from "../../../../../../components/modelpopup/deletePopup";
+import DeleteModal from "../../../../../../components/Modals/deletePopup";
 import AppliedJobsTable from "./AppliedJobsTable";
 
 const UserDashboard = () => {

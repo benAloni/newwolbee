@@ -15,8 +15,8 @@ import {
   Avatar_13,
   Avatar_16,
 } from "../../../../Routes/ImagePath";
-import DeleteModal from "../../../../components/modelpopup/DeleteModal";
-import ProjectModelPopup from "../../../../components/modelpopup/ProjectModelPopup";
+import DeleteModal from "../../../../components/Modals/DeleteModal";
+import ProjectModelPopup from "../../../../components/Modals/ProjectModelPopup";
 
 const ProjectList = () => {
   const projectlist = [

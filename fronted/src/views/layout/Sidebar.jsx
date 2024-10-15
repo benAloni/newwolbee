@@ -30,7 +30,7 @@ const Sidebar = () => {
   const [isSideMenunew, setSideMenuNew] = useState("dashboard");
 
 
-  const user = useSelector((state) => state.user.user); 
+  const user = useSelector((state) => state.auth.user); 
   useEffect(() => {
     if (user && user.role) {
       if (user.role === "manager") {

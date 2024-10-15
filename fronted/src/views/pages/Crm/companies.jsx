@@ -3,9 +3,9 @@ import { company_icon_01, company_icon_02, company_icon_03, company_icon_04, com
 import { Link } from 'react-router-dom';
 import { Table } from "antd";
 import Select from 'react-select';
-import CompaniesModal from '../../../components/modelpopup/CompaniesModal';
+import CompaniesModal from '../../../components/Modals/CompaniesModal';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
-import AddNotes from '../../../components/modelpopup/Crm/AddNotes';
+import AddNotes from '../../../components/Modals/Crm/AddNotes';
 
 
 

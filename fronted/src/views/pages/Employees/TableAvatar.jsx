@@ -11,7 +11,7 @@ import {
   Avatar_13,
   Avatar_16,
 } from "../../../Routes/ImagePath";
-import AttendenceModelPopup from "../../../components/modelpopup/AttendenceModelPopup";
+import AttendenceModelPopup from "../../../components/Modals/AttendenceModelPopup";
 const TableAvatar = () => {
   return (
     <>

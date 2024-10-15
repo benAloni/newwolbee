@@ -2,9 +2,9 @@ import React from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import { Link } from "react-router-dom";
 import { Table } from "antd";
-import DeleteModal from "../../../components/modelpopup/DeleteModal";
-import ShiftModelPopup from "../../../components/modelpopup/ShiftModelPopup";
-import ScheduleModelPopup from "../../../components/modelpopup/ScheduleModelPopup";
+import DeleteModal from "../../../components/Modals/DeleteModal";
+import ShiftModelPopup from "../../../components/Modals/ShiftModelPopup";
+import ScheduleModelPopup from "../../../components/Modals/ScheduleModelPopup";
 import SearchBox from "../../../components/SearchBox";
 
 const ShiftList = () => {

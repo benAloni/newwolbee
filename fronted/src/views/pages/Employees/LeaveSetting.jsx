@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React, { useState } from "react";
 import LeaveSettingCustomPolicy from "./LeaveSettingCustomPolicy";
-import DeleteModal from "../../../components/modelpopup/DeleteModal";
-import LeaveSettingAddModelPopup from "../../../components/modelpopup/LeaveSettingAddModelPopup";
+import DeleteModal from "../../../components/Modals/DeleteModal";
+import LeaveSettingAddModelPopup from "../../../components/Modals/LeaveSettingAddModelPopup";
 import Breadcrumbs from "../../../components/Breadcrumbs";
 
 const LeaveSettings = () => {

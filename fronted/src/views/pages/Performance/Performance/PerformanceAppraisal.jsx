@@ -11,8 +11,8 @@ import {
   Avatar_12,
   Avatar_11,
 } from "../../../../Routes/ImagePath/index";
-import DeleteModal from "../../../../components/modelpopup/DeleteModal";
-import PerformanceAppraisalModal from "../../../../components/modelpopup/PerformanceAppraisalModal";
+import DeleteModal from "../../../../components/Modals/DeleteModal";
+import PerformanceAppraisalModal from "../../../../components/Modals/PerformanceAppraisalModal";
 
 const data = [
   {

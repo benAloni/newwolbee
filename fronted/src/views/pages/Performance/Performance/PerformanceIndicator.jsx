@@ -10,9 +10,9 @@ import {
   Avatar_11,
   Avatar_12,
 } from "../../../../Routes/ImagePath/index";
-import PerformanceIndicatorModal from "../../../../components/modelpopup/PerformanceIndicatorModal";
+import PerformanceIndicatorModal from "../../../../components/Modals/PerformanceIndicatorModal";
 import Breadcrumbs from "../../../../components/Breadcrumbs";
-import DeleteModal from "../../../../components/modelpopup/DeleteModal";
+import DeleteModal from "../../../../components/Modals/DeleteModal";
 
 const data = [
   {

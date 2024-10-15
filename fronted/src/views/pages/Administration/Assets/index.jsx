@@ -6,9 +6,9 @@ import Breadcrumbs from "../../../../components/Breadcrumbs";
 
 import AssetsSearchFilter from "./AssetsSearchFilter";
 import AssetsTable from "./AssetsTable";
-import AddAssetpopup from "../../../../components/modelpopup/Assets/AddAssetpopup";
-import EditAssetpopup from "../../../../components/modelpopup/Assets/EditAssetpopup";
-import DeleteModal from "../../../../components/modelpopup/deletePopup";
+import AddAssetpopup from "../../../../components/Modals/Assets/AddAssetpopup";
+import EditAssetpopup from "../../../../components/Modals/Assets/EditAssetpopup";
+import DeleteModal from "../../../../components/Modals/deletePopup";
 
 const Assets = () => {
   return (

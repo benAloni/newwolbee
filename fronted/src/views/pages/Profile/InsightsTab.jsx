@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import PersonalInformationModelPopup from "../../../components/modelpopup/PersonalInformationModelPopup";
+import PersonalInformationModelPopup from "../../../components/Modals/PersonalInformationModelPopup";
 import { ListItem, ProjectDetails } from "./ProfileContent";
 
 const inithtsTab = () => {

@@ -2,8 +2,8 @@ import React, { useEffect, useRef,useState } from 'react'
 import { avatar1, avatar19, avatar20, avatar21, avatar22, company_icon_01, company_icon_02, media35 } from '../../../Routes/ImagePath'
 import { Link } from 'react-router-dom'
 import Select from 'react-select';
-import CompaniesDetailModal from '../../../components/modelpopup/CompaniesDetailModal';
-import CompanyEditModal from '../../../components/modelpopup/Crm/CompanyEditModal';
+import CompaniesDetailModal from '../../../components/Modals/CompaniesDetailModal';
+import CompanyEditModal from '../../../components/Modals/Crm/CompanyEditModal';
 import { Calendar, Edit, Mail, MessageCircle, MoreVertical, Phone, PlusCircle, Star, Trash2 } from 'react-feather';
 
 

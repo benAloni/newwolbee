@@ -5,7 +5,7 @@ import Select from 'react-select';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Table } from "antd";
-import DealsModal from '../../../components/modelpopup/DealsModal';
+import DealsModal from '../../../components/Modals/DealsModal';
 
 
 

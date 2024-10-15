@@ -9,14 +9,14 @@ import {
   media35,
 } from "../../../Routes/ImagePath";
 import Select from "react-select";
-import AddNotes from "../../../components/modelpopup/Crm/AddNotes";
+import AddNotes from "../../../components/Modals/Crm/AddNotes";
 import { MoreVertical } from "react-feather";
 import { Tooltip } from "react-bootstrap";
 import { OverlayTrigger } from "react-bootstrap";
-import Calls from "../../../components/modelpopup/Crm/Calls";
-import AddFiles from "../../../components/modelpopup/Crm/AddFiles";
-import CreateEmail from "../../../components/modelpopup/Crm/CreateEmail";
-import AddContact from "../../../components/modelpopup/Crm/AddContact";
+import Calls from "../../../components/Modals/Crm/Calls";
+import AddFiles from "../../../components/Modals/Crm/AddFiles";
+import CreateEmail from "../../../components/Modals/Crm/CreateEmail";
+import AddContact from "../../../components/Modals/Crm/AddContact";
 
 const DealsDetails = () => {
   const recentlyViewd = [

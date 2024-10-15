@@ -14,7 +14,7 @@ import {
   keyboard,
 } from "../../../Routes/ImagePath";
 import Breadcrumbs from "../../../components/Breadcrumbs ";
-import UserAssestDetailPopup from "../../../components/modelpopup/UserAssestDetailPopup";
+import UserAssestDetailPopup from "../../../components/Modals/UserAssestDetailPopup";
 
 const UserAssestDetails = () => {
   const userData = {

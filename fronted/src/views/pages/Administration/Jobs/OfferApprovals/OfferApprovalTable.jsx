@@ -1,6 +1,6 @@
 import React from "react";
 import { Table } from "antd";
-import DeleteModal from "../../../../../components/modelpopup/deletePopup";
+import DeleteModal from "../../../../../components/Modals/deletePopup";
 import { Link } from "react-router-dom";
 import {
   Avatar_01,

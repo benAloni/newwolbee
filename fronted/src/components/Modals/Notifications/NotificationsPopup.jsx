@@ -1,22 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { auth } from '../../../firebase/firebaseConfig';
 
 export default function NotificationsPopup() {
-  const user = useSelector((state) => state.user.user);
-
   const [events, setEvents] = useState([]);
   const [eventsTomorrow, setEventsTomorrow] = useState([]);
 
   const fetchData = async () => {
+    const token = await auth.currentUser.getIdToken()
     const [AllNotification, employeesResponse] =
       await Promise.all([
         axios.get("https://newwolbee-l7cc.onrender.com/api/getAllNotifications", {
-          headers: { Authorization: `Bearer ${user.token}` },
+          headers: { Authorization: `Bearer ${token}` },
         }),
         axios.get("https://newwolbee-l7cc.onrender.com/api/getEmployees", {
-          headers: { Authorization: `Bearer ${user.token}` },
+          headers: { Authorization: `Bearer ${token}` },
         }),
       ]);
   
@@ -36,9 +35,9 @@ export default function NotificationsPopup() {
     if (events.length > 0 && !isLoading) {
       const newEvents = events.map((val) => {
         // Check if DataOfBirth exists, and set title accordingly
-        if (val.DataOfBirth) {
+        if (val.dateOfBirth) {
           return {
-            title: `Happy Birthday ${val.FullName}`, // Assuming employees have FullName
+            title: `Happy Birthday ${val.fullName}`, 
             date: val.DataOfBirth,
             className: `Birthday`,
           };

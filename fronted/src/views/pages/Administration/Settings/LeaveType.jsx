@@ -3,8 +3,8 @@ import SearchBox from "../../../../components/SearchBox";
 import { Table } from "antd";
 import { Link } from "react-router-dom";
 import Breadcrumbs from "../../../../components/Breadcrumbs";
-import DeleteModal from "../../../../components/modelpopup/DeleteModal";
-import LeaveTypeModal from "../../../../components/modelpopup/LeaveTypeModal";
+import DeleteModal from "../../../../components/Modals/DeleteModal";
+import LeaveTypeModal from "../../../../components/Modals/LeaveTypeModal";
 
 const LeaveType = () => {
   const data = [

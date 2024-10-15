@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { Table } from "antd";
 import AddJobModal from "../../../../../components/Administration/Jobs/ManageJobs/AddJobModal";
 import EditJobModal from "../../../../../components/Administration/Jobs/ManageJobs/EditJobModal";
-import DeleteModal from "../../../../../components/modelpopup/deletePopup";
+import DeleteModal from "../../../../../components/Modals/deletePopup";
 
 const ManageJobs = () => {
   const data = [

@@ -6,7 +6,7 @@ import {
   Avatar_09,
   Avatar_10,
 } from "../../../../../Routes/ImagePath";
-import DeleteModal from "../../../../../components/modelpopup/deletePopup";
+import DeleteModal from "../../../../../components/Modals/deletePopup";
 
 const ShortlistTable = () => {
   const data = [

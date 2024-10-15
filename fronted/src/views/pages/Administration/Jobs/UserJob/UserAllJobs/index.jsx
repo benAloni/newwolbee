@@ -4,7 +4,7 @@ import Breadcrumbs from "../../../../../../components/Breadcrumbs";
 import UserSearchFilter from "../../../../../../components/Administration/Jobs/UserJobs/UserSearchFilter";
 import UserDashboardHeader from "../../../../../../components/Administration/Jobs/UserJobs/UserDashboardHeader";
 import UserDataTable from "../../../../../../components/Administration/Jobs/UserJobs/UserDataTable";
-import DeleteModal from "../../../../../../components/modelpopup/deletePopup";
+import DeleteModal from "../../../../../../components/Modals/deletePopup";
 
 const UserAllJobs = () => {
   return (

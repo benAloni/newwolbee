@@ -2,8 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Salary from "../../../../../assets/json/employeeSalary";
 import { Table } from "antd";
-import EditSalaryModal from "../../../../../components/modelpopup/EditSalaryModal";
-import DeleteModal from "../../../../../components/modelpopup/deletePopup";
+import EditSalaryModal from "../../../../../components/Modals/EditSalaryModal";
+import DeleteModal from "../../../../../components/Modals/deletePopup";
 
 const SalaryTable = () => {
   const data = Salary.Salary;

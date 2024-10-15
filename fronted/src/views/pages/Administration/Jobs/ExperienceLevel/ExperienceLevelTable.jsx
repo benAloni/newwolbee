@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Table } from "antd";
 import EditExperiencelModal from "../../../../../components/Administration/Jobs/ExperienceLevel/EditExperienceModal";
-import DeleteModal from "../../../../../components/modelpopup/deletePopup";
+import DeleteModal from "../../../../../components/Modals/deletePopup";
 
 const ExperienceLevelTable = () => {
   const data = [

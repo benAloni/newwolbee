@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import Select from "react-select";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import AddSalaryModal from "../../../../../components/modelpopup/AddSalaryModal";
+import AddSalaryModal from "../../../../../components/Modals/AddSalaryModal";
 import SalaryTable from "./SalaryTable";
 
 const EmployeeSalary = () => {

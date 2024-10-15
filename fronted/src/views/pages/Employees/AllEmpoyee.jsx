@@ -4,9 +4,9 @@ import axios from "axios";
 import Select from "react-select";
 import { useSelector } from "react-redux";
 import { auth } from "../../../firebase/firebaseConfig";
-import AllEmployeeAddPopup from "../../../components/modelpopup/employeepopup/AllEmployeeAddPopup";
+import AddEmployeeModal from "../../../components/Modals/employeepopup/AddEmployeeModal";
 import Breadcrumbs from "../../../components/Breadcrumbs";
-import DeleteModal from "../../../components/modelpopup/DeleteModal";
+import DeleteModal from "../../../components/Modals/DeleteModal";
 import EmployeeListFilter from "../../../components/EmployeeListFilter";
 import lisa from "../../../imgs/avatar_1.JPG";
 import tom from "../../../imgs/avatar_2.JPG";
@@ -30,7 +30,7 @@ const AllEmployee = () => {
   const [values, setValues] = useState([]);
   const [userRole, setUserRole] = useState(null);
 
-  const user = useSelector((state) => state.user.user);
+  const user = useSelector((state) => state.auth.user);
 
   // need to add loading
   useEffect(() => {
@@ -73,7 +73,7 @@ const AllEmployee = () => {
         );
         const employeesWithAvatars = response.data.map((employee, index) => ({
           ...employee,
-          id: employee._id, 
+          id: employee._id,
           avatar: avatars[index % avatars.length],
         }));
         setEmployees(employeesWithAvatars);
@@ -93,13 +93,15 @@ const AllEmployee = () => {
     const fetchTeams = async () => {
       if (!user) return;
       try {
-        const response = await axios.get("https://newwolbee-l7cc.onrender.com/api/teams", {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        });
+        const response = await axios.get(
+          "https://newwolbee-l7cc.onrender.com/api/getTeams",
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        );
         setValues(response.data);
-        
       } catch (error) {
         console.error("Error fetching team :", error);
       }
@@ -114,7 +116,6 @@ const AllEmployee = () => {
         (employee) => employee.Team === selectedTeam
       );
       setFilteredEmployees(filteredTeam);
-      
     } else {
       setFilteredEmployees(employees);
     }
@@ -254,7 +255,7 @@ const AllEmployee = () => {
         </div>
       </div>
 
-      <AllEmployeeAddPopup />
+      <AddEmployeeModal />
       <DeleteModal Name="מחק עובד" />
     </div>
   );

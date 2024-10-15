@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 import { Table } from "antd";
 import SearchBox from "../../../../components/SearchBox";
 import Breadcrumbs from "../../../../components/Breadcrumbs";
-import GoalTypeModal from "../../../../components/modelpopup/GoalTypeModal";
-import DeleteModal from "../../../../components/modelpopup/DeleteModal";
+import GoalTypeModal from "../../../../components/Modals/GoalTypeModal";
+import DeleteModal from "../../../../components/Modals/DeleteModal";
 
 const GoalType = () => {
   const data = [

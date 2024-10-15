@@ -59,11 +59,7 @@ import MyDashboard from "../../views/pages/MainPages/Dashboard/AdminDashboard/My
 import HrDashboard from "../../views/pages/MainPages/Dashboard/AdminDashboard/HrDashboard";
 import { useDispatch, useSelector } from "react-redux";
 import { auth } from "../../firebase/firebaseConfig";
-import {
-  login,
-  setLoading,
-  logout
-} from "../../features/userSlice";
+import { authenticate, setLoading, logout } from "../../features/authSlice";
 const ScrollToTop = () => {
   const { pathname } = useLocation();
 
@@ -82,18 +78,14 @@ const AppRouter = () => {
     const unsubscribe = auth.onIdTokenChanged(async (user) => {
       if (user) {
         const token = await user.getIdTokenResult();
-        const encodedToken = await user.getIdToken();       
-          dispatch(
-            login({
-              uid: user.uid,
-              email: user.email,
-              role: token.claims.role,
-              token: encodedToken,
-            })
-          );
-          // console.log(token);
-          
-      
+        dispatch(
+          authenticate({
+            uid: user.uid,
+            fullName: token.claims.fullName,
+            email: token.claims.email,
+            role: token.claims.role,
+          })
+        );
       } else {
         dispatch(logout());
       }
@@ -108,7 +100,7 @@ const AppRouter = () => {
     <div>
       <BrowserRouter>
         <ScrollToTop />
-        
+
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/myDashboard" element={<MyDashboard />} />

@@ -3,8 +3,8 @@ import React from "react";
 import Breadcrumbs from "../../../../components/Breadcrumbs";
 import { Table } from "antd";
 import { Link } from "react-router-dom";
-import AddandEditPolicy from "../../../../components/modelpopup/AddandEditPolicy";
-import DeleteModal from "../../../../components/modelpopup/deletePopup";
+import AddandEditPolicy from "../../../../components/Modals/AddandEditPolicy";
+import DeleteModal from "../../../../components/Modals/deletePopup";
 
 const Policies = () => {
   const data = [

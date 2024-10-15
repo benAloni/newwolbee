@@ -5,35 +5,38 @@ import Select from "react-select";
 import { useSelector } from "react-redux";
 import MainPageEdit from "./MainPageEdit";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { auth } from "../../../firebase/firebaseConfig";
 
-const AllEmployeeAddPopup = (props) => {
-  const user = useSelector((state) => state.user.user);
-  const queryClient = useQueryClient(); // Initialize queryClient
-  const [isSubmitting, setIsSubmitting] = useState(false); // Track form submission
-
+const AddEmployeeModal = (props) => {
+  const user = useSelector((state) => state.auth.user);
+  const queryClient = useQueryClient();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [employeeData, setEmployeeData] = useState({
-    FullName: "",
-    EmployeeOfManagerId: "",
-    EmployeeID: "",
-    Role: "",
-    Team: "",
-    DataOfBirth: "",
-    Address: "",
-    MaritalStatus: "",
-    NumOfChildren: 0,
-    StartDay: "",
-    Anniversary: "",
-    LastestActivity: [''],
-    InterestingFacts: "",
-    ClosestPersonalEvent: [''],
-    Singers: "",
-    FoodAndDrinks: [{ Food1: "", Food2: "", Drink: "" }],
-    Restaurants: [{ Restaurant1: "", Restaurant2: "" }],
-    Hobbies: [{ Hobby1: "", Hobby2: "", Hobby3: "" }],
-    TopInsights: [''],
-    LatestInfo: [''],
-    Vacation:[{name:"" , startDate:"" , endDate: ""}]
+    fullName: "",
+    employeeOfManagerId: "",
+    employeeId: "",
+    role: "",
+    team: "",
+    dateOfBirth: "",
+    address: "",
+    gender: "",
+    maritalStatus: "",
+    children: 0,
+    startDay: "",
+    anniversary: "",
+    latestActivity: [""],
+    interestingFact: "",
+    closestPersonalEvent: [""],
+    singers: "",
+    foodAndDrinks: [{ food1: "", food2: "", drink: "" }],
+    restaurants: [{ restaurant1: "", restaurant2: "" }],
+    hobbies: [{ hobby1: "", hobby2: "", hobby3: "" }],
+    topInsights: [""],
+    latestInfo: [""],
+    vacation: [
+      { destination: "", purposeOfTrip: "", startDate: "", endDate: "" },
+    ],
   });
 
   const [errors, setErrors] = useState({});
@@ -49,40 +52,40 @@ const AllEmployeeAddPopup = (props) => {
   const handleInputChange = (e, index, field) => {
     const { name, value } = e.target;
 
-    if (name === "FoodAndDrinks") {
+    if (name === "foodAndDrinks") {
       setEmployeeData((prevData) => {
-        const updatedFoodAndDrinks = [...prevData.FoodAndDrinks];
-        updatedFoodAndDrinks[index] = {
-          ...updatedFoodAndDrinks[index],
+        const updatedfoodAndDrinks = [...prevData.foodAndDrinks];
+        updatedfoodAndDrinks[index] = {
+          ...updatedfoodAndDrinks[index],
           [field]: value,
         };
         return {
           ...prevData,
-          FoodAndDrinks: updatedFoodAndDrinks,
+          foodAndDrinks: updatedfoodAndDrinks,
         };
       });
-    } else if (name === "Restaurants") {
+    } else if (name === "restaurants") {
       setEmployeeData((prevData) => {
-        const updatedRestaurants = [...prevData.Restaurants];
+        const updatedRestaurants = [...prevData.restaurants];
         updatedRestaurants[index] = {
           ...updatedRestaurants[index],
           [field]: value,
         };
         return {
           ...prevData,
-          Restaurants: updatedRestaurants,
+          restaurants: updatedRestaurants,
         };
       });
-    } else if (name === "Hobbies") {
+    } else if (name === "hobbies") {
       setEmployeeData((prevData) => {
-        const updatedHobbies = [...prevData.Hobbies];
-        updatedHobbies[index] = {
-          ...updatedHobbies[index],
+        const updatedhobbies = [...prevData.hobbies];
+        updatedhobbies[index] = {
+          ...updatedhobbies[index],
           [field]: value,
         };
         return {
           ...prevData,
-          Hobbies: updatedHobbies,
+          hobbies: updatedhobbies,
         };
       });
     } else {
@@ -118,75 +121,59 @@ const AllEmployeeAddPopup = (props) => {
 
   const addEmployeeMutation = useMutation({
     mutationFn: async (employeeData) => {
-      console.log("Submitting employee data:", employeeData); // Log data being sent
-  
       try {
-        setIsSubmitting(true); // Disable the submit button when submission starts
+        setIsSubmitting(true); 
+        const token = await auth.currentUser.getIdToken();
         const response = await axios.post(
-          "https://newwolbee-l7cc.onrender.com/api/addEmployees",
+         `http://localhost:5000/api/addEmployee`,
           employeeData,
           {
             headers: {
-              Authorization: `Bearer ${user.token}`, // Ensure `user.token` is available
+              Authorization: `Bearer ${token}`,
             },
           }
         );
-        console.log("Response from server:", response.data); // Log server response
         return response.data;
       } catch (error) {
-        console.error("Error adding employee:", error);
-  
-        // Check if the error response has a code 11000
-        if (
-          error.response &&
-          error.response.status === 500 &&
-          error.response.data.message.includes("11000")
-        ) {
-          throw new Error(
-            "Duplicate entry detected. Please provide unique values for all required fields."
-          );
-        }
-  
-        throw error; // Ensure other errors are propagated
+        console.error("Error adding employee:", error);       
       } finally {
-        setIsSubmitting(false); // Re-enable the submit button even if there's an error
+        setIsSubmitting(false); 
       }
     },
     onSuccess: () => {
       setSuccessMessage("Employee added successfully!");
       queryClient.invalidateQueries(["employees"]);
       addNotificationMutation.mutate(employeeData);
-
     },
     onError: (error) => {
       console.error("Error adding employee:", error);
-      setSuccessMessage(error.message || "An error occurred. Please try again.");
+      setSuccessMessage(
+        error.message || "An error occurred. Please try again."
+      );
     },
   });
 
   // Mutation for adding a notification
-const addNotificationMutation = useMutation({
-  mutationFn: async (eventData) => {
-    const response = await axios.post(
-      "https://newwolbee-l7cc.onrender.com/api/addAllNotifications",
-      { notificationsData: [eventData] }, // Wrap eventData in an array
-      {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      }
-    );
-    return response.data;
-  },
-  onSuccess: () => {
-    queryClient.invalidateQueries(["employees"]);
-  },
-  onError: (error) => {
-    console.error("Error adding notification:", error);
-  },
-});
-  
-
+  const addNotificationMutation = useMutation({
+    mutationFn: async (eventData) => {
+      const response = await axios.post(
+        "https://newwolbee-l7cc.onrender.com/api/addAllNotifications",
+        { notificationsData: [eventData] },
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["employees"]);
+    },
+    onError: (error) => {
+      console.error("Error adding notification:", error);
+    },
+  });
 
   return (
     <>
@@ -196,10 +183,8 @@ const addNotificationMutation = useMutation({
             <div className="modal-header">
               <h5 className="modal-title">Add Employee</h5>
               {successMessage && (
-                  <div className="alert alert-success mt-3">
-                    {successMessage}
-                  </div>
-                )}
+                <div className="alert alert-success mt-3">{successMessage}</div>
+              )}
               <button
                 type="button"
                 className="btn-close"
@@ -210,68 +195,73 @@ const addNotificationMutation = useMutation({
               </button>
             </div>
             <div className="modal-body">
-            <form
-    onSubmit={(e) => {
-      e.preventDefault();
-      addEmployeeMutation.mutate(employeeData);
-    }}
-  >                <div className="row">
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  addEmployeeMutation.mutate(employeeData);
+                }}
+              >
+                {" "}
+                <div className="row">
                   <div className="input-block mb-3">
                     <label className="col-form-label">
                       Full Name <span className="text-danger">*</span>
                     </label>
                     <input
                       className={`form-control ${
-                        errors.FullName ? "border-danger" : ""
+                        errors.fullName ? "border-danger" : ""
                       }`}
                       type="text"
-                      name="FullName"
-                      value={employeeData.FullName}
+                      name="fullName"
+                      value={employeeData.fullName}
                       onChange={handleInputChange}
-                      placeholder="Employee's Full Name"
+                      placeholder="Employee's full name"
                     />
-                    {errors.FullName && (
-                      <div className="text-danger">{errors.FullName}</div>
+                    {errors.fullName && (
+                      <div className="text-danger">{errors.fullName}</div>
                     )}
                   </div>
 
                   <div className="col-sm-6">
                     <div className="input-block mb-3">
                       <label className="col-form-label">
-                        Employee ID# <span className="text-danger">*</span>
+                        Employee ID <span className="text-danger">*</span>
                       </label>
                       <input
                         className={`form-control ${
-                          errors.EmployeeID ? "border-danger" : ""
+                          errors.employeeId ? "border-danger" : ""
                         }`}
                         type="text"
-                        name="EmployeeID"
-                        value={employeeData.EmployeeID}
+                        name="employeeId"
+                        value={employeeData.employeeId}
                         onChange={handleInputChange}
-                        placeholder="Employee ID"
+                        placeholder="Employee Id"
                       />
-                      {errors.EmployeeID && (
-                        <div className="text-danger">{errors.EmployeeID}</div>
+                      {errors.employeeId && (
+                        <div className="text-danger">{errors.employeeId}</div>
                       )}
                     </div>
                   </div>
                   <div className="col-sm-6">
                     <div className="input-block mb-3">
                       <label className="col-form-label">
-                      Employee Of Manager Id <span className="text-danger">*</span>
+                        Employee Of Manager ID{" "}
+                        <span className="text-danger">*</span>
                       </label>
                       <input
                         className={`form-control ${
-                          errors.EmployeeOfManagerId ? "border-danger" : ""
+                          errors.employeeOfManagerId ? "border-danger" : ""
                         }`}
                         type="text"
-                        name="EmployeeOfManagerId"
-                        value={employeeData.EmployeeOfManagerId}
+                        name="employeeOfManagerId"
+                        value={employeeData.employeeOfManagerId}
                         onChange={handleInputChange}
-                        placeholder="Manager Id"
+                        placeholder="Employee's Manager Id"
                       />
-                      {errors.EmployeeOfManagerId && (
-                        <div className="text-danger">{errors.EmployeeOfManagerId}</div>
+                      {errors.employeeOfManagerId && (
+                        <div className="text-danger">
+                          {errors.employeeOfManagerId}
+                        </div>
                       )}
                     </div>
                   </div>
@@ -283,16 +273,16 @@ const addNotificationMutation = useMutation({
                       </label>
                       <input
                         className={`form-control ${
-                          errors.Role ? "border-danger" : ""
+                          errors.role ? "border-danger" : ""
                         }`}
                         type="text"
-                        name="Role"
-                        value={employeeData.Role}
+                        name="role"
+                        value={employeeData.role}
                         onChange={handleInputChange}
-                        placeholder="Employee ID"
+                        placeholder="Employee's role"
                       />
-                      {errors.Role && (
-                        <div className="text-danger">{errors.Role}</div>
+                      {errors.role && (
+                        <div className="text-danger">{errors.role}</div>
                       )}
                     </div>
                   </div>
@@ -302,7 +292,7 @@ const addNotificationMutation = useMutation({
                       Team <span className="text-danger">*</span>
                     </label>
                     <Select
-                      styles={customStyles(errors.Team)}
+                      styles={customStyles(errors.team)}
                       options={[
                         {
                           value: "",
@@ -317,13 +307,13 @@ const addNotificationMutation = useMutation({
                       ]}
                       placeholder="Select A Team"
                       onChange={(selectedOption) =>
-                        selectTeam(selectedOption, { name: "Team" })
+                        selectTeam(selectedOption, { name: "team" })
                       }
                       isClearable
-                      name="Team"
+                      name="team"
                     />
-                    {errors.Team && (
-                      <div className="text-danger">{errors.Team}</div>
+                    {errors.team && (
+                      <div className="text-danger">{errors.team}</div>
                     )}
                   </div>
 
@@ -333,16 +323,16 @@ const addNotificationMutation = useMutation({
                     </label>
                     <div className="cal-icon">
                       <DatePicker
-                        selected={employeeData.DataOfBirth}
-                        onChange={(date) => selectDate(date, "DataOfBirth")}
+                        selected={employeeData.dateOfBirth}
+                        onChange={(date) => selectDate(date, "dateOfBirth")}
                         className={`form-control ${
-                          errors.DataOfBirth ? "border-danger" : ""
+                          errors.dateOfBirth ? "border-danger" : ""
                         }`}
                         dateFormat="dd-MM-yyyy"
-                        name="DataOfBirth"
+                        name="dateOfBirth"
                       />
-                      {errors.DataOfBirth && (
-                        <div className="text-danger">{errors.DataOfBirth}</div>
+                      {errors.dateOfBirth && (
+                        <div className="text-danger">{errors.dateOfBirth}</div>
                       )}
                     </div>
                   </div>
@@ -353,18 +343,40 @@ const addNotificationMutation = useMutation({
                     </label>
                     <input
                       className={`form-control ${
-                        errors.Address ? "border-danger" : ""
+                        errors.address ? "border-danger" : ""
                       }`}
                       type="text"
                       onChange={handleInputChange}
-                      name="Address"
-                      placeholder="Address"
+                      name="address"
+                      placeholder="Employee's address"
                     />
-                    {errors.Address && (
-                      <div className="text-danger">{errors.Address}</div>
+                    {errors.address && (
+                      <div className="text-danger">{errors.address}</div>
                     )}
                   </div>
-
+                  <div className="input-block mb-3 col-sm-6">
+                    <label className="col-form-label">
+                      Gender <span className="text-danger">*</span>
+                    </label>
+                    <Select
+                      options={[
+                        {
+                          value: "",
+                          label: "Select A Gender",
+                          isDisabled: true,
+                        },
+                        { value: "male", label: "Male" },
+                        { value: "female", label: "Female" },
+                        { value: "other", label: "Other" },
+                      ]}
+                      placeholder="Select A Gender"
+                      onChange={(selectedOption) =>
+                        selectTeam(selectedOption, { name: "gender" })
+                      }
+                      isClearable
+                      name="gender"
+                    />
+                  </div>
                   <div className="input-block mb-3 col-sm-6">
                     <label className="col-form-label">
                       Marital Status <span className="text-danger">*</span>
@@ -382,23 +394,23 @@ const addNotificationMutation = useMutation({
                         { value: "divorced", label: "Divorced" },
                         { value: "separated ", label: "Separated " },
                       ]}
-                      placeholder="Select A Role"
+                      placeholder="Select A Marital Status"
                       onChange={(selectedOption) =>
-                        selectTeam(selectedOption, { name: "MaritalStatus" })
+                        selectTeam(selectedOption, { name: "maritalStatus" })
                       }
                       isClearable
-                      name="MaritalStatus"
+                      name="maritalStatus"
                     />
                   </div>
 
                   <div className="input-block mb-3 col-sm-6">
                     <label className="col-form-label">
-                      Number Of Children<span className="text-danger">*</span>
+                       Children<span className="text-danger">* If true insert number of children. Otherwise write no.</span>
                     </label>
                     <input
                       className={"form-control"}
-                      type="number"
-                      name="NumOfChildren"
+                      type="text"
+                      name="children"
                       onChange={handleInputChange}
                       placeholder="Employee's nubmer of children"
                     />
@@ -410,50 +422,50 @@ const addNotificationMutation = useMutation({
                     </label>
                     <div className="cal-icon">
                       <DatePicker
-                        selected={employeeData.StartDay}
-                        onChange={(date) => selectDate(date, "StartDay")}
+                        selected={employeeData.startDay}
+                        onChange={(date) => selectDate(date, "startDay")}
                         className={`form-control ${
-                          errors.StartDay ? "border-danger" : ""
+                          errors.startDay ? "border-danger" : ""
                         }`}
                         dateFormat="dd-MM-yyyy"
-                        name="StartDay"
+                        name="startDay"
                       />
-                      {errors.StartDay && (
-                        <div className="text-danger">{errors.StartDay}</div>
+                      {errors.startDay && (
+                        <div className="text-danger">{errors.startDay}</div>
                       )}
                     </div>
                   </div>
 
                   <div className="input-block mb-3 col-sm-6">
                     <label className="col-form-label">
-                    Anniversary <span className="text-danger">*</span>
+                      Anniversary <span className="text-danger">*</span>
                     </label>
                     <div className="cal-icon">
                       <DatePicker
-                        selected={employeeData.Anniversary}
-                        onChange={(date) => selectDate(date, "Anniversary")}
+                        selected={employeeData.anniversary}
+                        onChange={(date) => selectDate(date, "anniversary")}
                         className={`form-control ${
-                          errors.Anniversary ? "border-danger" : ""
+                          errors.anniversary ? "border-danger" : ""
                         }`}
                         dateFormat="dd-MM-yyyy"
-                        name="Anniversary"
+                        name="anniversary"
                       />
-                      {errors.Anniversary && (
-                        <div className="text-danger">{errors.Anniversary}</div>
+                      {errors.anniversary && (
+                        <div className="text-danger">{errors.anniversary}</div>
                       )}
                     </div>
                   </div>
 
                   <div className="input-block mb-3 col-sm-6">
                     <label className="col-form-label">
-                      Interesting Facts <span className="text-danger">*</span>
+                      Interesting Fact <span className="text-danger">*</span>
                     </label>
                     <input
                       className={`form-control`}
                       type="text"
-                      name="InterestingFacts"
+                      name="interestingFact"
                       onChange={handleInputChange}
-                      placeholder="Interesting Facts"
+                      placeholder="Interesting Fact"
                     />
                   </div>
 
@@ -465,7 +477,7 @@ const addNotificationMutation = useMutation({
                       <input
                         className={`form-control`}
                         type="text"
-                        name="Singers"
+                        name="singers"
                         onChange={handleInputChange}
                         placeholder={`Singers`}
                       />
@@ -477,16 +489,16 @@ const addNotificationMutation = useMutation({
                       <label className="col-form-label">
                         Food and drinks <span className="text-danger">*</span>
                       </label>
-                      {employeeData.FoodAndDrinks.map((item, index) => (
+                      {employeeData.foodAndDrinks.map((item, index) => (
                         <div className="row mb-3" key={index}>
                           <div className="col-sm-4">
                             <input
                               className={`form-control`}
                               type="text"
-                              name="FoodAndDrinks"
-                              value={item.Food1}
+                              name="foodAndDrinks"
+                              value={item.food1}
                               onChange={(e) =>
-                                handleInputChange(e, index, "Food1")
+                                handleInputChange(e, index, "food1")
                               }
                               placeholder="Food 1"
                             />
@@ -495,10 +507,10 @@ const addNotificationMutation = useMutation({
                             <input
                               className={`form-control`}
                               type="text"
-                              name="FoodAndDrinks"
-                              value={item.Food2}
+                              name="foodAndDrinks"
+                              value={item.food2}
                               onChange={(e) =>
-                                handleInputChange(e, index, "Food2")
+                                handleInputChange(e, index, "food2")
                               }
                               placeholder="Food 2"
                             />
@@ -507,10 +519,10 @@ const addNotificationMutation = useMutation({
                             <input
                               className={`form-control`}
                               type="text"
-                              name="FoodAndDrinks"
-                              value={item.Drink}
+                              name="foodAndDrinks"
+                              value={item.drink}
                               onChange={(e) =>
-                                handleInputChange(e, index, "Drink")
+                                handleInputChange(e, index, "drink")
                               }
                               placeholder="Drink"
                             />
@@ -526,16 +538,16 @@ const addNotificationMutation = useMutation({
                         Favorite Restaurants{" "}
                         <span className="text-danger">*</span>
                       </label>
-                      {employeeData.Restaurants.map((item, index) => (
+                      {employeeData.restaurants.map((item, index) => (
                         <div className="row mb-3" key={index}>
                           <div className="col-sm-6">
                             <input
                               className="form-control"
                               type="text"
-                              name="Restaurants"
-                              value={item.Restaurant1}
+                              name="restaurants"
+                              value={item.restaurant1}
                               onChange={(e) =>
-                                handleInputChange(e, index, "Restaurant1")
+                                handleInputChange(e, index, "restaurant1")
                               }
                               placeholder="Restaurant 1"
                             />
@@ -544,10 +556,10 @@ const addNotificationMutation = useMutation({
                             <input
                               className="form-control"
                               type="text"
-                              name="Restaurants"
-                              value={item.Restaurant2}
+                              name="restaurants"
+                              value={item.restaurant2}
                               onChange={(e) =>
-                                handleInputChange(e, index, "Restaurant2")
+                                handleInputChange(e, index, "restaurant2")
                               }
                               placeholder="Restaurant 2"
                             />
@@ -562,16 +574,16 @@ const addNotificationMutation = useMutation({
                       <label className="col-form-label">
                         Favorite Hobbies <span className="text-danger">*</span>
                       </label>
-                      {employeeData.Hobbies.map((item, index) => (
+                      {employeeData.hobbies.map((item, index) => (
                         <div className="row mb-3" key={index}>
                           <div className="col-sm-4">
                             <input
                               className="form-control"
                               type="text"
-                              name="Hobbies"
-                              value={item.Hobby1 || ""}
+                              name="hobbies"
+                              value={item.hobby1 || ""}
                               onChange={(e) =>
-                                handleInputChange(e, index, "Hobby1")
+                                handleInputChange(e, index, "hobby1")
                               }
                               placeholder="Hobby 1"
                             />
@@ -580,10 +592,10 @@ const addNotificationMutation = useMutation({
                             <input
                               className="form-control"
                               type="text"
-                              name="Hobbies"
-                              value={item.Hobby2 || ""}
+                              name="hobbies"
+                              value={item.hobby2 || ""}
                               onChange={(e) =>
-                                handleInputChange(e, index, "Hobby2")
+                                handleInputChange(e, index, "hobby2")
                               }
                               placeholder="Hobby 2"
                             />
@@ -592,10 +604,10 @@ const addNotificationMutation = useMutation({
                             <input
                               className="form-control"
                               type="text"
-                              name="Hobbies"
-                              value={item.Hobby3 || ""}
+                              name="hobbies"
+                              value={item.hobby3 || ""}
                               onChange={(e) =>
-                                handleInputChange(e, index, "Hobby3")
+                                handleInputChange(e, index, "hobby3")
                               }
                               placeholder="Hobby 3"
                             />
@@ -631,4 +643,4 @@ const addNotificationMutation = useMutation({
   );
 };
 
-export default AllEmployeeAddPopup;
+export default AddEmployeeModal;

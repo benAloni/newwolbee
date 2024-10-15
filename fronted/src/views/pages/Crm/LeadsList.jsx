@@ -2,12 +2,12 @@ import { Table } from 'antd'
 import React, { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom';
 import { companyicon01, companyicon02, companyicon03, companyicon04, companyicon05, companyicon06, companyicon07, companyicon08, companyicon09, companyicon10 } from '../../../Routes/ImagePath';
-import ExportLeads from '../../../components/modelpopup/Crm/ExportLeads';
-import AddLeads from '../../../components/modelpopup/Crm/AddLeads';
+import ExportLeads from '../../../components/Modals/Crm/ExportLeads';
+import AddLeads from '../../../components/Modals/Crm/AddLeads';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 import Select from 'react-select';
-import CrmDeleteModal from '../../../components/modelpopup/Crm/CrmDeleteModal';
-import EditLeads from '../../../components/modelpopup/Crm/EditLeads';
+import CrmDeleteModal from '../../../components/Modals/Crm/CrmDeleteModal';
+import EditLeads from '../../../components/Modals/Crm/EditLeads';
 import { Star } from 'react-feather';
 import SearchBox from '../../../components/SearchBox';
 

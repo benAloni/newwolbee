@@ -11,8 +11,8 @@ import {
   Avatar_26,
   Avatar_29,
 } from "../../../Routes/ImagePath";
-import DeleteModal from "../../../components/modelpopup/DeleteModal";
-import { ClientModelPopup } from "../../../components/modelpopup/ClientModelPopup";
+import DeleteModal from "../../../components/Modals/DeleteModal";
+import { ClientModelPopup } from "../../../components/Modals/ClientModelPopup";
 import SearchBox from "../../../components/SearchBox";
 import Breadcrumbs from "../../../components/Breadcrumbs";
 import ClientsFilter from "../../../components/ClientsFilter";

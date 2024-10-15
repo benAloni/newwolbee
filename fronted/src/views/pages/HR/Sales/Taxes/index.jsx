@@ -2,7 +2,7 @@ import React from "react";
 import Breadcrumbs from "../../../../../components/Breadcrumbs";
 import TaxTable from "./taxTable";
 import TaxModal from "./taxModal";
-import DeleteModal from "../../../../../components/modelpopup/deletePopup";
+import DeleteModal from "../../../../../components/Modals/deletePopup";
 
 const Taxes = () => {
   return (

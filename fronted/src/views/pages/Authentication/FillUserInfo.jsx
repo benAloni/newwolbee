@@ -9,6 +9,7 @@ import { Applogo } from "../../../Routes/ImagePath";
 import { FirebaseError } from "firebase/app";
 
 const schema = yup.object({
+  fullName: yup.string().required("Full Name is required").trim(),
   id: yup.string().required("ID is required").trim(),
 });
 
@@ -28,8 +29,10 @@ const FillUserInfo = () => {
       const token = await auth.currentUser.getIdToken();
 
       const response = await axios.post(
-        "https://newwolbee-l7cc.onrender.com/api/fill-info",
+        // "https://newwolbee-l7cc.onrender.com/api/fill-info",
+        "http://localhost:5000/api/fill-info",
         {
+          fullName: data.fullName,
           civilId: data.id,
         },
         {
@@ -38,7 +41,7 @@ const FillUserInfo = () => {
           },
         }
       );
-      console.log(data.id);
+      console.log(data.fullName);
       
       const refreshedToken = await auth.currentUser.getIdTokenResult(true);
       if (response.status === 201) {
@@ -81,7 +84,7 @@ const FillUserInfo = () => {
               <div className="account-wrapper">
                 <h3 className="account-title">Register</h3>
                 <p className="account-subtitle">
-                  Please fill in your ID in order to set your account{" "}
+                  Please fill in your details in order to set your account{" "}
                 </p>
                 {/* Account Form */}
                 <div>
@@ -93,6 +96,17 @@ const FillUserInfo = () => {
                           {networkError}
                         </span>
                       )}
+                      <label className="col-form-label">Full Name</label>
+                      <input
+                        type="text"
+                        name="fullName"
+                        id="fullName"
+                        {...register("fullName")}
+                        className={`form-control ${
+                          errors?.fullName ? "error-input" : ""
+                        }`}
+                        autoComplete="off"
+                      />
                       <label className="col-form-label">ID</label>
                       <input
                         type="text"

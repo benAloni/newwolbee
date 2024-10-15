@@ -4,10 +4,10 @@ import { avatar16, avatar19, avatar20, avatar22, avatar23, avatar24, avatar25, c
 import Select from 'react-select';
 import Chart from 'react-apexcharts';
 import ApexCharts from 'apexcharts';
-import ExportLeads from '../../../components/modelpopup/Crm/ExportLeads';
-import AddContact from '../../../components/modelpopup/Crm/AddContact';
+import ExportLeads from '../../../components/Modals/Crm/ExportLeads';
+import AddContact from '../../../components/Modals/Crm/AddContact';
 import DatePicker from "react-datepicker";
-import AddActivity from '../../../components/modelpopup/Crm/AddActivity';
+import AddActivity from '../../../components/Modals/Crm/AddActivity';
 
 const Analytics = () => {
     const [selectedDate1, setSelectedDate1] = useState(null);

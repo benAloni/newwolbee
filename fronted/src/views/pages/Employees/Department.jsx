@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 import { Table } from "antd";
 import axios from "axios";
 import Breadcrumbs from "../../../components/Breadcrumbs";
-import DeleteModal from "../../../components/modelpopup/DeleteModal";
+import DeleteModal from "../../../components/Modals/DeleteModal";
 import SearchBox from "../../../components/SearchBox";
-import DepartmentModal from "../../../components/modelpopup/DepartmentModal";
+import DepartmentModal from "../../../components/Modals/DepartmentModal";
 import { base_url } from "../../../base_urls";
 import gift from '../../../imgs/gift.png'
 import notforget from '../../../imgs/notforget.png'

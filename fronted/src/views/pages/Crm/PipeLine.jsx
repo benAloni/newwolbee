@@ -3,11 +3,11 @@ import React, { useEffect, useRef, useState } from 'react'
 import DatePicker from 'react-datepicker'
 import { Link } from 'react-router-dom'
 import Select from 'react-select'
-import ExportLeads from '../../../components/modelpopup/Crm/ExportLeads'
-import AddPipeLine from '../../../components/modelpopup/Crm/AddPipeLine'
+import ExportLeads from '../../../components/Modals/Crm/ExportLeads'
+import AddPipeLine from '../../../components/Modals/Crm/AddPipeLine'
 import SearchBox from '../../../components/SearchBox'
-import EditPipeLine from '../../../components/modelpopup/Crm/EditPipeLine'
-import DetelePipeLine from '../../../components/modelpopup/Crm/DetelePipeLine'
+import EditPipeLine from '../../../components/Modals/Crm/EditPipeLine'
+import DetelePipeLine from '../../../components/Modals/Crm/DetelePipeLine'
 
 const PipeLine = () => {
   const [isFilterVisible, setIsFilterVisible] = useState(false);

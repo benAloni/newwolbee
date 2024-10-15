@@ -15,8 +15,8 @@ import {
 } from "../../../Routes/ImagePath";
 import Breadcrumbs from "../../../components/Breadcrumbs";
 import SearchBox from "../../../components/SearchBox";
-import DeleteModal from "../../../components/modelpopup/DeleteModal";
-import { AddTimeSheetModelPopup } from "../../../components/modelpopup/AddTimeSheetModelPopup";
+import DeleteModal from "../../../components/Modals/DeleteModal";
+import { AddTimeSheetModelPopup } from "../../../components/Modals/AddTimeSheetModelPopup";
 
 const TimeSheet = () => {
   const timesheet = [

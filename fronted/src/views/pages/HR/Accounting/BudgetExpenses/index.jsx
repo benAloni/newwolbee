@@ -2,7 +2,7 @@ import React from "react";
 // import { Table } from "antd";
 
 import Breadcrumbs from "../../../../../components/Breadcrumbs";
-import DeleteModal from "../../../../../components/modelpopup/deletePopup";
+import DeleteModal from "../../../../../components/Modals/deletePopup";
 import BudgetExpenseTable from "./budgetExpenseTable";
 import AddBudgetExpenseModal from "./AddBudgetExpenseModal";
 import EditBudgetExpenseModal from "./EditBudgetExpenseModal";

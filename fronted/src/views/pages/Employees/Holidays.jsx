@@ -1,11 +1,11 @@
 /* eslint-disable no-unused-expressions */
 
 import { Table } from "antd";
-import { AddHoliday } from "../../../components/modelpopup/AddHoliday";
+import { AddHoliday } from "../../../components/Modals/AddHoliday";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import DeleteModal from "../../../components/modelpopup/DeleteModal";
+import DeleteModal from "../../../components/Modals/DeleteModal";
 import Breadcrumbs from "../../../components/Breadcrumbs";
 import { base_url } from "../../../base_urls";
 

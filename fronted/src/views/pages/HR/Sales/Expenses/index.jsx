@@ -6,9 +6,9 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Link } from "react-router-dom";
 import ExpenseTable from "./expenseTable";
-import DeleteModal from "../../../../../components/modelpopup/DeleteModal";
-import AddExpenseModal from "../../../../../components/modelpopup/Expenses/addExpenseModal";
-import EditExpenseModal from "../../../../../components/modelpopup/Expenses/editExpenseModal";
+import DeleteModal from "../../../../../components/Modals/DeleteModal";
+import AddExpenseModal from "../../../../../components/Modals/Expenses/addExpenseModal";
+import EditExpenseModal from "../../../../../components/Modals/Expenses/editExpenseModal";
 
 const Expenses = () => {
   const [setSelectedOption] = useState(null);

@@ -5,7 +5,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import Select from "react-select";
 import { Link } from "react-router-dom";
 import InvoiceTable from "./invoiceTable";
-import DeleteModal from "../../../../../components/modelpopup/DeleteModal";
+import DeleteModal from "../../../../../components/Modals/DeleteModal";
 
 const Invoices = () => {
   const [selectedDate, setSelectedDate] = useState();

@@ -4,8 +4,8 @@ import { Avatar_02, Avatar_09 } from "../../../Routes/ImagePath";
 import { Table } from "antd";
 import Breadcrumbs from "../../../components/Breadcrumbs";
 import SearchBox from "../../../components/SearchBox";
-import AddOverTime from "../../../components/modelpopup/AddOverTime";
-import DeleteModal from "../../../components/modelpopup/DeleteModal";
+import AddOverTime from "../../../components/Modals/AddOverTime";
+import DeleteModal from "../../../components/Modals/DeleteModal";
 
 const OverTime = () => {
   const statsData = [

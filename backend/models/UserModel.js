@@ -3,12 +3,16 @@ import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
     civilId : {  
-        type : Number,
+        type : String,
         required : [true, "please provide Id"]
     },
     uid:{
         type : String,
         required : [true, "please provide uid"]
+    },
+    fullName : {
+        type : String,
+        required : [true, "please provide fullName"]
     },
     role : {
         type : String,

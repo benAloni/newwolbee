@@ -5,9 +5,9 @@ import { Avatar_15, Avatar_17, Avatar_20, Avatar_21, avatar1, avatar16, avatar19
 import Select from 'react-select';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 import { Star } from 'react-feather';
-import CrmDeleteModal from '../../../components/modelpopup/Crm/CrmDeleteModal';
-import AddLeads from '../../../components/modelpopup/Crm/AddLeads';
-import EditLeads from '../../../components/modelpopup/Crm/EditLeads';
+import CrmDeleteModal from '../../../components/Modals/Crm/CrmDeleteModal';
+import AddLeads from '../../../components/Modals/Crm/AddLeads';
+import EditLeads from '../../../components/Modals/Crm/EditLeads';
 import dragula from 'dragula';
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 

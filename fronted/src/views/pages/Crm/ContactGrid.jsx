@@ -2,12 +2,12 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { avatar1, avatar16, avatar19, avatar20, avatar21, avatar22, avatar23, avatar24 } from '../../../Routes/ImagePath'
 import Select from 'react-select'
-import AddContact from '../../../components/modelpopup/Crm/AddContact'
-import EditContact from '../../../components/modelpopup/Crm/EditContact'
-import DeleteContact from '../../../components/modelpopup/Crm/DeleteContact'
-import ExportLeads from '../../../components/modelpopup/Crm/ExportLeads'
+import AddContact from '../../../components/Modals/Crm/AddContact'
+import EditContact from '../../../components/Modals/Crm/EditContact'
+import DeleteContact from '../../../components/Modals/Crm/DeleteContact'
+import ExportLeads from '../../../components/Modals/Crm/ExportLeads'
 import DateRangePicker from 'react-bootstrap-daterangepicker'
-import AddNotes from '../../../components/modelpopup/Crm/AddNotes'
+import AddNotes from '../../../components/Modals/Crm/AddNotes'
 
 const ContactGrid = () => {
     const [inputValue, setInputValue] = useState("");
