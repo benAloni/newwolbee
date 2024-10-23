@@ -6,12 +6,18 @@ import { useSelector } from "react-redux";
 import MainPageEdit from "./MainPageEdit";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { auth } from "../../../firebase/firebaseConfig";
+import Swal from 'sweetalert2'
+import { useForm } from "react-hook-form";
 
-const AddEmployeeModal = (props) => {
+const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
   const user = useSelector((state) => state.auth.user);
   const queryClient = useQueryClient();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm();
   const [employeeData, setEmployeeData] = useState({
     fullName: "",
     employeeOfManagerId: "",
@@ -39,8 +45,12 @@ const AddEmployeeModal = (props) => {
     ],
   });
 
-  const [errors, setErrors] = useState({});
-  const [successMessage, setSuccessMessage] = useState("");
+
+  useEffect(() => {
+    if (!isOpen) {
+      reset();      
+    }
+  }, [isOpen]);
 
   const customStyles = (error) => ({
     control: (provided) => ({
@@ -122,7 +132,6 @@ const AddEmployeeModal = (props) => {
   const addEmployeeMutation = useMutation({
     mutationFn: async (employeeData) => {
       try {
-        setIsSubmitting(true); 
         const token = await auth.currentUser.getIdToken();
         const response = await axios.post(
          `${process.env.REACT_APP_SERVER_URI}/addEmployee`,
@@ -136,44 +145,39 @@ const AddEmployeeModal = (props) => {
         return response.data;
       } catch (error) {
         console.error("Error adding employee:", error);       
-      } finally {
-        setIsSubmitting(false); 
-      }
+      } 
     },
     onSuccess: () => {
-      setSuccessMessage("Employee added successfully!");
+      Swal("Success!", `${employeeData.fullName} has been added successfully`, "success")
       queryClient.invalidateQueries(["employees"]);
-      addNotificationMutation.mutate(employeeData);
+      // addNotificationMutation.mutate(employeeData);
     },
     onError: (error) => {
       console.error("Error adding employee:", error);
-      setSuccessMessage(
-        error.message || "An error occurred. Please try again."
-      );
     },
   });
 
   // Mutation for adding a notification
-  const addNotificationMutation = useMutation({
-    mutationFn: async (eventData) => {
-      const response = await axios.post(
-        `${process.env.REACT_APP_SERVER_URI}/addAllNotifications`,
-        { notificationsData: [eventData] },
-        {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        }
-      );
-      return response.data;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries(["employees"]);
-    },
-    onError: (error) => {
-      console.error("Error adding notification:", error);
-    },
-  });
+  // const addNotificationMutation = useMutation({
+  //   mutationFn: async (eventData) => {
+  //     const response = await axios.post(
+  //       `${process.env.REACT_APP_SERVER_URI}/addAllNotifications`,
+  //       { notificationsData: [eventData] },
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${user.token}`,
+  //         },
+  //       }
+  //     );
+  //     return response.data;
+  //   },
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries(["employees"]);
+  //   },
+  //   onError: (error) => {
+  //     console.error("Error adding notification:", error);
+  //   },
+  // });
 
   return (
     <>
@@ -182,9 +186,6 @@ const AddEmployeeModal = (props) => {
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title">Add Employee</h5>
-              {successMessage && (
-                <div className="alert alert-success mt-3">{successMessage}</div>
-              )}
               <button
                 type="button"
                 className="btn-close"

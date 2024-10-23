@@ -29,6 +29,7 @@ const AllEmployees = () => {
   const [favoriteEmployees, setFavoriteEmployees] = useState([]);
   const [selectedTeam, setSelectedTeam] = useState("");
   const [userRole, setUserRole] = useState(null);
+  const [AddEmployeeModalOpen, setAddEmployeeModalOpen] = useState(false);
   const queryClient = useQueryClient();
   const user = useSelector((state) => state.auth.user);
 
@@ -42,7 +43,12 @@ const AllEmployees = () => {
       }
     }
   }, [user]);
-
+  const openModal = () => {
+    setAddEmployeeModalOpen(true);
+  };
+  const closeModal = () => {
+    setAddEmployeeModalOpen(false);
+  };
   const avatars = [
     lisa,
     tom,
@@ -78,11 +84,10 @@ const AllEmployees = () => {
     queryFn: getEmployees,
   });
 
-  
   const getTeams = async () => {
     try {
-     const result = await fetchTeams();
-     return result
+      const result = await fetchTeams();
+      return result;
     } catch (error) {
       console.error("Error getting team :", error);
     }
@@ -91,7 +96,7 @@ const AllEmployees = () => {
     queryKey: ["teams"],
     queryFn: getTeams,
   });
-  
+
   useEffect(() => {
     if (employees && selectedTeam) {
       const filteredTeam = employees.filter(
@@ -238,7 +243,11 @@ const AllEmployees = () => {
         </div>
       </div>
 
-      <AddEmployeeModal />
+      <AddEmployeeModal
+        isOpen={AddEmployeeModalOpen}
+        onClose={closeModal}
+        onEmployeeAdded={() => queryClient.invalidateQueries(["employees"])}
+      />
       <DeleteModal Name="מחק עובד" />
     </div>
   );
