@@ -13,7 +13,7 @@ const schema = yup.object({
   id: yup.string().required("ID is required").trim(),
 });
 
-const FillUserInfo = () => {
+const CreateAccount = () => {
   const [networkError, setNetworkError] = useState("");
   const {
     handleSubmit,
@@ -29,8 +29,7 @@ const FillUserInfo = () => {
       const token = await auth.currentUser.getIdToken();
 
       const response = await axios.post(
-        // "https://newwolbee-l7cc.onrender.com/api/fill-info",
-        "http://localhost:5000/api/fill-info",
+        `${process.env.REACT_APP_SERVER_URI}/create-account`,
         {
           fullName: data.fullName,
           civilId: data.id,
@@ -149,4 +148,4 @@ const FillUserInfo = () => {
   );
 };
 
-export default FillUserInfo;
+export default CreateAccount;

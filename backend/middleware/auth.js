@@ -16,6 +16,8 @@ export const isAuthenticated = async (req, res, next) => {
   try {
     const decodedToken = await getAuth().verifyIdToken(idToken); //check if token is valid - authentication(where does the request come from?)   
     req.user = decodedToken; //return the user from firebase in the req - identification(who's making the request)
+    console.log(decodedToken);
+    
     next();
   } catch (error) {
     console.error("Error verifying token:", error);

@@ -19,7 +19,7 @@ import manager from "../../imgs/managerProfilePic.jpg";
 import defultprofile from "../../imgs/DefultProfile.png";
 import { useDispatch, useSelector } from "react-redux";
 import { auth } from "../../firebase/firebaseConfig";
-import { logout } from "../../features/authSlice";
+import { logout } from "../../redux";
 import { signOut } from "firebase/auth";
 import { useQueryClient } from '@tanstack/react-query';
 import NotificationsPopup from "../../components/Modals/Notifications/NotificationsPopup";

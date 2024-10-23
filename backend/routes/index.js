@@ -23,7 +23,7 @@ initializeApp({
 router.use(isAuthenticated);
 
 //final registration step - use token for validation(if user exists in firebase)then save civil id in db
-router.post("/fill-info", fillUserInfo);
+router.post("/create-account", fillUserInfo);
 // //login
 router.post("/login", verifyAuthentication);
 //get Teams

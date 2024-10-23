@@ -20,16 +20,16 @@ import justin from "../../../imgs/avatar_9.JPG";
 import selena from "../../../imgs/avatar_10.JPG";
 import emma from "../../../imgs/avatar_11.JPG";
 import sofia from "../../../imgs/avatar_12.JPG";
-
+import { fetchEmployees, fetchTeams } from "../../../services";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import PopUp from "./PopUp";
-const AllEmployee = () => {
-  const [employees, setEmployees] = useState([]);
+
+const AllEmployees = () => {
   const [filteredEmployees, setFilteredEmployees] = useState([]);
   const [favoriteEmployees, setFavoriteEmployees] = useState([]);
   const [selectedTeam, setSelectedTeam] = useState("");
-  const [values, setValues] = useState([]);
   const [userRole, setUserRole] = useState(null);
-
+  const queryClient = useQueryClient();
   const user = useSelector((state) => state.auth.user);
 
   // need to add loading
@@ -58,83 +58,66 @@ const AllEmployee = () => {
     emma,
   ];
 
-  // get all employees from db
-  useEffect(() => {
-    const fetchEmployees = async () => {
-      if (!user) return;
-      try {
-        const response = await axios.get(
-          "https://newwolbee-l7cc.onrender.com/api/getEmployees",
-          {
-            headers: {
-              Authorization: `Bearer ${user.token}`,
-            },
-          }
-        );
-        const employeesWithAvatars = response.data.map((employee, index) => ({
-          ...employee,
-          id: employee._id,
-          avatar: avatars[index % avatars.length],
-        }));
-        setEmployees(employeesWithAvatars);
-        const employeesArr = localStorage.setItem(
-          "employeesArr",
-          JSON.stringify(employeesWithAvatars)
-        );
-      } catch (error) {
-        console.log("Error fetching employees :", error);
-      }
-    };
-    fetchEmployees();
-  }, [user]);
+  const getEmployees = async () => {
+    let employeesWithAvatars;
+    try {
+      const result = await fetchEmployees();
+      employeesWithAvatars = await result?.map((employee, index) => ({
+        ...employee,
+        id: employee._id,
+        avatar: avatars[index % avatars.length],
+      }));
+      return employeesWithAvatars;
+    } catch (error) {
+      console.log("Error getting employees :", error);
+    }
+  };
 
-  // get all team names from db
-  useEffect(() => {
-    const fetchTeams = async () => {
-      if (!user) return;
-      try {
-        const response = await axios.get(
-          "https://newwolbee-l7cc.onrender.com/api/getTeams",
-          {
-            headers: {
-              Authorization: `Bearer ${user.token}`,
-            },
-          }
-        );
-        setValues(response.data);
-      } catch (error) {
-        console.error("Error fetching team :", error);
-      }
-    };
-    fetchTeams();
-  }, [user]);
+  const { data: employees } = useQuery({
+    queryKey: ["employees"],
+    queryFn: getEmployees,
+  });
 
-  //filter employees by team
+  
+  const getTeams = async () => {
+    try {
+     const result = await fetchTeams();
+     return result
+    } catch (error) {
+      console.error("Error getting team :", error);
+    }
+  };
+  const { data: teams } = useQuery({
+    queryKey: ["teams"],
+    queryFn: getTeams,
+  });
+  
   useEffect(() => {
-    if (selectedTeam) {
+    if (employees && selectedTeam) {
       const filteredTeam = employees.filter(
-        (employee) => employee.Team === selectedTeam
+        (employee) => employee.team === selectedTeam
       );
       setFilteredEmployees(filteredTeam);
     } else {
-      setFilteredEmployees(employees);
+      setFilteredEmployees(employees || []);
     }
   }, [selectedTeam, employees]);
 
   const handleSelect = (option) => {
     setSelectedTeam(option.label);
+    queryClient.invalidateQueries(["employees"]);
   };
-  const toggleFavorite = (e, EmployeeID) => {
+  const toggleFavorite = (e, employeeId) => {
     e.preventDefault();
     const updatedFavoriteEmployees = [...favoriteEmployees]; // העתקת רשימת העובדים המועדפים
 
-    if (updatedFavoriteEmployees.includes(EmployeeID)) {
+    if (updatedFavoriteEmployees.includes(employeeId)) {
       updatedFavoriteEmployees.splice(
-        updatedFavoriteEmployees.indexOf(EmployeeID),
+        updatedFavoriteEmployees.indexOf(employeeId),
         1
       ); // הסרת העובד מרשימת המועדפים
     } else {
-      updatedFavoriteEmployees.push(EmployeeID); // הוספת העובד לרשימת המועדפים
+      updatedFavoriteEmployees.push(employeeId); // הוספת העובד לרשימת המועדפים
     }
 
     setFavoriteEmployees(updatedFavoriteEmployees); // עדכון רשימת העובדים המועדפים
@@ -168,7 +151,7 @@ const AllEmployee = () => {
           {userRole === "manager" && (
             <div className="d-flex justify-content-center">
               <Select
-                options={values.map((team) => ({
+                options={teams?.map((team) => ({
                   value: team._id,
                   label: team.name,
                 }))}
@@ -180,7 +163,7 @@ const AllEmployee = () => {
           )}
 
           <div className="row">
-            {filteredEmployees.map((employee) => (
+            {filteredEmployees?.map((employee) => (
               <div
                 key={employee._id}
                 className="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3"
@@ -208,7 +191,7 @@ const AllEmployee = () => {
                         &#9734;
                       </span>
                       {employee.avatar ? (
-                        <img src={employee.avatar} alt={employee.FullName} />
+                        <img src={employee.avatar} alt={employee.fullName} />
                       ) : (
                         <p>No Avatar</p>
                       )}
@@ -244,10 +227,10 @@ const AllEmployee = () => {
                   </div>
                   <h4 className="user-name m-t-10 mb-0 text-ellipsis">
                     <Link to={`/profile/${employee._id}`}>
-                      {employee.FullName}
+                      {employee.fullName}
                     </Link>
                   </h4>
-                  <div className="small text-muted">{employee.Team}</div>
+                  <div className="small text-muted">{employee.team}</div>
                 </div>
               </div>
             ))}
@@ -261,4 +244,4 @@ const AllEmployee = () => {
   );
 };
 
-export default AllEmployee;
+export default AllEmployees;

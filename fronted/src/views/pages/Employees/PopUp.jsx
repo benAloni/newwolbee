@@ -53,7 +53,7 @@ export default function PopUp() {
     try {
       const token = await auth.currentUser.getIdToken();
       const response = await fetch(
-        "https://newwolbee-l7cc.onrender.com/api/updateEmployeeVacation",
+        `${process.env.REACT_APP_SERVER_URI}/updateEmployeeVacation`,
         {
           method: "POST",
           headers: {
@@ -92,7 +92,7 @@ export default function PopUp() {
     try {
       const token = await auth.currentUser.getIdToken();
       const response = await axios.get(
-        "https://newwolbee-l7cc.onrender.com/api/getEmployees",
+        `${process.env.REACT_APP_SERVER_URI}/getEmployees`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

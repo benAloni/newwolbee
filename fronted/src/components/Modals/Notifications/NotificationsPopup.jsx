@@ -11,10 +11,10 @@ export default function NotificationsPopup() {
     const token = await auth.currentUser.getIdToken()
     const [AllNotification, employeesResponse] =
       await Promise.all([
-        axios.get("https://newwolbee-l7cc.onrender.com/api/getAllNotifications", {
+        axios.get(`${process.env.REACT_APP_SERVER_URI}/getAllNotifications`, {
           headers: { Authorization: `Bearer ${token}` },
         }),
-        axios.get("https://newwolbee-l7cc.onrender.com/api/getEmployees", {
+        axios.get(`${process.env.REACT_APP_SERVER_URI}/getEmployees`, {
           headers: { Authorization: `Bearer ${token}` },
         }),
       ]);

@@ -63,7 +63,7 @@ import NotificationSettings from "../../views/pages/Administration/Settings/Noti
 import LeaveType from "../../views/pages/Administration/Settings/LeaveType.jsx";
 import ToxboxSetting from "../../views/pages/Administration/Settings/ToxboxSetting.jsx";
 import CronSetting from "../../views/pages/Administration/Settings/CronSetting.jsx";
-import AllEmpoyee from "../../views/pages/Employees/AllEmpoyee.jsx";
+import AllEmployees from "../../views/pages/Employees/AllEmployees.jsx";
 import Holidays from "../../views/pages/Employees/Holidays.jsx";
 import AdminLeave from "../../views/pages/Employees/AdminLeave.jsx";
 import EmployeeLeave from "../../views/pages/Employees/EmployeeLeave.jsx";
@@ -389,7 +389,7 @@ const AppContainer = () => {
     {
       id: 34,
       path: "employees",
-      element: <AllEmpoyee />,
+      element: <AllEmployees />,
     },
     {
       id: 35,

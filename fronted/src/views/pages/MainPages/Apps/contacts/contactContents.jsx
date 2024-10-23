@@ -173,10 +173,10 @@ const ContactContents = () => {
       const fetchData = async () => {
         try {
           const [AllNotification, employeesResponse] = await Promise.all([
-            axios.get("https://newwolbee-l7cc.onrender.com/api/getAllNotifications", {
+            axios.get(`${process.env.REACT_APP_SERVER_URI}/getAllNotifications`, {
               headers: { Authorization: `Bearer ${user.token}` },
             }),
-            axios.get("https://newwolbee-l7cc.onrender.com/api/getEmployees", {
+            axios.get(`${process.env.REACT_APP_SERVER_URI}/getEmployees`, {
               headers: { Authorization: `Bearer ${user.token}` },
             }),
           ]);

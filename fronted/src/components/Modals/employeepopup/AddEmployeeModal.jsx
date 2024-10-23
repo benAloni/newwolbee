@@ -125,7 +125,7 @@ const AddEmployeeModal = (props) => {
         setIsSubmitting(true); 
         const token = await auth.currentUser.getIdToken();
         const response = await axios.post(
-         `http://localhost:5000/api/addEmployee`,
+         `${process.env.REACT_APP_SERVER_URI}/addEmployee`,
           employeeData,
           {
             headers: {
@@ -157,7 +157,7 @@ const AddEmployeeModal = (props) => {
   const addNotificationMutation = useMutation({
     mutationFn: async (eventData) => {
       const response = await axios.post(
-        "https://newwolbee-l7cc.onrender.com/api/addAllNotifications",
+        `${process.env.REACT_APP_SERVER_URI}/addAllNotifications`,
         { notificationsData: [eventData] },
         {
           headers: {

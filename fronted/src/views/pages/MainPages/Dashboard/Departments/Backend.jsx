@@ -39,7 +39,7 @@ export default function HrStatistics() {
   useEffect(() => {
     const fetchTeams = async () => {
       try {
-        const response = await axios.get("https://newwolbee-l7cc.onrender.com/api/getTeams");
+        const response = await axios.get(`${process.env.REACT_APP_SERVER_URI}/getTeams`);
         setValues(response.data);
       } catch (error) {
         console.error("Error fetching team :", error);

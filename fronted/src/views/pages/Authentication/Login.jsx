@@ -58,7 +58,7 @@ const Login = () => {
         } else if (tokenData.claims.role === "otherUser") {
           navigate("/myDashboard");
         } else {
-          navigate("/fill-info");
+          navigate("/create-account");
         }
       }
     } catch (error) {
@@ -88,7 +88,7 @@ const Login = () => {
         } else if (tokenData.claims.role === "otherUser") {
           navigate("/myDashboard");
         } else {
-          navigate("/fill-info");
+          navigate("/create-account");
         }
       }
     } catch (error) {
@@ -139,7 +139,7 @@ const Login = () => {
                         <label className="col-form-label">Email Address</label>
                         <input
                           id="email"
-                          name="email" // Not strictly necessary, but good practice
+                          name="email" 
                           type="email"
                           {...register("email")}
                           placeholder="Enter your email..."

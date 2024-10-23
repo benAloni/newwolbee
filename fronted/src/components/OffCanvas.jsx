@@ -12,7 +12,7 @@ import {
   small_hover,
 } from "../Routes/ImagePath";
 import { Link } from "react-router-dom";
-import { setLayout } from "../features/authSlice";
+import { setLayout } from "../redux";
 import { useDispatch } from "react-redux";
 
 const OffCanvas = () => {

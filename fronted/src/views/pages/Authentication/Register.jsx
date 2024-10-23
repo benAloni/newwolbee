@@ -2,7 +2,6 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios, { AxiosError } from "axios";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -33,7 +32,7 @@ const schema = yup.object({
     .trim(),
 });
 
-const SignUp = () => {
+const Register = () => {
   const [passwordEye, setPasswordEye] = useState(true);
   const [confirmPasswordEye, setConfirmPasswordEye] = useState(true);
   const [checkUser, setCheckUser] = useState("");
@@ -47,9 +46,6 @@ const SignUp = () => {
   });
   const navigate = useNavigate();
 
-  //When the form is submitted, the handleSubmit function is called.
-  // This function validates the inputs and,if they are valid,
-  // calls the onSubmit function.
   const onSubmit = async (data) => {
     try {
       const userCredential = await createUserWithEmailAndPassword(
@@ -57,9 +53,8 @@ const SignUp = () => {
         data.email,
         data.password
       );
-      const user = userCredential.user; //is the result returned by this function
-      //navigate to fill-info on order to force refresh the firebase token.
-      navigate("/fill-info");
+      //navigate to create-account on order to force refresh the firebase token.
+      navigate("/create-account");
     } catch (error) {
       if (error instanceof FirebaseError) {
         // console.log(error);
@@ -237,4 +232,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default Register;
