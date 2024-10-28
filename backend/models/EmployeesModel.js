@@ -83,29 +83,22 @@ const employeeSchema = new mongoose.Schema({
   closestPersonalEvent: {
     type: [String],
   },
-  singers: {
+  favoriteSinger: {
+    type: String,
+  },
+  favoriteFoods: {
     type: [String],
   },
-  foodAndDrinks: [
-    {
-      food1: { type: String },
-      food2: { type: String },
-      drink: { type: String },
-    },
-  ],
-  restaurants: [
-    {
-      restaurant1: { type: String },
-      restaurant2: { type: String },
-    },
-  ],
-  hobbies: [
-    {
-      hobby1: { type: String },
-      hobby2: { type: String },
-      hobby3: { type: String },
-    },
-  ],
+  favoriteDrink: {
+    type: String,
+  },
+  favoriteRestaurants: {
+    type: [String],
+  },
+  hobbies: {
+    type: [String],
+  },
+
   topInsights: {
     type: Array,
   },

@@ -2,55 +2,47 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import Select from "react-select";
-import { useSelector } from "react-redux";
 import MainPageEdit from "./MainPageEdit";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import { auth } from "../../../firebase/firebaseConfig";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 import { useForm } from "react-hook-form";
+import { addEmployee } from "../../../services/api/employees";
+import { fetchTeams } from "../../../services/api/teams";
+import Profile from "../../../views/pages/Profile/Profile";
 
 const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
-  const user = useSelector((state) => state.auth.user);
+  const [addEmployeeModalOpen, setAddEmployeeModalOpen] = useState(false);
+  const [selectedGender, setSelectedGender] = useState("");
+  const [selectedMaritalStatus, setSelectedMaritalStatus] = useState("");
+  const [selectedTeam, setSelectedTeam] = useState("");
+
+  const [employeeDates, setEmployeeDates] = useState({
+    dateOfBirth: null,
+    startDay: null,
+    anniversary: null,
+  });
   const queryClient = useQueryClient();
   const {
-    control,
+    register,
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
   } = useForm();
-  const [employeeData, setEmployeeData] = useState({
-    fullName: "",
-    employeeOfManagerId: "",
-    employeeId: "",
-    role: "",
-    team: "",
-    dateOfBirth: "",
-    address: "",
-    gender: "",
-    maritalStatus: "",
-    children: 0,
-    startDay: "",
-    anniversary: "",
-    latestActivity: [""],
-    interestingFact: "",
-    closestPersonalEvent: [""],
-    singers: "",
-    foodAndDrinks: [{ food1: "", food2: "", drink: "" }],
-    restaurants: [{ restaurant1: "", restaurant2: "" }],
-    hobbies: [{ hobby1: "", hobby2: "", hobby3: "" }],
-    topInsights: [""],
-    latestInfo: [""],
-    vacation: [
-      { destination: "", purposeOfTrip: "", startDate: "", endDate: "" },
-    ],
-  });
-
 
   useEffect(() => {
     if (!isOpen) {
-      reset();      
+      reset();
+      setSelectedGender("");
+      setSelectedMaritalStatus("");
+      setSelectedTeam("");
     }
-  }, [isOpen]);
+  }, [isOpen, reset]);
+
+  const { data: teams } = useQuery({
+    queryKey: ["teams"],
+    queryFn: fetchTeams,
+  });
 
   const customStyles = (error) => ({
     control: (provided) => ({
@@ -59,103 +51,57 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
     }),
   });
 
-  const handleInputChange = (e, index, field) => {
-    const { name, value } = e.target;
-
-    if (name === "foodAndDrinks") {
-      setEmployeeData((prevData) => {
-        const updatedfoodAndDrinks = [...prevData.foodAndDrinks];
-        updatedfoodAndDrinks[index] = {
-          ...updatedfoodAndDrinks[index],
-          [field]: value,
-        };
-        return {
-          ...prevData,
-          foodAndDrinks: updatedfoodAndDrinks,
-        };
+  const onSubmit = async (data) => {
+    const formData = {
+      ...data,
+      ...employeeDates,
+      team: selectedTeam,
+      gender: selectedGender,
+      maritalStatus: selectedMaritalStatus,
+    };
+    try {
+      await addEmployee({
+        employeeData: formData,
       });
-    } else if (name === "restaurants") {
-      setEmployeeData((prevData) => {
-        const updatedRestaurants = [...prevData.restaurants];
-        updatedRestaurants[index] = {
-          ...updatedRestaurants[index],
-          [field]: value,
-        };
-        return {
-          ...prevData,
-          restaurants: updatedRestaurants,
-        };
-      });
-    } else if (name === "hobbies") {
-      setEmployeeData((prevData) => {
-        const updatedhobbies = [...prevData.hobbies];
-        updatedhobbies[index] = {
-          ...updatedhobbies[index],
-          [field]: value,
-        };
-        return {
-          ...prevData,
-          hobbies: updatedhobbies,
-        };
-      });
-    } else {
-      setEmployeeData((prevData) => ({
-        ...prevData,
-        [name]: value,
-      }));
+      Swal.fire("Success!", "Employee has been added successfully", "success");
+      queryClient.invalidateQueries("employees");
+      onEmployeeAdded();
+      reset();
+      onClose();
+    } catch (error) {
+      if (error.message?.includes("already exists")) {
+        Swal.fire({
+          title: `According to our employees list, ${data.fullName} already exists.`,
+          text: "You won't be able to revert this!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes, delete this form!",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            Swal.fire({
+              title: "Deleted!",
+              text: "Your employee has been deleted.",
+              icon: "success",
+            });
+          }
+        });
+      }
     }
   };
 
-  const selectTeam = (selectedOption, actionMeta) => {
-    const { name } = actionMeta;
-    setEmployeeData((prevData) => ({
-      ...prevData,
-      [name]: selectedOption ? selectedOption.value : "",
-    }));
-    setErrors((prevErrors) => ({
-      ...prevErrors,
-      [name]: "",
-    }));
-  };
-
-  const selectDate = (date, name) => {
-    setEmployeeData((prevData) => ({
+  const handleSelectedDate = (date, name) => {
+    setEmployeeDates((prevData) => ({
       ...prevData,
       [name]: date ? date.toISOString() : "",
     }));
-    setErrors((prevErrors) => ({
-      ...prevErrors,
-      [name]: "",
-    }));
-  };
 
-  const addEmployeeMutation = useMutation({
-    mutationFn: async (employeeData) => {
-      try {
-        const token = await auth.currentUser.getIdToken();
-        const response = await axios.post(
-         `${process.env.REACT_APP_SERVER_URI}/addEmployee`,
-          employeeData,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        return response.data;
-      } catch (error) {
-        console.error("Error adding employee:", error);       
-      } 
-    },
-    onSuccess: () => {
-      Swal("Success!", `${employeeData.fullName} has been added successfully`, "success")
-      queryClient.invalidateQueries(["employees"]);
-      // addNotificationMutation.mutate(employeeData);
-    },
-    onError: (error) => {
-      console.error("Error adding employee:", error);
-    },
-  });
+    // setErrors((prevErrors) => ({
+    //   ...prevErrors,
+    //   [name]: "",
+    // }));
+  };
 
   // Mutation for adding a notification
   // const addNotificationMutation = useMutation({
@@ -187,21 +133,17 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
             <div className="modal-header">
               <h5 className="modal-title">Add Employee</h5>
               <button
+                onClick={onClose}
                 type="button"
                 className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
+                // data-bs-dismiss="modal"
+                // aria-label="Close"
               >
                 <span aria-hidden="true">×</span>
               </button>
             </div>
             <div className="modal-body">
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  addEmployeeMutation.mutate(employeeData);
-                }}
-              >
+              <form onSubmit={handleSubmit(onSubmit)}>
                 {" "}
                 <div className="row">
                   <div className="input-block mb-3">
@@ -214,8 +156,7 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
                       }`}
                       type="text"
                       name="fullName"
-                      value={employeeData.fullName}
-                      onChange={handleInputChange}
+                      {...register("fullName")}
                       placeholder="Employee's full name"
                     />
                     {errors.fullName && (
@@ -234,8 +175,7 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
                         }`}
                         type="text"
                         name="employeeId"
-                        value={employeeData.employeeId}
-                        onChange={handleInputChange}
+                        {...register("employeeId")}
                         placeholder="Employee Id"
                       />
                       {errors.employeeId && (
@@ -255,9 +195,8 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
                         }`}
                         type="text"
                         name="employeeOfManagerId"
-                        value={employeeData.employeeOfManagerId}
-                        onChange={handleInputChange}
-                        placeholder="Employee's Manager Id"
+                        {...register("employeeOfManagerId")}
+                        placeholder="Employee's manager Id"
                       />
                       {errors.employeeOfManagerId && (
                         <div className="text-danger">
@@ -278,8 +217,7 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
                         }`}
                         type="text"
                         name="role"
-                        value={employeeData.role}
-                        onChange={handleInputChange}
+                        {...register("role")}
                         placeholder="Employee's role"
                       />
                       {errors.role && (
@@ -294,25 +232,20 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
                     </label>
                     <Select
                       styles={customStyles(errors.team)}
-                      options={[
-                        {
-                          value: "",
-                          label: "Select A Team",
-                          isDisabled: true,
-                        },
-                        { value: "UI/UX", label: "UI/UX" },
-                        { value: "BackEnd", label: "BackEnd" },
-                        { value: "DevOps", label: "DevOps" },
-                        { value: "DataScience", label: "Data Science" },
-                        { value: "FrontEnd", label: "FrontEnd" },
-                      ]}
-                      placeholder="Select A Team"
+                      options={teams?.map((team) => ({
+                        value: team.name,
+                        label: team.name,
+                      }))}
+                      placeholder="Select a team"
                       onChange={(selectedOption) =>
-                        selectTeam(selectedOption, { name: "team" })
+                        setSelectedTeam(
+                          selectedOption ? selectedOption.value : ""
+                        )
                       }
                       isClearable
                       name="team"
                     />
+
                     {errors.team && (
                       <div className="text-danger">{errors.team}</div>
                     )}
@@ -324,8 +257,10 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
                     </label>
                     <div className="cal-icon">
                       <DatePicker
-                        selected={employeeData.dateOfBirth}
-                        onChange={(date) => selectDate(date, "dateOfBirth")}
+                        selected={employeeDates.dateOfBirth}
+                        onChange={(date) =>
+                          handleSelectedDate(date, "dateOfBirth")
+                        }
                         className={`form-control ${
                           errors.dateOfBirth ? "border-danger" : ""
                         }`}
@@ -347,8 +282,8 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
                         errors.address ? "border-danger" : ""
                       }`}
                       type="text"
-                      onChange={handleInputChange}
                       name="address"
+                      {...register("address")}
                       placeholder="Employee's address"
                     />
                     {errors.address && (
@@ -361,18 +296,15 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
                     </label>
                     <Select
                       options={[
-                        {
-                          value: "",
-                          label: "Select A Gender",
-                          isDisabled: true,
-                        },
                         { value: "male", label: "Male" },
                         { value: "female", label: "Female" },
                         { value: "other", label: "Other" },
                       ]}
                       placeholder="Select A Gender"
                       onChange={(selectedOption) =>
-                        selectTeam(selectedOption, { name: "gender" })
+                        setSelectedGender(
+                          selectedOption ? selectedOption.value : ""
+                        )
                       }
                       isClearable
                       name="gender"
@@ -384,11 +316,6 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
                     </label>
                     <Select
                       options={[
-                        {
-                          value: "",
-                          label: "Select A Marital Status",
-                          isDisabled: true,
-                        },
                         { value: "single", label: "Single" },
                         { value: "married", label: "Married" },
                         { value: "widowed", label: "Widowed" },
@@ -397,22 +324,47 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
                       ]}
                       placeholder="Select A Marital Status"
                       onChange={(selectedOption) =>
-                        selectTeam(selectedOption, { name: "maritalStatus" })
+                        setSelectedMaritalStatus(
+                          selectedOption ? selectedOption.value : ""
+                        )
                       }
                       isClearable
                       name="maritalStatus"
                     />
                   </div>
-
                   <div className="input-block mb-3 col-sm-6">
                     <label className="col-form-label">
-                       Children<span className="text-danger">* If true insert number of children. Otherwise write no.</span>
+                      Anniversary <span className="text-danger">*</span>
+                    </label>
+                    <div className="cal-icon">
+                      <DatePicker
+                        selected={employeeDates.anniversary}
+                        onChange={(date) =>
+                          handleSelectedDate(date, "anniversary")
+                        }
+                        className={`form-control ${
+                          errors.anniversary ? "border-danger" : ""
+                        }`}
+                        dateFormat="dd-MM-yyyy"
+                        name="anniversary"
+                      />
+                      {errors.anniversary && (
+                        <div className="text-danger">{errors.anniversary}</div>
+                      )}
+                    </div>
+                  </div>
+                  <div className="input-block mb-3 col-sm-6">
+                    <label className="col-form-label">
+                      Children
+                      <span className="text-danger">
+                        * If true insert number of children. Otherwise write no.
+                      </span>
                     </label>
                     <input
                       className={"form-control"}
                       type="text"
                       name="children"
-                      onChange={handleInputChange}
+                      {...register("children")}
                       placeholder="Employee's nubmer of children"
                     />
                   </div>
@@ -423,8 +375,10 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
                     </label>
                     <div className="cal-icon">
                       <DatePicker
-                        selected={employeeData.startDay}
-                        onChange={(date) => selectDate(date, "startDay")}
+                        selected={employeeDates.startDay}
+                        onChange={(date) =>
+                          handleSelectedDate(date, "startDay")
+                        }
                         className={`form-control ${
                           errors.startDay ? "border-danger" : ""
                         }`}
@@ -439,50 +393,27 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
 
                   <div className="input-block mb-3 col-sm-6">
                     <label className="col-form-label">
-                      Anniversary <span className="text-danger">*</span>
-                    </label>
-                    <div className="cal-icon">
-                      <DatePicker
-                        selected={employeeData.anniversary}
-                        onChange={(date) => selectDate(date, "anniversary")}
-                        className={`form-control ${
-                          errors.anniversary ? "border-danger" : ""
-                        }`}
-                        dateFormat="dd-MM-yyyy"
-                        name="anniversary"
-                      />
-                      {errors.anniversary && (
-                        <div className="text-danger">{errors.anniversary}</div>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="input-block mb-3 col-sm-6">
-                    <label className="col-form-label">
                       Interesting Fact <span className="text-danger">*</span>
                     </label>
                     <input
                       className={`form-control`}
                       type="text"
                       name="interestingFact"
-                      onChange={handleInputChange}
-                      placeholder="Interesting Fact"
+                      {...register("interestingFact")}
+                      placeholder="Interesting fact"
                     />
                   </div>
-
-                  <div className="input-block mb-3 col-sm-6">
+                  <div className="input-block mb-3">
                     <label className="col-form-label">
-                      Favorite Singers <span className="text-danger">*</span>
+                      Favorite Singer <span className="text-danger">*</span>
                     </label>
-                    <div className="col-sm-12 row mb-3">
-                      <input
-                        className={`form-control`}
-                        type="text"
-                        name="singers"
-                        onChange={handleInputChange}
-                        placeholder={`Singers`}
-                      />
-                    </div>
+                    <input
+                      className={`form-control`}
+                      type="text"
+                      name="favoriteSinger"
+                      {...register("favoriteSinger")}
+                      placeholder={`favorite singer`}
+                    />
                   </div>
 
                   <div className="col-sm-12">
@@ -490,46 +421,35 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
                       <label className="col-form-label">
                         Food and drinks <span className="text-danger">*</span>
                       </label>
-                      {employeeData.foodAndDrinks.map((item, index) => (
-                        <div className="row mb-3" key={index}>
-                          <div className="col-sm-4">
-                            <input
-                              className={`form-control`}
-                              type="text"
-                              name="foodAndDrinks"
-                              value={item.food1}
-                              onChange={(e) =>
-                                handleInputChange(e, index, "food1")
-                              }
-                              placeholder="Food 1"
-                            />
-                          </div>
-                          <div className="col-sm-4">
-                            <input
-                              className={`form-control`}
-                              type="text"
-                              name="foodAndDrinks"
-                              value={item.food2}
-                              onChange={(e) =>
-                                handleInputChange(e, index, "food2")
-                              }
-                              placeholder="Food 2"
-                            />
-                          </div>
-                          <div className="col-sm-4">
-                            <input
-                              className={`form-control`}
-                              type="text"
-                              name="foodAndDrinks"
-                              value={item.drink}
-                              onChange={(e) =>
-                                handleInputChange(e, index, "drink")
-                              }
-                              placeholder="Drink"
-                            />
-                          </div>
+                      <div className="row mb-3">
+                        <div className="col-sm-4">
+                          <input
+                            className={`form-control`}
+                            type="text"
+                            name="foodAndDrinks"
+                            {...register("food1")}
+                            placeholder="Food 1"
+                          />
                         </div>
-                      ))}
+                        <div className="col-sm-4">
+                          <input
+                            className={`form-control`}
+                            type="text"
+                            name="foodAndDrinks"
+                            {...register("food2")}
+                            placeholder="Food 2"
+                          />
+                        </div>
+                        <div className="col-sm-4">
+                          <input
+                            className={`form-control`}
+                            type="text"
+                            name="foodAndDrinks"
+                            {...register("drink")}
+                            placeholder="Drink"
+                          />
+                        </div>
+                      </div>
                     </div>
                   </div>
 
@@ -539,34 +459,26 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
                         Favorite Restaurants{" "}
                         <span className="text-danger">*</span>
                       </label>
-                      {employeeData.restaurants.map((item, index) => (
-                        <div className="row mb-3" key={index}>
-                          <div className="col-sm-6">
-                            <input
-                              className="form-control"
-                              type="text"
-                              name="restaurants"
-                              value={item.restaurant1}
-                              onChange={(e) =>
-                                handleInputChange(e, index, "restaurant1")
-                              }
-                              placeholder="Restaurant 1"
-                            />
-                          </div>
-                          <div className="col-sm-6">
-                            <input
-                              className="form-control"
-                              type="text"
-                              name="restaurants"
-                              value={item.restaurant2}
-                              onChange={(e) =>
-                                handleInputChange(e, index, "restaurant2")
-                              }
-                              placeholder="Restaurant 2"
-                            />
-                          </div>
+                      <div className="row mb-3">
+                        <div className="col-sm-6">
+                          <input
+                            className="form-control"
+                            type="text"
+                            name="restaurants"
+                            {...register("restaurant1")}
+                            placeholder="Restaurant 1"
+                          />
                         </div>
-                      ))}
+                        <div className="col-sm-6">
+                          <input
+                            className="form-control"
+                            type="text"
+                            name="restaurants"
+                            {...register("restaurant2")}
+                            placeholder="Restaurant 2"
+                          />
+                        </div>
+                      </div>
                     </div>
                   </div>
 
@@ -575,51 +487,41 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
                       <label className="col-form-label">
                         Favorite Hobbies <span className="text-danger">*</span>
                       </label>
-                      {employeeData.hobbies.map((item, index) => (
-                        <div className="row mb-3" key={index}>
-                          <div className="col-sm-4">
-                            <input
-                              className="form-control"
-                              type="text"
-                              name="hobbies"
-                              value={item.hobby1 || ""}
-                              onChange={(e) =>
-                                handleInputChange(e, index, "hobby1")
-                              }
-                              placeholder="Hobby 1"
-                            />
-                          </div>
-                          <div className="col-sm-4">
-                            <input
-                              className="form-control"
-                              type="text"
-                              name="hobbies"
-                              value={item.hobby2 || ""}
-                              onChange={(e) =>
-                                handleInputChange(e, index, "hobby2")
-                              }
-                              placeholder="Hobby 2"
-                            />
-                          </div>
-                          <div className="col-sm-4">
-                            <input
-                              className="form-control"
-                              type="text"
-                              name="hobbies"
-                              value={item.hobby3 || ""}
-                              onChange={(e) =>
-                                handleInputChange(e, index, "hobby3")
-                              }
-                              placeholder="Hobby 3"
-                            />
-                          </div>
+                      <div className="row mb-3">
+                        <div className="col-sm-4">
+                          <input
+                            className="form-control"
+                            type="text"
+                            name="hobbies"
+                            {...register("hobby1")}
+                            placeholder="Hobby 1"
+                          />
                         </div>
-                      ))}
+                        <div className="col-sm-4">
+                          <input
+                            className="form-control"
+                            type="text"
+                            name="hobbies"
+                            {...register("hobby2")}
+                            placeholder="Hobby 2"
+                          />
+                        </div>
+                        <div className="col-sm-4">
+                          <input
+                            className="form-control"
+                            type="text"
+                            name="hobbies"
+                            {...register("hobby3")}
+                            placeholder="Hobby 3"
+                          />
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
                 <div className="submit-section">
                   <button
+                    disabled={isSubmitting}
                     className="btn btn-primary submit-btn"
                     aria-label="Close"
                     type="submit"
@@ -631,9 +533,10 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
                       border: "none",
                     }}
                   >
-                    Submit
+                    {isSubmitting ? "Submitting..." : "Submit"}
                   </button>
                 </div>
+                {/* <Profile employeeId={data?.employeeId} /> */}
               </form>
             </div>
           </div>

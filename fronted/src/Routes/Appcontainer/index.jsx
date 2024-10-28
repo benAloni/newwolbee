@@ -24,8 +24,6 @@ import GoalType from "../../views/pages/Performance/Goals/GoalType.jsx";
 import Trainers from "../../views/pages/Performance/Training/Trainers.jsx";
 import Training from "../../views/pages/Performance/Training/Training.jsx";
 import TrainingType from "../../views/pages/Performance/Training/TrainingType.jsx";
-
-// import EmployeeProfile from "../../views/pages/Pages/profile/employeeprofile";
 import AdminDashboard from "../../views/pages/MainPages/Dashboard/AdminDashboard/adminDashboard.jsx";
 import EmployeeDashboard from "../../views/pages/MainPages/Dashboard/EmployeeDashboard/index.jsx";
 import Chat from "../../views/pages/MainPages/Apps/chat/index.jsx";
@@ -313,7 +311,7 @@ const AppContainer = () => {
     // {
     //   id: 20,
     //   path: "profile",
-    //   element: <EmployeeProfile />,
+    //   element: <Profile />,
     // },
     {
       id: 21,

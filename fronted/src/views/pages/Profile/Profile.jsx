@@ -5,66 +5,46 @@ import moment from "moment";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { fetchEmployees } from "../../../services";
 
 const Profile = () => {
   const user = useSelector((state) => state.auth?.user); // Safely access user
   const { employeeId } = useParams();
-  const [employees, setEmployees] = useState([]);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
 
-  const fetchEmployees = async () => {
-    if (!user) return [];
-    try {
-      const response = await axios.get(`${process.env.REACT_APP_SERVER_URI}/getEmployees`, {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      });
-      return response.data;
-    } catch (error) {
-      console.error("Error fetching employees:", error);
-      return [];
-    }
-  };
-
-  const query = useQuery({
-    queryKey: ['employees'],
+  const { data: employees, isLoading, error } = useQuery({
+    queryKey: ["employees"],
     queryFn: fetchEmployees,
-    enabled: !!user, // Only fetch when the user is available
-    onSuccess: (data) => {
-      console.log("Fetched employees:", data); // Debug log
-      // Use the data to update state
-      const employee = data.find((employee) => employee._id === employeeId);
-      setSelectedEmployee(employee);
-    },
-    onError: (error) => {
-      console.log("Error fetching employees:", error);
-    },
+    enabled: !!user
   });
 
-  const { isLoading, error, data } = query;
-
   useEffect(() => {
-    console.log("User state:", user); // Debug log
-    const employeesArrJson = localStorage.getItem('employeesArr');
-    if (employeesArrJson) {
-      const currentManagerEmployeesArr = JSON.parse(employeesArrJson);
-      const employee = currentManagerEmployeesArr.find(emp => emp.id === employeeId);
-      setSelectedEmployee(employee);
+    if(user) {
+      if (employees && employeeId) {
+        console.log(employees);
+        
+        const employee = employees.find((employee) => employee._id === employeeId);
+        setSelectedEmployee(employee);
+        console.log("Selected Employee:", employee); // Debug log
+      }
     }
-  }, [employeeId, employees]);
+   
+  }, [employees, employeeId]);
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading employees</div>;
   if (!selectedEmployee) return <div>No employees have been added yet...</div>;
 
-  const formattedDateOfBirth = moment(selectedEmployee.DataOfBirth, 'DD/MM/YYYY').format('MMMM Do, YYYY');
+  const formattedDateOfBirth = moment(
+    selectedEmployee.dateOfBirth,
+    "DD/MM/YYYY"
+  ).format("MMMM Do, YYYY");
 
   return (
     <>
       <div className="page-wrapper">
         <div className="content container-fluid">
-          <h1>{selectedEmployee.FullName} Profile</h1>
+          <h1>{selectedEmployee.fullName} Profile</h1>
           <br />
           <br />
           <div className="card mb-0">
@@ -84,9 +64,11 @@ const Profile = () => {
                         <div className="col-md-5">
                           <div className="profile-info-left">
                             <h3 className="user-name m-t-0 mb-0">
-                              {selectedEmployee.FullName}
+                              {selectedEmployee.fullName}
                             </h3>
-                            <h6 className="text-muted">{selectedEmployee.role}</h6>
+                            <h6 className="text-muted">
+                              {selectedEmployee.role}
+                            </h6>
                           </div>
                         </div>
                         <div className="col-md-7">
@@ -94,22 +76,24 @@ const Profile = () => {
                             <li>
                               <div className="title">Phone:</div>
                               <div className="text">
-                                <Link to={`tel:050-1234567`}>
-                                  050-1234567
-                                </Link>
+                                <Link to={`tel:050-1234567`}>050-1234567</Link>
                               </div>
                             </li>
                             <li>
                               <div className="title">Mail:</div>
                               <div className="text">
-                                <Link to={`mailto:${selectedEmployee.FullName}@gmail.com`}>
-                                  {selectedEmployee.FullName + '@gmail.com'}
+                                <Link
+                                  to={`mailto:${selectedEmployee.fullName}@gmail.com`}
+                                >
+                                  {selectedEmployee.fullName + "@gmail.com"}
                                 </Link>
                               </div>
                             </li>
                             <li>
                               <div className="title">Place of residence:</div>
-                              <div className="text">{selectedEmployee.Address}</div>
+                              <div className="text">
+                                {selectedEmployee.address}
+                              </div>
                             </li>
                           </ul>
                         </div>
@@ -193,7 +177,7 @@ const Profile = () => {
             </div>
           </div>
           {/* Profile Info Tab */}
-          <ProfileTab selectedEmployee={selectedEmployee} />
+          {/* <ProfileTab selectedEmployee={selectedEmployee} /> */}
         </div>
       </div>
     </>

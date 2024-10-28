@@ -50,20 +50,27 @@ export const getEmployees =  async (req, res) => {
 
 
   export const addEmployee = async (req, res) => {
-    const employeeData = req.body;
+    const {employeeData} = req.body;
     const { user } = req; 
 
     try {
-        const employeeAlreadyExists = await EmployeeModel.findOne({
-            employeeId: employeeData.employeeId,
-        });
-        if (employeeAlreadyExists) {
-            return res.status(422).json({
-                message: "Employee already exists.",
-            });
-        }
+        // const employeeAlreadyExists = await EmployeeModel.findOne({
+        //     employeeId: employeeData.employeeId,
+        // });
+        // if (employeeAlreadyExists) {
+        //     return res.status(422).json({
+        //         message: "Employee already exists.",
+        //     });
+        // }
         const newEmployee = new EmployeeModel({
             ...employeeData,
+            // foodAndDrinks: [
+            //     {
+            //         food1: employeeData.food1,
+            //         good2: employeeData.food2, 
+            //         drink: employ
+            //     }
+            // ]
             uid: user.uid,
         });
         await newEmployee.save();

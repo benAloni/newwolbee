@@ -29,7 +29,7 @@ const AllEmployees = () => {
   const [favoriteEmployees, setFavoriteEmployees] = useState([]);
   const [selectedTeam, setSelectedTeam] = useState("");
   const [userRole, setUserRole] = useState(null);
-  const [AddEmployeeModalOpen, setAddEmployeeModalOpen] = useState(false);
+  const [addEmployeeModalOpen, setAddEmployeeModalOpen] = useState(false);
   const queryClient = useQueryClient();
   const user = useSelector((state) => state.auth.user);
 
@@ -244,7 +244,7 @@ const AllEmployees = () => {
       </div>
 
       <AddEmployeeModal
-        isOpen={AddEmployeeModalOpen}
+        isOpen={addEmployeeModalOpen}
         onClose={closeModal}
         onEmployeeAdded={() => queryClient.invalidateQueries(["employees"])}
       />
