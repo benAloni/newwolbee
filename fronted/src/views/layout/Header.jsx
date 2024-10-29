@@ -15,40 +15,30 @@ import { FaRegBell, FaRegComment } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import i18n from "../../i18n";
-import manager from "../../imgs/managerProfilePic.jpg";
-import defultprofile from "../../imgs/DefultProfile.png";
+import userProfile from "../../imgs/userProfile.png";
 import { useDispatch, useSelector } from "react-redux";
 import { auth } from "../../firebase/firebaseConfig";
 import { logout } from "../../redux";
 import { signOut } from "firebase/auth";
-import { useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import NotificationsPopup from "../../components/Modals/Notifications/NotificationsPopup";
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage"; // הייבוא הנכון
-import { app } from '../../firebase/firebaseConfig'; 
+import { fetchUserProfilePic } from "../../services";
 
-const Header = (props) => {
+const Header = () => {
   const queryClient = useQueryClient();
 
   const dispatch = useDispatch();
-  const navigate = useNavigate()
-  const userFullName = useSelector((state)=> state.auth.user?.fullName)
-  const handleLogout = (() => {
-    // Dispatch the logout action
+  const navigate = useNavigate();
+  const username = useSelector((state) => state.auth.user?.fullName);
+  const user = useSelector((state)=> state.auth?.user.uid)
+  const handleLogout = () => {
     dispatch(logout());
-    
-    // Sign out from authentication
     signOut(auth);
-    
-    // Clear browser cache
     queryClient.clear();
-
-    // Clear localStorage and sessionStorage
     localStorage.clear();
     sessionStorage.clear();
-    
-    // Navigate to the home page
     navigate("/");
-})
+  };
   const initialNotifications = notificationsData.notifications.map(
     (notification) => ({
       ...notification,
@@ -60,67 +50,36 @@ const Header = (props) => {
   const [notifications, setNotifications] = useState(initialNotifications);
   const [notificationVisible, setNotificationVisible] = useState(false);
   const [flag, setFlag] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  const [profile, setProfile] = useState(false);
   const [flagImage, setFlagImage] = useState(lnEnglish);
+  const [isOpen, setIsOpen] = useState(false);
+  const [dismissToggle, setDismissToggle] = useState(false)
+  const [userProfileImage, setUserProfileImage] = useState("");
+
   const notificationRef = useRef(null);
-  const [profileName, setProfileName] = useState('');
-const [profilePicURL, setProfilePicURL] = useState(null);
-  const storage = getStorage(app); // הגדרת משתנה storage
 
+  const { data } = useQuery({
+    queryKey: ["user-profile-pic"],
+    queryFn: () => fetchUserProfilePic(user),
+    enabled: !!user,
+  });
   useEffect(() => {
-    const fetchProfilePic = async () => {
-      const user = auth.currentUser;
-      if (user) {
-        const storedProfilePicURL = localStorage.getItem("profilePic");
-        if (storedProfilePicURL) {
-          setProfilePicURL(storedProfilePicURL); // השתמש ב-URL שנשמר ב-LocalStorage
-        } else {
-          // אם לא נמצא URL ב-LocalStorage, שלוף אותו מ-Firebase Storage
-          const storageRef = ref(storage, `profilePictures/${user.uid}/profilePic`);
-          try {
-            const url = await getDownloadURL(storageRef);
-            setProfilePicURL(url);
-            localStorage.setItem("profilePic", url); // שמור את ה-URL ב-LocalStorage
-          } catch (error) {
-            console.error('שגיאה בשליפת תמונת פרופיל:', error);
-          }
-        }
-      }
-    };
-  
-    fetchProfilePic();
-  }, [storage]);
-
-
-  useEffect(() => {
-    const user = auth.currentUser; 
-    if (user) {
-      const fullName = userFullName || "Admin"; 
-      setProfileName(fullName);
+    if (data) {
+      setUserProfileImage(data);
     }
-  }, []);
+  }, [data]);
 
-
-  const toggleDropdown = () => {
-    setIsOpen(!isOpen);
-    setNotificationVisible(false);
-    setProfile(false);
-    setFlag(false);
-  };
+  // const toggleDropdown = () => {
+  //   setIsOpen(!isOpen);
+  //   setNotificationVisible(false);
+  //   setDismissToggle(false);
+  //   setFlagImage(false);
+  // };
 
   const handleNotification = () => {
     setNotificationVisible(!notificationVisible);
-    setFlag(false);
+    setFlagImage(false);
     setIsOpen(false);
-    setProfile(false);
-  };
-
-  const handleProfile = () => {
-    setProfile(!profile);
-    setNotificationVisible(false);
-    setFlag(false);
-    setIsOpen(false);
+    setDismissToggle(false);
   };
 
   const changeLanguage = (lng) => {
@@ -135,7 +94,6 @@ const [profilePicURL, setProfilePicURL] = useState(null);
         : lnGerman
     );
   };
-
 
   const notificationNav = (key) => {
     const notification = notifications.find(
@@ -180,8 +138,6 @@ const [profilePicURL, setProfilePicURL] = useState(null);
 
   const Credencial = localStorage.getItem("credencial");
   const Value = JSON.parse(Credencial);
-  const UserName = Value?.email?.split("@")[0];
-  const ProfileName = UserName?.charAt(0).toUpperCase() + UserName?.slice(1);
 
   const { t, i18n } = useTranslation();
 
@@ -222,15 +178,15 @@ const [profilePicURL, setProfilePicURL] = useState(null);
           <span />
         </span>
       </Link> */}
-     <div className="page-title-box" style={{ marginTop: "5px" }}>
-      <h4>
-        Hi{" "}
-        <span style={{ fontWeight: "bold", fontSize: "20px" }}>
-          {profileName ? `${profileName}` : "Admin"}
-        </span>{" "}
-        welcome back to wolbee
-      </h4>
-    </div>
+      <div className="page-title-box" style={{ marginTop: "5px" }}>
+        <h4>
+          Hi{" "}
+          <span style={{ fontWeight: "bold", fontSize: "20px" }}>
+            {username ? `${username}` : "Admin"}
+          </span>{" "}
+          welcome back to wolbee
+        </h4>
+      </div>
       <Link
         id="mobile_btn"
         className="mobile_btn"
@@ -327,7 +283,7 @@ const [profilePicURL, setProfilePicURL] = useState(null);
               </Link>
             </div>
             <div className="noti-content">
-            <NotificationsPopup/>
+              <NotificationsPopup />
             </div>
             <div
               className="topnav-dropdown-footer"
@@ -345,7 +301,7 @@ const [profilePicURL, setProfilePicURL] = useState(null);
             <div className="topnav-dropdown-header">
               <span className="notification-title">Messages</span>
               <Link to="#" className="clear-noti"> Clear All </Link>
-            </div> */}
+            </div> }
         {/* <div className="noti-content">
               <ul className="notification-list">
                 {datas.map((value, index) => (
@@ -379,17 +335,16 @@ const [profilePicURL, setProfilePicURL] = useState(null);
             to="#"
             className="dropdown-toggle nav-link"
             data-bs-toggle="dropdown"
-            onClick={handleProfile}
           >
             <span className="user-img me-1">
-            <img src={profilePicURL || defultprofile} alt="Profile" />
+              <img src={userProfileImage || userProfile} alt="Profile" />
               <span className="status online" />
             </span>
-            <span> {profileName ? `${profileName}` : "Admin"}</span>
+            <span> {username ? `${username}` : "Admin"}</span>
           </Link>
           <div
             className={`dropdown-menu dropdown-menu-end ${
-              profile ? "show" : ""
+              dismissToggle ? "show" : ""
             }`}
           >
             <Link className="dropdown-item" to="/admin-dashboard">
@@ -430,4 +385,3 @@ const [profilePicURL, setProfilePicURL] = useState(null);
 };
 
 export default Header;
-

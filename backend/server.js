@@ -9,7 +9,6 @@ dotenv.config();
 import dbConnection from "./Connection/dbConnection.js";
 import router from "./routes/index.js";
 import EmployeeModel from "./models/EmployeesModel.js";
-import { log } from "console";
 
 const app = express();
 app.use(express.json());

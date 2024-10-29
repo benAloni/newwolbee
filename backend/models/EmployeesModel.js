@@ -98,7 +98,6 @@ const employeeSchema = new mongoose.Schema({
   hobbies: {
     type: [String],
   },
-
   topInsights: {
     type: Array,
   },
@@ -116,6 +115,6 @@ const employeeSchema = new mongoose.Schema({
   uid: { type: String },
 });
 
-const EmployeeModel = mongoose.model("employee", employeeSchema);
+const EmployeeModel = mongoose.model("memployee", employeeSchema);
 
 export default EmployeeModel;

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import Select from "react-select";
 import { useSelector } from "react-redux";
 import { auth } from "../../../firebase/firebaseConfig";
@@ -20,9 +19,13 @@ import justin from "../../../imgs/avatar_9.JPG";
 import selena from "../../../imgs/avatar_10.JPG";
 import emma from "../../../imgs/avatar_11.JPG";
 import sofia from "../../../imgs/avatar_12.JPG";
-import { fetchEmployees, fetchTeams } from "../../../services";
+import {
+  fetchEmployees,
+  fetchEmployeesProfilePics,
+  fetchTeams,
+} from "../../../services";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import PopUp from "./PopUp";
+import userProfile from "../../../imgs/userProfile.png";
 
 const AllEmployees = () => {
   const [filteredEmployees, setFilteredEmployees] = useState([]);
@@ -32,6 +35,7 @@ const AllEmployees = () => {
   const [addEmployeeModalOpen, setAddEmployeeModalOpen] = useState(false);
   const queryClient = useQueryClient();
   const user = useSelector((state) => state.auth.user);
+  const uid = useSelector((state) => state.auth?.user.uid);
 
   // need to add loading
   useEffect(() => {
@@ -43,12 +47,12 @@ const AllEmployees = () => {
       }
     }
   }, [user]);
-  const openModal = () => {
-    setAddEmployeeModalOpen(true);
-  };
-  const closeModal = () => {
-    setAddEmployeeModalOpen(false);
-  };
+  // const openModal = () => {
+  //   setAddEmployeeModalOpen(true);
+  // };
+  // const closeModal = () => {
+  //   setAddEmployeeModalOpen(false);
+  // };
   const avatars = [
     lisa,
     tom,
@@ -65,15 +69,25 @@ const AllEmployees = () => {
   ];
 
   const getEmployees = async () => {
-    let employeesWithAvatars;
+    let employeesWithProfilePics;
     try {
-      const result = await fetchEmployees();
-      employeesWithAvatars = await result?.map((employee, index) => ({
-        ...employee,
-        id: employee._id,
-        avatar: avatars[index % avatars.length],
-      }));
-      return employeesWithAvatars;
+      const employees = await fetchEmployees();
+
+      employeesWithProfilePics = await Promise.all(
+        employees?.map(async (employee) => {
+          const profilePicUrl = await fetchEmployeesProfilePics(
+            uid,
+            employee.employeeId
+          );
+          return {
+            ...employee,
+            id: employee._id,
+            employeeId: employee.employeeId,
+            avatar: profilePicUrl || userProfile,
+          };
+        })
+      );
+      return employeesWithProfilePics;
     } catch (error) {
       console.log("Error getting employees :", error);
     }
@@ -154,7 +168,7 @@ const AllEmployees = () => {
           />
           {userRole === "otherUser" && <EmployeeListFilter />}
           {userRole === "manager" && (
-            <div className="d-flex justify-content-center">
+            <div className="d-flex justify-content-center text-center">
               <Select
                 options={teams?.map((team) => ({
                   value: team._id,
@@ -166,7 +180,6 @@ const AllEmployees = () => {
               />
             </div>
           )}
-
           <div className="row">
             {filteredEmployees?.map((employee) => (
               <div
@@ -239,13 +252,19 @@ const AllEmployees = () => {
                 </div>
               </div>
             ))}
+            {filteredEmployees.length === 0 && (
+              <div className="mt-5">
+                <p className=" d-flex justify-content-center text-center">
+                  You got no current employees in this departement
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>
-
       <AddEmployeeModal
-        isOpen={addEmployeeModalOpen}
-        onClose={closeModal}
+        // isOpen={addEmployeeModalOpen}
+        // onClose={closeModal}
         onEmployeeAdded={() => queryClient.invalidateQueries(["employees"])}
       />
       <DeleteModal Name="מחק עובד" />

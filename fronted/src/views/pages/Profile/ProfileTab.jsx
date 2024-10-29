@@ -315,14 +315,14 @@ const ProfileTab = ({selectedEmployee}) => {
             </div>
           </div>
         </div>
-        <ProjectDetails  selectedEmployee={selectedEmployee}/>
+        {/* <ProjectDetails  selectedEmployee={selectedEmployee}/> */}
         {/* Bank Statutory Tab */}
 
         {/* Bank Statutory Tab */}
         {/*  Bank Tab */}
       </div>
       {/* Model Popup*/}
-      <PersonalInformationModelPopup selectedEmployee={selectedEmployee} />
+      {/* <PersonalInformationModelPopup selectedEmployee={selectedEmployee} /> */}
     </>
   );
 };

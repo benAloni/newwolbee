@@ -1,18 +1,31 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useEffect, useRef, useState } from "react";
+import Modal from "react-modal";
 import DatePicker from "react-datepicker";
 import Select from "react-select";
 import MainPageEdit from "./MainPageEdit";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
-import { auth } from "../../../firebase/firebaseConfig";
+import { app, storage } from "../../../firebase/firebaseConfig";
+import {
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  deleteObject,
+} from "firebase/storage";
 import Swal from "sweetalert2";
 import { useForm } from "react-hook-form";
-import { addEmployee } from "../../../services/api/employees";
-import { fetchTeams } from "../../../services/api/teams";
+import {
+  addEmployee,
+  fetchTeams,
+  uploadEmployeeImage,
+} from "../../../services";
+import userProfile from "../../../imgs/userProfile.png";
 import Profile from "../../../views/pages/Profile/Profile";
+import { CiUser } from "react-icons/ci";
+import { CiCirclePlus } from "react-icons/ci";
+import { useSelector } from "react-redux";
 
 const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
-  const [addEmployeeModalOpen, setAddEmployeeModalOpen] = useState(false);
+  // const [addEmployeeModalOpen, setAddEmployeeModalOpen] = useState(false);
   const [selectedGender, setSelectedGender] = useState("");
   const [selectedMaritalStatus, setSelectedMaritalStatus] = useState("");
   const [selectedTeam, setSelectedTeam] = useState("");
@@ -22,22 +35,27 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
     startDay: null,
     anniversary: null,
   });
+
+  const [employeeProfileImage, setEmployeeProfileImage] = useState(null);
   const queryClient = useQueryClient();
   const {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm();
+  const uid = useSelector((state) => state.auth?.user.uid);
+  const employeeId = watch("employeeId");
 
   useEffect(() => {
-    if (!isOpen) {
-      reset();
-      setSelectedGender("");
-      setSelectedMaritalStatus("");
-      setSelectedTeam("");
-    }
-  }, [isOpen, reset]);
+    // if (!isOpen) {
+    reset();
+    setSelectedGender("");
+    setSelectedMaritalStatus("");
+    setSelectedTeam("");
+    // }
+  }, [reset]);
 
   const { data: teams } = useQuery({
     queryKey: ["teams"],
@@ -60,34 +78,28 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
       maritalStatus: selectedMaritalStatus,
     };
     try {
-      await addEmployee({
+      const response = await addEmployee({
         employeeData: formData,
       });
-      Swal.fire("Success!", "Employee has been added successfully", "success");
-      queryClient.invalidateQueries("employees");
-      onEmployeeAdded();
-      reset();
-      onClose();
-    } catch (error) {
-      if (error.message?.includes("already exists")) {
-        Swal.fire({
-          title: `According to our employees list, ${data.fullName} already exists.`,
-          text: "You won't be able to revert this!",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
-          confirmButtonText: "Yes, delete this form!",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            Swal.fire({
-              title: "Deleted!",
-              text: "Your employee has been deleted.",
-              icon: "success",
-            });
-          }
-        });
+      if (response.status === 200) {
+        Swal.fire(
+          "Success!",
+          `${data.fullName} has been added successfully to our employees`,
+          "success"
+        );
+        queryClient.invalidateQueries("employees");
+        onEmployeeAdded();
+        reset();
       }
+    } catch (error) {
+      if(error.message?.includes("already exists")) {
+        Swal.fire(
+          "Error!",
+          `According to our employees records, an employee with the Id number : ${data.employeeId} you entered, already exists.`,
+          "warning"
+        );
+      }     
+      console.log(error.message);
     }
   };
 
@@ -101,6 +113,27 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
     //   ...prevErrors,
     //   [name]: "",
     // }));
+  };
+
+  const uploadEmployeeImage = async () => {
+    if (!employeeProfileImage || !employeeId) return;
+    
+      const storageRef = ref(
+       storage,
+        `/employeesProfilePics/${uid}/${employeeId}`
+      );
+      console.log(storageRef);
+      
+      try {
+        const snapshot = await uploadBytes(storageRef, employeeProfileImage);
+        const url = await getDownloadURL(snapshot.ref);
+        console.log(url);
+        setEmployeeProfileImage(url); 
+        queryClient.invalidateQueries(["employees-profile-pics"])
+      } catch (error) {
+        console.log("Error uploading image:", error.message);
+      }
+        
   };
 
   // Mutation for adding a notification
@@ -127,17 +160,20 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
 
   return (
     <>
+      {/* <Modal
+        isOpen={addEmployeeModalOpen}
+        onCancel={onClose}
+      > */}
       <div id="add_employee" className="modal custom-modal fade" role="dialog">
         <div className="modal-dialog modal-dialog-centered modal-lg">
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title">Add Employee</h5>
               <button
-                onClick={onClose}
                 type="button"
                 className="btn-close"
-                // data-bs-dismiss="modal"
-                // aria-label="Close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
               >
                 <span aria-hidden="true">×</span>
               </button>
@@ -426,7 +462,7 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
                           <input
                             className={`form-control`}
                             type="text"
-                            name="foodAndDrinks"
+                            name="favoriteFoods"
                             {...register("food1")}
                             placeholder="Food 1"
                           />
@@ -435,7 +471,7 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
                           <input
                             className={`form-control`}
                             type="text"
-                            name="foodAndDrinks"
+                            name="favoriteFoods"
                             {...register("food2")}
                             placeholder="Food 2"
                           />
@@ -444,7 +480,7 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
                           <input
                             className={`form-control`}
                             type="text"
-                            name="foodAndDrinks"
+                            name="favoriteDrink"
                             {...register("drink")}
                             placeholder="Drink"
                           />
@@ -452,7 +488,6 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
                       </div>
                     </div>
                   </div>
-
                   <div className="col-sm-12">
                     <div className="input-block mb-3">
                       <label className="col-form-label">
@@ -464,7 +499,7 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
                           <input
                             className="form-control"
                             type="text"
-                            name="restaurants"
+                            name="favoriteRestaurants"
                             {...register("restaurant1")}
                             placeholder="Restaurant 1"
                           />
@@ -473,7 +508,7 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
                           <input
                             className="form-control"
                             type="text"
-                            name="restaurants"
+                            name="favoriteRestaurants"
                             {...register("restaurant2")}
                             placeholder="Restaurant 2"
                           />
@@ -481,7 +516,6 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
                       </div>
                     </div>
                   </div>
-
                   <div className="col-sm-12">
                     <div className="input-block mb-3">
                       <label className="col-form-label">
@@ -517,6 +551,48 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
                         </div>
                       </div>
                     </div>
+                  </div>
+
+                  <div className="d-flex justify-content-center mt-5 mb-2 ">
+                    <div
+                      className="d-flex flex-column align-items-center text-center"
+                      style={{
+                        border: "2px solid rgb(71, 89, 114)",
+                        padding: "25px",
+                        borderRadius: "100%",
+                        height: "10rem",
+                        width: "fit-content",
+                      }}
+                    >
+                      <input
+                        type="file"
+                        id="employee-profile-pic"
+                        onChange={(e)=> {setEmployeeProfileImage(e.target.files[0])}}
+                        hidden
+                        data-bs-toggle="tooltip"
+                        title="Add an employee image"
+                      />
+                      <label
+                        htmlFor="employee-profile-pic"
+                        style={{
+                          backgroundImage: `url(${
+                            employeeProfileImage || "userProfile"
+                          })`,
+                          width: "120px",
+                          height: "120px",
+                          backgroundSize: "cover",
+                          backgroundPosition: "center",
+                        }}
+                      />                      
+                    </div>
+                    <button
+                        onClick={uploadEmployeeImage}
+                       className="btn btn-outline-info "
+                        data-bs-toggle="tooltip"
+                        title="Add an employee image"
+                      >
+                        Upload Employee Image
+                      </button>
                   </div>
                 </div>
                 <div className="submit-section">

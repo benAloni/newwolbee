@@ -28,6 +28,7 @@ export const ProjectDetails = ({ selectedEmployee }) => {
   selectedEmployee.LatestInfo.map((val) => {
     return console.log(val.info);
   });
+console.log(selectedEmployee);
 
   const getValue = (importance) => {
     switch (importance) {

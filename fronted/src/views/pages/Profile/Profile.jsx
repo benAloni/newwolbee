@@ -8,11 +8,11 @@ import { useSelector } from "react-redux";
 import { fetchEmployees } from "../../../services";
 
 const Profile = () => {
-  const user = useSelector((state) => state.auth?.user); // Safely access user
+  const user = useSelector((state)=> state.auth?.user)
   const { employeeId } = useParams();
   const [selectedEmployee, setSelectedEmployee] = useState(null);
 
-  const { data: employees, isLoading, error } = useQuery({
+  const { data: employees } = useQuery({
     queryKey: ["employees"],
     queryFn: fetchEmployees,
     enabled: !!user
@@ -21,24 +21,16 @@ const Profile = () => {
   useEffect(() => {
     if(user) {
       if (employees && employeeId) {
-        console.log(employees);
-        
+        console.log(employees);      
         const employee = employees.find((employee) => employee._id === employeeId);
         setSelectedEmployee(employee);
-        console.log("Selected Employee:", employee); // Debug log
+        console.log("Selected Employee:", employee); 
       }
     }
+      
    
   }, [employees, employeeId]);
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error loading employees</div>;
-  if (!selectedEmployee) return <div>No employees have been added yet...</div>;
-
-  const formattedDateOfBirth = moment(
-    selectedEmployee.dateOfBirth,
-    "DD/MM/YYYY"
-  ).format("MMMM Do, YYYY");
 
   return (
     <>

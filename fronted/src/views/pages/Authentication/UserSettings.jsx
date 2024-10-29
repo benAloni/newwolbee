@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { app, auth, googleAuthProvider } from '../../../firebase/firebaseConfig'; // לא מייבא את storage כאן
-import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "firebase/storage"; // ייבוא של פונקציות חדשות
-import { CiCirclePlus } from 'react-icons/ci'; // או הספרייה שממנה הרכיב מגיע
-import { CiTrash } from 'react-icons/ci';
-
+import { app, auth, storage } from "../../../firebase/firebaseConfig";
+import {
+  ref,
+  getDownloadURL,
+  deleteObject,
+  uploadBytes,
+} from "firebase/storage";
+import { CiCirclePlus } from "react-icons/ci";
+import { CiTrash } from "react-icons/ci";
 
 import Sidebar from "../../layout/Sidebar";
 import Header from "../../layout/Header";
 
-import { animated, useSpring } from '@react-spring/web';
+import { animated, useSpring } from "@react-spring/web";
 
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
@@ -19,89 +23,63 @@ import Select from "@mui/material/Select";
 import dayjs from "dayjs";
 import BoxSelector from "./Barsettings";
 import manager from "../../../imgs/managerProfilePic.jpg";
+import { useSelector } from "react-redux";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { fetchUserProfilePic, uploadEmployeeImage } from "../../../services";
+import userProfile from "../../../imgs/userProfile.png";
+
 const UserSettings = () => {
-  const [updateProfilePic, setUpdateProfilePic] = useState(""); 
-  const [removePicPopup, setRemovePicPopup] = useState(false);
+  const [removeUserProfileImage, setRemoveUserProfileImage] = useState(false);
+  const [userProfileImage, setUserProfileImage] = useState(null);
+  const queryClient = useQueryClient();
+
   const [activeTab, setActiveTab] = useState("Notifications");
   const [selectedTime, setSelectedTime] = useState(null);
   const [frequency, setFrequency] = useState("Daily");
   const [notificationRepeat, setNotificationRepeat] = useState("3 Times");
-  const [profilePicURL, setProfilePicURL] = useState("");
-  const [progress, setProgress] = useState(0);
-  const [profileName, setProfileName] = useState('');
-
-  const storage = getStorage(app); // קבלת מופע של storage
-
   const [slideProps, api] = useSpring(() => ({
     transform: "translateX(0%)",
-
   }));
+  const username = useSelector((state) => state.auth.user?.fullName);
+  const user = auth.currentUser;
+
   // const slideProps = useSpring({
   //   opacity: activeTab === 'Notifications' ? 1 : 0,
   //   transform: activeTab === 'Notifications' ? 'translateX(0%)' : 'translateX(-100%)',
   //   config: { duration: 300 }
   // });
+
+  const { data } = useQuery({
+    queryKey: ["user-profile-pic", user?.uid],
+    queryFn: () => fetchUserProfilePic(user.uid),
+    enabled: !!user,
+  });
   useEffect(() => {
-    const user = auth.currentUser; // קבלת המשתמש המחובר
-    if (user) {
-      const name = user.displayName || "Admin"; // במידה ואין שם, ייכתב Admin
-      setProfileName(name);
+    if (data) {
+      setUserProfileImage(data);
     }
-  }, []);
+  }, [data]);
 
-
-  useEffect(() => {
-    const fetchProfilePic = async () => {
-      const user = auth.currentUser;
-      if (user) {
-        const storageRef = ref(storage, `profilePictures/${user.uid}/profilePic`);
-        try {
-          const url = await getDownloadURL(storageRef);
-          setProfilePicURL(url);
-        } catch (error) {
-          console.error('Error fetching profile pic:', error);
-        }
-      }
-    };
-    
-    fetchProfilePic();
-  }, [storage]);
-
-  const triggerFileInput = () => {
+  const triggerUploadImage = () => {
     document.getElementById("profile-pic").click();
   };
-
-  const handleUpdateProfile = (e) => {
+  //move this function to profile.js
+  const uploadUserImage = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    const user = auth.currentUser;
-    if (!user) {
-      alert("User not logged in");
-      return;
+    const storageRef = ref(storage, `users/${user.uid}/user-profile-pic`);
+
+    try {
+      const snapShot = await uploadBytes(storageRef, file);
+      const url = await getDownloadURL(snapShot.ref);
+      console.log(url);
+      setUserProfileImage(url);
+      queryClient.invalidateQueries(["user-profile-pic"]);
+    } catch (error) {
+      console.log("Error uploading user image:", error.message);
     }
-
-    const storageRef = ref(storage, `profilePictures/${user.uid}/profilePic`);
-    const uploadTask = uploadBytesResumable(storageRef, file);
-
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-        setProgress(progress);
-      },
-      (error) => {
-        console.error('Upload error:', error);
-      },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then(url => {
-          setProfilePicURL(url);
-          localStorage.setItem("profilePic", url);
-        });
-      }
-    );
   };
-
 
   const handleTabClick = (tabName) => {
     setActiveTab(tabName);
@@ -111,82 +89,87 @@ const UserSettings = () => {
       api.start({ transform: "translateX(0%)" });
     }, 100);
   };
+
   const handleRemoveProfile = async (e) => {
     e.stopPropagation();
     e.preventDefault();
-    
-    const user = auth.currentUser;
-    if (!user) return;
-
     try {
-      const storageRef = ref(storage, `profilePictures/${user.uid}/profilePic`);
+      const storageRef = ref(storage, `users/${user.uid}/user-profile-pic`);
       await deleteObject(storageRef);
-      setProfilePicURL('');
-      localStorage.removeItem("profilePic");
+      setUserProfileImage(userProfile);
+      queryClient.removeQueries(["user-profile-pic", user.uid]);
     } catch (error) {
-      console.error('Error removing profile pic:', error);
+      console.error("Error removing profile pic:", error);
     }
 
-    setRemovePicPopup(false);
+    setRemoveUserProfileImage(false);
   };
 
   return (
-    <div className="container" style={{marginLeft:'220px'}}>
+    <div className="container" style={{ marginLeft: "220px" }}>
       <div className="page-wrapper">
         <div className="content container-fluid">
           {/* Your Header and Sidebar components */}
         </div>
       </div>
-      
+
       <div className="settings-page-container">
         <div className="user-profile-container">
           <div className="profile-pic-wrapper">
             <input
               type="file"
               accept="image/*"
-              id="profile-pic"
+              id="user-profile-pic"
               className="profile-pic-container"
               name="profile_pic"
-              onChange={handleUpdateProfile}
+              onChange={uploadUserImage}
             />
             <label
-              htmlFor="profile-pic"
+              htmlFor="user-profile-pic"
               className="profile-pic-label"
               style={{
-                backgroundImage: `url(${profilePicURL || 'defaultImageUrl'})`,
-                width: '120px',
-                height: '120px',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
+                backgroundImage: `url(${userProfileImage || "userProfile"})`,
+                width: "120px",
+                height: "120px",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
               }}
             />
-            <div className="icon plus" onClick={triggerFileInput}>
+            <div className="icon plus" onClick={triggerUploadImage}>
               <CiCirclePlus size={24} />
             </div>
-            <div className="icon trash" onClick={() => setRemovePicPopup(true)}>
+            <div
+              className="icon trash"
+              onClick={() => setRemoveUserProfileImage(true)}
+            >
               <CiTrash size={24} />
             </div>
           </div>
           <div>
-            <h2> {profileName ? `${profileName}` : "Admin"}</h2>
+            <h2> {username ? `${username}` : "Admin"}</h2>
             <p>Product Development Manager</p>
           </div>
         </div>
 
-        {removePicPopup && (
+        {removeUserProfileImage && (
           <div className="popup">
             <p>Remove Profile Picture?</p>
             <button onClick={handleRemoveProfile}>Yes</button>
-            <button onClick={() => setRemovePicPopup(false)}>Cancel</button>
+            <button onClick={() => setRemoveUserProfileImage(false)}>
+              Cancel
+            </button>
           </div>
         )}
 
-        <div className="settings-container"  style={{
-    scrollbarColor: 'black',
-    maxHeight: '400px', // גובה מקסימלי לדיב
-    overflowY: 'auto', // פס גלילה אנכי כאשר התוכן חורג
-    overflowX: 'hidden' // מסתיר פס גלילה אופקי
-  }} >
+        <div
+          className="settings-container"
+          style={{
+            scrollbarColor: "black",
+            maxHeight: "400px", // גובה מקסימלי לדיב
+            overflowY: "auto", // פס גלילה אנכי כאשר התוכן חורג
+            overflowX: "hidden", // מסתיר פס גלילה אופקי
+          }}
+        >
           <h1>Settings</h1>
           <div className="tabs-container">
             <div
@@ -202,7 +185,9 @@ const UserSettings = () => {
               Language
             </div>
             <div
-              className={`tab ${activeTab === "App Preferences" ? "active" : ""}`}
+              className={`tab ${
+                activeTab === "App Preferences" ? "active" : ""
+              }`}
               onClick={() => handleTabClick("App Preferences")}
             >
               App Preferences
@@ -271,21 +256,23 @@ const UserSettings = () => {
                 <BoxSelector />
                 <div className="notification-settings">
                   <div className="checkbox-group">
-                    <label style={{ display: 'flex', alignItems: 'center' }}>
+                    <label style={{ display: "flex", alignItems: "center" }}>
                       <input type="checkbox" />
-                      <span style={{ marginLeft: '8px' }}>Every Employee</span>
+                      <span style={{ marginLeft: "8px" }}>Every Employee</span>
                     </label>
-                    <label style={{ display: 'flex', alignItems: 'center' }}>
+                    <label style={{ display: "flex", alignItems: "center" }}>
                       <input type="checkbox" />
-                      <span style={{ marginLeft: '8px' }}>Only Managers</span>
+                      <span style={{ marginLeft: "8px" }}>Only Managers</span>
                     </label>
-                    <label style={{ display: 'flex', alignItems: 'center' }}>
+                    <label style={{ display: "flex", alignItems: "center" }}>
                       <input type="checkbox" />
-                      <span style={{ marginLeft: '8px' }}>No Managerial Attention</span>
+                      <span style={{ marginLeft: "8px" }}>
+                        No Managerial Attention
+                      </span>
                     </label>
-                    <label style={{ display: 'flex', alignItems: 'center' }}>
+                    <label style={{ display: "flex", alignItems: "center" }}>
                       <input type="checkbox" />
-                      <span style={{ marginLeft: '8px' }}>Only Milestone</span>
+                      <span style={{ marginLeft: "8px" }}>Only Milestone</span>
                     </label>
                   </div>
                   <button>OK</button>
@@ -293,7 +280,9 @@ const UserSettings = () => {
               </div>
             )}
             {activeTab === "Language" && <div>Language Settings</div>}
-            {activeTab === "App Preferences" && <div>App Preferences Settings</div>}
+            {activeTab === "App Preferences" && (
+              <div>App Preferences Settings</div>
+            )}
           </animated.div>
         </div>
         <Sidebar></Sidebar>
@@ -501,10 +490,8 @@ const UserSettings = () => {
             background-color: #2196F3;
               }
 `}
-      
-      
       </style>
     </div>
   );
 };
-export default UserSettings
+export default UserSettings;

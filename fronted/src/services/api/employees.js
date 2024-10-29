@@ -14,13 +14,11 @@ export const fetchEmployees = async () => {
 
 export const addEmployee = async ({ employeeData }) => {
   try {
-    const response = await client.post("/addEmployee", {
+    const response = await client.postForm("/addEmployee", {
       employeeData,
     });
-    console.log(employeeData)
     if (response.status === 200) {
-      const result = response.data;
-      return result;
+      return response;
     }
     if (response.status === 422) {
       throw new Error(
@@ -29,5 +27,6 @@ export const addEmployee = async ({ employeeData }) => {
     }
   } catch (error) {
     console.log("Error saving employee", error);
-    throw error;  }
+    throw error
+     }
 };
