@@ -2,16 +2,27 @@ import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import ProfileTab from "./ProfileTab";
 import moment from "moment";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { fetchEmployees } from "../../../services";
+import { useLocation } from "react-router-dom";
+import { userProfile } from "../../../imgs";
+
 
 const Profile = () => {
-  const user = useSelector((state) => state.auth?.user); // Safely access user
+  const user = useSelector((state)=> state.auth?.user)
+  const uid = useSelector((state)=> state.auth?.user.uid)
+
   const { employeeId } = useParams();
   const [employees, setEmployees] = useState([]);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const location = useLocation()
+  const queryClient= useQueryClient()
+  const { employeeAvatar } = location.state || {};
 
+
+  
   const fetchEmployees = async () => {
     if (!user) return [];
     try {

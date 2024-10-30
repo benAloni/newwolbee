@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
+import { auth } from '../../../firebase/firebaseConfig';
+
 
 export default function NotificationsPopup() {
   const user = useSelector((state) => state.user.user);
@@ -10,13 +12,14 @@ export default function NotificationsPopup() {
   const [eventsTomorrow, setEventsTomorrow] = useState([]);
 
   const fetchData = async () => {
+    const token = await auth.currentUser.getIdToken()
     const [AllNotification, employeesResponse] =
       await Promise.all([
-        axios.get("http://localhost:5000/api/getAllNotifications", {
-          headers: { Authorization: `Bearer ${user.token}` },
+        axios.get(`${process.env.REACT_APP_SERVER_URI}/getAllNotifications`, {
+          headers: { Authorization: `Bearer ${token}` },
         }),
-        axios.get("http://localhost:5000/api/getEmployees", {
-          headers: { Authorization: `Bearer ${user.token}` },
+        axios.get(`${process.env.REACT_APP_SERVER_URI}/getEmployees`, {
+          headers: { Authorization: `Bearer ${token}` },
         }),
       ]);
   
