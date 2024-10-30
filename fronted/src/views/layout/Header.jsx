@@ -15,7 +15,7 @@ import { FaRegBell, FaRegComment } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import i18n from "../../i18n";
-import userProfile from "../../imgs/userProfile.png";
+import { userProfile } from "../../imgs";
 import { useDispatch, useSelector } from "react-redux";
 import { auth } from "../../firebase/firebaseConfig";
 import { logout } from "../../redux";

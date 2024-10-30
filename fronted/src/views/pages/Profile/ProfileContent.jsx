@@ -12,7 +12,7 @@ import { useSelector } from "react-redux";
 
 import EditInsightsActivity from "./EditInsightsActivity";
 
-export const ProjectDetails = ({ selectedEmployee }) => {
+export const ProjectDetails = ({ selectedEmployee }) => {  
   const [popupEdit, setPopupEdit] = useState(0);
   const [importanceLevels, setImportanceLevels] = useState({
     management: "High",
@@ -22,24 +22,16 @@ export const ProjectDetails = ({ selectedEmployee }) => {
     professionalism: "Low",
   });
 
-  if (!selectedEmployee) {
-    return <div></div>;
-  }
-  selectedEmployee.LatestInfo.map((val) => {
-    return console.log(val.info);
-  });
-console.log(selectedEmployee);
-
   const getValue = (importance) => {
     switch (importance) {
       case "High":
-        return 100; // מלא
+        return 100;
       case "Medium":
-        return 50; // חצי מלא
+        return 50; 
       case "Low":
-        return 25; // רבע מלא
+        return 25;
       default:
-        return 0; // ריק
+        return 0; 
     }
   };
 
@@ -168,7 +160,7 @@ console.log(selectedEmployee);
             <h3 style={titleStyle}>Wolbee’s Top Insights</h3>
             <hr />
             <div style={{ marginLeft: "15px" }}>
-              {selectedEmployee.TopInsights.map((val, index) => {
+              {selectedEmployee?.topInsights.map((val, index) => {
                 return (
                   <div
                     key={`${index}`}
@@ -186,7 +178,7 @@ console.log(selectedEmployee);
                       }}
                       size={pinIconSize}
                     />
-                    <div style={{ marginTop: "20px" }}>{val.Insight}</div>
+                    <div style={{ marginTop: "20px" }}>{val}</div>
                   </div>
                 );
               })}
@@ -207,7 +199,7 @@ console.log(selectedEmployee);
             <h3 style={titleStyle}>Latest Insights</h3>
             <hr />
             <div style={{ marginLeft: "15px" }}>
-              {selectedEmployee.LatestInfo.map((val, index) => {
+              {selectedEmployee?.latestInsights.map((val, index) => {
                 return (
                   <div
                     key={`${index}`}
@@ -225,7 +217,7 @@ console.log(selectedEmployee);
                       }}
                       size={pinIconSize}
                     />
-                    <div style={{ marginTop: "20px" }}>{val.Info}</div>
+                    <div style={{ marginTop: "20px" }}>{val}</div>
                   </div>
                 );
               })}
@@ -252,7 +244,7 @@ console.log(selectedEmployee);
                 <hr />
                 <div className="experience-box">
                   <div style={{ marginLeft: "15px" }}>
-                    {selectedEmployee.LatestActivity.map((val, index) => {
+                    {selectedEmployee?.latestActivity.map((val, index) => {
                       const entries = Object.entries(val);
                       return entries.map(([key, value], i) => (
                         <div

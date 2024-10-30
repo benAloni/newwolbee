@@ -3,41 +3,34 @@ import { Avatar_02 } from "../../Routes/ImagePath";
 import { Link } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import Select from "react-select";
-import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-import { useSelector } from "react-redux";
+import { fetchEmployees } from "../../services";
+import Loading from "../../views/layout/Loading";
 
-const PersonalInformationModelPopup = ({selectedEmployee}) => {
+const PersonalInformationModelPopup = ({ selectedEmployee }) => {
   const [selectedDate1, setSelectedDate1] = useState(null);
-  const user = useSelector((state) => state.auth.user); // Get the user data from Redux
 
-
-  const fetchEmployees = async () => {
-    const response = await axios.get(`${process.env.REACT_APP_SERVER_URI}/getEmployees`, {
-      headers: { Authorization: `Bearer ${user.token}` },
-    });
-    return response.data;
-  };
-  
-  const { data: employees, isLoading, isError, error } = useQuery({
-    queryKey: ["employees"], // Query key
-    queryFn: fetchEmployees, // Fetch function
+  const {
+    data: employees,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["employees"],
+    queryFn: fetchEmployees,
   });
-  
+
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loading/>;
   }
-  
+
   if (isError) {
     return <div>Error: {error.message}</div>;
   }
-  
-  // Find the manager based on EmployeeID
-  const manager = employees.find(
-    (employee) => employee.EmployeeID === selectedEmployee.EmployeeOfManagerId
-  );  
-  
-  
+
+  const manager = employees?.find(
+    (employee) => employee.employeeId === selectedEmployee?.employeeOfManagerId
+  );
 
   const handleDateChange1 = (date) => {
     setSelectedDate1(date);
@@ -60,12 +53,13 @@ const PersonalInformationModelPopup = ({selectedEmployee}) => {
     { value: 4, label: "Jeffery Lalor" },
   ];
   const status = [
-    { value: 1, label: "Single" },
-    { value: 2, label: "Married" },
+    { value: "single", label: "Single" },
+    { value: "married", label: "Married" },
   ];
   const gender = [
-    { value: 1, label: "Male" },
-    { value: 2, label: "Female" },
+    { value: "male", label: "Male" },
+    { value: "female", label: "Female" },
+    { value: "other", label: "Other" },
   ];
   const customStyles = {
     option: (provided, state) => ({
@@ -113,24 +107,32 @@ const PersonalInformationModelPopup = ({selectedEmployee}) => {
                       </div>
                     </div>
                     <div className="row">
-                        <div className="input-block mb-3 col-md-12">
-                          <label className="col-form-label">Full Name</label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            defaultValue= {selectedEmployee.FullName}
-                          />
+                      <div className="input-block mb-3 col-md-12">
+                        <label className="col-form-label">Full Name</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          defaultValue={selectedEmployee?.fullName}
+                        />
                       </div>
                       <div className="col-md-6">
                         <div className="input-block mb-3">
-                          <label className="col-form-label">Birth Date</label>
+                          <label className="col-form-label">
+                            Date Of Birth
+                          </label>
                           <div>
                             <DatePicker
                               selected={selectedDate1}
                               onChange={handleDateChange1}
                               className="form-control floating datetimepicker"
                               type="date"
-                              placeholderText= {new Date(selectedEmployee.DataOfBirth).toISOString().slice(0, 10)}
+                              placeholderText={
+                                selectedEmployee?.dateOfBirth
+                                  ? new Date(selectedEmployee.dateOfBirth)
+                                      .toISOString()
+                                      .slice(0, 10)
+                                  : "Select a date"
+                              }
                               dateFormat="dd-MM-yyyy"
                             />
                           </div>
@@ -156,7 +158,7 @@ const PersonalInformationModelPopup = ({selectedEmployee}) => {
                       <input
                         type="text"
                         className="form-control"
-                        defaultValue= {selectedEmployee.Address}
+                        defaultValue={selectedEmployee?.address}
                       />
                     </div>
                   </div>
@@ -186,7 +188,7 @@ const PersonalInformationModelPopup = ({selectedEmployee}) => {
                       <input
                         type="text"
                         className="form-control"
-                        defaultValue='-'
+                        defaultValue="-"
                       />
                     </div>
                   </div>
@@ -230,12 +232,12 @@ const PersonalInformationModelPopup = ({selectedEmployee}) => {
                         Reports To <span className="text-danger">*</span>
                       </label>
                       <div>
-    {manager ? (
-      <div>{manager.FullName}</div>
-    ) : (
-      <div>No manager found</div>
-    )}
-  </div>
+                        {manager ? (
+                          <div>{manager.fullName}</div>
+                        ) : (
+                          <div>No manager found</div>
+                        )}
+                      </div>
                       {/* <Select
                         options={reporter}
                         placeholder="-"

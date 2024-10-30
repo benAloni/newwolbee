@@ -2,30 +2,19 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Select from "react-select";
 import { useSelector } from "react-redux";
-import { auth } from "../../../firebase/firebaseConfig";
 import AddEmployeeModal from "../../../components/Modals/employeepopup/AddEmployeeModal";
 import Breadcrumbs from "../../../components/Breadcrumbs";
 import DeleteModal from "../../../components/Modals/DeleteModal";
 import EmployeeListFilter from "../../../components/EmployeeListFilter";
-import lisa from "../../../imgs/avatar_1.JPG";
-import tom from "../../../imgs/avatar_2.JPG";
-import david from "../../../imgs/avatar_3.JPG";
-import nicole from "../../../imgs/avatar_4.JPG";
-import brad from "../../../imgs/avatar_5.JPG";
-import john from "../../../imgs/avatar_6.JPG";
-import mark from "../../../imgs/avatar_7.JPG";
-import josh from "../../../imgs/avatar_8.JPG";
-import justin from "../../../imgs/avatar_9.JPG";
-import selena from "../../../imgs/avatar_10.JPG";
-import emma from "../../../imgs/avatar_11.JPG";
-import sofia from "../../../imgs/avatar_12.JPG";
+
 import {
   fetchEmployees,
   fetchEmployeesProfilePics,
   fetchTeams,
 } from "../../../services";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import userProfile from "../../../imgs/userProfile.png";
+import { userProfile } from "../../../imgs";
+import Loading from "../../layout/Loading";
 
 const AllEmployees = () => {
   const [filteredEmployees, setFilteredEmployees] = useState([]);
@@ -53,20 +42,6 @@ const AllEmployees = () => {
   // const closeModal = () => {
   //   setAddEmployeeModalOpen(false);
   // };
-  const avatars = [
-    lisa,
-    tom,
-    david,
-    nicole,
-    john,
-    mark,
-    brad,
-    selena,
-    justin,
-    josh,
-    sofia,
-    emma,
-  ];
 
   const getEmployees = async () => {
     let employeesWithProfilePics;
@@ -87,38 +62,30 @@ const AllEmployees = () => {
           };
         })
       );
+      // queryClient.setQueryData(["employees", uid], employeesWithProfilePics);
       return employeesWithProfilePics;
     } catch (error) {
       console.log("Error getting employees :", error);
     }
   };
-
-  const { data: employees } = useQuery({
+  const { data: employees, isLoading } = useQuery({
     queryKey: ["employees"],
     queryFn: getEmployees,
   });
-
-  const getTeams = async () => {
-    try {
-      const result = await fetchTeams();
-      return result;
-    } catch (error) {
-      console.error("Error getting team :", error);
-    }
-  };
+ 
+  
   const { data: teams } = useQuery({
     queryKey: ["teams"],
-    queryFn: getTeams,
+    queryFn: fetchTeams,
   });
 
   useEffect(() => {
-    if (employees && selectedTeam) {
-      const filteredTeam = employees.filter(
-        (employee) => employee.team === selectedTeam
-      );
+    if (employees) {
+      const filteredTeam = selectedTeam
+        ? employees.filter((employee) => employee.team === selectedTeam)
+        : employees;
+
       setFilteredEmployees(filteredTeam);
-    } else {
-      setFilteredEmployees(employees || []);
     }
   }, [selectedTeam, employees]);
 
@@ -126,20 +93,20 @@ const AllEmployees = () => {
     setSelectedTeam(option.label);
     queryClient.invalidateQueries(["employees"]);
   };
-  const toggleFavorite = (e, employeeId) => {
+  const toggleFavoriteEmployee = (e, employeeId) => {
     e.preventDefault();
-    const updatedFavoriteEmployees = [...favoriteEmployees]; // העתקת רשימת העובדים המועדפים
+    const updatedFavoriteEmployees = [...favoriteEmployees];
 
     if (updatedFavoriteEmployees.includes(employeeId)) {
       updatedFavoriteEmployees.splice(
         updatedFavoriteEmployees.indexOf(employeeId),
         1
-      ); // הסרת העובד מרשימת המועדפים
+      );
     } else {
-      updatedFavoriteEmployees.push(employeeId); // הוספת העובד לרשימת המועדפים
+      updatedFavoriteEmployees.push(employeeId);
     }
 
-    setFavoriteEmployees(updatedFavoriteEmployees); // עדכון רשימת העובדים המועדפים
+    setFavoriteEmployees(updatedFavoriteEmployees);
   };
   return (
     <div>
@@ -161,6 +128,7 @@ const AllEmployees = () => {
       </style>
       <div className="page-wrapper">
         <div className="content container-fluid">
+        {isLoading && <Loading />}
           <Breadcrumbs
             maintitle="Employees Page"
             modal="#add_employee"
@@ -180,6 +148,7 @@ const AllEmployees = () => {
               />
             </div>
           )}
+
           <div className="row">
             {filteredEmployees?.map((employee) => (
               <div
@@ -195,9 +164,16 @@ const AllEmployees = () => {
                 <div className="profile-widget">
                   <div className="profile-img">
                     <Link
-                      to={`/profile/${employee._id}`}
+                      to={{
+                        pathname: `/profile/${employee._id}`,
+                        state: {
+                          employeeAvatar: employee.avatar,
+                        },
+                      }}
                       className="avatar"
-                      onClick={(event) => toggleFavorite(event, employee._id)}
+                      onClick={(event) =>
+                        toggleFavoriteEmployee(event, employee._id)
+                      }
                     >
                       <span
                         className={`favorite-star ${
@@ -208,11 +184,7 @@ const AllEmployees = () => {
                       >
                         &#9734;
                       </span>
-                      {employee.avatar ? (
-                        <img src={employee.avatar} alt={employee.fullName} />
-                      ) : (
-                        <p>No Avatar</p>
-                      )}
+                      <img src={employee.avatar} alt={employee.fullName} />
                     </Link>
                   </div>
                   <div className="dropdown profile-action">

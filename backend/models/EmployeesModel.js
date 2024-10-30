@@ -101,7 +101,7 @@ const employeeSchema = new mongoose.Schema({
   topInsights: {
     type: Array,
   },
-  latestInfo: {
+  latestInsights: {
     type: Array,
   },
   vacation: [

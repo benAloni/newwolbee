@@ -4,7 +4,7 @@ const Loading = () => {
   const containerStyle = {
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center',
+    marginTop: "30rem",
     height: '100vh',
     backgroundColor: '#f8f9fa', 
   };

@@ -26,7 +26,7 @@ import manager from "../../../imgs/managerProfilePic.jpg";
 import { useSelector } from "react-redux";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetchUserProfilePic, uploadEmployeeImage } from "../../../services";
-import userProfile from "../../../imgs/userProfile.png";
+import { userProfile } from "../../../imgs";
 
 const UserSettings = () => {
   const [removeUserProfileImage, setRemoveUserProfileImage] = useState(false);

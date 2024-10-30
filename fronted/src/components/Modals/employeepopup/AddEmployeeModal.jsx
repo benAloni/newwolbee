@@ -137,26 +137,26 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
   };
 
   // Mutation for adding a notification
-  // const addNotificationMutation = useMutation({
-  //   mutationFn: async (eventData) => {
-  //     const response = await axios.post(
-  //       `${process.env.REACT_APP_SERVER_URI}/addAllNotifications`,
-  //       { notificationsData: [eventData] },
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${user.token}`,
-  //         },
-  //       }
-  //     );
-  //     return response.data;
-  //   },
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries(["employees"]);
-  //   },
-  //   onError: (error) => {
-  //     console.error("Error adding notification:", error);
-  //   },
-  // });
+  const addNotificationMutation = useMutation({
+    mutationFn: async (eventData) => {
+      const response = await axios.post(
+        `${process.env.REACT_APP_SERVER_URI}/addAllNotifications`,
+        { notificationsData: [eventData] },
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["employees"]);
+    },
+    onError: (error) => {
+      console.error("Error adding notification:", error);
+    },
+  });
 
   return (
     <>

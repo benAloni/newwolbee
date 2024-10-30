@@ -14,7 +14,7 @@ const ProfileTab = ({selectedEmployee}) => {
     { id: 5, title: "Religion", text: "Christian" },
     { id: 6, title: "Marital status", text: "Married" },
     { id: 7, title: "Employment of spouse", text: "No" },
-    { id: 8, title: "No. of children", text: selectedEmployee.NumOfChildren },
+    { id: 8, title: "No. of children", text: selectedEmployee?.NumOfChildren },
   ];
 
   const primaryContactData = [
@@ -78,10 +78,6 @@ const ProfileTab = ({selectedEmployee}) => {
     // Add more experience info data as needed
   ];
 
-  if (selectedEmployee) {
-    console.log(selectedEmployee);
-    
-  }
 
   return (
     <>
@@ -315,14 +311,14 @@ const ProfileTab = ({selectedEmployee}) => {
             </div>
           </div>
         </div>
-        {/* <ProjectDetails  selectedEmployee={selectedEmployee}/> */}
+        <ProjectDetails  selectedEmployee={selectedEmployee}/>
         {/* Bank Statutory Tab */}
 
         {/* Bank Statutory Tab */}
         {/*  Bank Tab */}
       </div>
       {/* Model Popup*/}
-      {/* <PersonalInformationModelPopup selectedEmployee={selectedEmployee} /> */}
+      <PersonalInformationModelPopup selectedEmployee={selectedEmployee} />
     </>
   );
 };

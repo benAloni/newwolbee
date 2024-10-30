@@ -5,19 +5,19 @@ Modal.setAppElement("#root"); // Make sure this matches your root element in the
 
 export default function EditInsightsActivity({ isOpen, closeModal }) {
   const [topInsights, setTopInsights] = useState({
-    Insight1: "type here",
-    Insight2: "type here",
-    Insight3: "type here",
+    insight1: "type here",
+    insight2: "type here",
+    insight3: "type here",
   });
-  const [latestInfo, setLatestInfo] = useState({
-    LatestInfo1: "type here",
-    LatestInfo2: "type here",
-    LatestInfo3: "type here",
+  const [latestInsights, setLatestInsights] = useState({
+    latestInsight1: "type here",
+    latestInsight2: "type here",
+    latestInsight3: "type here",
   });
   const [latestActivity, setLatestActivity] = useState({
-    LatestActivity1: "type here",
-    LatestActivity2: "type here",
-    LatestActivity3: "type here",
+    latestActivity1: "type here",
+    latestActivity2: "type here",
+    latestActivity3: "type here",
   });
 
   const handleChange1 = (event, key) => {
@@ -58,20 +58,20 @@ export default function EditInsightsActivity({ isOpen, closeModal }) {
             <input
               type="text"
               style={inputStyle}
-              value={topInsights.Insight1}
-              onChange={(e) => handleChange1(e, "Insight1")}
+              value={topInsights.insight1}
+              onChange={(e) => handleChange1(e, "insight1")}
             />
             <input
               type="text"
               style={inputStyle}
-              value={topInsights.Insight2}
-              onChange={(e) => handleChange1(e, "Insight2")}
+              value={topInsights.insight2}
+              onChange={(e) => handleChange1(e, "insight2")}
             />
             <input
               type="text"
               style={inputStyle}
-              value={topInsights.Insight3}
-              onChange={(e) => handleChange1(e, "Insight3")}
+              value={topInsights.insight3}
+              onChange={(e) => handleChange1(e, "insight3")}
             />
           </div>
         </>
@@ -84,20 +84,20 @@ export default function EditInsightsActivity({ isOpen, closeModal }) {
             <input
               type="text"
               style={inputStyle}
-              value={latestInfo.LatestInfo1}
-              onChange={(e) => handleChange3(e, "LatestActivity1")}
+              value={latestInsights.latestInsight1}
+              onChange={(e) => handleChange3(e, "latestActivity1")}
             />
             <input
               type="text"
               style={inputStyle}
-              value={latestInfo.LatestInfo2}
-              onChange={(e) => handleChange3(e, "LatestActivity2")}
+              value={latestInsights.latestInsight2}
+              onChange={(e) => handleChange3(e, "latestActivity2")}
             />
             <input
               type="text"
               style={inputStyle}
-              value={latestInfo.LatestInfo3}
-              onChange={(e) => handleChange3(e, "LatestActivity3")}
+              value={latestInsights.latestInsight3}
+              onChange={(e) => handleChange3(e, "latestActivity3")}
             />
           </div>
         </>
@@ -110,20 +110,20 @@ export default function EditInsightsActivity({ isOpen, closeModal }) {
             <input
               type="text"
               style={inputStyle}
-              value={latestActivity.LatestActivity1}
-              onChange={(e) => handleChange3(e, "LatestActivity1")}
+              value={latestActivity.latestActivity1}
+              onChange={(e) => handleChange3(e, "latestActivity1")}
             />
             <input
               type="text"
               style={inputStyle}
-              value={latestActivity.LatestActivity2}
-              onChange={(e) => handleChange3(e, "LatestActivity2")}
+              value={latestActivity.latestActivity2}
+              onChange={(e) => handleChange3(e, "latestActivity2")}
             />
             <input
               type="text"
               style={inputStyle}
-              value={latestActivity.LatestActivity3}
-              onChange={(e) => handleChange3(e, "LatestActivity3")}
+              value={latestActivity.latestActivity3}
+              onChange={(e) => handleChange3(e, "latestActivity3")}
             />
           </div>
         </>
