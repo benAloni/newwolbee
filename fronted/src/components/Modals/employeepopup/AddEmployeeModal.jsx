@@ -18,10 +18,7 @@ import {
   fetchTeams,
   uploadEmployeeImage,
 } from "../../../services";
-import userProfile from "../../../imgs/userProfile.png";
-import Profile from "../../../views/pages/Profile/Profile";
-import { CiUser } from "react-icons/ci";
-import { CiCirclePlus } from "react-icons/ci";
+import { userProfile } from "../../../imgs";
 import { useSelector } from "react-redux";
 
 const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
@@ -136,27 +133,27 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
         
   };
 
-  // Mutation for adding a notification
-  const addNotificationMutation = useMutation({
-    mutationFn: async (eventData) => {
-      const response = await axios.post(
-        `${process.env.REACT_APP_SERVER_URI}/addAllNotifications`,
-        { notificationsData: [eventData] },
-        {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        }
-      );
-      return response.data;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries(["employees"]);
-    },
-    onError: (error) => {
-      console.error("Error adding notification:", error);
-    },
-  });
+  // // Mutation for adding a notification
+  // const addNotificationMutation = useMutation({
+  //   mutationFn: async (eventData) => {
+  //     const response = await axios.post(
+  //       `${process.env.REACT_APP_SERVER_URI}/addAllNotifications`,
+  //       { notificationsData: [eventData] },
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${user.token}`,
+  //         },
+  //       }
+  //     );
+  //     return response.data;
+  //   },
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries(["employees"]);
+  //   },
+  //   onError: (error) => {
+  //     console.error("Error adding notification:", error);
+  //   },
+  // });
 
   return (
     <>
@@ -576,7 +573,7 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
                         htmlFor="employee-profile-pic"
                         style={{
                           backgroundImage: `url(${
-                            employeeProfileImage || "userProfile"
+                            employeeProfileImage || userProfile
                           })`,
                           width: "120px",
                           height: "120px",

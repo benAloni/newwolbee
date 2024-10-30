@@ -31,7 +31,7 @@ import VoiceCall from "../../views/pages/MainPages/Apps/calls/voiceCall/index.js
 import VideoCall from "../../views/pages/MainPages/Apps/calls/VideoCall/index.jsx";
 import Outgoing from "../../views/pages/MainPages/Apps/calls/outgoingCall/index.jsx";
 import IncomingCall from "../../views/pages/MainPages/Apps/calls/incomingCall/index.jsx";
-import Calendar from "../../views/pages/MainPages/Apps/calendar/index.jsx";
+import Calendar from "../../views/pages/MainPages/Apps/calendar/Calendar.jsx";
 import Contacts from "../../views/pages/MainPages/Apps/contacts/index.jsx";
 import Email from "../../views/pages/MainPages/Apps/Email/index.jsx";
 import FileManager from "../../views/pages/MainPages/Apps/FileManager/index.jsx";

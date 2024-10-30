@@ -6,6 +6,7 @@ const eventSchema = new mongoose.Schema({
   className: String,
   note:String,
   uid: String,
+  // employeeId: String,
 });
 
 const EventModel = mongoose.model('events', eventSchema);

@@ -19,9 +19,7 @@ const CalendarEventsPopup = ({ show, handleClose, event, onDelete }) => {
     if (onDelete && event.id) {
       onDelete(event.id);
     }
-  };
-  console.log(event);
-  
+  };  
 
   return (
     <Modal show={show} onHide={handleClose}>

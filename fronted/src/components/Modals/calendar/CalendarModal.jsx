@@ -170,7 +170,6 @@ const handleSubmit = (e) => {
       });
 
       setHol(allHolidays); // Update the state with the filtered list of holidays
-      console.log(allHolidays); // Log the complete list of holidays
     };
 
     logHolidaysForAllCountries();

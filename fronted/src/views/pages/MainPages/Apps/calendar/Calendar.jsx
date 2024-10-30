@@ -18,6 +18,8 @@ import CalendarEventsPopup from "../../../../../components/Modals/calendar/calen
 import { useSelector } from "react-redux";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import "./calen.css";
+import { fetchEvents, fetchEmployees } from "../../../../../services";
+import { auth } from "../../../../../firebase/firebaseConfig";
 
 const Calendar = (props) => {
   const [events, setEvents] = useState([]);
@@ -29,26 +31,24 @@ const Calendar = (props) => {
   const linkRef = useRef(null);
   const calendarRef = useRef(null);
   const user = useSelector((state) => state.auth.user);
+
   const queryClient = useQueryClient();
 
   const fetchData = async () => {
+    const token = await auth.currentUser.getIdToken();
     const [eventsResponse, foodHolidaysResponse, employeesResponse] =
       await Promise.all([
-        axios.get(`${process.env.REACT_APP_SERVER_URI}/getEvents`, {
-          headers: { Authorization: `Bearer ${user.token}` },
-        }),
+        fetchEvents(),
         axios.get(`${process.env.REACT_APP_SERVER_URI}/getFoodHoliday`, {
-          headers: { Authorization: `Bearer ${user.token}` },
+          headers: { Authorization: `Bearer ${token}` },
         }),
-        axios.get(`${process.env.REACT_APP_SERVER_URI}/api/getEmployees`, {
-          headers: { Authorization: `Bearer ${user.token}` },
-        }),
+        fetchEmployees(),
       ]);
 
     return {
-      events: eventsResponse.data,
-      foodHolidays: foodHolidaysResponse.data, // Access data directly
-      employees: employeesResponse.data, // Access data directly
+      events: eventsResponse,
+      foodHolidays: foodHolidaysResponse.data, 
+      employees: employeesResponse, 
     };
   };
 
@@ -62,11 +62,12 @@ const Calendar = (props) => {
 
   const addEventMutation = useMutation({
     mutationFn: async (newEvent) => {
+      const token = await auth.currentUser.getIdToken();
       await axios.post(
         `${process.env.REACT_APP_SERVER_URI}/addEvent`,
         newEvent,
         {
-          headers: { Authorization: `Bearer ${user.token}` },
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
     },
@@ -101,26 +102,28 @@ const Calendar = (props) => {
         },
       }));
 
-      const employeeBirthdayEvents = data.employees.map((val) => ({
-        title: `birthday ${val.FullName}`,
+      const employeeBirthdayEvents = data.employees.map((employee) => ({
+        title: `${employee.fullName}'s birthday`,
         className: "bg-purple",
         rrule: {
           freq: "YEARLY",
-          dtstart: val.DataOfBirth,
+          dtstart: employee.dateOfBirth,
         },
       }));
-      const employeeVacationEvents = data.employees.flatMap((val) => {
-        if (val.Vacation && val.Vacation.length > 0) {
-          const vacation = val.Vacation[0];
+      const employeeVacationEvents = data.employees.flatMap((employee) => {
+        if (employee.vacation && employee.vacation.length > 0) {
+          const vacation = employee.vacation[0];
           return [
             {
-              title: `${val.FullName} flies to ${vacation.name}`,
+              title: `${employee.fullName} flies to ${vacation.destination}`,
               className: "bg-purple",
               start: vacation.startDate,
               end: vacation.startDate,
             },
             {
-              title: `${val.FullName} back to Israel`,
+              title: `${employee.fullName} is back from ${
+                employee.gender === "female" ? "her" : "him"
+              }`,
               className: "bg-purple",
               start: vacation.endDate,
               end: vacation.endDate,
@@ -130,8 +133,6 @@ const Calendar = (props) => {
           return [];
         }
       });
-
-      console.log(events);
 
       setEvents((prevEvents) => [
         ...employeeVacationEvents,
@@ -259,6 +260,7 @@ const Calendar = (props) => {
                         center: "title",
                         right: "dayGridMonth,timeGridWeek,timeGridDay",
                       }}
+                      Calendar
                       initialView="dayGridMonth"
                       editable={true}
                       selectable={true}
