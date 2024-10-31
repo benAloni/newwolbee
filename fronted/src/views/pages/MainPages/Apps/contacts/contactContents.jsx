@@ -1,4 +1,4 @@
-import React, { useState,useEffect,useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -9,7 +9,7 @@ import HeaderNottificatios from "./mainNotifications/HeaderNottificatios";
 import ShowNewNotifications from "./mainNotifications/ShowNewNotifications";
 
 import JohnStatistics from "./JohnStatistics";
-import nicole from "../../../../../imgs/avatar_4.JPG";  
+import nicole from "../../../../../imgs/avatar_4.JPG";
 import jacob from "../../../../../imgs/jacob.jpg";
 import john from "../../../../../imgs/avatar_6.JPG";
 import tom from "../../../../../imgs/avatar_2.JPG";
@@ -58,8 +58,6 @@ const ContactContents = () => {
   const [viewOption, setViewOption] = useState("All");
   const [currentPage, setCurrentPage] = useState(0); // Track the current page
   const itemsPerPage = 10; // Number of notifications per page
-    
-
 
   const [notifications, setNotifications] = useState([
     {
@@ -67,14 +65,14 @@ const ContactContents = () => {
       importance: "High",
       priorityNumber: 3,
       message: "Nicole's birthday is coming soon. Send her a gift!",
-      fullName:'Nicole',
+      fullName: "Nicole",
       link: "/de",
-      className:"Birthday",
+      className: "Birthday",
       read: false,
       viewed: false,
       dismissed: false,
-      startDay: '2021-08-24',
-      date: '1996-09-08',
+      startDay: "2021-08-24",
+      date: "1996-09-08",
       image: nicole,
     },
     {
@@ -83,9 +81,9 @@ const ContactContents = () => {
       priorityNumber: 2,
       message:
         "Tomorrow is the international pizza day. View your options for spoiling your team!",
-        className:'bg-pink',
+      className: "bg-pink",
       link: "/task-board",
-      date: '1996-09-08',
+      date: "1996-09-08",
       read: false,
       dismissed: false,
       viewed: false,
@@ -94,11 +92,11 @@ const ContactContents = () => {
       id: 3,
       importance: "High",
       priorityNumber: 3,
-      fullName:'Fourth of July',
+      fullName: "Fourth of July",
       message:
         "The Fourth of July celebration is in one month. Ensure there are food options for those with allergies and dietary preferences.",
-      date: '2024-12-08',
-      className:'bg-info',
+      date: "2024-12-08",
+      className: "bg-info",
       read: false,
       dismissed: false,
       viewed: false,
@@ -109,7 +107,7 @@ const ContactContents = () => {
       priorityNumber: 3,
       message: "Note! A meeting was arranged with Nicole when she is at home",
       link: "/departments",
-      date: '1996-09-07',
+      date: "1996-09-08",
       read: false,
       viewed: false,
       dismissed: false,
@@ -121,7 +119,7 @@ const ContactContents = () => {
       priorityNumber: 2,
       message:
         "Jacob used over 20 days of sick days in the last quarter. Let him know he has reached his limit.",
-      date: '1996-09-07',
+      date: "1996-09-08",
       read: false,
       viewed: false,
       dismissed: false,
@@ -133,7 +131,7 @@ const ContactContents = () => {
       priorityNumber: 2,
       message: "John's work routine has significantly changed.",
       link: "/departments",
-      date: '1996-09-08',
+      date: "1996-09-08",
       read: false,
       dismissed: false,
       viewed: false,
@@ -146,7 +144,7 @@ const ContactContents = () => {
       message:
         "A Maccabi Tel-Aviv Soccer Game is coming up in a week. Wanna find out who from your workers is a fan of the team?",
       link: "/task-board",
-      date: '1996-09-08',
+      date: "1996-09-08",
       read: false,
       viewed: false,
       dismissed: false,
@@ -158,7 +156,8 @@ const ContactContents = () => {
       message:
         "john is flying to rome tomorrow - lets make it a real vacation for her.",
       link: "/low-importance-notification",
-      date: '1996-09-06',
+      date: "1996-09-08",
+      className:'Vacation',
       read: false,
       dismissed: false,
       viewed: false,
@@ -166,115 +165,140 @@ const ContactContents = () => {
     },
   ]);
 
-      // get notifications
-      const user = useSelector((state) => state.auth.user);
-      const [events, setEvents] = useState([]);
-    
-      const fetchData = async () => {
-        try {
-          const [AllNotification, employeesResponse] = await Promise.all([
-            axios.get(`${process.env.REACT_APP_SERVER_URI}/getAllNotifications`, {
-              headers: { Authorization: `Bearer ${user.token}` },
-            }),
-            axios.get(`${process.env.REACT_APP_SERVER_URI}/getEmployees`, {
-              headers: { Authorization: `Bearer ${user.token}` },
-            }),
-          ]);
-          return [...AllNotification.data, ...employeesResponse.data];
-        } catch (error) {
-          console.error('Error fetching data:', error);
-          return []; 
-        }
-      };
-    
-      // Use React Query to fetch data
-      const { data, error, isLoading } = useQuery({
-        queryKey: ['AllNotificationsData'],
-        queryFn: fetchData,
-        staleTime: 0, // Cache data for 1 minute
-        refetchInterval: 0, // 3 minutes
-        refetchOnWindowFocus: true, // Refetch when the window gains focus
-      });
-    
-      useEffect(() => {
-        if (data) {
-          const filteredEvents = data.filter(event => event.title || event.DataOfBirth); // Filter out events without a title or DataOfBirth
-          setEvents(filteredEvents);
-          console.log(filteredEvents[68]); // Access the event at index 68 after filtering
-        }
-      }, [data]);
-    
-      
-      useEffect(() => {    
-        const eventNotifications = events.map((event, index) => {
-          if (event.DataOfBirth ) {
-            return {
-              id: event._id, // Unique ID for each notification
-              importance: "High",  // Default importance
-              priorityNumber: 3,     // Default priority number
-              message: `${event.FullName}'s birthday is coming soon. Send a gift!`,  // Customize the message
-              link: "/events",  // Link to event details
-              fullName:event.FullName,
-              read: false,
-              viewed: false,
-              dismissed: false,
-              image: event.image,  // Use event image if available
-              startDay: event.StartDay,
-              date: event.DataOfBirth,
-              className: `Birthday`,
-            };
-          } else if (new Date(event.start) >= new Date()) {
-            
-            return {
-              id: notifications.length + index + 1,
-              importance: "Low",
-              priorityNumber: 1,
-              message: `${event.title} is happening on`,
-              fullName: event.title,
-              link: "/events",
-              title: event.title,
-              start: event.start,
-              className: event.className,
-              read: false,
-              viewed: false,
-              dismissed: false,
-              date: event.start,
-              image: event.image,
-            };
-          }
-          else {
-            // Event has passed, show with the next year
-            const eventDate = new Date(event.start);
-            const nextYear = new Date().getFullYear() + 1;
-          
-            // Adjust the event date to the next year
-            const eventDateNextYear = new Date(eventDate.setFullYear(nextYear));
-          
-            return {
-              id: notifications.length + index + 1,
-              importance: "Low",
-              priorityNumber: 1,
-              message: `${event.title} is happening on ${eventDateNextYear.toLocaleDateString()}`,
-              fullName: event.title,
-              link: "/events",
-              title: event.title,
-              start: eventDateNextYear.toISOString(),
-              className: event.className,
-              read: false,
-              viewed: false,
-              dismissed: false,
-              date: eventDateNextYear.toISOString(),
-              image: event.image,
-            };
-          }
+  // get notifications
+  const user = useSelector((state) => state.user.user);
+  const [events, setEvents] = useState([]);
+
+  const fetchData = async () => {
+    try {
+      const [AllNotification, employeesResponse] = await Promise.all([
+        axios.get("http://localhost:5000/api/getAllNotifications", {
+          headers: { Authorization: `Bearer ${user.token}` },
+        }),
+        axios.get("http://localhost:5000/api/getEmployees", {
+          headers: { Authorization: `Bearer ${user.token}` },
+        }),
+      ]);
+      return [...AllNotification.data, ...employeesResponse.data];
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      return [];
+    }
+  };
+
+  // Use React Query to fetch data
+  const { data, error, isLoading } = useQuery({
+    queryKey: ["AllNotificationsData"],
+    queryFn: fetchData,
+    staleTime: 0, // Cache data for 1 minute
+    refetchInterval: 0, // 3 minutes
+    refetchOnWindowFocus: true, // Refetch when the window gains focus
+  });
+
+  useEffect(() => {
+    if (data) {
+      const filteredEvents = data.filter(event => event.title || event.DataOfBirth || event.Vacation); // Filter out events without a title or DataOfBirth
+      setEvents(filteredEvents);
+      console.log(filteredEvents); // Access the event at index 68 after filtering
+    }
+  }, [data]);
+  
+  
+
+  useEffect(() => {
+    const eventNotifications = events.flatMap((event) => {
+      const notifications = [];
+  
+      // Check for DataOfBirth
+      if (event.DataOfBirth) {
+        notifications.push({
+          id: `${event._id}-birthday`, // Unique ID for each notification
+          importance: "High",
+          priorityNumber: 3,
+          message: `${event.FullName}'s birthday is coming soon. Send a gift!`,
+          link: "/events",
+          fullName: event.FullName,
+          read: false,
+          viewed: false,
+          dismissed: false,
+          image: event.image,
+          startDay: event.StartDay,
+          date: event.DataOfBirth,
+          className: `Birthday`,
         });
-        // Append the new notifications to the existing ones
-        setNotifications((prevNotifications) => [
-          ...prevNotifications,
-          ...eventNotifications,
-        ]);
-    
-      }, [events]); // Dependency array includes events and getNotifications
+      }
+  
+      // Check for Vacation
+      if (event.Vacation && event.Vacation.length > 0) {
+        const vacationStartDate = new Date(event.Vacation[0].startDate).toLocaleDateString();
+
+        notifications.push({
+          id: `${event._id}-vacation`, // Unique ID for each notification
+          importance: "High",
+          priorityNumber: 3,
+          message: `${event.FullName} is flying to ${event.Vacation[0].name} on ${vacationStartDate}. Let's make it a real vacation for her!`,
+          link: "/events",
+          fullName: event.FullName,
+          read: false,
+          viewed: false,
+          dismissed: false,
+          image: event.image,
+          date: event.Vacation[0].startDate, // Use vacation start date
+          className: `Vacation`,
+        });
+      }
+  
+      // Handle Upcoming Events
+      if (!event.DataOfBirth && !event.Vacation && new Date(event.start) >= new Date()) {
+        notifications.push({
+          id: `${event._id}-event`, // Unique ID for each notification
+          importance: "Low",
+          priorityNumber: 1,
+          message: `${event.title} is happening on ${new Date(event.start).toLocaleDateString()}`,
+          fullName: event.title,
+          link: "/events",
+          title: event.title,
+          start: event.start,
+          className: event.className,
+          read: false,
+          viewed: false,
+          dismissed: false,
+          date: event.start,
+          image: event.image,
+        });
+      }
+  
+      // Handle Past Events
+      if (!event.DataOfBirth && !event.Vacation && new Date(event.start) < new Date()) {
+        const eventDate = new Date(event.start);
+        const nextYear = new Date().getFullYear() + 1;
+        const eventDateNextYear = new Date(eventDate.setFullYear(nextYear));
+        notifications.push({
+          id: `${event._id}-event-next-year`, // Unique ID for each notification
+          importance: "Low",
+          priorityNumber: 1,
+          message: `${event.title} is happening on ${eventDateNextYear.toLocaleDateString()}`,
+          fullName: event.title,
+          link: "/events",
+          title: event.title,
+          start: eventDateNextYear.toISOString(),
+          className: event.className,
+          read: false,
+          viewed: false,
+          dismissed: false,
+          date: eventDateNextYear.toISOString(),
+          image: event.image,
+        });
+      }
+  
+      return notifications;
+    });
+    // Append the new notifications to the existing ones
+    setNotifications((prevNotifications) => [
+      ...prevNotifications,
+      ...eventNotifications,
+    ]);
+  }, [events]); // Dependency array includes events and getNotifications
 
   //John Answer
   const [modalOpenNo, setModalOpenNo] = useState(false);
@@ -294,7 +318,7 @@ const ContactContents = () => {
 
   //
   const [isNotificationVisible, setNotificationVisible] = useState(false);
-  
+
   const closeModalfour = () => {
     setModalOpenfour(false);
   };
@@ -513,7 +537,6 @@ const ContactContents = () => {
     setModalOpenYes(true);
   };
 
-
   const closeModalNo = () => {
     setModalOpenNo(false);
   };
@@ -521,30 +544,29 @@ const ContactContents = () => {
     setModalOpenYes(false);
   };
   // ----------arrows---------
-//  Calculate the notifications to be displayed on the current page
-let displayedNotifications = [];
+  //  Calculate the notifications to be displayed on the current page
+  let displayedNotifications = [];
 
-if (viewOption !== 'New') {
-  displayedNotifications = notifications.slice(
-    currentPage * itemsPerPage,
-    (currentPage + 1) * itemsPerPage
-  );
-}
-
-
-// Handle clicking the next page button
-const handleNextPage = () => {
-  if ((currentPage + 1) * itemsPerPage < notifications.length) {
-    setCurrentPage(currentPage + 1);
+  if (viewOption !== "New") {
+    displayedNotifications = notifications.slice(
+      currentPage * itemsPerPage,
+      (currentPage + 1) * itemsPerPage
+    );
   }
-};
 
-// Handle clicking the previous page button
-const handlePreviousPage = () => {
-  if (currentPage > 0) {
-    setCurrentPage(currentPage - 1);
-  }
-};
+  // Handle clicking the next page button
+  const handleNextPage = () => {
+    if ((currentPage + 1) * itemsPerPage < notifications.length) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  // Handle clicking the previous page button
+  const handlePreviousPage = () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
 
   //---------
 
@@ -553,7 +575,6 @@ const handlePreviousPage = () => {
     flexDirection: "column",
     padding: "20px",
   };
-
 
   const ulStyle = {
     margin: 0,
@@ -566,46 +587,39 @@ const handlePreviousPage = () => {
     listStyleType: "none",
   };
 
-
-  const [showPopup,setShowPopup] = useState('')
+  const [showPopup, setShowPopup] = useState("");
 
   const [modalOpen, setModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState(null);
 
   const getNotificationId = (userId) => {
-    const notification = notifications.find(val => val.id === userId);
+    const notification = notifications.find((val) => val.id === userId);
     if (notification) {
       if (notification.className === "Birthday") {
         const encodedData = encodeURIComponent(JSON.stringify(notification));
         navigate(`/NotificationsBirth/${encodedData}`);
-            } else if (notification.className === 'bg-info') {
-              setShowPopup('bg-info')
-              setModalContent(notification); // Pass the notification data as content
-              setModalOpen(true); // Open the modal
-            }else if (notification.className === 'bg-pink') {
-              navigate('/task-board', {
-                state: { data: notification }
-              });
-            }
-            else if (notification.id === 4) {
-              setModalContent(notification); // Pass the notification data as content
-              setModalOpenId4(true); // Open the modal
-            }
-            else if (notification.id === 8) {
-              setModalOpenfive(true);
-            }
-            else if (notification.id === 6) {
-              setModalOpenThree(true);
-            }
-            else if (notification.id === 7) {
-              setModalOpenfour(true);
-            }
-            else {
-        alert('no Birthday');
+      } else if (notification.className === "bg-info") {
+        setShowPopup("bg-info");
+        setModalContent(notification); // Pass the notification data as content
+        setModalOpen(true); // Open the modal
+      } else if (notification.className === "bg-pink") {
+        navigate("/task-board", {
+          state: { data: notification },
+        });
+      } else if (notification.id === 4) {
+        setModalContent(notification); // Pass the notification data as content
+        setModalOpenId4(true); // Open the modal
+      } else if (notification.className === "Vacation") {
+        setModalOpenfive(true);
+      } else if (notification.id === 6) {
+        setModalOpenThree(true);
+      } else if (notification.id === 7) {
+        setModalOpenfour(true);
+      } else {
+        alert("no Birthday");
       }
     }
   };
-
 
   return (
     <div style={notificationContainerStyle}>
@@ -617,7 +631,10 @@ const handlePreviousPage = () => {
           gap: "70px",
         }}
       >
-<HeaderNottificatios setViewOption={setViewOption} displayedNotifications={displayedNotifications}/>
+        <HeaderNottificatios
+          setViewOption={setViewOption}
+          displayedNotifications={displayedNotifications}
+        />
         <div
           className="filterDiv"
           style={{
@@ -677,62 +694,68 @@ const handlePreviousPage = () => {
       </div>
       <br />
       <br />
-                {/* Pagination Controls */}
-                <div style={{ marginTop: "-40px" }}>
-            <button
-              onClick={handlePreviousPage}
-              disabled={currentPage === 0}
-              style={{
-                background: currentPage === 0 ? "#f2f2f2" : "#FFA500", // light grey when disabled, orange otherwise
-                color: currentPage === 0 ? "#aaa" : "white", // adjust text color for contrast
-                border: "none",
-                borderRadius: "5px",
-                padding: "10px 20px",
-                cursor: currentPage === 0 ? "not-allowed" : "pointer", // change cursor based on state
-              }}
-            >
-              ⬅
-            </button>
-            <button
-              onClick={handleNextPage}
-              disabled={(currentPage + 1) * itemsPerPage >= notifications.length}
-              style={{
-                background:
-                  (currentPage + 1) * itemsPerPage >= notifications.length
-                    ? "#f2f2f2"
-                    : "#FFA500", // light grey when disabled, orange otherwise
-                color:
-                  (currentPage + 1) * itemsPerPage >= notifications.length
-                    ? "#aaa"
-                    : "white", // adjust text color for contrast
-                border: "none",
-                borderRadius: "5px",
-                padding: "10px 20px",
-                cursor:
-                  (currentPage + 1) * itemsPerPage >= notifications.length
-                    ? "not-allowed"
-                    : "pointer", // change cursor based on state
-              }}
-            >
-              ➡
-            </button>
-          </div>
+      {/* Pagination Controls */}
+      <div style={{ marginTop: "-40px" }}>
+        <button
+          onClick={handlePreviousPage}
+          disabled={currentPage === 0}
+          style={{
+            background: currentPage === 0 ? "#f2f2f2" : "#FFA500", // light grey when disabled, orange otherwise
+            color: currentPage === 0 ? "#aaa" : "white", // adjust text color for contrast
+            border: "none",
+            borderRadius: "5px",
+            padding: "10px 20px",
+            cursor: currentPage === 0 ? "not-allowed" : "pointer", // change cursor based on state
+          }}
+        >
+          ⬅
+        </button>
+        <button
+          onClick={handleNextPage}
+          disabled={(currentPage + 1) * itemsPerPage >= notifications.length}
+          style={{
+            background:
+              (currentPage + 1) * itemsPerPage >= notifications.length
+                ? "#f2f2f2"
+                : "#FFA500", // light grey when disabled, orange otherwise
+            color:
+              (currentPage + 1) * itemsPerPage >= notifications.length
+                ? "#aaa"
+                : "white", // adjust text color for contrast
+            border: "none",
+            borderRadius: "5px",
+            padding: "10px 20px",
+            cursor:
+              (currentPage + 1) * itemsPerPage >= notifications.length
+                ? "not-allowed"
+                : "pointer", // change cursor based on state
+          }}
+        >
+          ➡
+        </button>
+      </div>
       <br />
 
       {/* Start new code */}
 
-      {viewOption === 'All' && (
-        <ShowAllNotifications getNotificationId={getNotificationId} displayedNotifications={displayedNotifications} />
+      {viewOption === "All" && (
+        <ShowAllNotifications
+          getNotificationId={getNotificationId}
+          displayedNotifications={displayedNotifications}
+        />
       )}
-      {viewOption === 'New' && (
-        <ShowNewNotifications notifications={notifications} getNotificationId={getNotificationId} />
+      {viewOption === "New" && (
+        <ShowNewNotifications
+          notifications={notifications}
+          getNotificationId={getNotificationId}
+        />
       )}
 
-     <ShowHolidaysNotifications
-     modalOpen={modalOpen}
-     modalContent={modalContent}
-     closeModal={closeModal}
-   />
+      <ShowHolidaysNotifications
+        modalOpen={modalOpen}
+        modalContent={modalContent}
+        closeModal={closeModal}
+      />
       {/* Modal for notification John */}
       <div style={rowStyle}>
         {modalOpenThree && (
@@ -1393,35 +1416,36 @@ const handlePreviousPage = () => {
               msOverflowStyle: "none",
             }}
           >
-<div style={{ 
-  display: "flex", 
-  justifyContent: "space-between", 
-  alignItems: "center", 
-  width: "100%",  
-  padding: "20px", 
-  margin: "20px 0"
-}}><div className="image-container" style={imageContainerStyle}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                width: "100%",
+                padding: "20px",
+                margin: "20px 0",
+              }}
+            >
+              <div className="image-container" style={imageContainerStyle}>
                 <img src={tom} alt="Project Seven" style={imgStyle} />
               </div>
               <div className="project-details" style={projectDetailsTextStyle}>
                 <h3 style={h3Style}>Tom</h3>
               </div>
 
-
               <div className="image-container" style={imageContainerStyle}>
                 <img src={employee2} alt="Project Seven" style={imgStyle} />
               </div>
               <div className="project-details" style={projectDetailsTextStyle}>
                 <h3 style={h3Style}>Brad</h3>
-            </div>
-
+              </div>
 
               <div className="image-container" style={imageContainerStyle}>
                 <img src={employee3} alt="Project Seven" style={imgStyle} />
               </div>
               <div className="project-details" style={projectDetailsTextStyle}>
                 <h3 style={h3Style}>John</h3>
-            </div>
+              </div>
             </div>
 
             <div
@@ -1434,13 +1458,14 @@ const handlePreviousPage = () => {
                 (e.currentTarget.style.transform = "scale(1)")
               }
             >
-                <h4>Flexible Hours:</h4>
+              <h4>Flexible Hours:</h4>
               {/* <div className="image-container" style={imageContainerStyle}>
                 <img src={employee4} alt="Project Seven" style={imgStyle} />
               </div> */}
               <div className="project-details" style={projectDetailsTextStyle}>
-                <h3 style={h5Style}>Consider allowing them
-                to leave a bit early on game day</h3>
+                <h3 style={h5Style}>
+                  Consider allowing them to leave a bit early on game day
+                </h3>
               </div>
             </div>
 
@@ -1456,7 +1481,9 @@ const handlePreviousPage = () => {
             >
               <h4>Team Viewing:</h4>
               <div className="project-details" style={projectDetailsTextStyle}>
-                <h3 style={h5Style}>Organize a small viewing event at the office</h3>
+                <h3 style={h5Style}>
+                  Organize a small viewing event at the office
+                </h3>
               </div>
             </div>
 
@@ -1470,10 +1497,11 @@ const handlePreviousPage = () => {
                 (e.currentTarget.style.transform = "scale(1)")
               }
             >
-<h4>Good Luck Note:</h4>
+              <h4>Good Luck Note:</h4>
               <div className="project-details" style={projectDetailsTextStyle}>
-                <h3 style={h5Style}>Leave a note wishing
-                them and their team good luck</h3>
+                <h3 style={h5Style}>
+                  Leave a note wishing them and their team good luck
+                </h3>
               </div>
             </div>
             <div
@@ -1486,7 +1514,7 @@ const handlePreviousPage = () => {
                 (e.currentTarget.style.transform = "scale(1)")
               }
             >
-<h4>Snacks and a drink:</h4>
+              <h4>Snacks and a drink:</h4>
               <div className="project-details" style={projectDetailsTextStyle}>
                 <h3 style={h5Style}>Build together with John a</h3>
               </div>
@@ -1501,10 +1529,13 @@ const handlePreviousPage = () => {
                 (e.currentTarget.style.transform = "scale(1)")
               }
             >
-<h4>Office Decorations: </h4>
+              <h4>Office Decorations: </h4>
               <div className="project-details" style={projectDetailsTextStyle}>
-                <h3 style={h5Style}>Decorate the office with their team's colors or flags to create a festive
-                atmosphere. But, make sure there are no fans of the opposite team</h3>
+                <h3 style={h5Style}>
+                  Decorate the office with their team's colors or flags to
+                  create a festive atmosphere. But, make sure there are no fans
+                  of the opposite team
+                </h3>
               </div>
             </div>
             <div
@@ -1517,11 +1548,12 @@ const handlePreviousPage = () => {
                 (e.currentTarget.style.transform = "scale(1)")
               }
             >
-<h4>Social Media Spotlight:</h4>
+              <h4>Social Media Spotlight:</h4>
               <div className="project-details" style={projectDetailsTextStyle}>
-                <h3 style={h5Style}>Feature their
-enthusiasm on the
-company's social media channels with a spotlight post or story</h3>
+                <h3 style={h5Style}>
+                  Feature their enthusiasm on the company's social media
+                  channels with a spotlight post or story
+                </h3>
               </div>
             </div>
           </div>
@@ -1591,10 +1623,13 @@ company's social media channels with a spotlight post or story</h3>
                     className="project-details"
                     style={projectDetailsTextStyle}
                   >
-<h4 style={{ fontSize: "24px",marginBottom:'10px' }}>Have a Great Vacation:</h4>
-<h5>
+                    <h4 style={{ fontSize: "24px", marginBottom: "10px" }}>
+                      Have a Great Vacation:
+                    </h4>
+                    <h5>
                       Send john a quick message wishing her a fantastic vacation
-                    </h5><br />
+                    </h5>
+                    <br />
                     <img
                       src={invitationcard}
                       alt="Project Seven"
@@ -1614,14 +1649,21 @@ company's social media channels with a spotlight post or story</h3>
                 >
                   <div
                     className="project-details"
-                    style={projectDetailsTextStyle }
+                    style={projectDetailsTextStyle}
                   >
-                    
-                    <h3 style={{ fontSize: "25px",marginBottom:'28px', marginTop:'10px' }}>Airport Treats:</h3>
-                    <h5 style={{marginBottom:'18px'}}>
+                    <h3
+                      style={{
+                        fontSize: "25px",
+                        marginBottom: "28px",
+                        marginTop: "10px",
+                      }}
+                    >
+                      Airport Treats:
+                    </h3>
+                    <h5 style={{ marginBottom: "18px" }}>
                       Send john a voucher to use while she's waiting for her
                       flight
-                    </h5 >
+                    </h5>
                     <img
                       src={coffeeCup}
                       alt="Project Seven"
@@ -1643,8 +1685,16 @@ company's social media channels with a spotlight post or story</h3>
                     className="project-details"
                     style={projectDetailsTextStyle}
                   >
-                    <h3 style={{ fontSize: "25px",marginBottom:'26px', marginTop:'10px' }}>Top Trip Tips:</h3>
-                    <h5 style={{marginBottom:'21px'}}>
+                    <h3
+                      style={{
+                        fontSize: "25px",
+                        marginBottom: "26px",
+                        marginTop: "10px",
+                      }}
+                    >
+                      Top Trip Tips:
+                    </h3>
+                    <h5 style={{ marginBottom: "21px" }}>
                       Give john some fantastic recommendations for her trip
                     </h5>
                     <img
@@ -1668,8 +1718,16 @@ company's social media channels with a spotlight post or story</h3>
                     className="project-details"
                     style={projectDetailsTextStyle}
                   >
-                    <h3 style={{ fontSize: "25px",marginBottom:'26px', marginTop:'10px' }}>Travel Kit:</h3>
-                    <h5 style={{marginBottom:'38px'}}>
+                    <h3
+                      style={{
+                        fontSize: "25px",
+                        marginBottom: "26px",
+                        marginTop: "10px",
+                      }}
+                    >
+                      Travel Kit:
+                    </h3>
+                    <h5 style={{ marginBottom: "38px" }}>
                       Prepare a travel kit for john to use on her trip
                     </h5>
                     <img
@@ -1693,16 +1751,20 @@ company's social media channels with a spotlight post or story</h3>
                     className="project-details"
                     style={projectDetailsTextStyle}
                   >
-                    <h3 style={{ fontSize: "25px",marginBottom:'26px', marginTop:'10px' }}>Warm Welcome:</h3>
-                    <h5 style={{marginBottom:'21px'}}>
+                    <h3
+                      style={{
+                        fontSize: "25px",
+                        marginBottom: "26px",
+                        marginTop: "10px",
+                      }}
+                    >
+                      Warm Welcome:
+                    </h3>
+                    <h5 style={{ marginBottom: "21px" }}>
                       Plan a warm welcome for john when she arrives at her
                       destination
                     </h5>
-                    <img
-                      src={sweet}
-                      alt="Project Seven"
-                      style={jhonimgStyle}
-                    />
+                    <img src={sweet} alt="Project Seven" style={jhonimgStyle} />
                   </div>
                 </div>
                 <div
@@ -1719,16 +1781,20 @@ company's social media channels with a spotlight post or story</h3>
                     className="project-details"
                     style={projectDetailsTextStyle}
                   >
-                    <h2 style={{ fontSize: "25px",marginBottom:'26px', marginTop:'10px' }}>Vacation Album:</h2>
-                    <h5 style={{marginBottom:'21px'}}>
+                    <h2
+                      style={{
+                        fontSize: "25px",
+                        marginBottom: "26px",
+                        marginTop: "10px",
+                      }}
+                    >
+                      Vacation Album:
+                    </h2>
+                    <h5 style={{ marginBottom: "21px" }}>
                       Help john putting together her vacation album when she
                       returns
                     </h5>
-                    <img
-                      src={album}
-                      alt="Project Seven"
-                      style={jhonimgStyle}
-                    />
+                    <img src={album} alt="Project Seven" style={jhonimgStyle} />
                   </div>
                 </div>
               </div>

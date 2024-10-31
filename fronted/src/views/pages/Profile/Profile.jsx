@@ -9,46 +9,71 @@ import { fetchEmployees } from "../../../services";
 import { useLocation } from "react-router-dom";
 import { userProfile } from "../../../imgs";
 
+
 const Profile = () => {
   const user = useSelector((state)=> state.auth?.user)
   const uid = useSelector((state)=> state.auth?.user.uid)
+
   const { employeeId } = useParams();
+  const [employees, setEmployees] = useState([]);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const location = useLocation()
   const queryClient= useQueryClient()
   const { employeeAvatar } = location.state || {};
 
-  const { data: employees } = useQuery({
-    queryKey: ["employees"],
+
+  
+  const fetchEmployees = async () => {
+    if (!user) return [];
+    try {
+      const response = await axios.get("http://localhost:5000/api/getEmployees", {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching employees:", error);
+      return [];
+    }
+  };
+
+  const query = useQuery({
+    queryKey: ['employees'],
     queryFn: fetchEmployees,
-    enabled: !!user
+    enabled: !!user, // Only fetch when the user is available
+    onSuccess: (data) => {
+      console.log("Fetched employees:", data); // Debug log
+      // Use the data to update state
+      const employee = data.find((employee) => employee._id === employeeId);
+      setSelectedEmployee(employee);
+    },
+    onError: (error) => {
+      console.log("Error fetching employees:", error);
+    },
   });
 
-  useEffect(() => {
-    if(user) {
-      if (employees && employeeId) {
-        const employee = employees.find((employee) => employee._id === employeeId);
-        setSelectedEmployee(employee);
-      }
-    }         
-  }, [employees, employeeId]);
+  const { isLoading, error, data } = query;
 
-  // const useEmployeeProfile = (uid, employeeCivilId) => {
-  //   return useQuery({
-  //     queryKey: ["employeeProfile", uid, employeeCivilId],
-  //     queryFn: () => {
-  //       const employees = queryClient.getQueryData(["employees", uid]);
-  //       return employees?.find((employee) => employee.employeeId === employeeCivilId);
-  //     },
-  //     enabled: !!uid && !!employeeCivilId, // Only run if uid and employeeId are defined
-  //   });
-  // };
+  useEffect(() => {
+    console.log("User state:", user); // Debug log
+    const employeesArrJson = localStorage.getItem('employeesArr');
+    if (employeesArrJson) {
+      const currentManagerEmployeesArr = JSON.parse(employeesArrJson);
+      const employee = currentManagerEmployeesArr.find(emp => emp.id === employeeId);
+      setSelectedEmployee(employee);
+    }
+  }, [employeeId, employees]);
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error loading employees</div>;
+  if (!selectedEmployee) return <div>No employees have been added yet...</div>;
 
   return (
     <>
       <div className="page-wrapper">
         <div className="content container-fluid">
-          <h1>{selectedEmployee?.fullName}'s Profile</h1>
+          <h1>{selectedEmployee.FullName} Profile</h1>
           <br />
           <br />
           <div className="card mb-0">
@@ -58,7 +83,9 @@ const Profile = () => {
                   <div className="profile-view">
                     <div className="profile-img-wrap">
                       <div className="profile-img">
-                          <img src={employeeAvatar ? employeeAvatar: userProfile} alt="UserImage" />
+                        <Link to="#">
+                          <img src={selectedEmployee.avatar} alt="UserImage" />
+                        </Link>
                       </div>
                     </div>
                     <div className="profile-basic">
@@ -66,11 +93,9 @@ const Profile = () => {
                         <div className="col-md-5">
                           <div className="profile-info-left">
                             <h3 className="user-name m-t-0 mb-0">
-                              {selectedEmployee?.fullName}
+                              {selectedEmployee.FullName}
                             </h3>
-                            <h6 className="text-muted">
-                              {selectedEmployee?.role}
-                            </h6>
+                            <h6 className="text-muted">{selectedEmployee.role}</h6>
                           </div>
                         </div>
                         <div className="col-md-7">
@@ -78,24 +103,22 @@ const Profile = () => {
                             <li>
                               <div className="title">Phone:</div>
                               <div className="text">
-                                <Link to={`tel:050-1234567`}>050-1234567</Link>
+                                <Link to={`tel:050-1234567`}>
+                                  050-1234567
+                                </Link>
                               </div>
                             </li>
                             <li>
                               <div className="title">Mail:</div>
                               <div className="text">
-                                <Link
-                                  to={`mailto:${selectedEmployee?.fullName}@gmail.com`}
-                                >
-                                  {selectedEmployee?.fullName + "@gmail.com"}
+                                <Link to={`mailto:${selectedEmployee.FullName}@gmail.com`}>
+                                  {selectedEmployee.FullName + '@gmail.com'}
                                 </Link>
                               </div>
                             </li>
                             <li>
                               <div className="title">Place of residence:</div>
-                              <div className="text">
-                                {selectedEmployee?.address}
-                              </div>
+                              <div className="text">{selectedEmployee.Address}</div>
                             </li>
                           </ul>
                         </div>
@@ -179,7 +202,7 @@ const Profile = () => {
             </div>
           </div>
           {/* Profile Info Tab */}
-          <ProfileTab selectedEmployee={selectedEmployee} />
+          <ProfileTab selectedEmployee={selectedEmployee}/>
         </div>
       </div>
     </>
