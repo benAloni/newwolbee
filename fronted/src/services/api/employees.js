@@ -30,3 +30,25 @@ export const addEmployee = async ({ employeeData }) => {
     throw error
      }
 };
+
+export const updateEmployeeVacation = async ({
+  id,
+  purposeOfTrip,
+  startDate,
+  endDate,
+}) => {
+  try {
+    const response = await client.post("/updateEmployeeVacation", {
+      id,
+      purposeOfTrip,
+      startDate,
+      endDate,
+    });
+    if (response.status === 200) {
+      // const result = response.data;
+      return response;
+    }
+  } catch (error) {
+    console.log("Error updating employee's vacation:", error);
+  }
+};

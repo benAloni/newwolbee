@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
-
-import { Avatar_01, Avatar_02, Avatar_03 } from "../../../Routes/ImagePath";
-import { useSelector } from "react-redux";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from "react-select";
@@ -21,15 +18,14 @@ import sick from "../../../imgs/sick.png";
 import baby from "../../../imgs/baby.png";
 import house from "../../../imgs/house.png";
 import flight from "../../../imgs/flight.png";
-
 import chase from "../../../imgs/chase.png";
-
 import Temporary from "../../../imgs/Temporary.png";
 import vacation from "../../../imgs/off.png";
-import { auth } from "../../../firebase/firebaseConfig";
-import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-import "./popup.css"; // Import the CSS file for styling
+import "./popup.css";
+import { updateEmployeeVacation, fetchEmployees } from "../../../services";
+import { userProfile } from "../../../imgs";
+import Swal from "sweetalert2";
 
 export default function PopUp() {
   const [isOpen, setIsOpen] = useState(false);
@@ -37,7 +33,7 @@ export default function PopUp() {
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [showEmployeeDetails, setShowEmployeeDetails] = useState(false);
   const [showNewModal, setShowNewModal] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedPurposeOfTrip, setSelectedPurposeOfTrip] = useState("");
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
   const [selectedStartDate, setSelectedStartDate] = useState(null);
@@ -45,78 +41,18 @@ export default function PopUp() {
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [employee, setEvents] = useState([]);
-  // get notifications
 
-  // Fetch data using React Query
-  const updateVacation = async () => {
-    try {
-      const token = await auth.currentUser.getIdToken();
-      const response = await fetch(
-        `${process.env.REACT_APP_SERVER_URI}/updateEmployeeVacation`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            Id: selectedEmployee._id, // Employee ID
-            name: selectedCountry.label, // Event name
-            startDate: selectedStartDate, // Start date
-            endDate: selectedEndDate, // End date
-          }),
-        }
-      );
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(
-          `Server error: ${errorData.message || response.statusText}`
-        );
-      }
-
-      // Display success alert
-      alert("Vacation update successful!");
-
-      // Return the response JSON if needed
-      return response.json();
-    } catch (error) {
-      // Handle error and display an alert or message if needed
-      alert(`Error: ${error.message}`);
-      throw error; // Re-throw the error after handling it
-    }
-  };
-
-  const fetchData = async () => {
-    try {
-      const token = await auth.currentUser.getIdToken();
-      const response = await axios.get(
-        `${process.env.REACT_APP_SERVER_URI}/getEmployees`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      return response.data;
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      return [];
-    }
-  };
-
-  const { data, error, isLoading } = useQuery({
-    queryKey: ["employeeData"],
-    queryFn: fetchData,
+  const {
+    data: employees,
+    error,
+    isLoading,
+  } = useQuery({
+    queryKey: ["employees"],
+    queryFn: fetchEmployees,
     staleTime: 0,
     refetchInterval: 0,
     refetchOnWindowFocus: true,
   });
-
-  useEffect(() => {
-    if (data) {
-      setEvents(data);
-    }
-  }, [data]);
 
   const europeanCountries = [
     { value: "albania", label: "Albania" },
@@ -175,36 +111,21 @@ export default function PopUp() {
       id: 1,
       name: "Engagement",
       imageUrl: rings,
-      onClick: () => openSubModal("engagement"),
+      onClick: () => openSubModal("Engagement"),
     },
     { id: 2, name: "Sick leave", imageUrl: sick, onClick: null },
     {
       id: 3,
-      name: "Vacation leave",
+      name: "Vacation Leave",
       imageUrl: vacation,
-      onClick: () => openSubModal("vacation"),
+      onClick: () => openSubModal("Vacation Leave"),
     },
     { id: 4, name: "Personal Celebrations", imageUrl: gift, onClick: null },
-    { id: 5, name: "ChildcareIssues", imageUrl: chase, onClick: null },
+    { id: 5, name: "Childcare Issues", imageUrl: chase, onClick: null },
     { id: 6, name: "Pregnancy", imageUrl: baby, onClick: null },
     { id: 7, name: "Housing Issues", imageUrl: house, onClick: null },
     { id: 8, name: "Flight", imageUrl: flight, onClick: null },
   ];
-
-  // const data1 = [
-  //   { id: 1, image: Avatar_02, name: "Brad Jones", role: "UX/UI Designer", jobtitle: "Web Designer", department: "Development" },
-  //   { id: 2, image: Avatar_01, name: "John Perkins", role: "Chief Scientist", jobtitle: "Web Developer", department: "Designing" },
-  //   { id: 3, image: Avatar_03, name: "Lisa Robinson", role: "Data Analystr", jobtitle: "Android Developer", department: "Android" },
-  //   { id: 4, image: Avatar_03, name: "Tom Hill", role: "Data Analyst", jobtitle: "Android Developer", department: "Android" },
-  //   { id: 5, image: Avatar_03, name: "David Lee", role: "Product Manager", jobtitle: "Android Developer", department: "Android" },
-  //   { id: 6, image: Avatar_03, name: "Nicole Miller", role: "UX/UI Designer", jobtitle: "Android Developer", department: "Android" },
-  //   { id: 7, image: Avatar_03, name: "Sofia Garcia", role: "Business Development Manager", jobtitle: "Android Developer", department: "Android" },
-  //   { id: 8, image: Avatar_03, name: "Emma Carter", role: "Research Engineer", jobtitle: "Android Developer", department: "Android" },
-  //   { id: 9, image: Avatar_03, name: "Mark Morris", role: "Research Engineer", jobtitle: "Android Developer", department: "Android" },
-  //   { id: 10, image: Avatar_03, name: "Josh Williams", role: "Data Analyst", jobtitle: "Android Developer", department: "Android" },
-  //   { id: 11, image: Avatar_03, name: "Selena Ramos", role: "Data Analyst", jobtitle: "Android Developer", department: "Android" },
-  //   { id: 12, image: Avatar_03, name: "Justin Smith", role: "Data Analyst", jobtitle: "Android Developer", department: "Android" },
-  // ];
 
   const openModal = () => setIsOpen(true);
   const closeModal = () => {
@@ -223,15 +144,11 @@ export default function PopUp() {
 
   const handleEmployeeClick = (employee) => {
     setSelectedEmployee(employee);
-    if (currentEventType === "vacation") {
+    if (currentEventType === "Vacation Leave") {
       setShowNewModal(true);
-    } else if (currentEventType === "engagement") {
+    } else if (currentEventType === "Engagement") {
       setShowEmployeeDetails(true);
     }
-  };
-
-  const handleOptionClick = (option) => {
-    setSelectedOption(option);
   };
 
   const handleDateClick = () => {
@@ -273,7 +190,37 @@ export default function PopUp() {
   const handleCloseModal = () => {
     setShowModal(false);
   };
+  const updateVacation = async () => {
+    if (
+      !selectedEmployee ||
+      !selectedPurposeOfTrip ||
+      !selectedStartDate ||
+      !selectedEndDate
+    ) {
+      console.log("Missing required data");
+      return;
+    }
+    try {
+      const response = await updateEmployeeVacation({
+        id: selectedEmployee,
+        purposeOfTrip: selectedPurposeOfTrip,
+        startDate: selectedStartDate,
+        endDate: selectedEndDate,
+      });
 
+      if (response.status === 200) {
+        Swal.fire(
+          "Success!",
+          `${selectedEmployee.fullName}'s vacation has been created successfully`,
+          "success"
+        );
+      }
+    } catch (error) {
+      console.log("Error updating vacation:", error);
+      alert(`Error: ${error.message}`);
+      throw error;
+    }
+  };
   const h1style = {
     textAlign: "center",
     marginBottom: "20px",
@@ -372,14 +319,14 @@ export default function PopUp() {
           {/* Event modals */}
           {currentEventType && (
             <div className="sub-modal">
-              <h2 style={h1style}>
-                {currentEventType.charAt(0).toUpperCase() +
-                  currentEventType.slice(1)}
-              </h2>
+              <h2 style={h1style}>{currentEventType}</h2>
               <br />
               <span className="close" onClick={closeModal}>
                 &times;
               </span>
+              <p className="d-flex justify-content-center align-items-center">
+                Please choose an employee
+              </p>
               <div
                 className="button-container"
                 style={{
@@ -389,9 +336,9 @@ export default function PopUp() {
                   height: "500px",
                 }}
               >
-                {data.map((employee) => (
+                {employees?.map((employee) => (
                   <div
-                    key={employee.id}
+                    key={employee.employeeId}
                     onClick={() => handleEmployeeClick(employee)}
                     style={{ cursor: "pointer" }}
                   >
@@ -410,8 +357,8 @@ export default function PopUp() {
                       }}
                     >
                       <img
-                        src={employee.imageUrl}
-                        alt={employee.name}
+                        src={userProfile}
+                        alt={employee.fullName}
                         style={{
                           marginBottom: "10px",
                           width: "80px",
@@ -420,10 +367,10 @@ export default function PopUp() {
                         }}
                       />
                       <span style={{ fontWeight: "bold", marginBottom: "5px" }}>
-                        {employee.FullName}
+                        {employee.fullName}
                       </span>
                       <span style={{ fontSize: "12px", color: "#666" }}>
-                        {employee.Role}
+                        {employee.role}
                       </span>
                     </div>
                   </div>
@@ -441,7 +388,7 @@ export default function PopUp() {
               >
                 &times;
               </span>
-              <h2 style={h1style}>{selectedEmployee.FullName} Engagement</h2>
+              <h2 style={h1style}>{selectedEmployee.fullName} Engagement</h2>
 
               {/* <img src={selectedEmployee.image} alt={selectedEmployee.name} style={{ width: '100px', borderRadius: '50%' }} /> */}
 
@@ -648,15 +595,13 @@ export default function PopUp() {
             </div>
           )}
 
-          {/* New Modal for Vacation */}
+          {/* Vacation Modal */}
           {showNewModal && (
             <div className="sub-modal">
               <h2>{selectedEmployee.name}</h2>
               <span className="close" onClick={() => setShowNewModal(false)}>
                 &times;
               </span>
-              {/* Add content for vacation modal here */}
-
               <div
                 style={{
                   width: "800px",
@@ -677,12 +622,12 @@ export default function PopUp() {
                   }}
                 >
                   <div
-                    onClick={() => handleOptionClick("option1")}
+                    onClick={() => setSelectedPurposeOfTrip("business")}
                     style={{
                       padding: "20px",
                       borderRadius: "10px",
                       border: `2px solid ${
-                        selectedOption === "option1" ? "green" : "#ccc"
+                        selectedPurposeOfTrip === "business" ? "green" : "#ccc"
                       }`,
                       cursor: "pointer",
                       width: "150px",
@@ -692,12 +637,12 @@ export default function PopUp() {
                     Business
                   </div>
                   <div
-                    onClick={() => handleOptionClick("option2")}
+                    onClick={() => setSelectedPurposeOfTrip("pleasure")}
                     style={{
                       padding: "20px",
                       borderRadius: "10px",
                       border: `2px solid ${
-                        selectedOption === "option2" ? "green" : "#ccc"
+                        selectedPurposeOfTrip === "pleasure" ? "green" : "#ccc"
                       }`,
                       cursor: "pointer",
                       width: "150px",
@@ -901,9 +846,9 @@ export default function PopUp() {
                       <h2>Event Registration Successful</h2>
                       <p>
                         <strong>Purpose:</strong>{" "}
-                        {selectedOption === "option1"
+                        {selectedPurposeOfTrip === "business"
                           ? "Business"
-                          : selectedOption === "option2"
+                          : selectedPurposeOfTrip === "pleasure"
                           ? "Pleasure"
                           : "No reason selected"}
                       </p>

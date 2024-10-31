@@ -15,16 +15,18 @@ export const getEmployees = async (req, res) => {
 export const updateEmployeeVacation = async (req, res) => {
   console.log("Received request to update vacation:", req.body);
 
-  const { Id, name, startDate, endDate } = req.body;
+  const { id, purposeOfTrip, destination, startDate, endDate } = req.body;
 
   try {
     const updatedEmployee = await EmployeeModel.findByIdAndUpdate(
-      Id,
+      id,
       {
-        Vacation: {
-          name,
+        vacation: {
+          purposeOfTrip,
+          destination,
           startDate,
           endDate,
+          _id: id,
         },
       },
       {
