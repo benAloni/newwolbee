@@ -34,7 +34,7 @@ const Calendar = (props) => {
 
   const queryClient = useQueryClient();
 
-  const fetchData = async () => {
+  const fetchCalendarData = async () => {
     const token = await auth.currentUser.getIdToken();
     const [eventsResponse, foodHolidaysResponse, employeesResponse] =
       await Promise.all([
@@ -54,7 +54,7 @@ const Calendar = (props) => {
 
   const { data, error, isLoading } = useQuery({
     queryKey: ["calendarData"],
-    queryFn: fetchData,
+    queryFn: fetchCalendarData,
     staleTime: 60000, // 60 seconds
     refetchInterval: 60000, // Refetch every 60 seconds
     refetchOnWindowFocus: true,
@@ -115,7 +115,7 @@ const Calendar = (props) => {
           const vacation = employee.vacation[0];
           return [
             {
-              title: `${employee.fullName} flies to ${vacation.destination}`,
+              title: `${employee.fullName} is off to ${employee.gender === "female" ? "her": "his"} ${vacation.purposeOfTrip === "pleasure" ? `trip in ${vacation.destination}` : "trip"} `,
               className: "bg-purple",
               start: vacation.startDate,
               end: vacation.startDate,
@@ -123,7 +123,7 @@ const Calendar = (props) => {
             {
               title: `${employee.fullName} is back from ${
                 employee.gender === "female" ? "her" : "him"
-              }`,
+              } ${vacation.purposeOfTrip === "pleasure" ? `trip in ${vacation.destination}`: vacation.purposeOfTrip} `,
               className: "bg-purple",
               start: vacation.endDate,
               end: vacation.endDate,

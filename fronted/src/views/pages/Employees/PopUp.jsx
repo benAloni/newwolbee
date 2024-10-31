@@ -204,6 +204,7 @@ export default function PopUp() {
       const response = await updateEmployeeVacation({
         id: selectedEmployee,
         purposeOfTrip: selectedPurposeOfTrip,
+        destination: selectedCountry.label,
         startDate: selectedStartDate,
         endDate: selectedEndDate,
       });
@@ -211,7 +212,7 @@ export default function PopUp() {
       if (response.status === 200) {
         Swal.fire(
           "Success!",
-          `${selectedEmployee.fullName}'s vacation has been created successfully`,
+          `${selectedEmployee.fullName}'s vacation has been added to your calendar successfully`,
           "success"
         );
       }
@@ -622,12 +623,12 @@ export default function PopUp() {
                   }}
                 >
                   <div
-                    onClick={() => setSelectedPurposeOfTrip("business")}
+                    onClick={() => setSelectedPurposeOfTrip("business trip")}
                     style={{
                       padding: "20px",
                       borderRadius: "10px",
                       border: `2px solid ${
-                        selectedPurposeOfTrip === "business" ? "green" : "#ccc"
+                        selectedPurposeOfTrip === "business trip" ? "green" : "#ccc"
                       }`,
                       cursor: "pointer",
                       width: "150px",

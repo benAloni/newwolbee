@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-// import { useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { auth } from '../../../firebase/firebaseConfig';
 
 
 export default function NotificationsPopup() {
-  const user = useSelector((state) => state.user.user);
+  const user = useSelector((state) => state.auth?.user);
 
   const [events, setEvents] = useState([]);
   const [eventsTomorrow, setEventsTomorrow] = useState([]);

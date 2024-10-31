@@ -34,6 +34,7 @@ export const addEmployee = async ({ employeeData }) => {
 export const updateEmployeeVacation = async ({
   id,
   purposeOfTrip,
+  destination,
   startDate,
   endDate,
 }) => {
@@ -41,6 +42,7 @@ export const updateEmployeeVacation = async ({
     const response = await client.post("/updateEmployeeVacation", {
       id,
       purposeOfTrip,
+      destination,
       startDate,
       endDate,
     });

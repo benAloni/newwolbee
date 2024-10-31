@@ -21,13 +21,14 @@ export const updateEmployeeVacation = async (req, res) => {
     const updatedEmployee = await EmployeeModel.findByIdAndUpdate(
       id,
       {
-        vacation: {
-          purposeOfTrip,
-          destination,
-          startDate,
-          endDate,
-          _id: id,
-        },
+        $push: {
+          vacation: {
+            purposeOfTrip,
+            destination,
+            startDate,
+            endDate,
+          },
+        }     
       },
       {
         new: true,
