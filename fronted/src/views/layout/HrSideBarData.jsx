@@ -23,7 +23,7 @@ export const managerSideBarData = [
         menuValue: 'Notifications',
         hasSubRoute: false,
         showSubRoute: false,
-        route: "/contacts",
+        route: "/notifications",
         icon: "las la-bell",
         // style: getMenuItemStyle('Upcoming events'),
       },

@@ -284,11 +284,11 @@ const Sidebar = () => {
                           localStorage.setItem("minheight", "true")
                         }
                         className={
-                          pathname.includes("contacts") ? "active" : ""
+                          pathname.includes("notifications") ? "active" : ""
                         }
-                        to="/contacts"
+                        to="/notifications"
                       >
-                        {t("Contacts")}
+                        {t("Notifications")}
                       </Link>
                     </li>
                     <li>
@@ -2791,11 +2791,11 @@ const Sidebar = () => {
                           localStorage.setItem("minheight", "true")
                         }
                         className={
-                          pathname.includes("contacts") ? "active" : ""
+                          pathname.includes("notifications") ? "active" : ""
                         }
-                        to="/contacts"
+                        to="/notifications"
                       >
-                        {t("Contacts")}
+                        {t("notifications")}
                       </Link>
                     </li>
                     <li>

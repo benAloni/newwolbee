@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import ContactContents from "./contactContents";
 import ContactModal from "./contactModal";
+import Notifications from "../notifications/Notifications";
 
 const Contacts = () => {
   // const [menu, setMenu] = useState(false);
@@ -46,7 +46,10 @@ const Contacts = () => {
           <div className="chat-main-wrapper">
             <div className="col-lg-12 message-view">
               <div className="chat-window">
-                <div className="fixed-header" style={{backgroundColor:'	#D3D3D3'}}>
+                <div
+                  className="fixed-header"
+                  style={{ backgroundColor: "	#D3D3D3" }}
+                >
                   <div className="row align-items-center">
                     <div className="col-6">
                       <h4 className="page-title mb-0">Notifications</h4>
@@ -59,7 +62,7 @@ const Contacts = () => {
                               type="text"
                               className="form-control"
                               placeholder="Search"
-                              style={{width:'300px'}}
+                              style={{ width: "300px" }}
                             />
                             <span className="input-group-append">
                               <button className="btn" type="button">
@@ -68,13 +71,12 @@ const Contacts = () => {
                             </span>
                           </div>
                         </div>
-                        <ul className="nav float-end custom-menu">
-                        </ul>
+                        <ul className="nav float-end custom-menu"></ul>
                       </div>
                     </div>
                   </div>
                 </div>
-                <ContactContents />
+                <Notifications />
               </div>
             </div>
           </div>

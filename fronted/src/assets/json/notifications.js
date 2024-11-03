@@ -15,7 +15,7 @@ const notificationsData = {
       // name: "Nicole's birthday",
       // contents: "added new task",
       link: "/departments",
-      contents_2: "Nicole's birthday is comming soon. Send her a gift!",
+      contents_2: "Nicole's birthday is coming soon. Don't forget to send her a gift!",
       time: "4 mins ago",
     },
     {
@@ -25,7 +25,7 @@ const notificationsData = {
       // contents: "changed the task name",
       link: "/task-board",
       contents_2:
-        "Tomorrow is the international pizza day. View your options of spoling your team!",
+        "Tomorrow is the international pizza day. View your options of treating your team!",
       time: "6 mins ago",
     },
     {
@@ -33,7 +33,7 @@ const notificationsData = {
       image: Avatar_06,
       // name: " Misty Tison",
       // contents: "added",
-      link: "/contacts",
+      link: "/notifications",
       contents_2:
         "The Fourth of July celebration is in one month. Ensure there are food options for those with allergies and dietary preferences.",
       time: "8 mins ago",
@@ -43,7 +43,7 @@ const notificationsData = {
       image: Avatar_06,
       // name: " Misty Tison",
       // contents: "added",
-      link: "/contacts",
+      link: "/notifications",
       contents_2:
         "Note! A meeting was arranged with Nicole when she is at home",
       time: "10 mins ago",

@@ -198,7 +198,7 @@ import NewCompanyEvent from "../../views/pages/Authentication/NewCompanyEvent.js
 
 import RetentionStatistics from "../../views/pages/MainPages/Dashboard/AdminDashboard/RetentionStatistics.jsx";
 import GiftForEmployee from "../../views/pages/Employees/ForEmployee/GiftForEmployee.jsx";
-import NotificationsBirth from "../../views/pages/MainPages/Apps/contacts/mainNotifications/ShowNotifications/NotificationsBirth.jsx";
+import NotificationsBirth from "../../views/pages/MainPages/Apps/notifications/mainNotifications/ShowNotifications/NotificationsBirth.jsx";
 
 const AppContainer = () => {
   useEffect(() => {
@@ -320,7 +320,7 @@ const AppContainer = () => {
     },
     {
       id: 22,
-      path: "contacts",
+      path: "notifications",
       element: <Contacts />,
     },
 

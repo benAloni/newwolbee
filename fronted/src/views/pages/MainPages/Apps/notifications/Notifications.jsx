@@ -8,7 +8,7 @@ import ShowAllNotifications from "./mainNotifications/ShowAllNotifications";
 import HeaderNotifications from "./mainNotifications/HeaderNotifications";
 import ShowNewNotifications from "./mainNotifications/ShowNewNotifications";
 
-import JohnStatistics from "./JohnStatistics";
+import JohnStatistics from "../contacts/JohnStatistics";
 import nicole from "../../../../../imgs/avatar_4.JPG";
 import jacob from "../../../../../imgs/jacob.jpg";
 import john from "../../../../../imgs/avatar_6.JPG";
@@ -44,7 +44,7 @@ import invitationcard from "../../../../../imgs/invitationcard.png";
 import ShowHolidaysNotifications from "./mainNotifications/ShowNotifications/ShowHolidaysNotifications";
 import { fetchEmployees, fetchNotifications } from "../../../../../services";
 
-const ContactContents = () => {
+const Notifications = () => {
   const navigate = useNavigate();
 
   const [modalOpenId4, setModalOpenId4] = useState(false);
@@ -186,7 +186,6 @@ const ContactContents = () => {
     refetchOnWindowFocus: true, // Refetch when the window gains focus
   });
 
-
   useEffect(() => {
     if (data) {
       const eventNotifications = data.flatMap((event) => {
@@ -305,7 +304,7 @@ const ContactContents = () => {
         ...eventNotifications,
       ]);
     }
-  }, [data]); 
+  }, [data]);
 
   //John Answer
   const [modalOpenNo, setModalOpenNo] = useState(false);
@@ -1815,4 +1814,4 @@ const ContactContents = () => {
   );
 };
 
-export default ContactContents;
+export default Notifications;

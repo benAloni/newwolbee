@@ -255,7 +255,7 @@ const Header = () => {
         </li>
         <li className="nav-item dropdown">
           <Link
-            to="/contacts"
+            to="/notifications"
             className="dropdown-toggle nav-link"
             data-bs-toggle="dropdown"
             onClick={handleNotification}
@@ -289,7 +289,7 @@ const Header = () => {
               className="topnav-dropdown-footer"
               style={{ lineHeight: "42px" }}
             >
-              <Link to="/contacts">View all Notifications</Link>
+              <Link to="/notifications">View all Notifications</Link>
             </div>
           </div>
         </li>
