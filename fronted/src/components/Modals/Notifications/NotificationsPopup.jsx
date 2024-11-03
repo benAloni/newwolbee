@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { auth } from '../../../firebase/firebaseConfig';
 import { fetchEmployees, fetchNotifications } from '../../../services';
 
 
 export default function NotificationsPopup() {
-  const [events, setEvents] = useState([]);
   const [eventsTomorrow, setEventsTomorrow] = useState([]);
-  const queryClient = useQueryClient()
   
   const fetchData = async () => {
     const [notifications, employees] =
@@ -19,7 +16,7 @@ export default function NotificationsPopup() {
     notifications
   );
   
-      setEvents([...notifications, ...employees]);
+  return [...notifications, ...employees];
       
     };
 
@@ -32,7 +29,12 @@ export default function NotificationsPopup() {
   });  
 
   useEffect(() => {
+    if (error) {
+      console.error("Error fetching data:", error);
+    }
     if (data && !isLoading) {
+      console.log(data);
+      
       const newEvents = data.flatMap((val) => {  
         const eventsArray = [];
          
@@ -47,7 +49,7 @@ export default function NotificationsPopup() {
         // Add the vacation event if vacation data exists
         if (val.vacation && val.vacation.length > 0) {
           eventsArray.push({
-            title: `${val.fullName} fly to ${val.vacation[0].name}`,
+            title: `${val.fullName} flies to ${val.vacation[0].destination}`,
             date: val.vacation[0].startDate,
             className: `vacation`,
           });
@@ -112,9 +114,6 @@ export default function NotificationsPopup() {
       setEventsTomorrow(eventsForTomorrow);
     }
   
-    if (error) {
-      console.error("Error fetching data:", error);
-    }
   }, [data, isLoading, error]);
   
   

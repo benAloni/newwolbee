@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import Holidays from "date-holidays";
+import { auth } from "../../../firebase/firebaseConfig";
 
 
 const CalendarModal = ({ addEvent }) => {
@@ -17,7 +18,6 @@ const CalendarModal = ({ addEvent }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [eventName, setEventName] = useState(neweventName);
   const [category, setCategory] = useState(null);
-  const user = useSelector((state) => state.auth.user);
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
@@ -27,6 +27,7 @@ const CalendarModal = ({ addEvent }) => {
 //add new event
 const addEventMutation = useMutation({
   mutationFn: async ({ eventName, selectedDate, category }) => {
+    const token = await auth.currentUser.getIdToken()
     const response = await axios.post(
       `${process.env.REACT_APP_SERVER_URI}/addEvent`,
       {
@@ -38,7 +39,7 @@ const addEventMutation = useMutation({
       },
       {
         headers: {
-          Authorization: `Bearer ${user.token}`,
+          Authorization: `Bearer ${token}`,
         },
       }
     );
@@ -71,12 +72,13 @@ const addEventMutation = useMutation({
 // Mutation for adding a notification
 const addNotificationMutation = useMutation({
   mutationFn: async (eventData) => {
+    const token = await auth.currentUser.getIdToken()
     const response = await axios.post(
-      `${process.env.REACT_APP_SERVER_URI}/addAllNotifications`,
+      `${process.env.REACT_APP_SERVER_URI}/addNotification`,
       { notificationsData: [eventData] }, // Wrap eventData in an array
       {
         headers: {
-          Authorization: `Bearer ${user.token}`,
+          Authorization: `Bearer ${token}`,
         },
       }
     );

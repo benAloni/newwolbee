@@ -10,9 +10,9 @@ import {
 } from "../controllers/employeesData.js";
 import { getFoodHoliday } from "../controllers/foodHolidays.js";
 import {
-  addAllNotifications,
+  addNotification,
   getAllNotifications,
-} from "../controllers/AllNotificationsData.js";
+} from "../controllers/allNotificationsData.js";
 import { addEvent, getEvents, deleteEvent } from "../controllers/eventsData.js";
 import { isAuthenticated } from "../middleware/auth.js";
 const router = express.Router();
@@ -46,7 +46,7 @@ router.get("/getEvents", getEvents);
 //add event to calendar
 router.post("/addEvent", addEvent);
 //add All Notifications
-router.post("/addAllNotifications", addAllNotifications);
+router.post("/addNotification", addNotification);
 //get All Notifications
 router.get("/getAllNotifications", getAllNotifications);
 // Add delete event route

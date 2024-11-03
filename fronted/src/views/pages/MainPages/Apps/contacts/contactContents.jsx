@@ -155,7 +155,7 @@ const ContactContents = () => {
       importance: "High",
       priorityNumber: 3,
       message:
-        "john is flying to rome tomorrow - lets make it a real vacation for her.",
+        "john is flying to rome tomorrow - lets make it a real vacation for him.",
       link: "/low-importance-notification",
       date: "1996-09-08",
       className: "vacation",
@@ -167,18 +167,15 @@ const ContactContents = () => {
   ]);
 
   // get notifications
-  const [events, setEvents] = useState([]);
+  // const [events, setEvents] = useState([]);
 
   const fetchData = async () => {
-    const [notifications, employees] =
-      await Promise.all([
-       fetchNotifications(),
-        fetchEmployees(),
-      ]);
-  
-      setEvents([...notifications.data, ...employees.data]);
-      
-    };
+    const [notifications, employees] = await Promise.all([
+      fetchNotifications(),
+      fetchEmployees(),
+    ]);
+    return [...notifications, ...employees];
+  };
 
   // Use React Query to fetch data
   const { data, error, isLoading } = useQuery({
@@ -189,124 +186,126 @@ const ContactContents = () => {
     refetchOnWindowFocus: true, // Refetch when the window gains focus
   });
 
+
   useEffect(() => {
     if (data) {
-      const filteredEvents = data.filter(
-        (event) => event.title || event.dateOfBirth || event.vacation
-      ); // Filter out events without a title or dateOfBirth
-      setEvents(filteredEvents);
-      console.log(filteredEvents); // Access the event at index 68 after filtering
+      const eventNotifications = data.flatMap((event) => {
+        const notifications = [];
+
+        // Check for dateOfBirth
+        //add a function here that checks bday is in 3 days
+        if (event.dateOfBirth) {
+          notifications.push({
+            id: `${event._id}-birthday`, // Unique ID for each notification
+            importance: "High",
+            priorityNumber: 3,
+            message: `${
+              event.fullName
+            }'s birthday is coming soon. Don't forget to send ${
+              event.gender === "female" ? "her" : "him"
+            } a gift!`,
+            link: "/events",
+            fullName: event.fullName,
+            read: false,
+            viewed: false,
+            dismissed: false,
+            image: event.image,
+            startDay: event.StartDay,
+            date: event.dateOfBirth,
+            className: `Birthday`,
+          });
+        }
+
+        // Check for vacation
+        if (event.vacation && event.vacation.length > 0) {
+          const vacationStartDate = new Date(
+            event.vacation[0].startDate
+          ).toLocaleDateString();
+
+          notifications.push({
+            id: `${event._id}-vacation`,
+            importance: "High",
+            priorityNumber: 3,
+            message: `${event.fullName} is flying to ${
+              event.vacation[0].destination
+            } on ${vacationStartDate}. Let's make it a real vacation for ${
+              event.gender === "female" ? "her" : "him"
+            }!`,
+            link: "/events",
+            fullName: event.fullName,
+            read: false,
+            viewed: false,
+            dismissed: false,
+            image: event.image,
+            date: event.vacation[0].startDate,
+            className: `vacation`,
+          });
+        }
+
+        // Handle Upcoming Events
+        if (
+          !event.dateOfBirth &&
+          !event.vacation &&
+          new Date(event.start) >= new Date()
+        ) {
+          notifications.push({
+            id: `${event._id}-event`,
+            importance: "Low",
+            priorityNumber: 1,
+            message: `${event.title} is happening on ${new Date(
+              event.start
+            ).toLocaleDateString()}`,
+            fullName: event.title,
+            link: "/events",
+            title: event.title,
+            start: event.start,
+            className: event.className,
+            read: false,
+            viewed: false,
+            dismissed: false,
+            date: event.start,
+            image: event.image,
+          });
+        }
+
+        // Handle Past Events
+        if (
+          !event.dateOfBirth &&
+          !event.vacation &&
+          new Date(event.start) < new Date()
+        ) {
+          const eventDate = new Date(event.start);
+          const nextYear = new Date().getFullYear() + 1;
+          const eventDateNextYear = new Date(eventDate.setFullYear(nextYear));
+          notifications.push({
+            id: `${event._id}-event-next-year`, // Unique ID for each notification
+            importance: "Low",
+            priorityNumber: 1,
+            message: `${
+              event.title
+            } is happening on ${eventDateNextYear.toLocaleDateString()}`,
+            fullName: event.title,
+            link: "/events",
+            title: event.title,
+            start: eventDateNextYear.toISOString(),
+            className: event.className,
+            read: false,
+            viewed: false,
+            dismissed: false,
+            date: eventDateNextYear.toISOString(),
+            image: event.image,
+          });
+        }
+
+        return notifications;
+      });
+      // Append the new notifications to the existing ones
+      setStaticNotifications((prevNotifications) => [
+        ...prevNotifications,
+        ...eventNotifications,
+      ]);
     }
-  }, [data]);
-
-  useEffect(() => {
-    const eventNotifications = events.flatMap((event) => {
-      const notifications = [];
-
-      // Check for dateOfBirth
-      if (event.dateOfBirth) {
-        notifications.push({
-          id: `${event._id}-birthday`, // Unique ID for each notification
-          importance: "High",
-          priorityNumber: 3,
-          message: `${event.fullName}'s birthday is coming soon. Send a gift!`,
-          link: "/events",
-          fullName: event.fullName,
-          read: false,
-          viewed: false,
-          dismissed: false,
-          image: event.image,
-          startDay: event.StartDay,
-          date: event.dateOfBirth,
-          className: `Birthday`,
-        });
-      }
-
-      // Check for vacation
-      if (event.vacation && event.vacation.length > 0) {
-        const vacationStartDate = new Date(
-          event.vacation[0].startDate
-        ).toLocaleDateString();
-
-        notifications.push({
-          id: `${event._id}-vacation`, // Unique ID for each notification
-          importance: "High",
-          priorityNumber: 3,
-          message: `${event.fullName} is flying to ${event.vacation[0].name} on ${vacationStartDate}. Let's make it a real vacation for her!`,
-          link: "/events",
-          fullName: event.fullName,
-          read: false,
-          viewed: false,
-          dismissed: false,
-          image: event.image,
-          date: event.vacation[0].startDate, // Use vacation start date
-          className: `vacation`,
-        });
-      }
-
-      // Handle Upcoming Events
-      if (
-        !event.dateOfBirth &&
-        !event.vacation &&
-        new Date(event.start) >= new Date()
-      ) {
-        notifications.push({
-          id: `${event._id}-event`, // Unique ID for each notification
-          importance: "Low",
-          priorityNumber: 1,
-          message: `${event.title} is happening on ${new Date(
-            event.start
-          ).toLocaleDateString()}`,
-          fullName: event.title,
-          link: "/events",
-          title: event.title,
-          start: event.start,
-          className: event.className,
-          read: false,
-          viewed: false,
-          dismissed: false,
-          date: event.start,
-          image: event.image,
-        });
-      }
-
-      // Handle Past Events
-      if (
-        !event.dateOfBirth &&
-        !event.vacation &&
-        new Date(event.start) < new Date()
-      ) {
-        const eventDate = new Date(event.start);
-        const nextYear = new Date().getFullYear() + 1;
-        const eventDateNextYear = new Date(eventDate.setFullYear(nextYear));
-        notifications.push({
-          id: `${event._id}-event-next-year`, // Unique ID for each notification
-          importance: "Low",
-          priorityNumber: 1,
-          message: `${
-            event.title
-          } is happening on ${eventDateNextYear.toLocaleDateString()}`,
-          fullName: event.title,
-          link: "/events",
-          title: event.title,
-          start: eventDateNextYear.toISOString(),
-          className: event.className,
-          read: false,
-          viewed: false,
-          dismissed: false,
-          date: eventDateNextYear.toISOString(),
-          image: event.image,
-        });
-      }
-
-      return notifications;
-    });
-    // Append the new notifications to the existing ones
-    setStaticNotifications((prevNotifications) => [
-      ...prevNotifications,
-      ...eventNotifications,
-    ]);
-  }, [events]); // Dependency array includes events and getNotifications
+  }, [data]); 
 
   //John Answer
   const [modalOpenNo, setModalOpenNo] = useState(false);
@@ -352,7 +351,7 @@ const ContactContents = () => {
     margin: "10px",
     height: "300px",
   };
-  const jhonAnswer = {
+  const johnAnswer = {
     width: "250px",
     boxSizing: "border-box",
     border: "1px solid #ddd",
@@ -720,7 +719,9 @@ const ContactContents = () => {
         </button>
         <button
           onClick={handleNextPage}
-          disabled={(currentPage + 1) * itemsPerPage >= staticNotifications.length}
+          disabled={
+            (currentPage + 1) * itemsPerPage >= staticNotifications.length
+          }
           style={{
             background:
               (currentPage + 1) * itemsPerPage >= staticNotifications.length
@@ -906,7 +907,7 @@ const ContactContents = () => {
               >
                 <div
                   className="project-card"
-                  style={jhonAnswer}
+                  style={johnAnswer}
                   onMouseEnter={(e) =>
                     (e.currentTarget.style.transform = "scale(1.05)")
                   }
@@ -920,7 +921,7 @@ const ContactContents = () => {
                   >
                     <h3 style={h4Style}>Show Appreciation</h3>
                     <h5>
-                      talk to jhon and make sure he understands that you see his
+                      talk to John and make sure he understands that you see his
                       work and that to appreciate it.
                     </h5>
                     <img
@@ -932,7 +933,7 @@ const ContactContents = () => {
                 </div>
                 <div
                   className="project-card"
-                  style={jhonAnswer}
+                  style={johnAnswer}
                   onMouseEnter={(e) =>
                     (e.currentTarget.style.transform = "scale(1.05)")
                   }
@@ -958,7 +959,7 @@ const ContactContents = () => {
                 </div>
                 <div
                   className="project-card"
-                  style={jhonAnswer}
+                  style={johnAnswer}
                   onMouseEnter={(e) =>
                     (e.currentTarget.style.transform = "scale(1.05)")
                   }
@@ -972,7 +973,7 @@ const ContactContents = () => {
                   >
                     <h3>famliy :</h3>
                     <h4 style={h3Style}>
-                      Send a small gesture to jhon's family to show
+                      Send a small gesture to John's family to show
                       appreciation.
                     </h4>
                     <img
@@ -984,7 +985,7 @@ const ContactContents = () => {
                 </div>
                 <div
                   className="project-card"
-                  style={jhonAnswer}
+                  style={johnAnswer}
                   onMouseEnter={(e) =>
                     (e.currentTarget.style.transform = "scale(1.05)")
                   }
@@ -998,7 +999,7 @@ const ContactContents = () => {
                   >
                     <h3>personal time planning:</h3>
                     <h4 style={h3Style}>
-                      talk to john and make sure he has enough personal personal
+                      talk to John and make sure he has enough personal personal
                       time during to project.
                     </h4>
                     <img
@@ -1010,7 +1011,7 @@ const ContactContents = () => {
                 </div>
                 <div
                   className="project-card"
-                  style={jhonAnswer}
+                  style={johnAnswer}
                   onMouseEnter={(e) =>
                     (e.currentTarget.style.transform = "scale(1.05)")
                   }
@@ -1024,7 +1025,7 @@ const ContactContents = () => {
                   >
                     <h3>public recognition:</h3>
                     <h4 style={h3Style}>
-                      acknowledge jhon's hard work in a team meeting or through
+                      acknowledge John's hard work in a team meeting or through
                       a wide email.
                     </h4>
                     <img
@@ -1036,7 +1037,7 @@ const ContactContents = () => {
                 </div>
                 <div
                   className="project-card"
-                  style={jhonAnswer}
+                  style={johnAnswer}
                   onMouseEnter={(e) =>
                     (e.currentTarget.style.transform = "scale(1.05)")
                   }
@@ -1111,7 +1112,7 @@ const ContactContents = () => {
               >
                 <div
                   className="project-card"
-                  style={jhonAnswer}
+                  style={johnAnswer}
                   onMouseEnter={(e) =>
                     (e.currentTarget.style.transform = "scale(1.05)")
                   }
@@ -1125,7 +1126,7 @@ const ContactContents = () => {
                   >
                     <h3 style={h4Style}>Show Appreciation</h3>
                     <h5>
-                      talk to jhon and make sure he understands that you see his
+                      talk to John and make sure he understands that you see his
                       work and that to appreciate it.
                     </h5>
                     <img
@@ -1137,7 +1138,7 @@ const ContactContents = () => {
                 </div>
                 <div
                   className="project-card"
-                  style={jhonAnswer}
+                  style={johnAnswer}
                   onMouseEnter={(e) =>
                     (e.currentTarget.style.transform = "scale(1.05)")
                   }
@@ -1163,7 +1164,7 @@ const ContactContents = () => {
                 </div>
                 <div
                   className="project-card"
-                  style={jhonAnswer}
+                  style={johnAnswer}
                   onMouseEnter={(e) =>
                     (e.currentTarget.style.transform = "scale(1.05)")
                   }
@@ -1177,7 +1178,7 @@ const ContactContents = () => {
                   >
                     <h3>famliy :</h3>
                     <h4 style={h3Style}>
-                      Send a small gesture to jhon's family to show
+                      Send a small gesture to John's family to show
                       appreciation.
                     </h4>
                     <img
@@ -1189,7 +1190,7 @@ const ContactContents = () => {
                 </div>
                 <div
                   className="project-card"
-                  style={jhonAnswer}
+                  style={johnAnswer}
                   onMouseEnter={(e) =>
                     (e.currentTarget.style.transform = "scale(1.05)")
                   }
@@ -1203,7 +1204,7 @@ const ContactContents = () => {
                   >
                     <h3>personal time planning:</h3>
                     <h4 style={h3Style}>
-                      talk to john and make sure he has enough personal personal
+                      talk to John and make sure he has enough personal personal
                       time during to project.
                     </h4>
                     <img
@@ -1215,7 +1216,7 @@ const ContactContents = () => {
                 </div>
                 <div
                   className="project-card"
-                  style={jhonAnswer}
+                  style={johnAnswer}
                   onMouseEnter={(e) =>
                     (e.currentTarget.style.transform = "scale(1.05)")
                   }
@@ -1229,7 +1230,7 @@ const ContactContents = () => {
                   >
                     <h3>public recognition:</h3>
                     <h4 style={h3Style}>
-                      acknowledge jhon's hard work in a team meeting or through
+                      acknowledge John's hard work in a team meeting or through
                       a wide email.
                     </h4>
                     <img
@@ -1241,7 +1242,7 @@ const ContactContents = () => {
                 </div>
                 <div
                   className="project-card"
-                  style={jhonAnswer}
+                  style={johnAnswer}
                   onMouseEnter={(e) =>
                     (e.currentTarget.style.transform = "scale(1.05)")
                   }
@@ -1585,11 +1586,11 @@ const ContactContents = () => {
                     marginBottom: "1rem" /* Add space below the heading */,
                   }}
                 >
-                  <h3>john's Trip: Recharge and Refresh!</h3>
-                  john will be heading to Rome for an 8-day vacation in two
-                  days. Let's ensure she relaxes and enjoys her time off by
-                  reassuring her that everything at work is in good hands. Here
-                  are some ways to help her feel confident leaving work behind{" "}
+                  <h3>John's Trip: Recharge and Refresh!</h3>
+                  John will be heading to Rome for an 8-day vacation in two
+                  days. Let's ensure he relaxes and enjoys his time off by
+                  reassuring him that everything at work is in good hands. Here
+                  are some ways to help him feel confident leaving work behind{" "}
                   <br />
                   <br />
                   vacations are vital for employees, offering a break to
@@ -1619,7 +1620,7 @@ const ContactContents = () => {
               >
                 <div
                   className="project-card"
-                  style={jhonAnswer}
+                  style={johnAnswer}
                   onMouseEnter={(e) =>
                     (e.currentTarget.style.transform = "scale(1.05)")
                   }
@@ -1635,7 +1636,7 @@ const ContactContents = () => {
                       Have a Great vacation:
                     </h4>
                     <h5>
-                      Send john a quick message wishing her a fantastic vacation
+                      Send John a quick message wishing him a fantastic vacation
                     </h5>
                     <br />
                     <img
@@ -1647,7 +1648,7 @@ const ContactContents = () => {
                 </div>
                 <div
                   className="project-card"
-                  style={jhonAnswer}
+                  style={johnAnswer}
                   onMouseEnter={(e) =>
                     (e.currentTarget.style.transform = "scale(1.05)")
                   }
@@ -1669,7 +1670,7 @@ const ContactContents = () => {
                       Airport Treats:
                     </h3>
                     <h5 style={{ marginBottom: "18px" }}>
-                      Send john a voucher to use while she's waiting for her
+                      Send John a voucher to use while he's waiting for his
                       flight
                     </h5>
                     <img
@@ -1681,7 +1682,7 @@ const ContactContents = () => {
                 </div>
                 <div
                   className="project-card"
-                  style={jhonAnswer}
+                  style={johnAnswer}
                   onMouseEnter={(e) =>
                     (e.currentTarget.style.transform = "scale(1.05)")
                   }
@@ -1703,7 +1704,7 @@ const ContactContents = () => {
                       Top Trip Tips:
                     </h3>
                     <h5 style={{ marginBottom: "21px" }}>
-                      Give john some fantastic recommendations for her trip
+                      Give John some fantastic recommendations for his trip
                     </h5>
                     <img
                       src={rating}
@@ -1714,7 +1715,7 @@ const ContactContents = () => {
                 </div>
                 <div
                   className="project-card"
-                  style={jhonAnswer}
+                  style={johnAnswer}
                   onMouseEnter={(e) =>
                     (e.currentTarget.style.transform = "scale(1.05)")
                   }
@@ -1736,7 +1737,7 @@ const ContactContents = () => {
                       Travel Kit:
                     </h3>
                     <h5 style={{ marginBottom: "38px" }}>
-                      Prepare a travel kit for john to use on her trip
+                      Prepare a travel kit for John to use on his trip
                     </h5>
                     <img
                       src={travelPillow}
@@ -1747,7 +1748,7 @@ const ContactContents = () => {
                 </div>
                 <div
                   className="project-card"
-                  style={jhonAnswer}
+                  style={johnAnswer}
                   onMouseEnter={(e) =>
                     (e.currentTarget.style.transform = "scale(1.05)")
                   }
@@ -1769,7 +1770,7 @@ const ContactContents = () => {
                       Warm Welcome:
                     </h3>
                     <h5 style={{ marginBottom: "21px" }}>
-                      Plan a warm welcome for john when she arrives at her
+                      Plan a warm welcome for John when he arrives to his
                       destination
                     </h5>
                     <img src={sweet} alt="Project Seven" style={jhonimgStyle} />
@@ -1777,7 +1778,7 @@ const ContactContents = () => {
                 </div>
                 <div
                   className="project-card"
-                  style={jhonAnswer}
+                  style={johnAnswer}
                   onMouseEnter={(e) =>
                     (e.currentTarget.style.transform = "scale(1.05)")
                   }
@@ -1799,7 +1800,7 @@ const ContactContents = () => {
                       vacation Album:
                     </h2>
                     <h5 style={{ marginBottom: "21px" }}>
-                      Help john putting together her vacation album when she
+                      Help John putting together his vacation album when he
                       returns
                     </h5>
                     <img src={album} alt="Project Seven" style={jhonimgStyle} />

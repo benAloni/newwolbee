@@ -137,7 +137,7 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
   // const addNotificationMutation = useMutation({
   //   mutationFn: async (eventData) => {
   //     const response = await axios.post(
-  //       `${process.env.REACT_APP_SERVER_URI}/addAllNotifications`,
+  //       `${process.env.REACT_APP_SERVER_URI}/addNotification`,
   //       { notificationsData: [eventData] },
   //       {
   //         headers: {
