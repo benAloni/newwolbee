@@ -5,7 +5,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 
 import ShowAllNotifications from "./mainNotifications/ShowAllNotifications";
-import HeaderNottificatios from "./mainNotifications/HeaderNottificatios";
+import HeaderNotifications from "./mainNotifications/HeaderNotifications";
 import ShowNewNotifications from "./mainNotifications/ShowNewNotifications";
 
 import JohnStatistics from "./JohnStatistics";
@@ -42,6 +42,7 @@ import rating from "../../../../../imgs/rating.png";
 import coffeeCup from "../../../../../imgs/coffeeCup.png";
 import invitationcard from "../../../../../imgs/invitationcard.png";
 import ShowHolidaysNotifications from "./mainNotifications/ShowNotifications/ShowHolidaysNotifications";
+import { fetchEmployees, fetchNotifications } from "../../../../../services";
 
 const ContactContents = () => {
   const navigate = useNavigate();
@@ -59,7 +60,7 @@ const ContactContents = () => {
   const [currentPage, setCurrentPage] = useState(0); // Track the current page
   const itemsPerPage = 10; // Number of notifications per page
 
-  const [notifications, setNotifications] = useState([
+  const [staticNotifications, setStaticNotifications] = useState([
     {
       id: 1,
       importance: "High",
@@ -157,7 +158,7 @@ const ContactContents = () => {
         "john is flying to rome tomorrow - lets make it a real vacation for her.",
       link: "/low-importance-notification",
       date: "1996-09-08",
-      className:'Vacation',
+      className: "vacation",
       read: false,
       dismissed: false,
       viewed: false,
@@ -166,29 +167,22 @@ const ContactContents = () => {
   ]);
 
   // get notifications
-  const user = useSelector((state) => state.user.user);
   const [events, setEvents] = useState([]);
 
   const fetchData = async () => {
-    try {
-      const [AllNotification, employeesResponse] = await Promise.all([
-        axios.get("http://localhost:5000/api/getAllNotifications", {
-          headers: { Authorization: `Bearer ${user.token}` },
-        }),
-        axios.get("http://localhost:5000/api/getEmployees", {
-          headers: { Authorization: `Bearer ${user.token}` },
-        }),
+    const [notifications, employees] =
+      await Promise.all([
+       fetchNotifications(),
+        fetchEmployees(),
       ]);
-      return [...AllNotification.data, ...employeesResponse.data];
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      return [];
-    }
-  };
+  
+      setEvents([...notifications.data, ...employees.data]);
+      
+    };
 
   // Use React Query to fetch data
   const { data, error, isLoading } = useQuery({
-    queryKey: ["AllNotificationsData"],
+    queryKey: ["allNotificationsData"],
     queryFn: fetchData,
     staleTime: 0, // Cache data for 1 minute
     refetchInterval: 0, // 3 minutes
@@ -197,64 +191,72 @@ const ContactContents = () => {
 
   useEffect(() => {
     if (data) {
-      const filteredEvents = data.filter(event => event.title || event.DataOfBirth || event.Vacation); // Filter out events without a title or DataOfBirth
+      const filteredEvents = data.filter(
+        (event) => event.title || event.dateOfBirth || event.vacation
+      ); // Filter out events without a title or dateOfBirth
       setEvents(filteredEvents);
       console.log(filteredEvents); // Access the event at index 68 after filtering
     }
   }, [data]);
-  
-  
 
   useEffect(() => {
     const eventNotifications = events.flatMap((event) => {
       const notifications = [];
-  
-      // Check for DataOfBirth
-      if (event.DataOfBirth) {
+
+      // Check for dateOfBirth
+      if (event.dateOfBirth) {
         notifications.push({
           id: `${event._id}-birthday`, // Unique ID for each notification
           importance: "High",
           priorityNumber: 3,
-          message: `${event.FullName}'s birthday is coming soon. Send a gift!`,
+          message: `${event.fullName}'s birthday is coming soon. Send a gift!`,
           link: "/events",
-          fullName: event.FullName,
+          fullName: event.fullName,
           read: false,
           viewed: false,
           dismissed: false,
           image: event.image,
           startDay: event.StartDay,
-          date: event.DataOfBirth,
+          date: event.dateOfBirth,
           className: `Birthday`,
         });
       }
-  
-      // Check for Vacation
-      if (event.Vacation && event.Vacation.length > 0) {
-        const vacationStartDate = new Date(event.Vacation[0].startDate).toLocaleDateString();
+
+      // Check for vacation
+      if (event.vacation && event.vacation.length > 0) {
+        const vacationStartDate = new Date(
+          event.vacation[0].startDate
+        ).toLocaleDateString();
 
         notifications.push({
           id: `${event._id}-vacation`, // Unique ID for each notification
           importance: "High",
           priorityNumber: 3,
-          message: `${event.FullName} is flying to ${event.Vacation[0].name} on ${vacationStartDate}. Let's make it a real vacation for her!`,
+          message: `${event.fullName} is flying to ${event.vacation[0].name} on ${vacationStartDate}. Let's make it a real vacation for her!`,
           link: "/events",
-          fullName: event.FullName,
+          fullName: event.fullName,
           read: false,
           viewed: false,
           dismissed: false,
           image: event.image,
-          date: event.Vacation[0].startDate, // Use vacation start date
-          className: `Vacation`,
+          date: event.vacation[0].startDate, // Use vacation start date
+          className: `vacation`,
         });
       }
-  
+
       // Handle Upcoming Events
-      if (!event.DataOfBirth && !event.Vacation && new Date(event.start) >= new Date()) {
+      if (
+        !event.dateOfBirth &&
+        !event.vacation &&
+        new Date(event.start) >= new Date()
+      ) {
         notifications.push({
           id: `${event._id}-event`, // Unique ID for each notification
           importance: "Low",
           priorityNumber: 1,
-          message: `${event.title} is happening on ${new Date(event.start).toLocaleDateString()}`,
+          message: `${event.title} is happening on ${new Date(
+            event.start
+          ).toLocaleDateString()}`,
           fullName: event.title,
           link: "/events",
           title: event.title,
@@ -267,9 +269,13 @@ const ContactContents = () => {
           image: event.image,
         });
       }
-  
+
       // Handle Past Events
-      if (!event.DataOfBirth && !event.Vacation && new Date(event.start) < new Date()) {
+      if (
+        !event.dateOfBirth &&
+        !event.vacation &&
+        new Date(event.start) < new Date()
+      ) {
         const eventDate = new Date(event.start);
         const nextYear = new Date().getFullYear() + 1;
         const eventDateNextYear = new Date(eventDate.setFullYear(nextYear));
@@ -277,7 +283,9 @@ const ContactContents = () => {
           id: `${event._id}-event-next-year`, // Unique ID for each notification
           importance: "Low",
           priorityNumber: 1,
-          message: `${event.title} is happening on ${eventDateNextYear.toLocaleDateString()}`,
+          message: `${
+            event.title
+          } is happening on ${eventDateNextYear.toLocaleDateString()}`,
           fullName: event.title,
           link: "/events",
           title: event.title,
@@ -290,11 +298,11 @@ const ContactContents = () => {
           image: event.image,
         });
       }
-  
+
       return notifications;
     });
     // Append the new notifications to the existing ones
-    setNotifications((prevNotifications) => [
+    setStaticNotifications((prevNotifications) => [
       ...prevNotifications,
       ...eventNotifications,
     ]);
@@ -494,13 +502,13 @@ const ContactContents = () => {
 
   // Sorting notifications based on the selected option
   if (selectedSortingOption === "A-Z") {
-    notifications.sort((a, b) => a.message.localeCompare(b.message));
+    staticNotifications.sort((a, b) => a.message.localeCompare(b.message));
   } else if (selectedSortingOption === "Z-A") {
-    notifications.sort((a, b) => b.message.localeCompare(a.message));
+    staticNotifications.sort((a, b) => b.message.localeCompare(a.message));
   } else if (selectedSortingOption === "Priority low - high") {
-    notifications.sort((a, b) => a.priorityNumber - b.priorityNumber);
+    staticNotifications.sort((a, b) => a.priorityNumber - b.priorityNumber);
   } else {
-    notifications.sort((a, b) => b.priorityNumber - a.priorityNumber);
+    staticNotifications.sort((a, b) => b.priorityNumber - a.priorityNumber);
   }
 
   // const markAsViewedAndArchive = (id) => {
@@ -548,7 +556,7 @@ const ContactContents = () => {
   let displayedNotifications = [];
 
   if (viewOption !== "New") {
-    displayedNotifications = notifications.slice(
+    displayedNotifications = staticNotifications.slice(
       currentPage * itemsPerPage,
       (currentPage + 1) * itemsPerPage
     );
@@ -556,7 +564,7 @@ const ContactContents = () => {
 
   // Handle clicking the next page button
   const handleNextPage = () => {
-    if ((currentPage + 1) * itemsPerPage < notifications.length) {
+    if ((currentPage + 1) * itemsPerPage < staticNotifications.length) {
       setCurrentPage(currentPage + 1);
     }
   };
@@ -593,7 +601,7 @@ const ContactContents = () => {
   const [modalContent, setModalContent] = useState(null);
 
   const getNotificationId = (userId) => {
-    const notification = notifications.find((val) => val.id === userId);
+    const notification = staticNotifications.find((val) => val.id === userId);
     if (notification) {
       if (notification.className === "Birthday") {
         const encodedData = encodeURIComponent(JSON.stringify(notification));
@@ -609,7 +617,7 @@ const ContactContents = () => {
       } else if (notification.id === 4) {
         setModalContent(notification); // Pass the notification data as content
         setModalOpenId4(true); // Open the modal
-      } else if (notification.className === "Vacation") {
+      } else if (notification.className === "vacation") {
         setModalOpenfive(true);
       } else if (notification.id === 6) {
         setModalOpenThree(true);
@@ -631,7 +639,7 @@ const ContactContents = () => {
           gap: "70px",
         }}
       >
-        <HeaderNottificatios
+        <HeaderNotifications
           setViewOption={setViewOption}
           displayedNotifications={displayedNotifications}
         />
@@ -712,21 +720,21 @@ const ContactContents = () => {
         </button>
         <button
           onClick={handleNextPage}
-          disabled={(currentPage + 1) * itemsPerPage >= notifications.length}
+          disabled={(currentPage + 1) * itemsPerPage >= staticNotifications.length}
           style={{
             background:
-              (currentPage + 1) * itemsPerPage >= notifications.length
+              (currentPage + 1) * itemsPerPage >= staticNotifications.length
                 ? "#f2f2f2"
                 : "#FFA500", // light grey when disabled, orange otherwise
             color:
-              (currentPage + 1) * itemsPerPage >= notifications.length
+              (currentPage + 1) * itemsPerPage >= staticNotifications.length
                 ? "#aaa"
                 : "white", // adjust text color for contrast
             border: "none",
             borderRadius: "5px",
             padding: "10px 20px",
             cursor:
-              (currentPage + 1) * itemsPerPage >= notifications.length
+              (currentPage + 1) * itemsPerPage >= staticNotifications.length
                 ? "not-allowed"
                 : "pointer", // change cursor based on state
           }}
@@ -746,7 +754,7 @@ const ContactContents = () => {
       )}
       {viewOption === "New" && (
         <ShowNewNotifications
-          notifications={notifications}
+          notifications={staticNotifications}
           getNotificationId={getNotificationId}
         />
       )}
@@ -1584,7 +1592,7 @@ const ContactContents = () => {
                   are some ways to help her feel confident leaving work behind{" "}
                   <br />
                   <br />
-                  Vacations are vital for employees, offering a break to
+                  vacations are vital for employees, offering a break to
                   recharge and prevent burnout. They boost morale, increase
                   productivity, and bring a fresh perspective. Encouraging time
                   off supports work-life balance and leads to a more engaged and
@@ -1624,7 +1632,7 @@ const ContactContents = () => {
                     style={projectDetailsTextStyle}
                   >
                     <h4 style={{ fontSize: "24px", marginBottom: "10px" }}>
-                      Have a Great Vacation:
+                      Have a Great vacation:
                     </h4>
                     <h5>
                       Send john a quick message wishing her a fantastic vacation
@@ -1788,7 +1796,7 @@ const ContactContents = () => {
                         marginTop: "10px",
                       }}
                     >
-                      Vacation Album:
+                      vacation Album:
                     </h2>
                     <h5 style={{ marginBottom: "21px" }}>
                       Help john putting together her vacation album when she

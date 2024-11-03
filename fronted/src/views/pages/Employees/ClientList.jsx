@@ -10,7 +10,7 @@ import {
   Avatar_22,
   Avatar_26,
   Avatar_29,
-} from "../../../Routes/ImagePath";
+} from "../../../routes/ImagePath";
 import DeleteModal from "../../../components/Modals/DeleteModal";
 import { ClientModelPopup } from "../../../components/Modals/ClientModelPopup";
 import SearchBox from "../../../components/SearchBox";

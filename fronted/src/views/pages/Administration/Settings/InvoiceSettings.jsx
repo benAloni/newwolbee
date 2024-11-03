@@ -1,5 +1,5 @@
 import React from "react";
-import { logo3 } from "../../../../Routes/ImagePath/index";
+import { logo3 } from "../../../../routes/ImagePath/index";
 import Breadcrumbs from "../../../../components/Breadcrumbs";
 
 const InvoiceSettings = () => {

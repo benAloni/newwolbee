@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Avatar_02 } from "../../Routes/ImagePath";
+import { Avatar_02 } from "../../routes/ImagePath";
 import { Link } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import Select from "react-select";
@@ -21,7 +21,7 @@ const PersonalInformationModelPopup = ({ selectedEmployee }) => {
   });
 
   if (isLoading) {
-    return <Loading/>;
+    return <Loading />;
   }
 
   if (isError) {

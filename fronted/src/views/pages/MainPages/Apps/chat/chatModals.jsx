@@ -4,7 +4,7 @@ import {
   Avatar_02,
   Avatar_13,
   Avatar_16,
-} from "../../../../../Routes/ImagePath";
+} from "../../../../../routes/ImagePath";
 
 const ChatModals = () => {
   return (

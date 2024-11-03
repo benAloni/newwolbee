@@ -4,7 +4,7 @@ import {
   Avatar_01,
   Avatar_05,
   Video_Call,
-} from "../../../../../../Routes/ImagePath";
+} from "../../../../../../routes/ImagePath";
 import VideoRightsidebar from "./videoRightsidebar";
 
 const VideoContent = () => {
@@ -25,10 +25,7 @@ const VideoContent = () => {
               <div className="navbar">
                 <div className="user-details">
                   <div className="float-start user-img">
-                    <Link
-                      className="avatar"
-                      to="/profile"
-                      title="Mike Litorus">
+                    <Link className="avatar" to="/profile" title="Mike Litorus">
                       <img src={Avatar_05} alt="" className="rounded-circle" />
                       <span className="status online" />
                     </Link>
@@ -46,7 +43,8 @@ const VideoContent = () => {
                       to="#task_window"
                       id="task_chat"
                       className="task-chat profile-rightbar float-end"
-                      onClick={toggleClass}>
+                      onClick={toggleClass}
+                    >
                       <i className="fa fa-comments" />
                     </Link>
                   </li>
@@ -55,7 +53,8 @@ const VideoContent = () => {
                       to="#"
                       className="nav-link dropdown-toggle"
                       data-bs-toggle="dropdown"
-                      aria-expanded="false">
+                      aria-expanded="false"
+                    >
                       <i className="fa fa-cog" />
                     </Link>
                     <div className="dropdown-menu dropdown-menu-right">
@@ -90,7 +89,8 @@ const VideoContent = () => {
                       to="#"
                       title="Enable Video"
                       data-placement="top"
-                      data-bs-toggle="tooltip">
+                      data-bs-toggle="tooltip"
+                    >
                       <i className="fa fa-video-camera camera" />
                     </Link>
                   </li>
@@ -99,7 +99,8 @@ const VideoContent = () => {
                       to="#"
                       title="Mute Audio"
                       data-placement="top"
-                      data-bs-toggle="tooltip">
+                      data-bs-toggle="tooltip"
+                    >
                       <i className="fa fa-microphone microphone" />
                     </Link>
                   </li>
@@ -108,7 +109,8 @@ const VideoContent = () => {
                       to="#"
                       title="Add User"
                       data-placement="top"
-                      data-bs-toggle="tooltip">
+                      data-bs-toggle="tooltip"
+                    >
                       <i className="fa fa-user-plus" />
                     </Link>
                   </li>
@@ -117,7 +119,8 @@ const VideoContent = () => {
                       to="#"
                       title="Full Screen"
                       data-placement="top"
-                      data-bs-toggle="tooltip">
+                      data-bs-toggle="tooltip"
+                    >
                       <i className="fa fa-arrows-v full-screen" />
                     </Link>
                   </li>
@@ -136,7 +139,8 @@ const VideoContent = () => {
           className={`col-lg-3 message-view chat-profile-view chat-sidebar ${
             isActive ? "opened" : ""
           }`}
-          id="task_window">
+          id="task_window"
+        >
           <VideoRightsidebar />
         </div>
       </div>

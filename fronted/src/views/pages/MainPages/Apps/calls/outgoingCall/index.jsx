@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Avatar_02 } from "../../../../../../Routes/ImagePath";
+import { Avatar_02 } from "../../../../../../routes/ImagePath";
 import ChatModals from "../../chat/chatModals";
 
 const Outgoing = () => {

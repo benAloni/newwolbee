@@ -5,13 +5,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { Applogo } from "../../../Routes/ImagePath";
+import { Applogo } from "../../../routes/ImagePath";
 import { emailrgx } from "./RegEx";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../../firebase/firebaseConfig";
 import { FirebaseError } from "firebase/app";
 
-// import { Applogo } from "../../../Routes/ImagePath";
+// import { Applogo } from "../../../routes/ImagePath";
 
 const schema = yup.object({
   email: yup

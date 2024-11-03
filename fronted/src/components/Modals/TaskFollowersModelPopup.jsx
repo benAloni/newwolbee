@@ -1,5 +1,5 @@
 import React from "react";
-import { Avatar_08, Avatar_17, Avatar_26 } from "../../Routes/ImagePath";
+import { Avatar_08, Avatar_17, Avatar_26 } from "../../routes/ImagePath";
 import { Link } from "react-router-dom";
 
 const TaskFollowersModelPopup = () => {

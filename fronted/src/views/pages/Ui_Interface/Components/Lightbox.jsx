@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Sidebar from "../../../layout/Sidebar";
 import Header from "../../../layout/Header";
-import { Img_01, img_02, img_03, img_04, img_05 } from "../../../../Routes/ImagePath";
+import { Img_01, img_02, img_03, img_04, img_05 } from "../../../../routes/ImagePath";
 import { Link } from "react-router-dom";
 
 

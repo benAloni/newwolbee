@@ -1,16 +1,28 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import DateRangePicker from 'react-bootstrap-daterangepicker';
-import Select from 'react-select';
-import { Avatar_15, Avatar_17, Avatar_20, Avatar_21, avatar1, avatar16, avatar19, avatar22, avatar23, avatar24, avatar25, avatar26 } from '../../../Routes/ImagePath';
-import DealsModal from '../../../components/Modals/DealsModal';
+import DateRangePicker from "react-bootstrap-daterangepicker";
+import Select from "react-select";
+import {
+  Avatar_15,
+  Avatar_17,
+  Avatar_20,
+  Avatar_21,
+  avatar1,
+  avatar16,
+  avatar19,
+  avatar22,
+  avatar23,
+  avatar24,
+  avatar25,
+  avatar26,
+} from "../../../routes/ImagePath";
+import DealsModal from "../../../components/Modals/DealsModal";
 
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 const DealsKanban = () => {
-
   const [tasks, setTasks] = useState({
     qualify: [
       {
@@ -25,7 +37,7 @@ const DealsKanban = () => {
         profile_link: "/deals-details",
         user_name: "Darlee Robertson",
         progress: "85%",
-        date: "10 Jan 2024"
+        date: "10 Jan 2024",
       },
       {
         id: "task2",
@@ -39,7 +51,7 @@ const DealsKanban = () => {
         profile_link: "/deals-details",
         user_name: "Darlee Robertson",
         progress: "15%",
-        date: "12 Jan 2024"
+        date: "12 Jan 2024",
       },
       {
         id: "task3",
@@ -53,8 +65,8 @@ const DealsKanban = () => {
         profile_link: "/deals-details",
         user_name: "Darlee Robertson",
         progress: "95%",
-        date: "14 Jan 2024"
-      }
+        date: "14 Jan 2024",
+      },
     ],
     contact: [
       {
@@ -69,7 +81,7 @@ const DealsKanban = () => {
         profile_link: "/deals-details",
         user_name: "Jessica",
         progress: "47%",
-        date: "06 Feb 2024"
+        date: "06 Feb 2024",
       },
       {
         id: "task5",
@@ -83,7 +95,7 @@ const DealsKanban = () => {
         profile_link: "/deals-details",
         user_name: "Carol Thomas",
         progress: "98%",
-        date: "15 Feb 2024"
+        date: "15 Feb 2024",
       },
       {
         id: "task6",
@@ -97,8 +109,8 @@ const DealsKanban = () => {
         profile_link: "/deals-details",
         user_name: "Dawn Mercha",
         progress: "78%",
-        date: "25 Jan 2024"
-      }
+        date: "25 Jan 2024",
+      },
     ],
     presentation: [
       {
@@ -113,7 +125,7 @@ const DealsKanban = () => {
         profile_link: "/deals-details",
         user_name: "Rachel Hampton",
         progress: "25%",
-        date: "18 Mar 2024"
+        date: "18 Mar 2024",
       },
       {
         id: "task8",
@@ -127,7 +139,7 @@ const DealsKanban = () => {
         profile_link: "/deals-details",
         user_name: "Jonelle Curtiss",
         progress: "70%",
-        date: "15 Feb 2024"
+        date: "15 Feb 2024",
       },
       {
         id: "task9",
@@ -141,11 +153,10 @@ const DealsKanban = () => {
         profile_link: "/deals-details",
         user_name: "Jonathan",
         progress: "45%",
-        date: "30 Jan 2024"
-      }
+        date: "30 Jan 2024",
+      },
     ],
     proposal: [
-
       {
         id: "task10",
         company: "Freda,Jennfier and Thompson",
@@ -158,7 +169,7 @@ const DealsKanban = () => {
         profile_link: "/deals-details",
         user_name: "Sidney Franks",
         progress: "59%",
-        date: "11 Apr 2024"
+        date: "11 Apr 2024",
       },
       {
         id: "task11",
@@ -172,7 +183,7 @@ const DealsKanban = () => {
         profile_link: "/deals-details",
         user_name: "Brook",
         progress: "72%",
-        date: "17 Apr 2024"
+        date: "17 Apr 2024",
       },
       {
         id: "task12",
@@ -186,12 +197,10 @@ const DealsKanban = () => {
         profile_link: "/deals-details",
         user_name: "Mickey",
         progress: "20%",
-        date: "10 Feb 2024"
-      }
+        date: "10 Feb 2024",
+      },
     ],
-
   });
-
 
   const [showFilter, setShowFilter] = useState(false);
   const [fieldInputs, setFieldInputs] = useState(false);
@@ -223,36 +232,36 @@ const DealsKanban = () => {
     };
 
     const maximizeBtn = maximizeBtnRef.current;
-    maximizeBtn.addEventListener('click', handleClick);
+    maximizeBtn.addEventListener("click", handleClick);
 
     // Cleanup function to remove the event listener and exit fullscreen on component unmount
     return () => {
-      maximizeBtn.removeEventListener('click', handleClick);
+      maximizeBtn.removeEventListener("click", handleClick);
       cleanup();
     };
   }, [isFullScreen]);
   const optionsSortValue = [
-    { value: 'sortAlphabet', label: 'Sort By Alphabet' },
-    { value: 'ascending', label: 'Ascending' },
-    { value: 'descending', label: 'Descending' },
-    { value: 'recentlyViewed', label: 'Recently Viewed' },
-    { value: 'recentlyAdded', label: 'Recently Added' }
+    { value: "sortAlphabet", label: "Sort By Alphabet" },
+    { value: "ascending", label: "Ascending" },
+    { value: "descending", label: "Descending" },
+    { value: "recentlyViewed", label: "Recently Viewed" },
+    { value: "recentlyAdded", label: "Recently Added" },
   ];
 
   const optionSort = [
-    { value: 'Germany', label: 'Germany' },
-    { value: 'USA', label: 'USA' },
-    { value: 'Canada', label: 'Canada' },
-    { value: 'India', label: 'India' },
-    { value: 'China', label: 'China' }
+    { value: "Germany", label: "Germany" },
+    { value: "USA", label: "USA" },
+    { value: "Canada", label: "Canada" },
+    { value: "India", label: "India" },
+    { value: "China", label: "China" },
   ];
 
   const options = [
-    { value: 'Conversation', label: 'Conversation' },
-    { value: 'Pipeline', label: 'Pipeline' },
-    { value: 'Won', label: 'Won' },
-    { value: 'Lost', label: 'Lost' },
-    { value: 'Follow Up', label: 'Follow Up' }
+    { value: "Conversation", label: "Conversation" },
+    { value: "Pipeline", label: "Pipeline" },
+    { value: "Won", label: "Won" },
+    { value: "Lost", label: "Lost" },
+    { value: "Follow Up", label: "Follow Up" },
   ];
 
   const handleLabelClick = () => {
@@ -308,8 +317,6 @@ const DealsKanban = () => {
     setSelectedDate1(date);
   };
 
-
-
   const onDragEnd = (result) => {
     if (!result.destination) {
       return; // Dropped outside the list
@@ -343,7 +350,6 @@ const DealsKanban = () => {
   };
 
   return (
-
     <div className="page-wrapper">
       {/* Page Content */}
       <div className="content container-fluid">
@@ -353,28 +359,69 @@ const DealsKanban = () => {
             <div className="col-md-4">
               <h3 className="page-title">Deals</h3>
               <ul className="breadcrumb">
-                <li className="breadcrumb-item"><Link to="/dashboard">Dashboard</Link></li>
+                <li className="breadcrumb-item">
+                  <Link to="/dashboard">Dashboard</Link>
+                </li>
                 <li className="breadcrumb-item active">Deals</li>
               </ul>
             </div>
             <div className="col-md-8 float-end ms-auto">
               <div className="d-flex title-head">
                 <div className="view-icons">
-                  <Link to="#" className="grid-view btn btn-link"><i className="las la-redo-alt" /></Link>
-                  <Link to="#" className="list-view btn btn-link" id="collapse-header" ref={maximizeBtnRef}><i className="las la-expand-arrows-alt" /></Link>
-                  <Link to="#" className={fieldInputs ? "list-view btn btn-link active-filter" : "list-view btn btn-link"} id="filter_search" onClick={() => setFieldInputs(!fieldInputs)}><i className="las la-filter" /></Link>
+                  <Link to="#" className="grid-view btn btn-link">
+                    <i className="las la-redo-alt" />
+                  </Link>
+                  <Link
+                    to="#"
+                    className="list-view btn btn-link"
+                    id="collapse-header"
+                    ref={maximizeBtnRef}
+                  >
+                    <i className="las la-expand-arrows-alt" />
+                  </Link>
+                  <Link
+                    to="#"
+                    className={
+                      fieldInputs
+                        ? "list-view btn btn-link active-filter"
+                        : "list-view btn btn-link"
+                    }
+                    id="filter_search"
+                    onClick={() => setFieldInputs(!fieldInputs)}
+                  >
+                    <i className="las la-filter" />
+                  </Link>
                 </div>
                 <div className="form-sort">
-                  <Link to="#" className="list-view btn btn-link" data-bs-toggle="modal" data-bs-target="#export"><i className="las la-file-export" />Export</Link>
+                  <Link
+                    to="#"
+                    className="list-view btn btn-link"
+                    data-bs-toggle="modal"
+                    data-bs-target="#export"
+                  >
+                    <i className="las la-file-export" />
+                    Export
+                  </Link>
                 </div>
-                <Link to="#" className="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_deals"><i className="la la-plus-circle" /> Add Deals</Link>
+                <Link
+                  to="#"
+                  className="btn add-btn"
+                  data-bs-toggle="modal"
+                  data-bs-target="#add_deals"
+                >
+                  <i className="la la-plus-circle" /> Add Deals
+                </Link>
               </div>
             </div>
           </div>
         </div>
         {/* /Page Header */}
         {/* Search Filter */}
-        <div className="filter-filelds" id="filter_inputs" style={{ display: fieldInputs ? "block" : "none" }} >
+        <div
+          className="filter-filelds"
+          id="filter_inputs"
+          style={{ display: fieldInputs ? "block" : "none" }}
+        >
           <div className="row filter-row">
             <div className="col-xl-2">
               <div
@@ -398,7 +445,6 @@ const DealsKanban = () => {
               </div>
             </div>
 
-
             <div className="col-xl-2">
               <div className="input-block mb-3 form-focus focused">
                 <DateRangePicker initialSettings={initialSettings}>
@@ -408,7 +454,6 @@ const DealsKanban = () => {
                   />
                 </DateRangePicker>
                 <label className="focus-label">From - To Date</label>
-
               </div>
             </div>
 
@@ -423,13 +468,19 @@ const DealsKanban = () => {
                     dateFormat="dd-MM-yyyy"
                   />
                 </div>
-                <label className="focus-label" style={{ top: "-20px" }}>Expected Date</label>
+                <label className="focus-label" style={{ top: "-20px" }}>
+                  Expected Date
+                </label>
               </div>
             </div>
 
             <div className="col-xl-2">
               <div className="input-block mb-3 form-focus select-focus">
-                <Select className="select floating" options={options} placeholder="--Select--" />
+                <Select
+                  className="select floating"
+                  options={options}
+                  placeholder="--Select--"
+                />
 
                 <label className="focus-label">Stage</label>
               </div>
@@ -446,7 +497,10 @@ const DealsKanban = () => {
               </div>
             </div>
             <div className="col-xl-2">
-              <Link to="#" className="btn btn-success w-100"> Search </Link>
+              <Link to="#" className="btn btn-success w-100">
+                {" "}
+                Search{" "}
+              </Link>
             </div>
           </div>
         </div>
@@ -456,8 +510,15 @@ const DealsKanban = () => {
           <ul>
             <li>
               <div className="view-icons">
-                <Link to="/deals" className="list-view btn btn-link "><i className="las la-list" /></Link>
-                <Link to="/deals-kanban" className="grid-view btn btn-link active"><i className="las la-th" /></Link>
+                <Link to="/deals" className="list-view btn btn-link ">
+                  <i className="las la-list" />
+                </Link>
+                <Link
+                  to="/deals-kanban"
+                  className="grid-view btn btn-link active"
+                >
+                  <i className="las la-th" />
+                </Link>
               </div>
             </li>
             <li>
@@ -472,10 +533,26 @@ const DealsKanban = () => {
               </div>
             </li>
             <li>
-
-              <div className={showFilter ? "form-sorts dropdown table-filter-show" : "form-sorts dropdown"} >
-                <Link to="#" className="dropdown-toggle" id="table-filter" onClick={() => setShowFilter(!showFilter)}><i className="las la-filter me-2" />Filter</Link>
-                <div className="filter-dropdown-menu" style={{ display: showFilter ? "block" : "none" }}>
+              <div
+                className={
+                  showFilter
+                    ? "form-sorts dropdown table-filter-show"
+                    : "form-sorts dropdown"
+                }
+              >
+                <Link
+                  to="#"
+                  className="dropdown-toggle"
+                  id="table-filter"
+                  onClick={() => setShowFilter(!showFilter)}
+                >
+                  <i className="las la-filter me-2" />
+                  Filter
+                </Link>
+                <div
+                  className="filter-dropdown-menu"
+                  style={{ display: showFilter ? "block" : "none" }}
+                >
                   <div className="filter-set-view">
                     <div className="filter-set-head">
                       <h4>Filter</h4>
@@ -483,9 +560,22 @@ const DealsKanban = () => {
                     <div className="accordion" id="accordionExample">
                       <div className="filter-set-content">
                         <div className="filter-set-content-head">
-                          <Link to="#" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">Rating<i className="las la-angle-right" /></Link>
+                          <Link
+                            to="#"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#collapseOne"
+                            aria-expanded="true"
+                            aria-controls="collapseOne"
+                          >
+                            Rating
+                            <i className="las la-angle-right" />
+                          </Link>
                         </div>
-                        <div className="filter-set-contents accordion-collapse collapse show" id="collapseOne" data-bs-parent="#accordionExample">
+                        <div
+                          className="filter-set-contents accordion-collapse collapse show"
+                          id="collapseOne"
+                          data-bs-parent="#accordionExample"
+                        >
                           <ul>
                             <li>
                               <div className="filter-checks">
@@ -572,9 +662,22 @@ const DealsKanban = () => {
                       </div>
                       <div className="filter-set-content">
                         <div className="filter-set-content-head">
-                          <Link to="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Owner<i className="las la-angle-right" /></Link>
+                          <Link
+                            to="#"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#collapseTwo"
+                            aria-expanded="false"
+                            aria-controls="collapseTwo"
+                          >
+                            Owner
+                            <i className="las la-angle-right" />
+                          </Link>
                         </div>
-                        <div className="filter-set-contents accordion-collapse collapse" id="collapseTwo" data-bs-parent="#accordionExample">
+                        <div
+                          className="filter-set-contents accordion-collapse collapse"
+                          id="collapseTwo"
+                          data-bs-parent="#accordionExample"
+                        >
                           <ul>
                             <li>
                               <div className="filter-checks">
@@ -636,9 +739,22 @@ const DealsKanban = () => {
                       </div>
                       <div className="filter-set-content">
                         <div className="filter-set-content-head">
-                          <Link to="#" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">Tags<i className="las la-angle-right" /></Link>
+                          <Link
+                            to="#"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#collapseThree"
+                            aria-expanded="false"
+                            aria-controls="collapseThree"
+                          >
+                            Tags
+                            <i className="las la-angle-right" />
+                          </Link>
                         </div>
-                        <div className="filter-set-contents accordion-collapse collapse" id="collapseThree" data-bs-parent="#accordionExample">
+                        <div
+                          className="filter-set-contents accordion-collapse collapse"
+                          id="collapseThree"
+                          data-bs-parent="#accordionExample"
+                        >
                           <ul>
                             <li>
                               <div className="filter-checks">
@@ -700,8 +816,12 @@ const DealsKanban = () => {
                       </div>
                     </div>
                     <div className="filter-reset-btns">
-                      <Link to="#" className="btn btn-light">Reset</Link>
-                      <Link to="#" className="btn btn-primary">Filter</Link>
+                      <Link to="#" className="btn btn-light">
+                        Reset
+                      </Link>
+                      <Link to="#" className="btn btn-primary">
+                        Filter
+                      </Link>
                     </div>
                   </div>
                 </div>
@@ -710,9 +830,18 @@ const DealsKanban = () => {
             <li>
               <div className="search-set">
                 <div className="search-input">
-                  <Link to="#" className="btn btn-searchset"><i className="las la-search" /></Link>
+                  <Link to="#" className="btn btn-searchset">
+                    <i className="las la-search" />
+                  </Link>
                   <div className="dataTables_filter">
-                    <label> <input type="search" className="form-control form-control-sm" placeholder="Search" /></label>
+                    <label>
+                      {" "}
+                      <input
+                        type="search"
+                        className="form-control form-control-sm"
+                        placeholder="Search"
+                      />
+                    </label>
                   </div>
                 </div>
               </div>
@@ -724,7 +853,6 @@ const DealsKanban = () => {
           <div className="col-md-12">
             <div className="kanban-wrapper">
               <DragDropContext onDragEnd={onDragEnd}>
-
                 <div className="kanban-list-items">
                   <div className="kanban-list-head">
                     <div className="d-flex justify-content-between align-items-center">
@@ -733,12 +861,36 @@ const DealsKanban = () => {
                         <span>45 Leads - $15,44,540</span>
                       </div>
                       <div className="kanban-action-btns d-flex align-items-center">
-                        <Link to="#" className="plus-btn"><i className="la la-plus" /></Link>
+                        <Link to="#" className="plus-btn">
+                          <i className="la la-plus" />
+                        </Link>
                         <div className="dropdown dropdown-action">
-                          <Link to="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></Link>
+                          <Link
+                            to="#"
+                            className="action-icon dropdown-toggle"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                          >
+                            <i className="material-icons">more_vert</i>
+                          </Link>
                           <div className="dropdown-menu dropdown-menu-right">
-                            <Link className="dropdown-item" to="#" data-bs-toggle="modal" data-bs-target="#edit_deals"><i className="fa-solid fa-pencil m-r-5" /> Edit</Link>
-                            <Link className="dropdown-item" to="#" data-bs-toggle="modal" data-bs-target="#delete_deals"><i className="fa-regular fa-trash-can m-r-5" /> Delete</Link>
+                            <Link
+                              className="dropdown-item"
+                              to="#"
+                              data-bs-toggle="modal"
+                              data-bs-target="#edit_deals"
+                            >
+                              <i className="fa-solid fa-pencil m-r-5" /> Edit
+                            </Link>
+                            <Link
+                              className="dropdown-item"
+                              to="#"
+                              data-bs-toggle="modal"
+                              data-bs-target="#delete_deals"
+                            >
+                              <i className="fa-regular fa-trash-can m-r-5" />{" "}
+                              Delete
+                            </Link>
                           </div>
                         </div>
                       </div>
@@ -746,9 +898,8 @@ const DealsKanban = () => {
                   </div>
                   <Droppable droppableId="qualify" direction="vertical">
                     {(provided) => (
-                      <ul className="kanban-drag-wrap" ref={provided.innerRef} >
+                      <ul className="kanban-drag-wrap" ref={provided.innerRef}>
                         {tasks.qualify.map((task, index) => (
-
                           <Draggable
                             key={task.id}
                             draggableId={task.id}
@@ -761,8 +912,6 @@ const DealsKanban = () => {
                                 {...provided.draggableProps}
                                 {...provided.dragHandleProps}
                               >
-
-
                                 <div className="kanban-card">
                                   <div className="kanban-card-head">
                                     <span className="bar-design bg-purple" />
@@ -792,31 +941,58 @@ const DealsKanban = () => {
                                     </ul>
                                     <div className="d-flex justify-content-between align-items-center">
                                       <div className="card-user-info">
-                                        <Link to="/deals-details" className="avatar"><img src={task?.profile_picture} alt="Img" /></Link>
-                                        <Link to="/deals-details" className="user-name">{task?.user_name}</Link>
+                                        <Link
+                                          to="/deals-details"
+                                          className="avatar"
+                                        >
+                                          <img
+                                            src={task?.profile_picture}
+                                            alt="Img"
+                                          />
+                                        </Link>
+                                        <Link
+                                          to="/deals-details"
+                                          className="user-name"
+                                        >
+                                          {task?.user_name}
+                                        </Link>
                                       </div>
-                                      <span className="badge badge-soft-info">{task?.progress}</span>
+                                      <span className="badge badge-soft-info">
+                                        {task?.progress}
+                                      </span>
                                     </div>
                                   </div>
                                   <div className="kanban-card-footer d-flex align-items-center justify-content-between">
-                                    <span><i className="la la-calendar" />{task?.date}</span>
+                                    <span>
+                                      <i className="la la-calendar" />
+                                      {task?.date}
+                                    </span>
                                     <ul className="icons-social">
-                                      <li><Link to="#"><i className="la la-phone-volume" /></Link></li>
-                                      <li><Link to="#"><i className="lab la-facebook-messenger" /></Link></li>
-                                      <li><Link to="#"><i className="la la-swatchbook" /></Link></li>
+                                      <li>
+                                        <Link to="#">
+                                          <i className="la la-phone-volume" />
+                                        </Link>
+                                      </li>
+                                      <li>
+                                        <Link to="#">
+                                          <i className="lab la-facebook-messenger" />
+                                        </Link>
+                                      </li>
+                                      <li>
+                                        <Link to="#">
+                                          <i className="la la-swatchbook" />
+                                        </Link>
+                                      </li>
                                     </ul>
                                   </div>
                                 </div>
-
                               </li>
-
                             )}
                           </Draggable>
                         ))}
                       </ul>
                     )}
                   </Droppable>
-
                 </div>
                 <div className="kanban-list-items">
                   <div className="kanban-list-head">
@@ -826,12 +1002,36 @@ const DealsKanban = () => {
                         <span>30 Leads - $19,94,938</span>
                       </div>
                       <div className="kanban-action-btns d-flex align-items-center">
-                        <Link to="#" className="plus-btn"><i className="la la-plus" /></Link>
+                        <Link to="#" className="plus-btn">
+                          <i className="la la-plus" />
+                        </Link>
                         <div className="dropdown dropdown-action">
-                          <Link to="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></Link>
+                          <Link
+                            to="#"
+                            className="action-icon dropdown-toggle"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                          >
+                            <i className="material-icons">more_vert</i>
+                          </Link>
                           <div className="dropdown-menu dropdown-menu-right">
-                            <Link className="dropdown-item" to="#" data-bs-toggle="modal" data-bs-target="#edit_deals"><i className="fa-solid fa-pencil m-r-5" /> Edit</Link>
-                            <Link className="dropdown-item" to="#" data-bs-toggle="modal" data-bs-target="#delete_deals"><i className="fa-regular fa-trash-can m-r-5" /> Delete</Link>
+                            <Link
+                              className="dropdown-item"
+                              to="#"
+                              data-bs-toggle="modal"
+                              data-bs-target="#edit_deals"
+                            >
+                              <i className="fa-solid fa-pencil m-r-5" /> Edit
+                            </Link>
+                            <Link
+                              className="dropdown-item"
+                              to="#"
+                              data-bs-toggle="modal"
+                              data-bs-target="#delete_deals"
+                            >
+                              <i className="fa-regular fa-trash-can m-r-5" />{" "}
+                              Delete
+                            </Link>
                           </div>
                         </div>
                       </div>
@@ -839,9 +1039,8 @@ const DealsKanban = () => {
                   </div>
                   <Droppable droppableId="contact" direction="vertical">
                     {(provided) => (
-                      <ul className="kanban-drag-wrap" ref={provided.innerRef} >
+                      <ul className="kanban-drag-wrap" ref={provided.innerRef}>
                         {tasks.contact.map((task, index) => (
-
                           <Draggable
                             key={task.id}
                             draggableId={task.id}
@@ -854,8 +1053,6 @@ const DealsKanban = () => {
                                 {...provided.draggableProps}
                                 {...provided.dragHandleProps}
                               >
-
-
                                 <div className="kanban-card">
                                   <div className="kanban-card-head">
                                     <span className="bar-design bg-success" />
@@ -885,24 +1082,52 @@ const DealsKanban = () => {
                                     </ul>
                                     <div className="d-flex justify-content-between align-items-center">
                                       <div className="card-user-info">
-                                        <Link to="/deals-details" className="avatar"><img src={task?.profile_picture} alt="Img" /></Link>
-                                        <Link to="/deals-details" className="user-name">{task?.user_name}</Link>
+                                        <Link
+                                          to="/deals-details"
+                                          className="avatar"
+                                        >
+                                          <img
+                                            src={task?.profile_picture}
+                                            alt="Img"
+                                          />
+                                        </Link>
+                                        <Link
+                                          to="/deals-details"
+                                          className="user-name"
+                                        >
+                                          {task?.user_name}
+                                        </Link>
                                       </div>
-                                      <span className="badge badge-soft-info">{task?.progress}</span>
+                                      <span className="badge badge-soft-info">
+                                        {task?.progress}
+                                      </span>
                                     </div>
                                   </div>
                                   <div className="kanban-card-footer d-flex align-items-center justify-content-between">
-                                    <span><i className="la la-calendar" />{task?.date}</span>
+                                    <span>
+                                      <i className="la la-calendar" />
+                                      {task?.date}
+                                    </span>
                                     <ul className="icons-social">
-                                      <li><Link to="#"><i className="la la-phone-volume" /></Link></li>
-                                      <li><Link to="#"><i className="lab la-facebook-messenger" /></Link></li>
-                                      <li><Link to="#"><i className="la la-swatchbook" /></Link></li>
+                                      <li>
+                                        <Link to="#">
+                                          <i className="la la-phone-volume" />
+                                        </Link>
+                                      </li>
+                                      <li>
+                                        <Link to="#">
+                                          <i className="lab la-facebook-messenger" />
+                                        </Link>
+                                      </li>
+                                      <li>
+                                        <Link to="#">
+                                          <i className="la la-swatchbook" />
+                                        </Link>
+                                      </li>
                                     </ul>
                                   </div>
                                 </div>
-
                               </li>
-
                             )}
                           </Draggable>
                         ))}
@@ -918,12 +1143,36 @@ const DealsKanban = () => {
                         <span>25 Leads - $10,36.390</span>
                       </div>
                       <div className="kanban-action-btns d-flex align-items-center">
-                        <Link to="#" className="plus-btn"><i className="la la-plus" /></Link>
+                        <Link to="#" className="plus-btn">
+                          <i className="la la-plus" />
+                        </Link>
                         <div className="dropdown dropdown-action">
-                          <Link to="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></Link>
+                          <Link
+                            to="#"
+                            className="action-icon dropdown-toggle"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                          >
+                            <i className="material-icons">more_vert</i>
+                          </Link>
                           <div className="dropdown-menu dropdown-menu-right">
-                            <Link className="dropdown-item" to="#" data-bs-toggle="modal" data-bs-target="#edit_deals"><i className="fa-solid fa-pencil m-r-5" /> Edit</Link>
-                            <Link className="dropdown-item" to="#" data-bs-toggle="modal" data-bs-target="#delete_deals"><i className="fa-regular fa-trash-can m-r-5" /> Delete</Link>
+                            <Link
+                              className="dropdown-item"
+                              to="#"
+                              data-bs-toggle="modal"
+                              data-bs-target="#edit_deals"
+                            >
+                              <i className="fa-solid fa-pencil m-r-5" /> Edit
+                            </Link>
+                            <Link
+                              className="dropdown-item"
+                              to="#"
+                              data-bs-toggle="modal"
+                              data-bs-target="#delete_deals"
+                            >
+                              <i className="fa-regular fa-trash-can m-r-5" />{" "}
+                              Delete
+                            </Link>
                           </div>
                         </div>
                       </div>
@@ -933,7 +1182,6 @@ const DealsKanban = () => {
                     {(provided) => (
                       <ul className="kanban-drag-wrap" ref={provided.innerRef}>
                         {tasks.presentation.map((task, index) => (
-
                           <Draggable
                             key={task.id}
                             draggableId={task.id}
@@ -946,8 +1194,6 @@ const DealsKanban = () => {
                                 {...provided.draggableProps}
                                 {...provided.dragHandleProps}
                               >
-
-
                                 <div className="kanban-card">
                                   <div className="kanban-card-head">
                                     <span className="bar-design bg-warning" />
@@ -977,24 +1223,52 @@ const DealsKanban = () => {
                                     </ul>
                                     <div className="d-flex justify-content-between align-items-center">
                                       <div className="card-user-info">
-                                        <Link to="/deals-details" className="avatar"><img src={task?.profile_picture} alt="Img" /></Link>
-                                        <Link to="/deals-details" className="user-name">{task?.user_name}</Link>
+                                        <Link
+                                          to="/deals-details"
+                                          className="avatar"
+                                        >
+                                          <img
+                                            src={task?.profile_picture}
+                                            alt="Img"
+                                          />
+                                        </Link>
+                                        <Link
+                                          to="/deals-details"
+                                          className="user-name"
+                                        >
+                                          {task?.user_name}
+                                        </Link>
                                       </div>
-                                      <span className="badge badge-soft-info">{task?.progress}</span>
+                                      <span className="badge badge-soft-info">
+                                        {task?.progress}
+                                      </span>
                                     </div>
                                   </div>
                                   <div className="kanban-card-footer d-flex align-items-center justify-content-between">
-                                    <span><i className="la la-calendar" />{task?.date}</span>
+                                    <span>
+                                      <i className="la la-calendar" />
+                                      {task?.date}
+                                    </span>
                                     <ul className="icons-social">
-                                      <li><Link to="#"><i className="la la-phone-volume" /></Link></li>
-                                      <li><Link to="#"><i className="lab la-facebook-messenger" /></Link></li>
-                                      <li><Link to="#"><i className="la la-swatchbook" /></Link></li>
+                                      <li>
+                                        <Link to="#">
+                                          <i className="la la-phone-volume" />
+                                        </Link>
+                                      </li>
+                                      <li>
+                                        <Link to="#">
+                                          <i className="lab la-facebook-messenger" />
+                                        </Link>
+                                      </li>
+                                      <li>
+                                        <Link to="#">
+                                          <i className="la la-swatchbook" />
+                                        </Link>
+                                      </li>
                                     </ul>
                                   </div>
                                 </div>
                               </li>
-
-
                             )}
                           </Draggable>
                         ))}
@@ -1010,12 +1284,36 @@ const DealsKanban = () => {
                         <span>50 Leads - $18,83,013</span>
                       </div>
                       <div className="kanban-action-btns d-flex align-items-center">
-                        <Link to="#" className="plus-btn"><i className="la la-plus" /></Link>
+                        <Link to="#" className="plus-btn">
+                          <i className="la la-plus" />
+                        </Link>
                         <div className="dropdown dropdown-action">
-                          <Link to="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></Link>
+                          <Link
+                            to="#"
+                            className="action-icon dropdown-toggle"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                          >
+                            <i className="material-icons">more_vert</i>
+                          </Link>
                           <div className="dropdown-menu dropdown-menu-right">
-                            <Link className="dropdown-item" to="#" data-bs-toggle="modal" data-bs-target="#edit_deals"><i className="fa-solid fa-pencil m-r-5" /> Edit</Link>
-                            <Link className="dropdown-item" to="#" data-bs-toggle="modal" data-bs-target="#delete_deals"><i className="fa-regular fa-trash-can m-r-5" /> Delete</Link>
+                            <Link
+                              className="dropdown-item"
+                              to="#"
+                              data-bs-toggle="modal"
+                              data-bs-target="#edit_deals"
+                            >
+                              <i className="fa-solid fa-pencil m-r-5" /> Edit
+                            </Link>
+                            <Link
+                              className="dropdown-item"
+                              to="#"
+                              data-bs-toggle="modal"
+                              data-bs-target="#delete_deals"
+                            >
+                              <i className="fa-regular fa-trash-can m-r-5" />{" "}
+                              Delete
+                            </Link>
                           </div>
                         </div>
                       </div>
@@ -1025,7 +1323,6 @@ const DealsKanban = () => {
                     {(provided) => (
                       <ul className="kanban-drag-wrap" ref={provided.innerRef}>
                         {tasks.proposal.map((task, index) => (
-
                           <Draggable
                             key={task.id}
                             draggableId={task.id}
@@ -1038,8 +1335,6 @@ const DealsKanban = () => {
                                 {...provided.draggableProps}
                                 {...provided.dragHandleProps}
                               >
-
-
                                 <div className="kanban-card">
                                   <div className="kanban-card-head">
                                     <span className="bar-design bg-danger" />
@@ -1069,24 +1364,52 @@ const DealsKanban = () => {
                                     </ul>
                                     <div className="d-flex justify-content-between align-items-center">
                                       <div className="card-user-info">
-                                        <Link to="/deals-details" className="avatar"><img src={task?.profile_picture} alt="Img" /></Link>
-                                        <Link to="/deals-details" className="user-name">{task?.user_name}</Link>
+                                        <Link
+                                          to="/deals-details"
+                                          className="avatar"
+                                        >
+                                          <img
+                                            src={task?.profile_picture}
+                                            alt="Img"
+                                          />
+                                        </Link>
+                                        <Link
+                                          to="/deals-details"
+                                          className="user-name"
+                                        >
+                                          {task?.user_name}
+                                        </Link>
                                       </div>
-                                      <span className="badge badge-soft-info">{task?.progress}</span>
+                                      <span className="badge badge-soft-info">
+                                        {task?.progress}
+                                      </span>
                                     </div>
                                   </div>
                                   <div className="kanban-card-footer d-flex align-items-center justify-content-between">
-                                    <span><i className="la la-calendar" />{task?.date}</span>
+                                    <span>
+                                      <i className="la la-calendar" />
+                                      {task?.date}
+                                    </span>
                                     <ul className="icons-social">
-                                      <li><Link to="#"><i className="la la-phone-volume" /></Link></li>
-                                      <li><Link to="#"><i className="lab la-facebook-messenger" /></Link></li>
-                                      <li><Link to="#"><i className="la la-swatchbook" /></Link></li>
+                                      <li>
+                                        <Link to="#">
+                                          <i className="la la-phone-volume" />
+                                        </Link>
+                                      </li>
+                                      <li>
+                                        <Link to="#">
+                                          <i className="lab la-facebook-messenger" />
+                                        </Link>
+                                      </li>
+                                      <li>
+                                        <Link to="#">
+                                          <i className="la la-swatchbook" />
+                                        </Link>
+                                      </li>
                                     </ul>
                                   </div>
                                 </div>
                               </li>
-
-
                             )}
                           </Draggable>
                         ))}
@@ -1094,7 +1417,6 @@ const DealsKanban = () => {
                     )}
                   </Droppable>
                 </div>
-
               </DragDropContext>
             </div>
           </div>
@@ -1103,9 +1425,7 @@ const DealsKanban = () => {
 
       <DealsModal />
     </div>
+  );
+};
 
-
-  )
-}
-
-export default DealsKanban
+export default DealsKanban;

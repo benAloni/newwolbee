@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../../../layout/Header';
 import Sidebar from '../../../layout/Sidebar';
-import { Avatar_01, Avatar_02, Avatar_03, Avatar_04, Avatar_05, Avatar_06 } from '../../../../Routes/ImagePath';
+import { Avatar_01, Avatar_02, Avatar_03, Avatar_04, Avatar_05, Avatar_06 } from '../../../../routes/ImagePath';
 
 const Alerts = () => {
 

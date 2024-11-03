@@ -9,7 +9,7 @@ import {
   Avatar_05,
   Avatar_06,
   Avatar_08,
-} from "../../../Routes/ImagePath";
+} from "../../../routes/ImagePath";
 import Breadcrumbs from "../../../components/Breadcrumbs";
 import { base_url } from "../../../base_urls";
 

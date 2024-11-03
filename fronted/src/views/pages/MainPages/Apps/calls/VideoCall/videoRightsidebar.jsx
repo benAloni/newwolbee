@@ -6,7 +6,7 @@ import {
   Avatar_09,
   Avatar_16,
   User,
-} from "../../../../../../Routes/ImagePath";
+} from "../../../../../../routes/ImagePath";
 
 const VideoRightsidebar = () => {
   return (

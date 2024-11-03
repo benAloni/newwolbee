@@ -1,7 +1,7 @@
 import React from 'react'
 import Header from '../../../layout/Header'
 import Sidebar from '../../../layout/Sidebar'
-import { avatar1, avatar2, avatar3, avatar4, avatar5, avatar6, avatar7 } from '../../../../Routes/ImagePath'
+import { avatar1, avatar2, avatar3, avatar4, avatar5, avatar6, avatar7 } from '../../../../routes/ImagePath'
 
 const Borders = () => {
     return (

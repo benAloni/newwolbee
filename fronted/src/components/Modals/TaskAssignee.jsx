@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 import React from "react";
 import { Link } from "react-router-dom";
-import { Avatar_09, Avatar_10, Avatar_16 } from "../../Routes/ImagePath";
+import { Avatar_09, Avatar_10, Avatar_16 } from "../../routes/ImagePath";
 
 const TaskAssignee = () => {
   return (

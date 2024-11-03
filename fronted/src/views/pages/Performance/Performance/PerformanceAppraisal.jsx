@@ -10,7 +10,7 @@ import {
   Avatar_13,
   Avatar_12,
   Avatar_11,
-} from "../../../../Routes/ImagePath/index";
+} from "../../../../routes/ImagePath/index";
 import DeleteModal from "../../../../components/Modals/DeleteModal";
 import PerformanceAppraisalModal from "../../../../components/Modals/PerformanceAppraisalModal";
 

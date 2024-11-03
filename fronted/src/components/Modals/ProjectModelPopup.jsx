@@ -4,7 +4,7 @@ import {
   Avatar_09,
   Avatar_10,
   Avatar_16,
-} from "../../Routes/ImagePath";
+} from "../../routes/ImagePath";
 import { Link } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import Select from "react-select";

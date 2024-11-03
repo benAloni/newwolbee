@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Avatar_05, PlaceHolder } from "../../../../../Routes/ImagePath";
+import { Avatar_05, PlaceHolder } from "../../../../../routes/ImagePath";
 
 const ChatContent = () => {
   return (

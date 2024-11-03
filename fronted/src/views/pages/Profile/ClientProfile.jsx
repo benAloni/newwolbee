@@ -11,7 +11,7 @@ import {
   Avatar_13,
   Avatar_16,
   Avatar_19,
-} from "../../../Routes/ImagePath";
+} from "../../../routes/ImagePath";
 import Breadcrumbs from "../../../components/Breadcrumbs";
 
 const ClientProfile = () => {

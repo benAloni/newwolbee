@@ -15,7 +15,7 @@ import {
   Avatar_10,
   Avatar_11,
   Avatar_12,
-} from "../../../Routes/ImagePath";
+} from "../../../routes/ImagePath";
 import DeleteModal from "../../../components/Modals/DeleteModal";
 import Breadcrumbs from "../../../components/Breadcrumbs";
 import { AdminLeaveAddModelPopup } from "../../../components/Modals/AdminLeaveModelPopup";

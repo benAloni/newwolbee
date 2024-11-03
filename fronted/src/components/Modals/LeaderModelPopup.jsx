@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 import React from "react";
-import { Avatar_09, Avatar_10, Avatar_16 } from "../../Routes/ImagePath";
+import { Avatar_09, Avatar_10, Avatar_16 } from "../../routes/ImagePath";
 import { Link } from "react-router-dom";
 const LeaderModelPopup = () => {
   return (

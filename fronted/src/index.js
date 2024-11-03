@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import Approuter from "./Routes/Approuter";
+import Approuter from "./routes/Approuter";
 import { store } from "./redux/store";
 import { Provider } from "react-redux";
 import "bootstrap/dist/css/bootstrap.min.css";

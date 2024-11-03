@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Attachment, Avatar_05 } from "../../../../../Routes/ImagePath";
+import { Attachment, Avatar_05 } from "../../../../../routes/ImagePath";
 import ChatContent from "./chatContent";
-
 
 const ChatView = () => {
   const [isActive, setIsActive] = useState(false);
@@ -21,10 +20,7 @@ const ChatView = () => {
             <div className="navbar">
               <div className="user-details me-auto">
                 <div className="float-start user-img">
-                  <Link
-                    className="avatar"
-                    to="/profile"
-                    title="Mike Litorus">
+                  <Link className="avatar" to="/profile" title="Mike Litorus">
                     <img src={Avatar_05} alt="" className="rounded-circle" />
                     <span className="status online" />
                   </Link>
@@ -55,7 +51,8 @@ const ChatView = () => {
                     className="nav-link task-chat profile-rightbar float-end"
                     id="task_chat"
                     to="#task_window"
-                    onClick={toggleClass}>
+                    onClick={toggleClass}
+                  >
                     <i className="fa fa-user" />
                   </Link>
                 </li>
@@ -63,7 +60,8 @@ const ChatView = () => {
                   <Link
                     onClick={() => localStorage.setItem("minheight", "true")}
                     to="/call/voice-call"
-                    className="nav-link">
+                    className="nav-link"
+                  >
                     <i className="fa fa-phone" />
                   </Link>
                 </li>
@@ -77,7 +75,8 @@ const ChatView = () => {
                     aria-expanded="false"
                     data-bs-toggle="dropdown"
                     className="nav-link dropdown-toggle"
-                    to="#">
+                    to="#"
+                  >
                     <i className="fa fa-cog" />
                   </Link>
                   <div className="dropdown-menu dropdown-menu-right">
@@ -108,7 +107,8 @@ const ChatView = () => {
                   className="link attach-icon"
                   to="#"
                   data-bs-toggle="modal"
-                  data-bs-target="#drag_files">
+                  data-bs-target="#drag_files"
+                >
                   <img src={Attachment} alt="" />
                 </Link>
                 <div className="message-area">
@@ -130,8 +130,6 @@ const ChatView = () => {
           </div>
         </div>
       </div>
-
-     
     </>
   );
 };

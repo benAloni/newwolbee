@@ -7,7 +7,7 @@ import {
   Avatar_05,
   Avatar_06,
   Avatar_07,
-} from "../../../../Routes/ImagePath";
+} from "../../../../routes/ImagePath";
 import { Table, Tag } from "antd";
 import { Link } from "react-router-dom";
 

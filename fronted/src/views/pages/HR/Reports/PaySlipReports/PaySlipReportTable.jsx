@@ -5,7 +5,7 @@ import {
   Avatar_01,
   Avatar_03,
   Avatar_04,
-} from "../../../../../Routes/ImagePath";
+} from "../../../../../routes/ImagePath";
 
 const PaySlipReportTable = () => {
   const data = [

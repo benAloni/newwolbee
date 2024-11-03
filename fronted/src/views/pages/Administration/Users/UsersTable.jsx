@@ -13,7 +13,7 @@ import {
   Avatar_10,
   Avatar_11,
   Avatar_12,
-} from "../../../../Routes/ImagePath";
+} from "../../../../routes/ImagePath";
 import { Link } from "react-router-dom";
 import EditUserModal from "../../../../components/Administration/Users/EditUseModal";
 import DeleteModal from "../../../../components/Modals/deletePopup";

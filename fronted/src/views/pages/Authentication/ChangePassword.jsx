@@ -1,5 +1,5 @@
 import React from "react";
-import { Applogo } from "../../../Routes/ImagePath";
+import { Applogo } from "../../../routes/ImagePath";
 import { Link } from "react-router-dom";
 
 const ChangePassword = () => {

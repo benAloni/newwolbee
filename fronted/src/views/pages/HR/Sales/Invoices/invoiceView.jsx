@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Applogo } from "../../../../../Routes/ImagePath";
+import { Applogo } from "../../../../../routes/ImagePath";
 
 const InvoiceView = () => {
   return (

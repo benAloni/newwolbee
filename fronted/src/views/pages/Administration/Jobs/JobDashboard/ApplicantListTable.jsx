@@ -5,7 +5,7 @@ import {
   Avatar_02,
   Avatar_09,
   Avatar_10,
-} from "../../../../../Routes/ImagePath";
+} from "../../../../../routes/ImagePath";
 import DeleteModal from "../../../../../components/Modals/deletePopup";
 
 const ApplicantListTable = () => {

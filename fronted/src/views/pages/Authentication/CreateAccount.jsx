@@ -5,7 +5,7 @@ import axios, { AxiosError } from "axios";
 import { auth } from "../../../firebase/firebaseConfig";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { Applogo } from "../../../Routes/ImagePath";
+import { Applogo } from "../../../routes/ImagePath";
 import { FirebaseError } from "firebase/app";
 
 const schema = yup.object({

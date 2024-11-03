@@ -2,98 +2,47 @@
 import React, { useState } from "react";
 
 import { Link } from "react-router-dom";
-import { avatar1, avatar13, avatar16, avatar18, avatar19, avatar2, avatar20, avatar21, avatar23, avatar26, avatar4, avatar6, avatar8, clockin, employeeimg, holidaycalendar } from "../../../../../Routes/ImagePath";
+import {
+  avatar1,
+  avatar13,
+  avatar16,
+  avatar18,
+  avatar19,
+  avatar2,
+  avatar20,
+  avatar21,
+  avatar23,
+  avatar26,
+  avatar4,
+  avatar6,
+  avatar8,
+  clockin,
+  employeeimg,
+  holidaycalendar,
+} from "../../../../../routes/ImagePath";
 import Chart from "react-apexcharts";
 import Slider from "react-slick";
 import { ArrowRightCircle } from "react-feather";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 const EmployeeDashboard = () => {
-  const tooltip = (
-    <Tooltip id="tooltip-id">
-      Lesley Grauer
-    </Tooltip>
-  );
-  const tooltip1 = (
-    <Tooltip id="tooltip-id">
-      Richard Miles
-    </Tooltip>
-  );
-  const tooltip2 = (
-    <Tooltip id="tooltip-id">
-      Loren Gatlin
-    </Tooltip>
-  );
-  const tooltip3 = (
-    <Tooltip id="tooltip-id">
-      Jeffery Lalor
-    </Tooltip>
-  );
-  const tooltip4 = (
-    <Tooltip id="tooltip-id">
-      Tarah Shropshire
-    </Tooltip>
-  );
-  const tooltip5 = (
-    <Tooltip id="tooltip-id">
-      Catherine Manseau
-    </Tooltip>
-  );
-  const tooltip6 = (
-    <Tooltip id="tooltip-id">
-      Richard Miles
-    </Tooltip>
-  );
-  const tooltip7 = (
-    <Tooltip id="tooltip-id">
-      Jeffery Lalor
-    </Tooltip>
-  );
-  const tooltip8 = (
-    <Tooltip id="tooltip-id">
-      Lesley Grauer
-    </Tooltip>
-  );
-  const tooltip9 = (
-    <Tooltip id="tooltip-id">
-      Loren Gatlin
-    </Tooltip>
-  );
-  const tooltip10 = (
-    <Tooltip id="tooltip-id">
-      Tarah Shropshire
-    </Tooltip>
-  );
-  const tooltip11 = (
-    <Tooltip id="tooltip-id">
-      John Smith"
-    </Tooltip>
-  );
-  const tooltip12 = (
-    <Tooltip id="tooltip-id">
-      Richard Miles
-    </Tooltip>
-  );
-  const tooltip13 = (
-    <Tooltip id="tooltip-id">
-      Jeffery Lalor
-    </Tooltip>
-  );
-  const tooltip14 = (
-    <Tooltip id="tooltip-id">
-      Lesley Grauer
-    </Tooltip>
-  );
-  const tooltip15 = (
-    <Tooltip id="tooltip-id">
-      Tarah Shropshire
-    </Tooltip>
-  );
-  const tooltip16 = (
-    <Tooltip id="tooltip-id">
-    Loren Gatlin
-    </Tooltip>
-  );
+  const tooltip = <Tooltip id="tooltip-id">Lesley Grauer</Tooltip>;
+  const tooltip1 = <Tooltip id="tooltip-id">Richard Miles</Tooltip>;
+  const tooltip2 = <Tooltip id="tooltip-id">Loren Gatlin</Tooltip>;
+  const tooltip3 = <Tooltip id="tooltip-id">Jeffery Lalor</Tooltip>;
+  const tooltip4 = <Tooltip id="tooltip-id">Tarah Shropshire</Tooltip>;
+  const tooltip5 = <Tooltip id="tooltip-id">Catherine Manseau</Tooltip>;
+  const tooltip6 = <Tooltip id="tooltip-id">Richard Miles</Tooltip>;
+  const tooltip7 = <Tooltip id="tooltip-id">Jeffery Lalor</Tooltip>;
+  const tooltip8 = <Tooltip id="tooltip-id">Lesley Grauer</Tooltip>;
+  const tooltip9 = <Tooltip id="tooltip-id">Loren Gatlin</Tooltip>;
+  const tooltip10 = <Tooltip id="tooltip-id">Tarah Shropshire</Tooltip>;
+  const tooltip11 = <Tooltip id="tooltip-id">John Smith"</Tooltip>;
+  const tooltip12 = <Tooltip id="tooltip-id">Richard Miles</Tooltip>;
+  const tooltip13 = <Tooltip id="tooltip-id">Jeffery Lalor</Tooltip>;
+  const tooltip14 = <Tooltip id="tooltip-id">Lesley Grauer</Tooltip>;
+  const tooltip15 = <Tooltip id="tooltip-id">Tarah Shropshire</Tooltip>;
+  const tooltip16 = <Tooltip id="tooltip-id">Loren Gatlin</Tooltip>;
   // const [menu, setMenu] = useState(false);
 
   // const toggleMobileMenu = () => {
@@ -110,15 +59,15 @@ const EmployeeDashboard = () => {
         data: [200, 250, 200, 290, 220, 300, 250],
       },
     ],
-    colors: ['#FC133D', '#55CE63'],
+    colors: ["#FC133D", "#55CE63"],
     chart: {
-      type: 'bar',
+      type: "bar",
       height: 210,
       stacked: true,
 
       zoom: {
-        enabled: true
-      }
+        enabled: true,
+      },
     },
     responsive: [
       {
@@ -135,10 +84,10 @@ const EmployeeDashboard = () => {
       bar: {
         horizontal: false,
         borderRadius: 6,
-        borderRadiusApplication: "end", // "around" / "end" 
+        borderRadiusApplication: "end", // "around" / "end"
         borderRadiusWhenStacked: "all", // "all"/"last"
-        columnWidth: '30%',
-        endingShape: 'rounded'
+        columnWidth: "30%",
+        endingShape: "rounded",
       },
     },
     dataLabels: {
@@ -150,16 +99,7 @@ const EmployeeDashboard = () => {
       tickAmount: 5,
     },
     xaxis: {
-      categories: [
-        "S",
-        "M",
-        "T",
-        "W",
-        "T",
-        "F",
-        "S",
-
-      ],
+      categories: ["S", "M", "T", "W", "T", "F", "S"],
     },
     legend: { show: false },
     fill: {
@@ -180,7 +120,6 @@ const EmployeeDashboard = () => {
     speed: 500,
     slidesToShow: 3,
     slidesToScroll: 1,
-
   };
 
   return (
@@ -196,8 +135,8 @@ const EmployeeDashboard = () => {
                 <div className="alert alert-outline-success alert-dismissible fade show">
                   <div className="employee-alert-request">
                     <i className="far fa-circle-question" />
-                    Your Leave Request on <span>“24th April 2024”</span> has been
-                    Approved!!!
+                    Your Leave Request on <span>“24th April 2024”</span> has
+                    been Approved!!!
                   </div>
                   <button
                     type="button"
@@ -273,8 +212,7 @@ const EmployeeDashboard = () => {
                         </div>
                         <div className="clock-in-btn">
                           <Link to="#" className="btn btn-primary">
-                            <img src={clockin} alt="Icon" />{" "}
-                            Clock-In
+                            <img src={clockin} alt="Icon" /> Clock-In
                           </Link>
                         </div>
                       </div>
@@ -296,7 +234,8 @@ const EmployeeDashboard = () => {
                       </div>
                       <div className="view-attendance">
                         <Link to="/adminattendance">
-                          View Attendance <i className="fe fe-arrow-right-circle" />
+                          View Attendance{" "}
+                          <i className="fe fe-arrow-right-circle" />
                         </Link>
                       </div>
                     </div>
@@ -307,10 +246,7 @@ const EmployeeDashboard = () => {
                       <div className="holiday-details">
                         <div className="holiday-calendar">
                           <div className="holiday-calendar-icon">
-                            <img
-                              src={holidaycalendar}
-                              alt="Icon"
-                            />
+                            <img src={holidaycalendar} alt="Icon" />
                           </div>
                           <div className="holiday-calendar-content">
                             <h6>Ramzan</h6>
@@ -754,12 +690,15 @@ const EmployeeDashboard = () => {
                       <div className="statistic-header">
                         <h4>On Going Projects</h4>
                       </div>
-                  </div>
+                    </div>
                     <div className="col-sm-4 text-sm-end">
                       <div className="owl-nav project-nav nav-control" />
                     </div>
                   </div>
-                  <Slider {...settingsprojectslide} className="project-slider owl-carousel">
+                  <Slider
+                    {...settingsprojectslide}
+                    className="project-slider owl-carousel"
+                  >
                     {/* Project Grid */}
                     <div className="project-grid">
                       <div className="project-top">
@@ -801,10 +740,7 @@ const EmployeeDashboard = () => {
                                 aria-label="Jeffery Lalor"
                                 data-bs-original-title="Jeffery Lalor"
                               >
-                                <img
-                                  src={avatar19}
-                                  alt="User"
-                                />
+                                <img src={avatar19} alt="User" />
                               </Link>
                             </li>
                           </ul>
@@ -813,16 +749,9 @@ const EmployeeDashboard = () => {
                           <ul className="nav">
                             <li>Members :</li>
                             <li>
-
-                              <OverlayTrigger
-                                placement="top"
-                                overlay={tooltip}
-                              >
+                              <OverlayTrigger placement="top" overlay={tooltip}>
                                 <Link to="/project-view">
-                                  <img
-                                    src={avatar20}
-                                    alt="User"
-                                  />
+                                  <img src={avatar20} alt="User" />
                                 </Link>
                               </OverlayTrigger>
                             </li>
@@ -832,10 +761,7 @@ const EmployeeDashboard = () => {
                                 overlay={tooltip1}
                               >
                                 <Link to="/project-view">
-                                  <img
-                                    src={avatar19}
-                                    alt="User"
-                                  />
+                                  <img src={avatar19} alt="User" />
                                 </Link>
                               </OverlayTrigger>
                             </li>
@@ -845,10 +771,7 @@ const EmployeeDashboard = () => {
                                 overlay={tooltip2}
                               >
                                 <Link to="/project-view">
-                                  <img
-                                    src={avatar20}
-                                    alt="User"
-                                  />
+                                  <img src={avatar20} alt="User" />
                                 </Link>
                               </OverlayTrigger>
                             </li>
@@ -858,10 +781,7 @@ const EmployeeDashboard = () => {
                                 overlay={tooltip3}
                               >
                                 <Link to="/project-view">
-                                  <img
-                                    src={avatar16}
-                                    alt="User"
-                                  />
+                                  <img src={avatar16} alt="User" />
                                 </Link>
                               </OverlayTrigger>
                             </li>
@@ -871,18 +791,12 @@ const EmployeeDashboard = () => {
                                 overlay={tooltip4}
                               >
                                 <Link to="/project-view">
-                                  <img
-                                    src={avatar23}
-                                    alt="User"
-                                  />
+                                  <img src={avatar23} alt="User" />
                                 </Link>
                               </OverlayTrigger>
                             </li>
                             <li>
-                              <Link
-                                to="#"
-                                className="more-team-members"
-                              >
+                              <Link to="#" className="more-team-members">
                                 +16
                               </Link>
                             </li>
@@ -901,8 +815,8 @@ const EmployeeDashboard = () => {
                           <Link to="/project-view">Video Calling App</Link>
                         </h5>
                         <p>
-                          Design and developing a software application that enables
-                          users to make video calls over the internet.
+                          Design and developing a software application that
+                          enables users to make video calls over the internet.
                         </p>
                       </div>
                       <div className="project-middle">
@@ -931,10 +845,7 @@ const EmployeeDashboard = () => {
                                 overlay={tooltip5}
                               >
                                 <Link to="/project-view">
-                                  <img
-                                    src={avatar18}
-                                    alt="User"
-                                  />
+                                  <img src={avatar18} alt="User" />
                                 </Link>
                               </OverlayTrigger>
                             </li>
@@ -949,10 +860,7 @@ const EmployeeDashboard = () => {
                                 overlay={tooltip6}
                               >
                                 <Link to="/project-view">
-                                  <img
-                                    src={avatar21}
-                                    alt="User"
-                                  />
+                                  <img src={avatar21} alt="User" />
                                 </Link>
                               </OverlayTrigger>
                             </li>
@@ -962,10 +870,7 @@ const EmployeeDashboard = () => {
                                 overlay={tooltip7}
                               >
                                 <Link to="/project-view">
-                                  <img
-                                    src={avatar16}
-                                    alt="User"
-                                  />
+                                  <img src={avatar16} alt="User" />
                                 </Link>
                               </OverlayTrigger>
                             </li>
@@ -975,24 +880,17 @@ const EmployeeDashboard = () => {
                                 overlay={tooltip8}
                               >
                                 <Link to="/project-view">
-                                  <img
-                                    src={avatar20}
-                                    alt="User"
-                                  />
+                                  <img src={avatar20} alt="User" />
                                 </Link>
                               </OverlayTrigger>
                             </li>
                             <li>
-
                               <OverlayTrigger
                                 placement="top"
                                 overlay={tooltip9}
                               >
                                 <Link to="/project-view">
-                                  <img
-                                    src={avatar1}
-                                    alt="User"
-                                  />
+                                  <img src={avatar1} alt="User" />
                                 </Link>
                               </OverlayTrigger>
                             </li>
@@ -1002,18 +900,12 @@ const EmployeeDashboard = () => {
                                 overlay={tooltip10}
                               >
                                 <Link to="/project-view">
-                                  <img
-                                    src={avatar23}
-                                    alt="User"
-                                  />
+                                  <img src={avatar23} alt="User" />
                                 </Link>
                               </OverlayTrigger>
                             </li>
                             <li>
-                              <Link
-                                to="#"
-                                className="more-team-members"
-                              >
+                              <Link to="#" className="more-team-members">
                                 +10
                               </Link>
                             </li>
@@ -1029,11 +921,13 @@ const EmployeeDashboard = () => {
                           <Link to="/project-view">Deadline : 12 Apr 2024</Link>
                         </h6>
                         <h5>
-                          <Link to="/project-view">Hospital Administration</Link>
+                          <Link to="/project-view">
+                            Hospital Administration
+                          </Link>
                         </h5>
                         <p>
-                          Creating an online platform that serves as a central hub
-                          for hospital admin, staff, patients.
+                          Creating an online platform that serves as a central
+                          hub for hospital admin, staff, patients.
                         </p>
                       </div>
                       <div className="project-middle">
@@ -1057,16 +951,12 @@ const EmployeeDashboard = () => {
                           <ul className="nav">
                             <li>Project Leader :</li>
                             <li>
-
                               <OverlayTrigger
                                 placement="top"
                                 overlay={tooltip11}
                               >
                                 <Link to="/project-view">
-                                  <img
-                                    src={avatar4}
-                                    alt="User"
-                                  />
+                                  <img src={avatar4} alt="User" />
                                 </Link>
                               </OverlayTrigger>
                             </li>
@@ -1076,44 +966,32 @@ const EmployeeDashboard = () => {
                           <ul className="nav">
                             <li>Members :</li>
                             <li>
-
                               <OverlayTrigger
                                 placement="top"
                                 overlay={tooltip12}
                               >
                                 <Link to="/project-view">
-                                  <img
-                                    src={avatar6}
-                                    alt="User"
-                                  />
+                                  <img src={avatar6} alt="User" />
                                 </Link>
                               </OverlayTrigger>
                             </li>
                             <li>
-
                               <OverlayTrigger
                                 placement="top"
                                 overlay={tooltip13}
                               >
                                 <Link to="/project-view">
-                                  <img
-                                    src={avatar13}
-                                    alt="User"
-                                  />
+                                  <img src={avatar13} alt="User" />
                                 </Link>
                               </OverlayTrigger>
                             </li>
                             <li>
-
                               <OverlayTrigger
                                 placement="top"
                                 overlay={tooltip14}
                               >
                                 <Link to="/project-view">
-                                  <img
-                                    src={avatar18}
-                                    alt="User"
-                                  />
+                                  <img src={avatar18} alt="User" />
                                 </Link>
                               </OverlayTrigger>
                             </li>
@@ -1123,32 +1001,22 @@ const EmployeeDashboard = () => {
                                 overlay={tooltip15}
                               >
                                 <Link to="/project-view">
-                                  <img
-                                    src={avatar23}
-                                    alt="User"
-                                  />
+                                  <img src={avatar23} alt="User" />
                                 </Link>
                               </OverlayTrigger>
                             </li>
                             <li>
-                             
                               <OverlayTrigger
                                 placement="top"
                                 overlay={tooltip16}
                               >
                                 <Link to="/project-view">
-                                  <img
-                                    src={avatar1}
-                                    alt="User"
-                                  />
+                                  <img src={avatar1} alt="User" />
                                 </Link>
                               </OverlayTrigger>
                             </li>
                             <li>
-                              <Link
-                                to="#"
-                                className="more-team-members"
-                              >
+                              <Link to="#" className="more-team-members">
                                 +12
                               </Link>
                             </li>
@@ -1198,10 +1066,7 @@ const EmployeeDashboard = () => {
                                 aria-label="Jeffery Lalor"
                                 data-bs-original-title="Jeffery Lalor"
                               >
-                                <img
-                                  src={avatar1}
-                                  alt="User"
-                                />
+                                <img src={avatar1} alt="User" />
                               </Link>
                             </li>
                           </ul>
@@ -1216,10 +1081,7 @@ const EmployeeDashboard = () => {
                                 aria-label="Loren Gatlin"
                                 data-bs-original-title="Loren Gatlin"
                               >
-                                <img
-                                  src={avatar26}
-                                  alt="User"
-                                />
+                                <img src={avatar26} alt="User" />
                               </Link>
                             </li>
                             <li>
@@ -1229,10 +1091,7 @@ const EmployeeDashboard = () => {
                                 aria-label="Lesley Grauer"
                                 data-bs-original-title="Lesley Grauer"
                               >
-                                <img
-                                  src={avatar18}
-                                  alt="User"
-                                />
+                                <img src={avatar18} alt="User" />
                               </Link>
                             </li>
                             <li>
@@ -1242,10 +1101,7 @@ const EmployeeDashboard = () => {
                                 aria-label="Richard Miles"
                                 data-bs-original-title="Richard Miles"
                               >
-                                <img
-                                  src={avatar6}
-                                  alt="User"
-                                />
+                                <img src={avatar6} alt="User" />
                               </Link>
                             </li>
                             <li>
@@ -1255,10 +1111,7 @@ const EmployeeDashboard = () => {
                                 aria-label="Jeffery Lalor"
                                 data-bs-original-title="Jeffery Lalor"
                               >
-                                <img
-                                  src={avatar13}
-                                  alt="User"
-                                />
+                                <img src={avatar13} alt="User" />
                               </Link>
                             </li>
                             <li>
@@ -1268,17 +1121,11 @@ const EmployeeDashboard = () => {
                                 aria-label="Tarah Shropshire"
                                 data-bs-original-title="Tarah Shropshire"
                               >
-                                <img
-                                  src={avatar8}
-                                  alt="User"
-                                />
+                                <img src={avatar8} alt="User" />
                               </Link>
                             </li>
                             <li>
-                              <Link
-                                to="#"
-                                className="more-team-members"
-                              >
+                              <Link to="#" className="more-team-members">
                                 +13
                               </Link>
                             </li>
@@ -1297,8 +1144,8 @@ const EmployeeDashboard = () => {
                           <Link to="/project-view">Video Calling App</Link>
                         </h5>
                         <p>
-                          Design and developing a software application that enables
-                          users to make video calls over the internet.
+                          Design and developing a software application that
+                          enables users to make video calls over the internet.
                         </p>
                       </div>
                       <div className="project-middle">
@@ -1328,10 +1175,7 @@ const EmployeeDashboard = () => {
                                 aria-label="Catherine Manseau"
                                 data-bs-original-title="Catherine Manseau"
                               >
-                                <img
-                                  src={avatar18}
-                                  alt="User"
-                                />
+                                <img src={avatar18} alt="User" />
                               </Link>
                             </li>
                           </ul>
@@ -1346,10 +1190,7 @@ const EmployeeDashboard = () => {
                                 aria-label="Richard Miles"
                                 data-bs-original-title="Richard Miles"
                               >
-                                <img
-                                  src={avatar21}
-                                  alt="User"
-                                />
+                                <img src={avatar21} alt="User" />
                               </Link>
                             </li>
                             <li>
@@ -1359,10 +1200,7 @@ const EmployeeDashboard = () => {
                                 aria-label="Jeffery Lalor"
                                 data-bs-original-title="Jeffery Lalor"
                               >
-                                <img
-                                  src={avatar16}
-                                  alt="User"
-                                />
+                                <img src={avatar16} alt="User" />
                               </Link>
                             </li>
                             <li>
@@ -1372,10 +1210,7 @@ const EmployeeDashboard = () => {
                                 aria-label="Lesley Grauer"
                                 data-bs-original-title="Lesley Grauer"
                               >
-                                <img
-                                  src={avatar20}
-                                  alt="User"
-                                />
+                                <img src={avatar20} alt="User" />
                               </Link>
                             </li>
                             <li>
@@ -1385,10 +1220,7 @@ const EmployeeDashboard = () => {
                                 aria-label="Loren Gatlin"
                                 data-bs-original-title="Loren Gatlin"
                               >
-                                <img
-                                  src={avatar1}
-                                  alt="User"
-                                />
+                                <img src={avatar1} alt="User" />
                               </Link>
                             </li>
                             <li>
@@ -1398,17 +1230,11 @@ const EmployeeDashboard = () => {
                                 aria-label="Tarah Shropshire"
                                 data-bs-original-title="Tarah Shropshire"
                               >
-                                <img
-                                  src={avatar23}
-                                  alt="User"
-                                />
+                                <img src={avatar23} alt="User" />
                               </Link>
                             </li>
                             <li>
-                              <Link
-                                to="#"
-                                className="more-team-members"
-                              >
+                              <Link to="#" className="more-team-members">
                                 +10
                               </Link>
                             </li>
@@ -1432,8 +1258,9 @@ const EmployeeDashboard = () => {
                       <div className="employee-month-details">
                         <h4>Employee of the month</h4>
                         <p>
-                          We are really proud of the difference you have made which
-                          gives everybody the reason to applaud &amp; appreciate
+                          We are really proud of the difference you have made
+                          which gives everybody the reason to applaud &amp;
+                          appreciate
                         </p>
                       </div>
                       <div className="employee-month-content">
@@ -1469,9 +1296,15 @@ const EmployeeDashboard = () => {
                       <div className="owl-nav company-nav nav-control" />
                     </div>
                   </div>
-                  <Slider {...settings} className="company-slider owl-carousel owl-loaded owl-drag">
+                  <Slider
+                    {...settings}
+                    className="company-slider owl-carousel owl-loaded owl-drag"
+                  >
                     {/* Company Grid */}
-                    <div className="owl-item active" style={{ width: '199.667px', marginRight: '20px' }}>
+                    <div
+                      className="owl-item active"
+                      style={{ width: "199.667px", marginRight: "20px" }}
+                    >
                       <div className="company-grid company-soft-tertiary">
                         <div className="company-top">
                           <div className="company-icon">
@@ -1501,7 +1334,10 @@ const EmployeeDashboard = () => {
                     </div>
                     {/* Company Grid */}
                     {/* Company Grid */}
-                    <div className="owl-item active" style={{ width: '199.667px', marginRight: '20px' }}>
+                    <div
+                      className="owl-item active"
+                      style={{ width: "199.667px", marginRight: "20px" }}
+                    >
                       <div className="company-grid company-soft-success">
                         <div className="company-top">
                           <div className="company-icon">
@@ -1531,7 +1367,10 @@ const EmployeeDashboard = () => {
                     </div>
                     {/* Company Grid */}
                     {/* Company Grid */}
-                    <div className="owl-item active" style={{ width: '199.667px', marginRight: '20px' }}>
+                    <div
+                      className="owl-item active"
+                      style={{ width: "199.667px", marginRight: "20px" }}
+                    >
                       <div className="company-grid company-soft-info">
                         <div className="company-top">
                           <div className="company-icon">
@@ -1571,7 +1410,6 @@ const EmployeeDashboard = () => {
       </div>
       {/* /Page Wrapper */}
     </>
-
   );
 };
 

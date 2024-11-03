@@ -7,7 +7,7 @@ import {
   Avatar_09,
   Avatar_10,
   Avatar_11,
-} from "../../../../Routes/ImagePath/index";
+} from "../../../../routes/ImagePath/index";
 import SearchBox from "../../../../components/SearchBox";
 import Breadcrumbs from "../../../../components/Breadcrumbs";
 import DeleteModal from "../../../../components/Modals/DeleteModal";

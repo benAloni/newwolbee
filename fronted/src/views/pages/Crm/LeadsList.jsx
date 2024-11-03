@@ -1,15 +1,26 @@
-import { Table } from 'antd'
-import React, { useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom';
-import { companyicon01, companyicon02, companyicon03, companyicon04, companyicon05, companyicon06, companyicon07, companyicon08, companyicon09, companyicon10 } from '../../../Routes/ImagePath';
-import ExportLeads from '../../../components/Modals/Crm/ExportLeads';
-import AddLeads from '../../../components/Modals/Crm/AddLeads';
-import DateRangePicker from 'react-bootstrap-daterangepicker';
-import Select from 'react-select';
-import CrmDeleteModal from '../../../components/Modals/Crm/CrmDeleteModal';
-import EditLeads from '../../../components/Modals/Crm/EditLeads';
-import { Star } from 'react-feather';
-import SearchBox from '../../../components/SearchBox';
+import { Table } from "antd";
+import React, { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
+import {
+  companyicon01,
+  companyicon02,
+  companyicon03,
+  companyicon04,
+  companyicon05,
+  companyicon06,
+  companyicon07,
+  companyicon08,
+  companyicon09,
+  companyicon10,
+} from "../../../routes/ImagePath";
+import ExportLeads from "../../../components/Modals/Crm/ExportLeads";
+import AddLeads from "../../../components/Modals/Crm/AddLeads";
+import DateRangePicker from "react-bootstrap-daterangepicker";
+import Select from "react-select";
+import CrmDeleteModal from "../../../components/Modals/Crm/CrmDeleteModal";
+import EditLeads from "../../../components/Modals/Crm/EditLeads";
+import { Star } from "react-feather";
+import SearchBox from "../../../components/SearchBox";
 
 const LeadsList = () => {
   const [isFilterVisible, setIsFilterVisible] = useState(false);
@@ -39,7 +50,7 @@ const LeadsList = () => {
       CreatedData: "24 Feb 2024, 12:20 pm",
       LeadOwner: "Guillory",
     },
-    { 
+    {
       stars: "fa fa-star filled",
       img: companyicon03,
       LeadName: "Adams",
@@ -127,8 +138,8 @@ const LeadsList = () => {
       LeadStatus: "Lost",
       CreatedData: "28 June 2024, 05:40 pm",
       LeadOwner: "Daniel",
-    }
-  ]
+    },
+  ];
   const columns = [
     {
       title: "",
@@ -140,7 +151,6 @@ const LeadsList = () => {
               <i className={record.stars} />
             </div>
           </div>
-
         </div>
       ),
     },
@@ -148,7 +158,9 @@ const LeadsList = () => {
       title: "Lead Name",
       dataIndex: "LeadName",
       render: (text) => (
-        <Link to="/leads-details" className="company-img">{text}</Link>
+        <Link to="/leads-details" className="company-img">
+          {text}
+        </Link>
       ),
       sorter: (a, b) => a.LeadName.length - b.LeadName.length,
     },
@@ -160,8 +172,8 @@ const LeadsList = () => {
           <Link to="/company-details" className="company-img">
             <img alt="img" src={`${record.img}`} /> {/* Updated field name */}
           </Link>
-          <Link  to="/company-details">{text}</Link>
-           <span>{record.role}</span>
+          <Link to="/company-details">{text}</Link>
+          <span>{record.role}</span>
         </span>
       ),
       sorter: (a, b) => a.CompanyName.length - b.CompanyName.length,
@@ -241,7 +253,9 @@ const LeadsList = () => {
             >
               <i className="fa fa-trash m-r-5" /> Delete
             </Link>
-            <Link class="dropdown-item" to="/contact-details"><i class="fa-regular fa-eye"></i> Preview</Link>
+            <Link class="dropdown-item" to="/contact-details">
+              <i class="fa-regular fa-eye"></i> Preview
+            </Link>
           </div>
         </div>
       ),
@@ -280,26 +294,26 @@ const LeadsList = () => {
     timePicker: false,
   };
   const status = [
-    { value: '--Select--', label: '--Select--' },
-    { value: 'Closed', label: 'Closed' },
-    { value: 'Not Contacted', label: 'Not Contacted' },
-    { value: 'Contacted', label: 'Contacted' },
-    { value: 'Lost', label: 'Lost' }
+    { value: "--Select--", label: "--Select--" },
+    { value: "Closed", label: "Closed" },
+    { value: "Not Contacted", label: "Not Contacted" },
+    { value: "Contacted", label: "Contacted" },
+    { value: "Lost", label: "Lost" },
   ];
   const companyName = [
-    { value: '--Select--', label: '--Select--' },
-    { value: 'NovaWaveLLC', label: 'NovaWaveLLC' },
-    { value: 'SilverHawk', label: 'SilverHawk' },
-    { value: 'SummitPeak', label: 'SummitPeak' },
-    { value: 'HarborView', label: 'HarborView' },
-    { value: 'Redwood Inc', label: 'Redwood Inc' },
+    { value: "--Select--", label: "--Select--" },
+    { value: "NovaWaveLLC", label: "NovaWaveLLC" },
+    { value: "SilverHawk", label: "SilverHawk" },
+    { value: "SummitPeak", label: "SummitPeak" },
+    { value: "HarborView", label: "HarborView" },
+    { value: "Redwood Inc", label: "Redwood Inc" },
   ];
   const sortoption = [
-    { value: 'Sort By Alphabet', label: 'Sort By Alphabet' },
-    { value: 'Ascending', label: 'Ascending' },
-    { value: 'Descending', label: 'Descending' },
-    { value: 'Recently Viewed', label: 'Recently Viewed' },
-    { value: 'Recently Added', label: 'Recently Added' },
+    { value: "Sort By Alphabet", label: "Sort By Alphabet" },
+    { value: "Ascending", label: "Ascending" },
+    { value: "Descending", label: "Descending" },
+    { value: "Recently Viewed", label: "Recently Viewed" },
+    { value: "Recently Added", label: "Recently Added" },
   ];
 
   const customStyles = {
@@ -380,11 +394,11 @@ const LeadsList = () => {
     };
 
     const maximizeBtn = maximizeBtnRef.current;
-    maximizeBtn.addEventListener('click', handleClick);
+    maximizeBtn.addEventListener("click", handleClick);
 
     // Cleanup function to remove the event listener and exit fullscreen on component unmount
     return () => {
-      maximizeBtn.removeEventListener('click', handleClick);
+      maximizeBtn.removeEventListener("click", handleClick);
       cleanup();
     };
   }, [isFullScreen]);
@@ -410,10 +424,7 @@ const LeadsList = () => {
               <div className="col-md-8 float-end ms-auto">
                 <div className="d-flex title-head">
                   <div className="view-icons">
-                    <Link
-                      to="#"
-                      className="grid-view btn btn-link"
-                    >
+                    <Link to="#" className="grid-view btn btn-link">
                       <i className="las la-redo-alt" />
                     </Link>
                     <Link
@@ -426,8 +437,11 @@ const LeadsList = () => {
                     </Link>
                     <Link
                       to="#"
-                      className={`list-view btn btn-link ${isFilterVisible ? "active-filter" : ""}`}
-                      id="filter_search" onClick={toggleFilterVisibility}
+                      className={`list-view btn btn-link ${
+                        isFilterVisible ? "active-filter" : ""
+                      }`}
+                      id="filter_search"
+                      onClick={toggleFilterVisibility}
                     >
                       <i className="las la-filter" />
                     </Link>
@@ -458,9 +472,9 @@ const LeadsList = () => {
           {/* /Page Header */}
           {/* Search Filter */}
           <div
-            className={`filter-filelds${isFilterVisible ? ' visible' : ''}`}
+            className={`filter-filelds${isFilterVisible ? " visible" : ""}`}
             id="filter_inputs"
-            style={{ display: isFilterVisible ? 'block' : 'none' }}
+            style={{ display: isFilterVisible ? "block" : "none" }}
           >
             <div className="row filter-row">
               <div className="col-xl-2">
@@ -479,8 +493,9 @@ const LeadsList = () => {
                     onBlur={handleInputBlur}
                     onChange={handleInputChange}
                   />
-                  <label className="focus-label" onClick={handleLabelClick}>LeadName</label>
-
+                  <label className="focus-label" onClick={handleLabelClick}>
+                    LeadName
+                  </label>
                 </div>
               </div>
               <div className="col-xl-2">
@@ -499,7 +514,9 @@ const LeadsList = () => {
                     onBlur={handleInputBlur1}
                     onChange={handleInputChange1}
                   />
-                  <label className="focus-label" onClick={handleLabelClick1}>Email</label>
+                  <label className="focus-label" onClick={handleLabelClick1}>
+                    Email
+                  </label>
                 </div>
               </div>
               <div className="col-xl-2">
@@ -542,14 +559,16 @@ const LeadsList = () => {
             </div>
           </div>
 
-
           <hr />
           {/* /Search Filter */}
           <div className="filter-section">
             <ul>
               <li>
                 <div className="view-icons">
-                  <Link to="/leads-list" className="list-view btn btn-link active">
+                  <Link
+                    to="/leads-list"
+                    className="list-view btn btn-link active"
+                  >
                     <i className="las la-list" />
                   </Link>
                   <Link to="/leads-kanban" className="grid-view btn btn-link">
@@ -561,7 +580,7 @@ const LeadsList = () => {
                 <div className="form-sort value-contain">
                   <i className="las la-sort-alpha-up-alt" />
                   <Select
-                    className='form-sort-two w-100'
+                    className="form-sort-two w-100"
                     options={sortoption}
                     placeholder="Select By Alphabet"
                     styles={customStyles}
@@ -569,8 +588,13 @@ const LeadsList = () => {
                 </div>
               </li>
               <li>
-                <div className={`form-sorts dropdown ${isDropdownOpen ? 'table-filter-show' : ''}`}>
-                  <Link onClick={handleToggleDropdown}
+                <div
+                  className={`form-sorts dropdown ${
+                    isDropdownOpen ? "table-filter-show" : ""
+                  }`}
+                >
+                  <Link
+                    onClick={handleToggleDropdown}
                     to="#"
                     className="dropdown-toggle"
                     id="table-filter"
@@ -606,16 +630,44 @@ const LeadsList = () => {
                               <li>
                                 <div className="filter-checks">
                                   <label className="checkboxs">
-                                    <input type="checkbox" defaultChecked={true} />
+                                    <input
+                                      type="checkbox"
+                                      defaultChecked={true}
+                                    />
                                     <span className="checkmarks" />
                                   </label>
                                 </div>
                                 <div className="rating">
-                                  <Star className='me-1' size={18} color='#FFBC34' fill='#FFBC34' />
-                                  <Star className='me-1' size={18} color='#FFBC34' fill='#FFBC34' />
-                                  <Star className='me-1' size={18} color='#FFBC34' fill='#FFBC34' />
-                                  <Star className='me-1' size={18} color='#FFBC34' fill='#FFBC34' />
-                                  <Star className='me-1' size={18} color='#FFBC34' fill='#FFBC34' />
+                                  <Star
+                                    className="me-1"
+                                    size={18}
+                                    color="#FFBC34"
+                                    fill="#FFBC34"
+                                  />
+                                  <Star
+                                    className="me-1"
+                                    size={18}
+                                    color="#FFBC34"
+                                    fill="#FFBC34"
+                                  />
+                                  <Star
+                                    className="me-1"
+                                    size={18}
+                                    color="#FFBC34"
+                                    fill="#FFBC34"
+                                  />
+                                  <Star
+                                    className="me-1"
+                                    size={18}
+                                    color="#FFBC34"
+                                    fill="#FFBC34"
+                                  />
+                                  <Star
+                                    className="me-1"
+                                    size={18}
+                                    color="#FFBC34"
+                                    fill="#FFBC34"
+                                  />
 
                                   <span>5.0</span>
                                 </div>
@@ -628,11 +680,36 @@ const LeadsList = () => {
                                   </label>
                                 </div>
                                 <div className="rating">
-                                  <Star className='me-1' size={18} color='#FFBC34' fill='#FFBC34' />
-                                  <Star className='me-1' size={18} color='#FFBC34' fill='#FFBC34' />
-                                  <Star className='me-1' size={18} color='#FFBC34' fill='#FFBC34' />
-                                  <Star className='me-1' size={18} color='#FFBC34' fill='#FFBC34' />
-                                  <Star className='me-1' size={18} color='#E2E4E6' fill='#E2E4E6' />
+                                  <Star
+                                    className="me-1"
+                                    size={18}
+                                    color="#FFBC34"
+                                    fill="#FFBC34"
+                                  />
+                                  <Star
+                                    className="me-1"
+                                    size={18}
+                                    color="#FFBC34"
+                                    fill="#FFBC34"
+                                  />
+                                  <Star
+                                    className="me-1"
+                                    size={18}
+                                    color="#FFBC34"
+                                    fill="#FFBC34"
+                                  />
+                                  <Star
+                                    className="me-1"
+                                    size={18}
+                                    color="#FFBC34"
+                                    fill="#FFBC34"
+                                  />
+                                  <Star
+                                    className="me-1"
+                                    size={18}
+                                    color="#E2E4E6"
+                                    fill="#E2E4E6"
+                                  />
                                   <span>4.0</span>
                                 </div>
                               </li>
@@ -644,11 +721,36 @@ const LeadsList = () => {
                                   </label>
                                 </div>
                                 <div className="rating">
-                                  <Star className='me-1' size={18} color='#FFBC34' fill='#FFBC34' />
-                                  <Star className='me-1' size={18} color='#FFBC34' fill='#FFBC34' />
-                                  <Star className='me-1' size={18} color='#FFBC34' fill='#FFBC34' />
-                                  <Star className='me-1' size={18} color='#E2E4E6' fill='#E2E4E6' />
-                                  <Star className='me-1' size={18} color='#E2E4E6' fill='#E2E4E6' />
+                                  <Star
+                                    className="me-1"
+                                    size={18}
+                                    color="#FFBC34"
+                                    fill="#FFBC34"
+                                  />
+                                  <Star
+                                    className="me-1"
+                                    size={18}
+                                    color="#FFBC34"
+                                    fill="#FFBC34"
+                                  />
+                                  <Star
+                                    className="me-1"
+                                    size={18}
+                                    color="#FFBC34"
+                                    fill="#FFBC34"
+                                  />
+                                  <Star
+                                    className="me-1"
+                                    size={18}
+                                    color="#E2E4E6"
+                                    fill="#E2E4E6"
+                                  />
+                                  <Star
+                                    className="me-1"
+                                    size={18}
+                                    color="#E2E4E6"
+                                    fill="#E2E4E6"
+                                  />
 
                                   <span>3.0</span>
                                 </div>
@@ -661,12 +763,36 @@ const LeadsList = () => {
                                   </label>
                                 </div>
                                 <div className="rating">
-                                  <Star className='me-1' size={18} color='#FFBC34' fill='#FFBC34' />
-                                  <Star className='me-1' size={18} color='#FFBC34' fill='#FFBC34' />
-                                  <Star className='me-1' size={18} color='#E2E4E6' fill='#E2E4E6' />
-                                  <Star className='me-1' size={18} color='#E2E4E6' fill='#E2E4E6' />
-                                  <Star className='me-1' size={18} color='#E2E4E6' fill='#E2E4E6' />
-
+                                  <Star
+                                    className="me-1"
+                                    size={18}
+                                    color="#FFBC34"
+                                    fill="#FFBC34"
+                                  />
+                                  <Star
+                                    className="me-1"
+                                    size={18}
+                                    color="#FFBC34"
+                                    fill="#FFBC34"
+                                  />
+                                  <Star
+                                    className="me-1"
+                                    size={18}
+                                    color="#E2E4E6"
+                                    fill="#E2E4E6"
+                                  />
+                                  <Star
+                                    className="me-1"
+                                    size={18}
+                                    color="#E2E4E6"
+                                    fill="#E2E4E6"
+                                  />
+                                  <Star
+                                    className="me-1"
+                                    size={18}
+                                    color="#E2E4E6"
+                                    fill="#E2E4E6"
+                                  />
 
                                   <span>2.0</span>
                                 </div>
@@ -679,11 +805,36 @@ const LeadsList = () => {
                                   </label>
                                 </div>
                                 <div className="rating">
-                                  <Star className='me-1' size={18} color='#FFBC34' fill='#FFBC34' />
-                                  <Star className='me-1' size={18} color='#E2E4E6' fill='#E2E4E6' />
-                                  <Star className='me-1' size={18} color='#E2E4E6' fill='#E2E4E6' />
-                                  <Star className='me-1' size={18} color='#E2E4E6' fill='#E2E4E6' />
-                                  <Star className='me-1' size={18} color='#E2E4E6' fill='#E2E4E6' />
+                                  <Star
+                                    className="me-1"
+                                    size={18}
+                                    color="#FFBC34"
+                                    fill="#FFBC34"
+                                  />
+                                  <Star
+                                    className="me-1"
+                                    size={18}
+                                    color="#E2E4E6"
+                                    fill="#E2E4E6"
+                                  />
+                                  <Star
+                                    className="me-1"
+                                    size={18}
+                                    color="#E2E4E6"
+                                    fill="#E2E4E6"
+                                  />
+                                  <Star
+                                    className="me-1"
+                                    size={18}
+                                    color="#E2E4E6"
+                                    fill="#E2E4E6"
+                                  />
+                                  <Star
+                                    className="me-1"
+                                    size={18}
+                                    color="#E2E4E6"
+                                    fill="#E2E4E6"
+                                  />
 
                                   <span>1.0</span>
                                 </div>
@@ -901,8 +1052,7 @@ const LeadsList = () => {
       </div>
       {/* /Page Content */}
     </div>
+  );
+};
 
-  )
-}
-
-export default LeadsList
+export default LeadsList;

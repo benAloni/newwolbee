@@ -5,7 +5,7 @@ import {
   Avatar_03,
   Avatar_05,
   Avatar_08,
-} from "../../../../../../Routes/ImagePath";
+} from "../../../../../../routes/ImagePath";
 import VideoRightsidebar from "../VideoCall/videoRightsidebar";
 
 const VoiceContent = () => {

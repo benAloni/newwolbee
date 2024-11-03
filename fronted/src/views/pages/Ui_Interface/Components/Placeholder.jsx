@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import Header from '../../../layout/Header'
 import Sidebar from '../../../layout/Sidebar'
-import { image_01 } from '../../../../Routes/ImagePath'
+import { image_01 } from '../../../../routes/ImagePath'
 
 const Placeholder = () => {
     return (

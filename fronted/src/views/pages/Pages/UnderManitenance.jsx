@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { maintenance, maintenancebg01, maintenancebg02, maintenancebg03, maintenancebg04, maintenancebg05 } from '../../../Routes/ImagePath'
+import { maintenance, maintenancebg01, maintenancebg02, maintenancebg03, maintenancebg04, maintenancebg05 } from '../../../routes/ImagePath'
 
 const UnderManitenance = () => {
     return (

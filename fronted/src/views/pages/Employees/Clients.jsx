@@ -9,7 +9,7 @@ import {
   Avatar_19,
   Avatar_28,
   Avatar_29,
-} from "../../../Routes/ImagePath";
+} from "../../../routes/ImagePath";
 import Breadcrumbs from "../../../components/Breadcrumbs";
 import ClientsFilter from "../../../components/ClientsFilter";
 import DeleteModal from "../../../components/Modals/DeleteModal";

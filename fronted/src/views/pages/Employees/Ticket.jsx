@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { Table } from "antd";
-import { Avatar_02, Avatar_05 } from "../../../Routes/ImagePath";
+import { Avatar_02, Avatar_05 } from "../../../routes/ImagePath";
 import DeleteModal from "../../../components/Modals/DeleteModal";
 import TicketModelPopup from "../../../components/Modals/TicketModelPopup";
 import Breadcrumbs from "../../../components/Breadcrumbs";

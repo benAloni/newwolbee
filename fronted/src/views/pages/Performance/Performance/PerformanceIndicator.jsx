@@ -9,7 +9,7 @@ import {
   Avatar_10,
   Avatar_11,
   Avatar_12,
-} from "../../../../Routes/ImagePath/index";
+} from "../../../../routes/ImagePath/index";
 import PerformanceIndicatorModal from "../../../../components/Modals/PerformanceIndicatorModal";
 import Breadcrumbs from "../../../../components/Breadcrumbs";
 import DeleteModal from "../../../../components/Modals/DeleteModal";

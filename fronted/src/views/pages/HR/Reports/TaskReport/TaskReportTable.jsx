@@ -1,7 +1,7 @@
 import { Table } from "antd";
 import React from "react";
 import { Link } from "react-router-dom";
-import { Avatar_16 } from "../../../../../Routes/ImagePath";
+import { Avatar_16 } from "../../../../../routes/ImagePath";
 
 const TaskReportTable = () => {
   const data = [
@@ -56,7 +56,8 @@ const TaskReportTable = () => {
             className="btn btn-white btn-sm btn-rounded dropdown-toggle"
             to="#"
             data-bs-toggle="dropdown"
-            aria-expanded="false">
+            aria-expanded="false"
+          >
             <i
               className={
                 text === "Inactive"

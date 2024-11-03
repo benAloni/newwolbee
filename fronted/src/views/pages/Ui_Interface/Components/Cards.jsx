@@ -1,5 +1,5 @@
 import React from "react";
-import { Img_01, avatar1, avatar10, avatar11, avatar12, avatar13, avatar14, avatar15, avatar16, avatar17, avatar18, avatar2, avatar3, avatar4, avatar5, avatar6, avatar7, avatar8, avatar9, image_01, img_02, img_03, img_2, img_3, img_4, img_5 } from "../../../../Routes/ImagePath";
+import { Img_01, avatar1, avatar10, avatar11, avatar12, avatar13, avatar14, avatar15, avatar16, avatar17, avatar18, avatar2, avatar3, avatar4, avatar5, avatar6, avatar7, avatar8, avatar9, image_01, img_02, img_03, img_2, img_3, img_4, img_5 } from "../../../../routes/ImagePath";
 import { Link } from "react-router-dom";
 import Header from "../../../layout/Header";
 import Sidebar from "../../../layout/Sidebar";

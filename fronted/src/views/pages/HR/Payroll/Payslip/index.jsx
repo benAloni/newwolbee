@@ -1,7 +1,7 @@
 import React from "react";
 
 import Breadcrumbs from "../../../../../components/Breadcrumbs";
-import { Applogo } from "../../../../../Routes/ImagePath";
+import { Applogo } from "../../../../../routes/ImagePath";
 
 const PaySlip = () => {
   return (

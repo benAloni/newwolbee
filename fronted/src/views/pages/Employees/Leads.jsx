@@ -10,7 +10,7 @@ import {
   Avatar_12,
   Avatar_13,
   Avatar_16,
-} from "../../../Routes/ImagePath";
+} from "../../../routes/ImagePath";
 import { Table } from "antd";
 import Breadcrumbs from "../../../components/Breadcrumbs";
 import SearchBox from "../../../components/SearchBox";

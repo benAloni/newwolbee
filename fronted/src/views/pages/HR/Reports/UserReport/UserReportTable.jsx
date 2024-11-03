@@ -1,7 +1,7 @@
 import { Table } from "antd";
 import React from "react";
 import { Link } from "react-router-dom";
-import { Avatar_19, Avatar_21 } from "../../../../../Routes/ImagePath";
+import { Avatar_19, Avatar_21 } from "../../../../../routes/ImagePath";
 
 const UserReportTable = () => {
   const data = [
@@ -70,7 +70,8 @@ const UserReportTable = () => {
               : text === "Admin"
               ? "badge bg-inverse-danger"
               : "badge bg-inverse-default"
-          }>
+          }
+        >
           {text}
         </span>
       ),
@@ -92,7 +93,8 @@ const UserReportTable = () => {
             className="btn btn-white btn-sm btn-rounded dropdown-toggle"
             to="#"
             data-bs-toggle="dropdown"
-            aria-expanded="false">
+            aria-expanded="false"
+          >
             <i
               className={
                 text === "Inactive"

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Avatar_02, Avatar_09 } from "../../../Routes/ImagePath";
+import { Avatar_02, Avatar_09 } from "../../../routes/ImagePath";
 import { Table } from "antd";
 import Breadcrumbs from "../../../components/Breadcrumbs";
 import SearchBox from "../../../components/SearchBox";

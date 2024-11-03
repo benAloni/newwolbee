@@ -1,34 +1,30 @@
 import React, { useEffect, useState } from 'react';
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { useSelector } from "react-redux";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { auth } from '../../../firebase/firebaseConfig';
+import { fetchEmployees, fetchNotifications } from '../../../services';
 
 
 export default function NotificationsPopup() {
-  const user = useSelector((state) => state.auth?.user);
-
   const [events, setEvents] = useState([]);
   const [eventsTomorrow, setEventsTomorrow] = useState([]);
-
-  const fetchData = async () => {
-    const token = await auth.currentUser.getIdToken()
-    const [AllNotification, employeesResponse] =
-      await Promise.all([
-        axios.get(`${process.env.REACT_APP_SERVER_URI}/getAllNotifications`, {
-          headers: { Authorization: `Bearer ${token}` },
-        }),
-        axios.get(`${process.env.REACT_APP_SERVER_URI}/getEmployees`, {
-          headers: { Authorization: `Bearer ${token}` },
-        }),
-      ]);
+  const queryClient = useQueryClient()
   
-      setEvents([...AllNotification.data, ...employeesResponse.data]);
+  const fetchData = async () => {
+    const [notifications, employees] =
+      await Promise.all([
+       fetchNotifications(),
+        fetchEmployees(),
+      ]);
+  console.log(
+    notifications
+  );
+  
+      setEvents([...notifications, ...employees]);
       
     };
 
-  const {error, isLoading } = useQuery({
-    queryKey: ["AllNotificationsData"],
+  const {data, error, isLoading } = useQuery({
+    queryKey: ["allNotificationsData"],
     queryFn: fetchData,
     staleTime: 0, // 3 minutes
     refetchInterval: 0, // 3 minutes
@@ -36,30 +32,29 @@ export default function NotificationsPopup() {
   });  
 
   useEffect(() => {
-    if (events.length > 0 && !isLoading) {
-      const newEvents = events.flatMap((val) => {  
+    if (data && !isLoading) {
+      const newEvents = data.flatMap((val) => {  
         const eventsArray = [];
-  
-        // Always add the birthday event if DataOfBirth exists
-        if (val.DataOfBirth) {
+         
+        if (val.dateOfBirth) {
           eventsArray.push({
-            title: `Happy Birthday ${val.FullName}`, // Assuming employees have FullName
-            date: val.DataOfBirth,
+            title: `Happy Birthday ${val.fullName}`,
+            date: val.dateOfBirth,
             className: `Birthday`,
           });
         }
   
-        // Add the vacation event if Vacation data exists
-        if (val.Vacation && val.Vacation.length > 0) {
+        // Add the vacation event if vacation data exists
+        if (val.vacation && val.vacation.length > 0) {
           eventsArray.push({
-            title: `${val.FullName} fly to ${val.Vacation[0].name}`,
-            date: val.Vacation[0].startDate,
-            className: `Vacation`,
+            title: `${val.fullName} fly to ${val.vacation[0].name}`,
+            date: val.vacation[0].startDate,
+            className: `vacation`,
           });
         }
   
-        // If neither Birthday nor Vacation exists, return the default event
-        if (!val.DataOfBirth && !(val.Vacation && val.Vacation.length > 0)) {
+        // If neither Birthday nor vacation exists, return the default event
+        if (!val.dateOfBirth && !(val.vacation && val.vacation.length > 0)) {
           eventsArray.push({
             title: val.title,
             date: val.start,
@@ -88,7 +83,7 @@ export default function NotificationsPopup() {
               today >= threeDaysBefore && today <= eventDate
             );
           }
-          if (event.className === 'Vacation') {
+          if (event.className === 'vacation') {
             const threeDaysBefore = new Date(eventDate);
             threeDaysBefore.setDate(eventDate.getDate() - 3);
   
@@ -120,7 +115,7 @@ export default function NotificationsPopup() {
     if (error) {
       console.error("Error fetching data:", error);
     }
-  }, [events, isLoading, error]);
+  }, [data, isLoading, error]);
   
   
 

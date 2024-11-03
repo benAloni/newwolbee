@@ -6,7 +6,7 @@ import {
   Avatar_09,
   Avatar_10,
   Avatar_11,
-} from "../../Routes/ImagePath";
+} from "../../routes/ImagePath";
 import Select from "react-select";
 
 const TicketModelPopup = () => {

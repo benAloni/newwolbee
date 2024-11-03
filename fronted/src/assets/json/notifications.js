@@ -1,4 +1,10 @@
-import { Avatar_02, Avatar_03, Avatar_06, Avatar_13, Avatar_17 } from "../../Routes/ImagePath";
+import {
+  Avatar_02,
+  Avatar_03,
+  Avatar_06,
+  Avatar_13,
+  Avatar_17,
+} from "../../routes/ImagePath";
 
 // Create an object and assign it to a variable
 const notificationsData = {
@@ -8,7 +14,7 @@ const notificationsData = {
       image: Avatar_02,
       // name: "Nicole's birthday",
       // contents: "added new task",
-      link: '/departments',
+      link: "/departments",
       contents_2: "Nicole's birthday is comming soon. Send her a gift!",
       time: "4 mins ago",
     },
@@ -18,7 +24,8 @@ const notificationsData = {
       // name: "Tarah Shropshire",
       // contents: "changed the task name",
       link: "/task-board",
-      contents_2: "Tomorrow is the international pizza day. View your options of spoling your team!",
+      contents_2:
+        "Tomorrow is the international pizza day. View your options of spoling your team!",
       time: "6 mins ago",
     },
     {
@@ -50,12 +57,10 @@ const notificationsData = {
       contents_2:
         "Jacob used over 20 days of sick days in the last quarter. Let him know he has reached his limit.",
       time: "12 mins ago",
-    }
+    },
   ],
 };
 
 // Export the variable as the default export
 
-export default notificationsData
-
-
+export default notificationsData;

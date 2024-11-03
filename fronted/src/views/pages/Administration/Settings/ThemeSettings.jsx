@@ -1,6 +1,6 @@
 import React from "react";
 import Breadcrumbs from "../../../../components/Breadcrumbs";
-import { Applogo } from "../../../../Routes/ImagePath/index";
+import { Applogo } from "../../../../routes/ImagePath/index";
 
 const ThemeSettings = () => {
   return (

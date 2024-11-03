@@ -6,7 +6,7 @@ import {
   Avatar_09,
   Avatar_10,
   User,
-} from "../../Routes/ImagePath";
+} from "../../routes/ImagePath";
 
 const ChatSidebar = () => {
   return (

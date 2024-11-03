@@ -2,7 +2,7 @@
 import React from 'react'
 import Header from '../../../layout/Header'
 import Sidebar from '../../../layout/Sidebar'
-import { Avatar_02, Avatar_03, image_01, img_4 } from '../../../../Routes/ImagePath'
+import { Avatar_02, Avatar_03, image_01, img_4 } from '../../../../routes/ImagePath'
 
 const Images = () => {
     return (

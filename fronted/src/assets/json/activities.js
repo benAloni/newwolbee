@@ -1,4 +1,4 @@
-import { Avatar_01, Avatar_05, Avatar_08, Avatar_13, Avatar_16 } from "../../Routes/ImagePath";
+import { Avatar_01, Avatar_05, Avatar_08, Avatar_13, Avatar_16 } from "../../routes/ImagePath";
 
 const ActivitiesData = {
     ActivitiesList: [

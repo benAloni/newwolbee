@@ -4,7 +4,7 @@ import Header from "../../../../layout/Header";
 import Sidebar from "../../../../layout/Sidebar";
 import Breadcrumbs from "../../../../../components/Breadcrumbs";
 import { Link } from "react-router-dom";
-import { Avatar_02 } from "../../../../../Routes/ImagePath";
+import { Avatar_02 } from "../../../../../routes/ImagePath";
 import { Table } from "antd";
 import DeleteModal from "../../../../../components/Modals/deletePopup";
 import EditPfModal from "./EditPfModal";

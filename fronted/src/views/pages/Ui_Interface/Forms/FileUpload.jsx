@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { DownloadImg } from "../../../../Routes/ImagePath";
+import { DownloadImg } from "../../../../routes/ImagePath";
 
 const FileUpload = () => {
   return (

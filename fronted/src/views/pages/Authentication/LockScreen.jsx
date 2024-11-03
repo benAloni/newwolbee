@@ -1,5 +1,5 @@
 import React from "react";
-import { Applogo, Avatar_02 } from "../../../Routes/ImagePath";
+import { Applogo, Avatar_02 } from "../../../routes/ImagePath";
 import { Link } from "react-router-dom";
 
 const LockScreen = () => {

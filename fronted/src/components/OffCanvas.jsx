@@ -10,7 +10,7 @@ import {
   compact,
   dark,
   small_hover,
-} from "../Routes/ImagePath";
+} from "../routes/ImagePath";
 import { Link } from "react-router-dom";
 import { setLayout } from "../redux";
 import { useDispatch } from "react-redux";

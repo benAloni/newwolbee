@@ -5,7 +5,7 @@ import {
   Avatar_01,
   Avatar_02,
   Avatar_03,
-} from "../../../../../Routes/ImagePath";
+} from "../../../../../routes/ImagePath";
 import DeleteModal from "../../../../../components/Modals/deletePopup";
 import AddJobResumes from "../../../../../components/Administration/Jobs/ManageResumes/AddJobResumes";
 

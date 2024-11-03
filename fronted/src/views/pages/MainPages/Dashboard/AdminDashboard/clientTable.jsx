@@ -5,7 +5,7 @@ import {
   Avatar_07,
   Avatar_06,
   Avatar_14,
-} from "../../../../../Routes/ImagePath/index";
+} from "../../../../../routes/ImagePath/index";
 
 const ClientTable = () => {
   const data = [

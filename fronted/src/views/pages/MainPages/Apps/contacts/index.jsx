@@ -49,7 +49,7 @@ const Contacts = () => {
                 <div className="fixed-header" style={{backgroundColor:'	#D3D3D3'}}>
                   <div className="row align-items-center">
                     <div className="col-6">
-                      <h4 className="page-title mb-0">Notification's</h4>
+                      <h4 className="page-title mb-0">Notifications</h4>
                     </div>
                     <div className="col-6">
                       <div className="navbar justify-content-end">

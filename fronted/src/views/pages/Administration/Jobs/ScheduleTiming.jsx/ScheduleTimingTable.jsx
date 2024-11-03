@@ -6,7 +6,7 @@ import {
   Avatar_01,
   Avatar_02,
   Avatar_03,
-} from "../../../../../Routes/ImagePath";
+} from "../../../../../routes/ImagePath";
 import ScheduleTimingModal from "../../../../../components/ScheduleTiming/ScheduleTimingModal";
 
 const ScheduleTimingTable = () => {

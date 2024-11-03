@@ -7,7 +7,7 @@ import {
   Avatar_11,
   Avatar_12,
   Avatar_13,
-} from "../../../Routes/ImagePath";
+} from "../../../routes/ImagePath";
 import { Link } from "react-router-dom";
 import { Table } from "antd";
 import EmployeeListFilter from "../../../components/EmployeeListFilter";

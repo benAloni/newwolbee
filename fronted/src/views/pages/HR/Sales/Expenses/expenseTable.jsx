@@ -1,5 +1,5 @@
 import React from "react";
-import { Avatar_03, Avatar_04 } from "../../../../../Routes/ImagePath";
+import { Avatar_03, Avatar_04 } from "../../../../../routes/ImagePath";
 import { Link } from "react-router-dom";
 import { Table } from "antd";
 

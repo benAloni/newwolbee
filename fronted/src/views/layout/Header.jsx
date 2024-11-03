@@ -10,7 +10,7 @@ import {
   lnFrench,
   lnGerman,
   lnSpanish,
-} from "../../Routes/ImagePath";
+} from "../../routes/ImagePath";
 import { FaRegBell, FaRegComment } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -30,7 +30,7 @@ const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const username = useSelector((state) => state.auth.user?.fullName);
-  const user = useSelector((state)=> state.auth?.user.uid)
+  const user = useSelector((state) => state.auth?.user.uid);
   const handleLogout = () => {
     dispatch(logout());
     signOut(auth);
@@ -52,7 +52,7 @@ const Header = () => {
   const [flag, setFlag] = useState(false);
   const [flagImage, setFlagImage] = useState(lnEnglish);
   const [isOpen, setIsOpen] = useState(false);
-  const [dismissToggle, setDismissToggle] = useState(false)
+  const [dismissToggle, setDismissToggle] = useState(false);
   const [userProfileImage, setUserProfileImage] = useState("");
 
   const notificationRef = useRef(null);

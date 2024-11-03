@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Avatar_09, Avatar_11 } from "../../../../Routes/ImagePath";
+import { Avatar_09, Avatar_11 } from "../../../../routes/ImagePath";
 import LeaderModelPopup from "../../../../components/Modals/LeaderModelPopup";
 const ProjectViewDetails = () => {
   const projectData = {

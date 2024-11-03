@@ -1,5 +1,5 @@
 import React from 'react'
-import { Avatar_01, Avatar_04, Avatar_05, Avatar_06, Avatar_07, Avatar_08 } from '../../../../Routes/ImagePath'
+import { Avatar_01, Avatar_04, Avatar_05, Avatar_06, Avatar_07, Avatar_08 } from '../../../../routes/ImagePath'
 import Header from '../../../layout/Header'
 import Sidebar from '../../../layout/Sidebar'
 

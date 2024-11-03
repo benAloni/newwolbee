@@ -12,7 +12,7 @@ import {
   img3,
   img4,
   keyboard,
-} from "../../../Routes/ImagePath";
+} from "../../../routes/ImagePath";
 import Breadcrumbs from "../../../components/Breadcrumbs ";
 import UserAssestDetailPopup from "../../../components/Modals/UserAssestDetailPopup";
 

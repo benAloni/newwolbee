@@ -10,7 +10,7 @@ import {
   Avatar_11,
   Avatar_12,
   Avatar_13,
-} from "../../../Routes/ImagePath";
+} from "../../../routes/ImagePath";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import ScheduleModelPopup from "../../../components/Modals/ScheduleModelPopup";
@@ -79,10 +79,7 @@ const ShiftScheduling = () => {
                     <tr>
                       <td>
                         <h2 className="table-avatar">
-                          <Link
-                            to="/profile"
-                            className="avatar"
-                          >
+                          <Link to="/profile" className="avatar">
                             <img src={Avatar_02} alt="img" />
                           </Link>
                           <Link to="/profile">
@@ -223,10 +220,7 @@ const ShiftScheduling = () => {
                     <tr>
                       <td>
                         <h2 className="table-avatar">
-                          <Link
-                            to="/profile"
-                            className="avatar"
-                          >
+                          <Link to="/profile" className="avatar">
                             <img src={Avatar_09} alt="img" />
                           </Link>
                           <Link to="/profile">
@@ -367,10 +361,7 @@ const ShiftScheduling = () => {
                     <tr>
                       <td>
                         <h2 className="table-avatar">
-                          <Link
-                            to="/profile"
-                            className="avatar"
-                          >
+                          <Link to="/profile" className="avatar">
                             <img src={Avatar_10} alt="img" />
                           </Link>
                           <Link to="/profile">
@@ -511,10 +502,7 @@ const ShiftScheduling = () => {
                     <tr>
                       <td>
                         <h2 className="table-avatar">
-                          <Link
-                            to="/profile"
-                            className="avatar"
-                          >
+                          <Link to="/profile" className="avatar">
                             <img src={Avatar_05} alt="img" />
                           </Link>
                           <Link to="/profile">
@@ -655,10 +643,7 @@ const ShiftScheduling = () => {
                     <tr>
                       <td>
                         <h2 className="table-avatar">
-                          <Link
-                            to="/profile"
-                            className="avatar"
-                          >
+                          <Link to="/profile" className="avatar">
                             <img src={Avatar_11} alt="img" />
                           </Link>
                           <Link to="/profile">
@@ -799,10 +784,7 @@ const ShiftScheduling = () => {
                     <tr>
                       <td>
                         <h2 className="table-avatar">
-                          <Link
-                            to="/profile"
-                            className="avatar"
-                          >
+                          <Link to="/profile" className="avatar">
                             <img src={Avatar_12} alt="img" />
                           </Link>
                           <Link to="/profile">
@@ -943,10 +925,7 @@ const ShiftScheduling = () => {
                     <tr>
                       <td>
                         <h2 className="table-avatar">
-                          <Link
-                            to="/profile"
-                            className="avatar"
-                          >
+                          <Link to="/profile" className="avatar">
                             <img src={Avatar_13} alt="img" />
                           </Link>
                           <Link to="/profile">

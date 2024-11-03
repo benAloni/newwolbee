@@ -5,7 +5,7 @@ import {
   Avatar_02,
   Avatar_05,
   Avatar_09,
-} from "../../../../../Routes/ImagePath";
+} from "../../../../../routes/ImagePath";
 
 const EmployeeReportTable = () => {
   const data = [

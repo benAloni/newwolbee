@@ -1,7 +1,7 @@
 import { Table } from "antd";
 import React from "react";
 import { Link } from "react-router-dom";
-import { Avatar_03, Avatar_04 } from "../../../../../Routes/ImagePath";
+import { Avatar_03, Avatar_04 } from "../../../../../routes/ImagePath";
 
 const ExpenseReportTable = () => {
   const data = [
@@ -82,7 +82,8 @@ const ExpenseReportTable = () => {
             className="btn btn-white btn-sm btn-rounded dropdown-toggle"
             to="#"
             data-bs-toggle="dropdown"
-            aria-expanded="false">
+            aria-expanded="false"
+          >
             <i
               className={
                 text === "Pending"
@@ -112,7 +113,8 @@ const ExpenseReportTable = () => {
             to="#"
             className="action-icon dropdown-toggle"
             data-bs-toggle="dropdown"
-            aria-expanded="false">
+            aria-expanded="false"
+          >
             <i className="material-icons">more_vert</i>
           </Link>
           <div className="dropdown-menu dropdown-menu-right">

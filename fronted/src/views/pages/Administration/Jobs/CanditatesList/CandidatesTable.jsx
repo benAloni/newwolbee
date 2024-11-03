@@ -6,7 +6,7 @@ import {
   Avatar_01,
   Avatar_02,
   Avatar_03,
-} from "../../../../../Routes/ImagePath";
+} from "../../../../../routes/ImagePath";
 import EditCandidatesModal from "../../../../../components/Administration/Jobs/CandidatesModal/EditCandidatesModal";
 
 const CandidatesTable = () => {

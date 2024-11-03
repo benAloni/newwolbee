@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 import React from "react";
 import { Link } from "react-router-dom";
-import { Avatar_02 } from "../../../Routes/ImagePath/index";
+import { Avatar_02 } from "../../../routes/ImagePath/index";
 import { Table } from "antd";
 import PromotionModal from "../../../components/Modals/PromotionModal";
 import DeleteModal from "../../../components/Modals/DeleteModal";

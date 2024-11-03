@@ -14,7 +14,7 @@ import {
   Avatar_12,
   Avatar_13,
   Avatar_16,
-} from "../../../../Routes/ImagePath";
+} from "../../../../routes/ImagePath";
 import DeleteModal from "../../../../components/Modals/DeleteModal";
 import ProjectModelPopup from "../../../../components/Modals/ProjectModelPopup";
 

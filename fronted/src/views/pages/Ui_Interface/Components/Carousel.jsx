@@ -2,7 +2,7 @@
 import React from "react";
 import Header from "../../../layout/Header";
 import Sidebar from "../../../layout/Sidebar";
-import { image_01, img_2, img_3, img_4 } from "../../../../Routes/ImagePath";
+import { image_01, img_2, img_3, img_4 } from "../../../../routes/ImagePath";
 import { Link } from "react-router-dom";
 
 const Carousel = () => {

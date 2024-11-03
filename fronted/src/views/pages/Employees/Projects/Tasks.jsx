@@ -12,14 +12,12 @@ import {
   Avatar_10,
   Avatar_16,
   User,
-} from "../../../../Routes/ImagePath";
+} from "../../../../routes/ImagePath";
 import TaskAssignee from "../../../../components/Modals/TaskAssignee";
 import TaskFollowersModelPopup from "../../../../components/Modals/TaskFollowersModelPopup";
 import ProjectModelPopup from "../../../../components/Modals/ProjectModelPopup";
 
 const Tasks = () => {
-
-
   const [task, settask] = useState(true);
   const [taskText, setTaskText] = useState(true);
   const [toastMessage, setToastMessage] = useState("");

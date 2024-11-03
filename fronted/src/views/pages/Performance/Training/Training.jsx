@@ -11,7 +11,7 @@ import {
   Avatar_12,
   Avatar_13,
   Avatar_16,
-} from "../../../../Routes/ImagePath/index";
+} from "../../../../routes/ImagePath/index";
 import SearchBox from "../../../../components/SearchBox";
 import Breadcrumbs from "../../../../components/Breadcrumbs";
 import DeleteModal from "../../../../components/Modals/DeleteModal";

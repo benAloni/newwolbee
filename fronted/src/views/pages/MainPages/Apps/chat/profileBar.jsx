@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Avatar_02, Avatar_05 } from "../../../../../Routes/ImagePath";
+import { Avatar_02, Avatar_05 } from "../../../../../routes/ImagePath";
 
 const ProfileBar = () => {
   return (

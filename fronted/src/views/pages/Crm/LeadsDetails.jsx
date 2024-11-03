@@ -7,7 +7,7 @@ import {
   avatar21,
   avatar22,
   media35,
-} from "../../../Routes/ImagePath";
+} from "../../../routes/ImagePath";
 import Select from "react-select";
 import AddNotes from "../../../components/Modals/Crm/AddNotes";
 import { MoreVertical } from "react-feather";

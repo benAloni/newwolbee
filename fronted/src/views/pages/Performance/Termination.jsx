@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Table } from "antd";
-import { Avatar_02 } from "../../../Routes/ImagePath/index";
+import { Avatar_02 } from "../../../routes/ImagePath/index";
 import TerminationModal from "../../../components/Modals/TerminationModal";
 import DeleteModal from "../../../components/Modals/DeleteModal";
 import Breadcrumbs from "../../../components/Breadcrumbs";
