@@ -115,7 +115,7 @@ const Calendar = (props) => {
           const vacation = employee.vacation[0];
           return [
             {
-              title: `${employee.fullName} is off to ${employee.gender === "female" ? "her": "his"} ${vacation.purposeOfTrip === "pleasure" ? `trip in ${vacation.destination}` : "trip"} `,
+              title: `${employee.fullName} is off to ${employee.gender === "female" ? "her": "his"} ${vacation.purposeOfTrip === "pleasure" ? `trip in ${vacation.destination}` : `${vacation.purposeOfTrip} in ${vacation.destination}`} `,
               className: "bg-purple",
               start: vacation.startDate,
               end: vacation.startDate,
@@ -123,7 +123,7 @@ const Calendar = (props) => {
             {
               title: `${employee.fullName} is back from ${
                 employee.gender === "female" ? "her" : "him"
-              } ${vacation.purposeOfTrip === "pleasure" ? `trip in ${vacation.destination}`: vacation.purposeOfTrip} `,
+              } ${vacation.purposeOfTrip === "pleasure" ? `trip in ${vacation.destination}`: `${vacation.purposeOfTrip} in ${vacation.destination}`} `,
               className: "bg-purple",
               start: vacation.endDate,
               end: vacation.endDate,

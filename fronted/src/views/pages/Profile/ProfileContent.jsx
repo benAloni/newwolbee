@@ -7,7 +7,7 @@ import EditInsightsActivity from "./EditInsightsActivity";
 
 export const ProjectDetails = ({ selectedEmployee }) => {
   const [popupEdit, setPopupEdit] = useState(0);
-  const [showAllData, setShowAllData] = useState({});
+  // const [showAllData, setShowAllData] = useState({});
   const [importanceLevels, setImportanceLevels] = useState({
     management: "High",
     turnover: "Medium",
@@ -16,22 +16,24 @@ export const ProjectDetails = ({ selectedEmployee }) => {
     professionalism: "Low",
   });
 
-  useEffect(() => {
-    if (selectedEmployee) {
-      setShowAllData(selectedEmployee);
-    }
-  }, [selectedEmployee]); // Update when `selectedEmployee` changes
+  // console.log(selectedEmployee);
+  // useEffect(() => {
 
-  const topInsights = showAllData.TopInsights || [];
-  const latestInfo = showAllData.LatestInfo || [];
-  
+  //   if (selectedEmployee) {
+  //     setShowAllData(selectedEmployee);
+  //     console.log(selectedEmployee);
+  //   }
+  // }, [selectedEmployee]); // Update when `selectedEmployee` changes
 
-  if (!selectedEmployee) {
-    return <div></div>;
-  }
-  selectedEmployee.LatestInfo.map((val) => {
-    return console.log(val.Info1);
-  });
+  // const topInsights = showAllData.topInsights || [];
+  // const latestInsights = showAllData.latestInsights || [];
+
+  // if (!selectedEmployee) {
+  //   return <div></div>;
+  // }
+  // selectedEmployee.latestInsights.map((val) => {
+  //   return console.log(val.Info1);
+  // });
 
   const getValue = (importance) => {
     switch (importance) {
@@ -148,12 +150,12 @@ export const ProjectDetails = ({ selectedEmployee }) => {
   };
 
   // Example function to handle updates
-  const handleUpdate = (updatedData) => {
-    setShowAllData((prevData) => ({
-      ...prevData,
-      ...updatedData, // Apply updates to the state
-    }));
-  };
+  // const handleUpdate = (updatedData) => {
+  //   setShowAllData((prevData) => ({
+  //     ...prevData,
+  //     ...updatedData, // Apply updates to the state
+  //   }));
+  // };
 
   return (
     <div className="tab-content">
@@ -162,8 +164,8 @@ export const ProjectDetails = ({ selectedEmployee }) => {
           isOpen={popupEdit}
           closeModal={closeModal}
           selectedEmployee={selectedEmployee}
-          handleUpdate={handleUpdate}
-          showAllData={showAllData}
+          // handleUpdate={handleUpdate}
+          // showAllData={showAllData}
         />
       )}
 
@@ -182,71 +184,39 @@ export const ProjectDetails = ({ selectedEmployee }) => {
               <i className="fa-solid fa-pencil" />
             </button>
 
-            <h3 style={titleStyle}>Wolbee’s Top Insights</h3>
+            <h3 style={titleStyle}>Top Insights</h3>
             <hr />
             <div style={{ marginLeft: "15px" }}>
-              {topInsights.map((val, index) => (
-                <div
-                  key={index}
-                  style={{
-                    display: "flex",
-                    flexDirection: "column", // Stack insights vertically
-                    marginBottom: "20px", // Space between each insight
-                  }}
-                >
+              {[...new Set(selectedEmployee?.topInsights)].map(
+                (insight, index) => (
                   <div
+                    key={index}
                     style={{
                       display: "flex",
-                      alignItems: "center",
-                      marginBottom: "10px",
+                      flexDirection: "column", // Stack insights vertically
+                      marginBottom: "20px", // Space between each insight
                     }}
                   >
-                    <TiPin
+                    <div
                       style={{
-                        color: "#FF902F",
-                        marginRight: "10px", // Space between the icon and text
-                        flexShrink: 0, // Prevent the icon from shrinking
+                        display: "flex",
+                        alignItems: "center",
+                        marginBottom: "10px",
                       }}
-                      size={pinIconSize}
-                    />
-                    <div style={{ wordBreak: "break-word" }}>
-                      {val.Insight1}
+                    >
+                      <TiPin
+                        style={{
+                          color: "#FF902F",
+                          marginRight: "10px", // Space between the icon and text
+                          flexShrink: 0, // Prevent the icon from shrinking
+                        }}
+                        size={pinIconSize}
+                      />
+                      <div style={{ wordBreak: "break-word" }}>{insight}</div>
                     </div>
                   </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      marginBottom: "10px",
-                    }}
-                  >
-                    <TiPin
-                      style={{
-                        color: "#FF902F",
-                        marginRight: "10px", // Space between the icon and text
-                        flexShrink: 0, // Prevent the icon from shrinking
-                      }}
-                      size={pinIconSize}
-                    />
-                    <div style={{ wordBreak: "break-word" }}>
-                      {val.Insight2}
-                    </div>
-                  </div>
-                  <div style={{ display: "flex", alignItems: "center" }}>
-                    <TiPin
-                      style={{
-                        color: "#FF902F",
-                        marginRight: "10px", // Space between the icon and text
-                        flexShrink: 0, // Prevent the icon from shrinking
-                      }}
-                      size={pinIconSize}
-                    />
-                    <div style={{ wordBreak: "break-word" }}>
-                      {val.Insight3}
-                    </div>
-                  </div>
-                </div>
-              ))}
+                )
+              )}
             </div>
           </div>
           <div style={boxStyle}>
@@ -264,68 +234,36 @@ export const ProjectDetails = ({ selectedEmployee }) => {
             <h3 style={titleStyle}>Latest Insights</h3>
             <hr />
             <div style={{ marginLeft: "15px" }}>
-              {latestInfo.map((val, index) => (
-                <div
-                  key={index}
-                  style={{
-                    display: "flex",
-                    flexDirection: "column", // Stack insights vertically
-                    marginBottom: "20px", // Space between each insight
-                  }}
-                >
+            {[...new Set(selectedEmployee?.latestInsights)].map(
+                (insight, index) => (
                   <div
+                    key={index}
                     style={{
                       display: "flex",
-                      alignItems: "center",
-                      marginBottom: "10px",
+                      flexDirection: "column", 
+                      marginBottom: "20px", 
                     }}
                   >
-                    <TiPin
+                    <div
                       style={{
-                        color: "#FF902F",
-                        marginRight: "10px", // Space between the icon and text
-                        flexShrink: 0, // Prevent the icon from shrinking
+                        display: "flex",
+                        alignItems: "center",
+                        marginBottom: "10px",
                       }}
-                      size={pinIconSize}
-                    />
-                    <div style={{ wordBreak: "break-word" }}>
-                      {val.LatestInfo1}
+                    >
+                      <TiPin
+                        style={{
+                          color: "#FF902F",
+                          marginRight: "10px", 
+                          flexShrink: 0, 
+                        }}
+                        size={pinIconSize}
+                      />
+                      <div style={{ wordBreak: "break-word" }}>{insight}</div>
                     </div>
                   </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      marginBottom: "10px",
-                    }}
-                  >
-                    <TiPin
-                      style={{
-                        color: "#FF902F",
-                        marginRight: "10px", // Space between the icon and text
-                        flexShrink: 0, // Prevent the icon from shrinking
-                      }}
-                      size={pinIconSize}
-                    />
-                    <div style={{ wordBreak: "break-word" }}>
-                      {val.LatestInfo2}
-                    </div>
-                  </div>
-                  <div style={{ display: "flex", alignItems: "center" }}>
-                    <TiPin
-                      style={{
-                        color: "#FF902F",
-                        marginRight: "10px", // Space between the icon and text
-                        flexShrink: 0, // Prevent the icon from shrinking
-                      }}
-                      size={pinIconSize}
-                    />
-                    <div style={{ wordBreak: "break-word" }}>
-                      {val.LatestInfo3}
-                    </div>
-                  </div>
-                </div>
-              ))}
+                )
+              )}
             </div>
           </div>
 
@@ -344,12 +282,12 @@ export const ProjectDetails = ({ selectedEmployee }) => {
                   <i className="fa-solid fa-pencil" />
                 </button>
                 <h3 style={{ fontWeight: "bold", fontSize: "24px" }}>
-                  Latest Activity
+                  Latest Activities
                 </h3>
                 <hr />
                 <div className="experience-box">
                   <div style={{ marginLeft: "15px" }}>
-                    {selectedEmployee.LatestActivity.map((val, index) => {
+                    {selectedEmployee?.latestActivity.map((val, index) => {
                       const entries = Object.entries(val);
                       return entries.map(([key, value], i) => (
                         <div
