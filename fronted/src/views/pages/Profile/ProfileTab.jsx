@@ -1,7 +1,7 @@
 
 import React from "react";
 import { Link } from "react-router-dom";
-import PersonalInformationModelPopup from "../../../components/Modals/PersonalInformationModelPopup";
+import EditPersonalInfoModal from "../../../components/Modals/EditPersonalInfoModal";
 import { ListItem, ProjectDetails } from "./ProfileContent";
 
 const ProfileTab = ({selectedEmployee}) => {
@@ -318,7 +318,7 @@ const ProfileTab = ({selectedEmployee}) => {
         {/*  Bank Tab */}
       </div>
       {/* Model Popup*/}
-      <PersonalInformationModelPopup selectedEmployee={selectedEmployee} />
+      <EditPersonalInfoModal selectedEmployee={selectedEmployee} />
     </>
   );
 };

@@ -4,7 +4,6 @@ import ProfileTab from "./ProfileTab";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSelector } from "react-redux";
 import { fetchEmployees } from "../../../services";
-import { useLocation } from "react-router-dom";
 import { userProfile } from "../../../imgs";
 
 const Profile = () => {
@@ -12,9 +11,12 @@ const Profile = () => {
   const uid = useSelector((state)=> state.auth?.user.uid)
   const { employeeId } = useParams();
   const [selectedEmployee, setSelectedEmployee] = useState(null);
-  const location = useLocation()
   const queryClient= useQueryClient()
-  const { employeeAvatar } = location.state || {};
+
+  const cachedEmployees = queryClient.getQueryData(["employees", uid]);
+  const cachedEmployee = cachedEmployees?.find(emp => emp.id === employeeId);
+  const cachedEmployeeAvatar = cachedEmployee?.avatar;
+
 
   const { data: employees } = useQuery({
     queryKey: ["employees"],
@@ -31,16 +33,6 @@ const Profile = () => {
     }         
   }, [employees, employeeId]);
 
-  // const useEmployeeProfile = (uid, employeeCivilId) => {
-  //   return useQuery({
-  //     queryKey: ["employeeProfile", uid, employeeCivilId],
-  //     queryFn: () => {
-  //       const employees = queryClient.getQueryData(["employees", uid]);
-  //       return employees?.find((employee) => employee.employeeId === employeeCivilId);
-  //     },
-  //     enabled: !!uid && !!employeeCivilId, // Only run if uid and employeeId are defined
-  //   });
-  // };
 
   return (
     <>
@@ -56,7 +48,9 @@ const Profile = () => {
                   <div className="profile-view">
                     <div className="profile-img-wrap">
                       <div className="profile-img">
-                          <img src={employeeAvatar ? employeeAvatar: userProfile} alt="UserImage" />
+                          <img src={cachedEmployeeAvatar ? cachedEmployeeAvatar: userProfile}
+                          loading="lazy"
+                          alt="UserImage" />
                       </div>
                     </div>
                     <div className="profile-basic">

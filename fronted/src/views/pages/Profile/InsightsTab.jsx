@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import PersonalInformationModelPopup from "../../../components/Modals/PersonalInformationModelPopup";
+import EditPersonalInfoModal from "../../../components/Modals/EditPersonalInfoModal";
 import { ListItem, ProjectDetails } from "./ProfileContent";
 
 const inithtsTab = () => {
@@ -315,7 +315,7 @@ const inithtsTab = () => {
         {/*  Bank Tab */}
       </div>
       {/* Model Popup*/}
-      <PersonalInformationModelPopup />
+      <EditPersonalInfoModal />
     </>
   );
 };

@@ -36,12 +36,6 @@ const AllEmployees = () => {
       }
     }
   }, [user]);
-  // const openModal = () => {
-  //   setAddEmployeeModalOpen(true);
-  // };
-  // const closeModal = () => {
-  //   setAddEmployeeModalOpen(false);
-  // };
 
   const getEmployees = async () => {
     let employeesWithProfilePics;
@@ -60,9 +54,10 @@ const AllEmployees = () => {
             employeeId: employee.employeeId,
             avatar: profilePicUrl || userProfile,
           };
+          
         })
       );
-      // queryClient.setQueryData(["employees", uid], employeesWithProfilePics);
+      queryClient.setQueryData(["employees", uid], employeesWithProfilePics);
       return employeesWithProfilePics;
     } catch (error) {
       console.log("Error getting employees :", error);
@@ -166,9 +161,6 @@ const AllEmployees = () => {
                     <Link
                       to={{
                         pathname: `/profile/${employee._id}`,
-                        state: {
-                          employeeAvatar: employee.avatar,
-                        },
                       }}
                       className="avatar"
                       onClick={(event) =>
@@ -184,7 +176,10 @@ const AllEmployees = () => {
                       >
                         &#9734;
                       </span>
-                      <img src={employee.avatar} alt={employee.fullName} />
+                      <img 
+                      loading="lazy"                      
+                      src={employee.avatar}
+                       alt={employee.fullName} />
                     </Link>
                   </div>
                   <div className="dropdown profile-action">

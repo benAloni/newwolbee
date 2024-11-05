@@ -14,7 +14,7 @@ export const fetchEmployees = async () => {
 
 export const addEmployee = async ({ employeeData }) => {
   try {
-    const response = await client.postForm("/addEmployee", {
+    const response = await client.post("/addEmployee", {
       employeeData,
     });
     if (response.status === 200) {

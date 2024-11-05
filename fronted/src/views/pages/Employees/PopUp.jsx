@@ -21,11 +21,16 @@ import flight from "../../../imgs/flight.png";
 import chase from "../../../imgs/chase.png";
 import Temporary from "../../../imgs/Temporary.png";
 import vacation from "../../../imgs/off.png";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import "./popup.css";
-import { updateEmployeeVacation, fetchEmployees } from "../../../services";
+import {
+  updateEmployeeVacation,
+  fetchEmployees,
+  fetchEmployeesProfilePics,
+} from "../../../services";
 import { userProfile } from "../../../imgs";
 import Swal from "sweetalert2";
+import { useSelector } from "react-redux";
 
 export default function PopUp() {
   const [isOpen, setIsOpen] = useState(false);
@@ -41,14 +46,35 @@ export default function PopUp() {
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const queryClient = useQueryClient();
+  const uid = useSelector((state) => state.auth?.user.uid);
 
-  const {
-    data: employees,
-    error,
-    isLoading,
-  } = useQuery({
+  const getEmployees = async () => {
+    let employeesWithProfilePics;
+    try {
+      const employees = await fetchEmployees();
+
+      employeesWithProfilePics = await Promise.all(
+        employees?.map(async (employee) => {
+          const profilePicUrl = await fetchEmployeesProfilePics(
+            uid,
+            employee.employeeId
+          );
+          return {
+            ...employee,
+            avatar: profilePicUrl || userProfile,
+          };
+        })
+      );
+      // queryClient.setQueryData(["employees", uid], employeesWithProfilePics);
+      return employeesWithProfilePics;
+    } catch (error) {
+      console.log("Error getting employees :", error);
+    }
+  };
+  const { data: employees, isLoading } = useQuery({
     queryKey: ["employees"],
-    queryFn: fetchEmployees,
+    queryFn: getEmployees,
     staleTime: 0,
     refetchInterval: 0,
     refetchOnWindowFocus: true,
@@ -270,6 +296,7 @@ export default function PopUp() {
       <div className="floatingButton" onClick={openModal}>
         +
       </div>
+      {/* Choose event modal */}
       <div className={`modal ${isOpen ? "open" : ""}`}>
         <div className="modal-content">
           <h1 style={h1style}>Please choose type of event</h1>
@@ -316,8 +343,7 @@ export default function PopUp() {
               </button>
             ))}
           </div>
-
-          {/* Event modals */}
+          {/* Choose employee modal */}
           {currentEventType && (
             <div className="sub-modal">
               <h2 style={h1style}>{currentEventType}</h2>
@@ -350,23 +376,34 @@ export default function PopUp() {
                         flexDirection: "column",
                         alignItems: "center",
                         justifyContent: "center",
-                        padding: "10px",
                         border: "1px solid #ccc",
                         borderRadius: "8px",
                         backgroundColor: "#f9f9f9",
-                        height: "30%",
+                        height: "50%",
                       }}
                     >
-                      <img
-                        src={userProfile}
-                        alt={employee.fullName}
+                      
+                      <div
+                        className="profile-img"
                         style={{
-                          marginBottom: "10px",
-                          width: "80px",
-                          height: "80px",
-                          borderRadius: "50%",
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          height: "70%",
                         }}
-                      />
+                      >
+                        <img
+                          src={employee.avatar}
+                          alt={employee.fullName}
+                          style={{
+                            marginBottom: "10px",
+                            width: "70px",
+                            height: "70px",
+                            borderRadius: "50%",
+                          }}
+                        />{" "}
+                      </div>
                       <span style={{ fontWeight: "bold", marginBottom: "5px" }}>
                         {employee.fullName}
                       </span>
@@ -628,7 +665,9 @@ export default function PopUp() {
                       padding: "20px",
                       borderRadius: "10px",
                       border: `2px solid ${
-                        selectedPurposeOfTrip === "business trip" ? "green" : "#ccc"
+                        selectedPurposeOfTrip === "business trip"
+                          ? "green"
+                          : "#ccc"
                       }`,
                       cursor: "pointer",
                       width: "150px",

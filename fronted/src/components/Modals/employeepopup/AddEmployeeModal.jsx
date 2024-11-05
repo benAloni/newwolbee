@@ -34,6 +34,7 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
   });
 
   const [employeeProfileImage, setEmployeeProfileImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
   const queryClient = useQueryClient();
   const {
     register,
@@ -44,15 +45,18 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
   } = useForm();
   const uid = useSelector((state) => state.auth?.user.uid);
   const employeeId = watch("employeeId");
+  const genderRef = useRef();
+  const maritalStatusRef = useRef();
+  const teamRef = useRef();
 
-  useEffect(() => {
-    // if (!isOpen) {
+  const resetForm = () => {
     reset();
-    setSelectedGender("");
-    setSelectedMaritalStatus("");
-    setSelectedTeam("");
-    // }
-  }, [reset]);
+    genderRef.current.clearValue();
+    maritalStatusRef.current.clearValue();
+    teamRef.current.clearValue();
+    setSelectedImage(userProfile);
+    setEmployeeDates("");
+  };
 
   const { data: teams } = useQuery({
     queryKey: ["teams"],
@@ -79,6 +83,7 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
         employeeData: formData,
       });
       if (response.status === 200) {
+        await uploadEmployeeImage();
         Swal.fire(
           "Success!",
           `${data.fullName} has been added successfully to our employees`,
@@ -86,16 +91,16 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
         );
         queryClient.invalidateQueries("employees");
         onEmployeeAdded();
-        reset();
+        resetForm();
       }
     } catch (error) {
-      if(error.message?.includes("already exists")) {
+      if (error.message?.includes("already exists")) {
         Swal.fire(
           "Error!",
           `According to our employees records, an employee with the Id number : ${data.employeeId} you entered, already exists.`,
           "warning"
         );
-      }     
+      }
       console.log(error.message);
     }
   };
@@ -105,32 +110,29 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
       ...prevData,
       [name]: date ? date.toISOString() : "",
     }));
-
-    // setErrors((prevErrors) => ({
-    //   ...prevErrors,
-    //   [name]: "",
-    // }));
   };
-
+  const onImageChange = (event) => {
+    if (event.target.files && event.target.files[0]) {
+      setSelectedImage(URL.createObjectURL(event.target.files[0]));
+      setEmployeeProfileImage(event.target.files[0]);
+    }
+  };
   const uploadEmployeeImage = async () => {
     if (!employeeProfileImage || !employeeId) return;
-    
-      const storageRef = ref(
-       storage,
-        `/employeesProfilePics/${uid}/${employeeId}`
-      );
-      console.log(storageRef);
-      
-      try {
-        const snapshot = await uploadBytes(storageRef, employeeProfileImage);
-        const url = await getDownloadURL(snapshot.ref);
-        console.log(url);
-        setEmployeeProfileImage(url); 
-        queryClient.invalidateQueries(["employees-profile-pics"])
-      } catch (error) {
-        console.log("Error uploading image:", error.message);
-      }
-        
+
+    const storageRef = ref(
+      storage,
+      `/employeesProfilePics/${uid}/${employeeId}`
+    );
+
+    try {
+      const snapshot = await uploadBytes(storageRef, employeeProfileImage);
+      const url = await getDownloadURL(snapshot.ref);
+      setEmployeeProfileImage(url);
+      queryClient.invalidateQueries(["employees"]);
+    } catch (error) {
+      console.log("Error uploading image:", error.message);
+    }
   };
 
   // // Mutation for adding a notification
@@ -171,6 +173,7 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
                 className="btn-close"
                 data-bs-dismiss="modal"
                 aria-label="Close"
+                onClick={resetForm}
               >
                 <span aria-hidden="true">×</span>
               </button>
@@ -265,6 +268,7 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
                     </label>
                     <Select
                       styles={customStyles(errors.team)}
+                      ref={teamRef}
                       options={teams?.map((team) => ({
                         value: team.name,
                         label: team.name,
@@ -328,6 +332,7 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
                       Gender <span className="text-danger">*</span>
                     </label>
                     <Select
+                      ref={genderRef}
                       options={[
                         { value: "male", label: "Male" },
                         { value: "female", label: "Female" },
@@ -348,6 +353,7 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
                       Marital Status <span className="text-danger">*</span>
                     </label>
                     <Select
+                      ref={maritalStatusRef}
                       options={[
                         { value: "single", label: "Single" },
                         { value: "married", label: "Married" },
@@ -564,7 +570,7 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
                       <input
                         type="file"
                         id="employee-profile-pic"
-                        onChange={(e)=> {setEmployeeProfileImage(e.target.files[0])}}
+                        onChange={onImageChange}
                         hidden
                         data-bs-toggle="tooltip"
                         title="Add an employee image"
@@ -573,23 +579,23 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
                         htmlFor="employee-profile-pic"
                         style={{
                           backgroundImage: `url(${
-                            employeeProfileImage || userProfile
+                            selectedImage || userProfile
                           })`,
                           width: "120px",
                           height: "120px",
                           backgroundSize: "cover",
                           backgroundPosition: "center",
                         }}
-                      />                      
+                      />
                     </div>
-                    <button
-                        onClick={uploadEmployeeImage}
-                       className="btn btn-outline-info "
-                        data-bs-toggle="tooltip"
-                        title="Add an employee image"
-                      >
-                        Upload Employee Image
-                      </button>
+                    {/* <button
+                      onClick={uploadEmployeeImage}
+                      className="btn btn-outline-info "
+                      data-bs-toggle="tooltip"
+                      title="Add an employee image"
+                    >
+                      Upload Employee Image
+                    </button> */}
                   </div>
                 </div>
                 <div className="submit-section">
