@@ -12,43 +12,6 @@ export const getEmployees = async (req, res) => {
   res.status(200).json(employees);
 };
 
-export const updateEmployeeVacation = async (req, res) => {
-  console.log("Received request to update vacation:", req.body);
-
-  const { id, purposeOfTrip, destination, startDate, endDate } = req.body;
-
-  try {
-    const updatedEmployee = await EmployeeModel.findByIdAndUpdate(
-      id,
-      {
-        $push: {
-          vacation: {
-            purposeOfTrip,
-            destination,
-            startDate,
-            endDate,
-          },
-        }     
-      },
-      {
-        new: true,
-        runValidators: true,
-      }
-    );
-
-    if (!updatedEmployee) {
-      console.log("Employee not found");
-      return res.status(404).send("Employee not found");
-    }
-
-    console.log("Employee updated successfully:", updatedEmployee);
-    res.status(200).json(updatedEmployee);
-  } catch (error) {
-    console.error("Error updating employee vacation:", error);
-    res.status(500).send("Internal Server Error");
-  }
-};
-
 export const addEmployee = async (req, res) => {
   const { employeeData } = req.body;
   const { user } = req;
@@ -80,3 +43,67 @@ export const addEmployee = async (req, res) => {
   }
 };
 
+export const updateEmployeeVacation = async (req, res) => {
+  console.log("Received request to update vacation:", req.body);
+
+  const { id, purposeOfTrip, destination, startDate, endDate } = req.body;
+
+  try {
+    const updatedEmployee = await EmployeeModel.findByIdAndUpdate(
+      id,
+      {
+        $push: {
+          vacation: {
+            purposeOfTrip,
+            destination,
+            startDate,
+            endDate,
+          },
+        },
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    if (!updatedEmployee) {
+      console.log("Employee not found");
+      return res.status(404).send("Employee not found");
+    }
+
+    console.log("Employee updated successfully:", updatedEmployee);
+    res.status(200).json(updatedEmployee);
+  } catch (error) {
+    console.error("Error updating employee vacation:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+export const updateEmployeeInsights = async (req, res) => {
+  const { id, topInsights, latestInsights, latestActivity } = req.body;
+  try {
+    const updatedEmployee = await EmployeeModel.findByIdAndUpdate(id,
+      {
+     topInsights,
+     latestInsights,
+     latestActivity,
+   },
+   {
+     new: true,
+     runValidators: true,
+   });
+ 
+   if (!updatedEmployee) {
+     console.log("Employee not found");
+     return res.status(404).send("Employee not found");
+   }
+ 
+   console.log("Employee updated successfully:", updatedEmployee);
+   res.status(200).json(updatedEmployee);
+  } catch (error) {
+    console.error("Error updating employee's insights:", error);
+    res.status(500).send("Internal Server Error");
+  }
+ 
+};

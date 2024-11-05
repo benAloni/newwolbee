@@ -7,6 +7,7 @@ import {
   getEmployees,
   addEmployee,
   updateEmployeeVacation,
+  updateEmployeeInsights,
 } from "../controllers/employeesData.js";
 import { getFoodHoliday } from "../controllers/foodHolidays.js";
 import {
@@ -53,5 +54,6 @@ router.get("/getAllNotifications", getAllNotifications);
 router.delete("/deleteEvent/:id", deleteEvent);
 //add event note endpoint
 // router.post("/addEventNote", addEventNote);
-
+//update employee's insights & latest activity
+router.put("/updateEmployeeInsights", updateEmployeeInsights);
 export default router;

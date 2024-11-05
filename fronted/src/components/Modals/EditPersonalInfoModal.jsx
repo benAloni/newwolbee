@@ -30,8 +30,8 @@ const EditPersonalInfoModal = ({ selectedEmployee }) => {
     }
   };
   const resetForm = () => {
-    setSelectedImage(cachedEmployeeAvatar ? cachedEmployeeAvatar: userProfile);
-  }
+    setSelectedImage(cachedEmployeeAvatar ? cachedEmployeeAvatar : userProfile);
+  };
   const handleDateChange1 = (date) => {
     setSelectedDate1(date);
   };
@@ -52,9 +52,12 @@ const EditPersonalInfoModal = ({ selectedEmployee }) => {
     { value: 3, label: "Lesley Grauer" },
     { value: 4, label: "Jeffery Lalor" },
   ];
-  const status = [
+  const maritalStatus = [
     { value: "single", label: "Single" },
     { value: "married", label: "Married" },
+    { value: "widowed", label: "Widowed" },
+    { value: "divorced", label: "Divorced" },
+    { value: "separated ", label: "Separated " },
   ];
   const gender = [
     { value: "male", label: "Male" },
@@ -409,7 +412,7 @@ const EditPersonalInfoModal = ({ selectedEmployee }) => {
                 <div className="row">
                   <div className="col-md-6">
                     <div className="input-block mb-3 mb-3">
-                      <label className="col-form-label">Passport No</label>
+                      <label className="col-form-label">Passport No.</label>
                       <input type="text" className="form-control" />
                     </div>
                   </div>
@@ -432,7 +435,7 @@ const EditPersonalInfoModal = ({ selectedEmployee }) => {
                   </div>
                   <div className="col-md-6">
                     <div className="input-block mb-3 mb-3">
-                      <label className="col-form-label">Tel</label>
+                      <label className="col-form-label">Tel No.</label>
                       <input className="form-control" type="text" />
                     </div>
                   </div>
@@ -447,16 +450,7 @@ const EditPersonalInfoModal = ({ selectedEmployee }) => {
                   <div className="col-md-6">
                     <div className="input-block mb-3 mb-3">
                       <label className="col-form-label">Religion</label>
-                      <div className="cal-icon">
-                        <DatePicker
-                          selected={selectedDate1}
-                          onChange={handleDateChange1}
-                          className="form-control floating datetimepicker"
-                          type="date"
-                          placeholderText="04/10/2023"
-                          dateFormat="dd-MM-yyyy"
-                        />
-                      </div>
+                      <input className="form-control" type="text" />
                     </div>
                   </div>
                   <div className="col-md-6">
@@ -465,8 +459,8 @@ const EditPersonalInfoModal = ({ selectedEmployee }) => {
                         Marital status <span className="text-danger">*</span>
                       </label>
                       <Select
-                        options={status}
-                        placeholder="-"
+                        options={maritalStatus}
+                        placeholder={`${selectedEmployee?.maritalStatus}`}
                         styles={customStyles}
                       />
                     </div>
@@ -515,7 +509,7 @@ const EditPersonalInfoModal = ({ selectedEmployee }) => {
         >
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title"> Education Informations</h5>
+              <h5 className="modal-title"> Education Information</h5>
               <button
                 type="button"
                 className="btn-close"
@@ -531,7 +525,7 @@ const EditPersonalInfoModal = ({ selectedEmployee }) => {
                   <div className="card">
                     <div className="card-body">
                       <h3 className="card-title">
-                        Education Informations{" "}
+                        Education Information{" "}
                         <Link to="#" className="delete-icon">
                           <i className="fa-regular fa-trash-can" />
                         </Link>
@@ -613,7 +607,7 @@ const EditPersonalInfoModal = ({ selectedEmployee }) => {
                   <div className="card">
                     <div className="card-body">
                       <h3 className="card-title">
-                        Education Informations
+                        Education Information
                         <Link to="#" className="delete-icon">
                           <i className="fa-regular fa-trash-can" />
                         </Link>
@@ -726,7 +720,7 @@ const EditPersonalInfoModal = ({ selectedEmployee }) => {
         >
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title">Experience Informations</h5>
+              <h5 className="modal-title">Experience Information</h5>
               <button
                 type="button"
                 className="btn-close"
@@ -742,7 +736,7 @@ const EditPersonalInfoModal = ({ selectedEmployee }) => {
                   <div className="card">
                     <div className="card-body">
                       <h3 className="card-title">
-                        Experience Informations{" "}
+                        Experience Information{" "}
                         <Link to="#" className="delete-icon">
                           <i className="fa-regular fa-trash-can" />
                         </Link>
@@ -814,7 +808,7 @@ const EditPersonalInfoModal = ({ selectedEmployee }) => {
                   <div className="card">
                     <div className="card-body">
                       <h3 className="card-title">
-                        Experience Informations{" "}
+                        Experience Information{" "}
                         <Link to="#" className="delete-icon">
                           <i className="fa-regular fa-trash-can" />
                         </Link>
@@ -918,7 +912,7 @@ const EditPersonalInfoModal = ({ selectedEmployee }) => {
         >
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title"> Family Informations</h5>
+              <h5 className="modal-title"> Family Information</h5>
               <button
                 type="button"
                 className="btn-close"
@@ -980,7 +974,7 @@ const EditPersonalInfoModal = ({ selectedEmployee }) => {
                   <div className="card">
                     <div className="card-body">
                       <h3 className="card-title">
-                        Education Informations{" "}
+                        Education Information{" "}
                         <Link to="#" className="delete-icon">
                           <i className="fa-regular fa-trash-can" />
                         </Link>

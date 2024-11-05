@@ -1,19 +1,17 @@
 import React, { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import Modal from "react-modal";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import "react-datepicker/dist/react-datepicker.css"; // Import the DatePicker CSS
 import { auth } from "../../../firebase/firebaseConfig";
 import { useForm, Controller } from "react-hook-form";
 
-Modal.setAppElement("#root"); // Make sure this matches your root element in the DOM
-
-export default function EditInsightsActivity({
+Modal.setAppElement("#root");
+export default function EditInsightsNActivity({
   isOpen,
   closeModal,
   selectedEmployee,
-  handleUpdate,
 }) {
   const {
     register,
@@ -26,14 +24,16 @@ export default function EditInsightsActivity({
       topInsights: selectedEmployee?.topInsights || [],
       latestInsights: selectedEmployee?.latestInsights || [],
       latestActivity: selectedEmployee?.latestActivity || [],
-    },
+  },
   });
-
-  const updateEmployeeInsightsActivityMutation = useMutation({
+  
+  
+  const queryClient = useQueryClient();
+  const updateEmployeeInsightsMutation = useMutation({
     mutationFn: async (data) => {
       const token = await auth.currentUser.getIdToken();
-      const response = await axios.post(
-        "http://localhost:5000/api/updateEmployeeInsightsActivity",
+      const response = await axios.put(
+        "http://localhost:5000/api/updateEmployeeInsights",
         data,
         {
           headers: {
@@ -43,9 +43,8 @@ export default function EditInsightsActivity({
       );
       return response.data;
     },
-    onSuccess: (data) => {
-      console.log("Employee updated successfully:", data);
-      handleUpdate(data);
+    onSuccess: () => {
+      queryClient.invalidateQueries(["employees"]);
       closeModal();
     },
     onError: (error) => {
@@ -58,39 +57,31 @@ export default function EditInsightsActivity({
       topInsights: data.topInsights,
       latestInsights: data.latestInsights,
       latestActivity: data.latestActivity.map((activity, index) => ({
-        activity: activity,
-        date: data.latestActivityDates[index],
+        date: formatDate(activity.date),
+        activity: activity.activity,
+
       })),
     };
     console.log("Saving insights:", updatedData);
-    await updateEmployeeInsightsActivityMutation.mutateAsync(updatedData);
+    await updateEmployeeInsightsMutation.mutateAsync(updatedData);
   };
-  // Utility function to parse date from "dd/MM/yyyy" to a Date object
   const parseDate = (dateStr) => {
+    if (!dateStr) return null;
     const [day, month, year] = dateStr.split("/");
     return new Date(`${year}-${month}-${day}`);
   };
 
-  // Function to format Date object to "dd/MM/yyyy"
   const formatDate = (date) => {
+    if (!date) return "";
     const day = date.getDate().toString().padStart(2, "0");
     const month = (date.getMonth() + 1).toString().padStart(2, "0");
     const year = date.getFullYear();
     return `${day}/${month}/${year}`;
   };
 
- 
-
-  // const handleDateChange = (date, field) => {
-  //   setLatestActivity((prevState) => ({
-  //     ...prevState,
-  //     [field]: date ? formatDate(date) : "", // Convert Date object back to "dd/MM/yyyy"
-  //   }));
-  // };
-
   return (
     <Modal
-      isOpen={!!isOpen} // Ensure isOpen is a boolean
+      isOpen={!!isOpen}
       onRequestClose={closeModal}
       contentLabel="Edit Insights Activity"
       style={customStyles}
@@ -134,21 +125,22 @@ export default function EditInsightsActivity({
           <>
             <h2 style={headerStyle}>Latest Activity</h2>
             <div style={containerStyle}>
-              {selectedEmployee?.latestActivity?.map((activity, index) => (
+              {selectedEmployee?.latestActivity?.map((value, index) => (
                 <div key={index}>
                   <div className="cal-icon">
                     <label>Set Date</label>
                     <Controller
                       control={control}
-                      name={`latestActivityDates.${index}`}
+                      name={`latestActivity.${index}.date`}
                       render={({ field }) => (
                         <DatePicker
-                          selected={field.value ? parseDate(field.value) : null}
+                          selected={field.value} 
                           onChange={(date) =>
-                            setValue(`latestActivityDates.${index}`, formatDate(date))
+                            setValue(`latestActivity.${index}.date`, date)
                           }
                           dateFormat="dd/MM/yyyy"
                           className="form-control w-100"
+                          
                         />
                       )}
                     />
@@ -157,13 +149,7 @@ export default function EditInsightsActivity({
                   <input
                     type="text"
                     style={inputStyle}
-                    {...register(`latestActivity.${index}`)}
-                  />
-                  <label>Set Activity</label>
-                  <input
-                    type="text"
-                    style={inputStyle}
-                    {...register(`latestActivity.${index}`)}                 
+                    {...register(`latestActivity.${index}.activity`)}
                   />
                 </div>
               ))}

@@ -14,7 +14,7 @@ const ProfileTab = ({selectedEmployee}) => {
     { id: 5, title: "Religion", text: "Christian" },
     { id: 6, title: "Marital status", text: "Married" },
     { id: 7, title: "Employment of spouse", text: "No" },
-    { id: 8, title: "No. of children", text: selectedEmployee?.NumOfChildren },
+    { id: 8, title: "No. of children", text: selectedEmployee?.numOfChildren },
   ];
 
   const primaryContactData = [
@@ -91,7 +91,7 @@ const ProfileTab = ({selectedEmployee}) => {
               <div className="card profile-box flex-fill">
                 <div className="card-body">
                   <h3 className="card-title">
-                    Personal Informations{" "}
+                    Personal Information{" "}
                     <Link
                       to="#"
                       className="edit-icon"
@@ -177,7 +177,7 @@ const ProfileTab = ({selectedEmployee}) => {
               <div className="card profile-box flex-fill">
                 <div className="card-body">
                   <h3 className="card-title">
-                    Family Informations{" "}
+                    Family Information{" "}
                     <Link
                       to="#"
                       className="edit-icon"
@@ -239,7 +239,7 @@ const ProfileTab = ({selectedEmployee}) => {
               <div className="card profile-box flex-fill">
                 <div className="card-body">
                   <h3 className="card-title">
-                    Education Informations{" "}
+                    Education Information{" "}
                     <Link
                       to="#"
                       className="edit-icon"

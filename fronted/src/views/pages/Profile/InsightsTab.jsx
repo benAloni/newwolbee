@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import EditPersonalInfoModal from "../../../components/Modals/EditPersonalInfoModal";
 import { ListItem, ProjectDetails } from "./ProfileContent";
 
-const inithtsTab = () => {
+const insightsTab = () => {
   const personalInfoData = [
     { id: 1, title: "Passport No.", text: "9876543210" },
     { id: 2, title: "Passport Exp Date.", text: "9876543210" },
@@ -88,7 +88,7 @@ const inithtsTab = () => {
               <div className="card profile-box flex-fill">
                 <div className="card-body">
                   <h3 className="card-title">
-                    Personal Informations{" "}
+                    Personal Information{" "}
                     <Link
                       to="#"
                       className="edit-icon"
@@ -174,7 +174,7 @@ const inithtsTab = () => {
               <div className="card profile-box flex-fill">
                 <div className="card-body">
                   <h3 className="card-title">
-                    Family Informations{" "}
+                    Family Information{" "}
                     <Link
                       to="#"
                       className="edit-icon"
@@ -236,7 +236,7 @@ const inithtsTab = () => {
               <div className="card profile-box flex-fill">
                 <div className="card-body">
                   <h3 className="card-title">
-                    Education Informations{" "}
+                    Education Information{" "}
                     <Link
                       to="#"
                       className="edit-icon"
@@ -320,4 +320,4 @@ const inithtsTab = () => {
   );
 };
 
-export default  inithtsTab;
+export default  insightsTab;

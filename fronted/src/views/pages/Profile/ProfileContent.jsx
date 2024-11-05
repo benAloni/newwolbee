@@ -3,7 +3,7 @@ import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { TiPin } from "react-icons/ti";
 
-import EditInsightsActivity from "./EditInsightsActivity";
+import EditInsightsActivity from "./EditInsightsNActivities";
 
 export const ProjectDetails = ({ selectedEmployee }) => {
   const [popupEdit, setPopupEdit] = useState(0);
