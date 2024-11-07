@@ -4,7 +4,6 @@ import Select from "react-select";
 import { useSelector } from "react-redux";
 import AddEmployeeModal from "../../../components/Modals/employeepopup/AddEmployeeModal";
 import Breadcrumbs from "../../../components/Breadcrumbs";
-import DeleteModal from "../../../components/Modals/DeleteModal";
 import EmployeeListFilter from "../../../components/EmployeeListFilter";
 
 import {
@@ -15,13 +14,14 @@ import {
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { userProfile } from "../../../imgs";
 import Loading from "../../layout/Loading";
+import DeleteEmployeeModal from "../../../components/Modals/DeleteEmployeeModal";
 
 const AllEmployees = () => {
   const [filteredEmployees, setFilteredEmployees] = useState([]);
   const [favoriteEmployees, setFavoriteEmployees] = useState([]);
   const [selectedTeam, setSelectedTeam] = useState("");
   const [userRole, setUserRole] = useState(null);
-  const [addEmployeeModalOpen, setAddEmployeeModalOpen] = useState(false);
+  const [employeeToDelete, setEmployeeToDelete] = useState(false);
   const queryClient = useQueryClient();
   const user = useSelector((state) => state.auth.user);
   const uid = useSelector((state) => state.auth?.user.uid);
@@ -54,7 +54,6 @@ const AllEmployees = () => {
             employeeId: employee.employeeId,
             avatar: profilePicUrl || userProfile,
           };
-          
         })
       );
       queryClient.setQueryData(["employees", uid], employeesWithProfilePics);
@@ -67,8 +66,7 @@ const AllEmployees = () => {
     queryKey: ["employees"],
     queryFn: getEmployees,
   });
- 
-  
+
   const { data: teams } = useQuery({
     queryKey: ["teams"],
     queryFn: fetchTeams,
@@ -123,7 +121,7 @@ const AllEmployees = () => {
       </style>
       <div className="page-wrapper">
         <div className="content container-fluid">
-        {isLoading && <Loading />}
+          {isLoading && <Loading />}
           <Breadcrumbs
             maintitle="Employees Page"
             modal="#add_employee"
@@ -176,10 +174,11 @@ const AllEmployees = () => {
                       >
                         &#9734;
                       </span>
-                      <img 
-                      loading="lazy"                      
-                      src={employee.avatar}
-                       alt={employee.fullName} />
+                      <img
+                        loading="lazy"
+                        src={employee.avatar}
+                        alt={employee.fullName}
+                      />
                     </Link>
                   </div>
                   <div className="dropdown profile-action">
@@ -205,6 +204,7 @@ const AllEmployees = () => {
                         to="#"
                         data-bs-toggle="modal"
                         data-bs-target="#delete"
+                        onClick={() => setEmployeeToDelete(employee)}
                       >
                         <i className="fa-regular fa-trash-can m-r-5" /> Delete
                       </Link>
@@ -222,7 +222,7 @@ const AllEmployees = () => {
             {filteredEmployees.length === 0 && (
               <div className="mt-5">
                 <p className=" d-flex justify-content-center text-center">
-                  You got no current employees in this departement
+                  You got no current employees in this department
                 </p>
               </div>
             )}
@@ -230,11 +230,9 @@ const AllEmployees = () => {
         </div>
       </div>
       <AddEmployeeModal
-        // isOpen={addEmployeeModalOpen}
-        // onClose={closeModal}
         onEmployeeAdded={() => queryClient.invalidateQueries(["employees"])}
       />
-      <DeleteModal Name="מחק עובד" />
+      <DeleteEmployeeModal employee={employeeToDelete}/>
     </div>
   );
 };

@@ -159,10 +159,6 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
 
   return (
     <>
-      {/* <Modal
-        isOpen={addEmployeeModalOpen}
-        onCancel={onClose}
-      > */}
       <div id="add_employee" className="modal custom-modal fade" role="dialog">
         <div className="modal-dialog modal-dialog-centered modal-lg">
           <div className="modal-content">

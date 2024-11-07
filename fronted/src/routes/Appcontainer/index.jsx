@@ -194,7 +194,7 @@ import RecentFiles from "../../views/pages/MainPages/Apps/FileManager/recentFile
 import EmailContent from "../../views/pages/MainPages/Apps/Email/emailContent.jsx";
 import EmailView from "../../views/pages/MainPages/Apps/Email/emailView.jsx";
 import DealsDetails from "../../views/pages/Crm/DealsDetails.jsx";
-import NewCompanyEvent from "../../views/pages/Authentication/NewCompanyEvent.jsx";
+import CompanyEvents from "../../views/pages/Authentication/CompanyEvents.jsx";
 
 import RetentionStatistics from "../../views/pages/MainPages/Dashboard/AdminDashboard/RetentionStatistics.jsx";
 import GiftForEmployee from "../../views/pages/Employees/ForEmployee/GiftForEmployee.jsx";
@@ -1232,8 +1232,8 @@ const AppContainer = () => {
       <div className="main-wrapper" onClick={mobileResponsive}>
         <Routes>
           <Route
-            path="/newcompanyplan"
-            element={<NewCompanyEvent></NewCompanyEvent>}
+            path="/plan-new-company-event"
+            element={<CompanyEvents></CompanyEvents>}
           />
 
           <Route path={"/*"} element={<SidebarLayout />}>

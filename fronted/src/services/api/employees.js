@@ -30,7 +30,19 @@ export const addEmployee = async ({ employeeData }) => {
     throw error
      }
 };
+export const deleteEmployee = async (id) => {
+  try {
+    const response = await client.delete("/deleteEmployee", {
+      data: { id } 
+    })
+    if (response.status === 200) {
+      return response;
+    }
 
+  } catch (error) {
+    console.log("Error deleting employee", error);
+  }
+}
 export const updateEmployeeVacation = async ({
   id,
   purposeOfTrip,

@@ -8,6 +8,7 @@ import {
   addEmployee,
   updateEmployeeVacation,
   updateEmployeeInsights,
+  deleteEmployee,
 } from "../controllers/employeesData.js";
 import { getFoodHoliday } from "../controllers/foodHolidays.js";
 import {
@@ -16,6 +17,12 @@ import {
 } from "../controllers/allNotificationsData.js";
 import { addEvent, getEvents, deleteEvent } from "../controllers/eventsData.js";
 import { isAuthenticated } from "../middleware/auth.js";
+import {
+  getCompanyEvents,
+  addNewCompanyEvent,
+  updateCompanyEvent,
+  deleteCompanyEvent,
+} from "../controllers/companyEventsData.js";
 const router = express.Router();
 initializeApp({
   //in order to verify user Id tokens
@@ -38,6 +45,8 @@ router.get("/getTeams", getTeams);
 router.get("/getEmployees", getEmployees);
 //add new employee
 router.post("/addEmployee", addEmployee);
+//delete an employee
+router.delete("/deleteEmployee", deleteEmployee);
 //add Update employee
 router.post("/updateEmployeeVacation", updateEmployeeVacation);
 //get all food holidays
@@ -56,4 +65,9 @@ router.delete("/deleteEvent/:id", deleteEvent);
 // router.post("/addEventNote", addEventNote);
 //update employee's insights & latest activity
 router.put("/updateEmployeeInsights", updateEmployeeInsights);
+
+router.get("/getCompanyEvents", getCompanyEvents);
+router.post("/addNewCompanyEvent", addNewCompanyEvent);
+router.put("/updateCompanyEvent", updateCompanyEvent);
+router.delete("/deleteCompanyEvent/:id", deleteCompanyEvent);
 export default router;

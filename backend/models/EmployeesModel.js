@@ -112,7 +112,9 @@ const employeeSchema = new mongoose.Schema({
       endDate: { type: Date },
     },
   ],
-  uid: { type: String },
+  uid: { type: String ,
+  required: [true, "Please provide uid of the employee creator"],
+},
 });
 
 const EmployeeModel = mongoose.model("memployee", employeeSchema);

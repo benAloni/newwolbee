@@ -24,7 +24,7 @@ export const addEvent = async (eventData) => {
         return result;
       }
     } catch (error) {
-      console.log("Error add new event :", error);
+      console.log("Error adding new event :", error);
     }
   };
 

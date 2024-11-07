@@ -38,7 +38,7 @@ export const managerSideBarData = [
         menuValue: "Plan New Company Event",
         hasSubRoute: false,
         showSubRoute: false,
-        route: "/newcompanyplan",
+        route: "/plan-new-company-event",
         icon: "las la-bell",
       },
 

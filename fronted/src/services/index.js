@@ -1,8 +1,19 @@
 import { fetchTeams } from "./api/teams";
-import { fetchEmployees, addEmployee, updateEmployeeVacation } from "./api/employees";
+import {
+  fetchEmployees,
+  addEmployee,
+  deleteEmployee,
+  updateEmployeeVacation,
+} from "./api/employees";
 import { fetchUserProfilePic, fetchEmployeesProfilePics } from "./api/profile";
 import { fetchEvents, addEvent } from "./api/calendarEvents";
 import { fetchNotifications } from "./api/notifications";
+import {
+  fetchCompanyEvents,
+  addNewCompanyEvent,
+  updateCompanyEvent,
+  deleteCompanyEvent,
+} from "./api/companyEvents";
 export {
   fetchTeams,
   fetchEmployees,
@@ -13,4 +24,9 @@ export {
   fetchEvents,
   addEvent,
   fetchNotifications,
+  deleteEmployee,
+  fetchCompanyEvents,
+  addNewCompanyEvent,
+  updateCompanyEvent,
+  deleteCompanyEvent,
 };
