@@ -57,7 +57,7 @@ export default function EditInsightsNActivity({
       topInsights: data.topInsights,
       latestInsights: data.latestInsights,
       latestActivity: data.latestActivity.map((activity, index) => ({
-        date: formatDate(activity.date),
+        date: activity.date,
         activity: activity.activity,
 
       })),
@@ -71,13 +71,13 @@ export default function EditInsightsNActivity({
     return new Date(`${year}-${month}-${day}`);
   };
 
-  const formatDate = (date) => {
-    if (!date) return "";
-    const day = date.getDate().toString().padStart(2, "0");
-    const month = (date.getMonth() + 1).toString().padStart(2, "0");
-    const year = date.getFullYear();
-    return `${day}/${month}/${year}`;
-  };
+  // const formatDate = (date) => {
+  //   if (!date) return "";
+  //   const day = date.toString().padStart(2, "0");
+  //   const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  //   const year = date.getFullYear();
+  //   return `${day}/${month}/${year}`;
+  // };
 
   return (
     <Modal
@@ -120,7 +120,6 @@ export default function EditInsightsNActivity({
             </div>
           </>
         )}
-
         {isOpen === 3 && (
           <>
             <h2 style={headerStyle}>Latest Activity</h2>

@@ -1,6 +1,5 @@
 import React from "react";
-import Header from "../../../../layout/Header";
-import Sidebar from "../../../../layout/Sidebar";
+import { Header, SideBar } from "../../../../../layout";
 import HrStatistics from "./HrStatistics";
 
 export default function HrDashboard() {
@@ -9,7 +8,7 @@ export default function HrDashboard() {
       <div className="page-wrapper">
         <div className="content container-fluid">
           <Header />
-          <Sidebar />
+          <SideBar />
           <HrStatistics />
         </div>
       </div>

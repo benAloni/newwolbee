@@ -1,19 +1,19 @@
 
-export const managerSideBarData = [
+ const  ManagerSideBar = [
   {
     tittle: "Main menu",
     showAsTab: false,
     separateRoute: false,
     menu: [
       {
-        menuValue: "Home Page",
+        menuValue: "Home page",
         hasSubRoute: false,
         showSubRoute: false,
         route: "/hrDashboard",
         icon: "la la-user",
       },
       {
-        menuValue: "Dashboards",
+        menuValue: "Your employees",
         hasSubRoute: false,
         showSubRoute: false,
         route: "/employees",
@@ -35,15 +35,15 @@ export const managerSideBarData = [
         icon: "la la-ticket",
       },
       {
-        menuValue: "Plan New Company Event",
+        menuValue: "Company events",
         hasSubRoute: false,
         showSubRoute: false,
-        route: "/plan-new-company-event",
+        route: "/company-events",
         icon: "las la-bell",
       },
 
       {
-        menuValue: "Personalized Gift",
+        menuValue: "Personalized gifts",
         hasSubRoute: false,
         showSubRoute: false,
         route: "#",
@@ -65,7 +65,7 @@ export const managerSideBarData = [
         icon: "la la-dashcube",
       },
       {
-        menuValue: "To do List",
+        menuValue: "To do list",
         hasSubRoute: false,
         showSubRoute: false,
         route: "#",
@@ -73,7 +73,7 @@ export const managerSideBarData = [
       },
 
       {
-        menuValue: "Useful information",
+        menuValue: "Useful info",
         hasSubRoute: false,
         showSubRoute: false,
         route: "#",
@@ -82,3 +82,4 @@ export const managerSideBarData = [
     ],
   },
 ];
+export default ManagerSideBar;

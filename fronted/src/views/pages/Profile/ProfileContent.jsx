@@ -234,14 +234,14 @@ export const ProjectDetails = ({ selectedEmployee }) => {
             <h3 style={titleStyle}>Latest Insights</h3>
             <hr />
             <div style={{ marginLeft: "15px" }}>
-            {[...new Set(selectedEmployee?.latestInsights)].map(
+              {[...new Set(selectedEmployee?.latestInsights)].map(
                 (insight, index) => (
                   <div
                     key={index}
                     style={{
                       display: "flex",
-                      flexDirection: "column", 
-                      marginBottom: "20px", 
+                      flexDirection: "column",
+                      marginBottom: "20px",
                     }}
                   >
                     <div
@@ -254,8 +254,8 @@ export const ProjectDetails = ({ selectedEmployee }) => {
                       <TiPin
                         style={{
                           color: "#FF902F",
-                          marginRight: "10px", 
-                          flexShrink: 0, 
+                          marginRight: "10px",
+                          flexShrink: 0,
                         }}
                         size={pinIconSize}
                       />
@@ -289,50 +289,61 @@ export const ProjectDetails = ({ selectedEmployee }) => {
                   <div style={{ marginLeft: "15px" }}>
                     {selectedEmployee?.latestActivity.map((val, index) => {
                       const entries = Object.entries(val);
-                      return entries.map(([key, value], i) => (
-                        <div
-                          key={`${index}-${i}`}
-                          style={{
-                            marginBottom: i % 2 === 1 ? "20px" : "0",
-                            display: "flex",
-                            alignItems: "center",
-                          }}
-                        >
+                      return entries.map(([key, value], i) => {
+                        const isDate =
+                          typeof value === "string" &&
+                          !isNaN(Date.parse(value));
+                        const formattedValue = isDate
+                          ? new Date(value).toLocaleDateString("en-GB") 
+                          : value;
+
+                        return (
                           <div
+                            key={`${index}-${i}`}
                             style={{
+                              marginBottom: i % 2 === 1 ? "20px" : "0",
                               display: "flex",
-                              flexDirection: "column",
                               alignItems: "center",
-                              marginRight: "10px",
                             }}
                           >
                             <div
                               style={{
-                                width: "8px",
-                                height: "8px",
-                                borderRadius: "50%",
-                                backgroundColor: "#000",
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "center",
+                                marginRight: "10px",
                               }}
-                            ></div>
-                            {i % 2 === 0 && i < entries.length - 1 && (
+                            >
                               <div
                                 style={{
-                                  width: "2px",
-                                  height: "20px",
+                                  width: "8px",
+                                  height: "8px",
+                                  borderRadius: "50%",
                                   backgroundColor: "#000",
                                 }}
                               ></div>
-                            )}
+                              {i % 2 === 0 && i < entries.length - 1 && (
+                                <div
+                                  style={{
+                                    width: "2px",
+                                    height: "20px",
+                                    backgroundColor: "#000",
+                                  }}
+                                ></div>
+                              )}
+                            </div>
+                            <div>
+                              {i % 2 === 0 ? (
+                                <div style={{ fontWeight: "bold" }}>
+                                  {formattedValue}
+                                </div>
+                              ) : (
+                                <div>{formattedValue}</div>
+                              )}
+                            </div>
                           </div>
-                          <div>
-                            {i % 2 === 0 ? (
-                              <div style={{ fontWeight: "bold" }}>{value}</div>
-                            ) : (
-                              <div>{value}</div>
-                            )}
-                          </div>
-                        </div>
-                      ));
+                        );
+                      });
                     })}
                   </div>
                 </div>

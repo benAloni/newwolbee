@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
-import Sidebar from "../../layout/Sidebar";
-import Header from "../../layout/Header";
+import { SideBar, Header } from "../../../layout";
 import CreateCompanyEventModal from "../../../components/Modals/companyEvents/CreateCompanyEventModal";
 import { fetchCompanyEvents } from "../../../services";
 import { useQuery } from "@tanstack/react-query";
@@ -19,7 +18,7 @@ export default function CompanyEvents() {
   });
   const handleClose = () => setShow(false);
   const handleShow = () => {
-    setCurrentModal(1); 
+    setCurrentModal(1);
     setShow(true);
   };
 
@@ -28,13 +27,12 @@ export default function CompanyEvents() {
   return (
     <div className="page-wrapper">
       <div className="content container-fluid">
-        <Sidebar />
+        <SideBar />
         <Header />
-        <h1 style={{ textAlign: "center", direction: "rtl" }}>Company's plans</h1>
-        <button
-          className="plan-event-button"
-          onClick={handleShow}
-        >
+        <h1 style={{ textAlign: "center", direction: "rtl" }}>
+          Company's events
+        </h1>
+        <button className="plan-event-button" onClick={handleShow}>
           Plan a new company event
         </button>
         <br />
@@ -44,11 +42,22 @@ export default function CompanyEvents() {
           {companyEvents?.map((event, index) => (
             <div key={index} className="event-card">
               <h2>{event.title}</h2>
-              <p><strong>Due Date:</strong> {new Date(event.dueDate).toLocaleDateString("en-GB")}</p>
-              <p><strong>Theme:</strong> {event.eventTheme}</p>
-              <p><strong>Location:</strong> {event.location}</p>
-              <p><strong>Number Of Guests:</strong> {event.numberOfGuests}</p>
-              <p><strong>Budget:</strong> {event.budget}₪</p>
+              <p>
+                <strong>Due Date:</strong>{" "}
+                {new Date(event.dueDate).toLocaleDateString("en-GB")}
+              </p>
+              <p>
+                <strong>Theme:</strong> {event.eventTheme}
+              </p>
+              <p>
+                <strong>Location:</strong> {event.location}
+              </p>
+              <p>
+                <strong>Number Of Guests:</strong> {event.numberOfGuests}
+              </p>
+              <p>
+                <strong>Budget:</strong> {event.budget}₪
+              </p>
               <p>
                 <strong>Time:</strong>
                 {event.time.map((time, index) => (
@@ -62,13 +71,14 @@ export default function CompanyEvents() {
             </div>
           ))}
         </div>
-        <CreateCompanyEventModal 
+        <CreateCompanyEventModal
           show={show}
           onClose={handleClose}
           currentModal={currentModal}
           setCurrentModal={setCurrentModal}
           nextModal={nextModal}
-          prevModal={prevModal}/>
+          prevModal={prevModal}
+        />
       </div>
       <style>
         {`

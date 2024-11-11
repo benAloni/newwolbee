@@ -7,12 +7,12 @@ import Scrollbars from "react-custom-scrollbars-2";
 import { useTranslation } from "react-i18next";
 // import { withRouter } from "react-router-dom";
 import { Link, useLocation } from "react-router-dom";
-import { SidebarData } from "./sidebardata";
-import { managerSideBarData } from "./HrSideBarData";
+import { SideBarData } from "./SideBarData";
+import ManagerSideBar from "./ManagerSideBar";
 import * as Icon from "react-feather";
 import { useSelector } from "react-redux";
 
-const Sidebar = () => {
+const SideBar = () => {
   const location = useLocation();
   // const pathname = location.pathname.split("/")[1];
   const pathname = location.pathname;
@@ -29,17 +29,15 @@ const Sidebar = () => {
   const [level3Menu, setLevel3Menu] = useState("");
   const [isSideMenunew, setSideMenuNew] = useState("dashboard");
 
-
-  const user = useSelector((state) => state.auth.user); 
+  const user = useSelector((state) => state.auth.user);
   useEffect(() => {
     if (user && user.role) {
       if (user.role === "manager") {
-        setSidebarData(managerSideBarData);
+        setSidebarData(ManagerSideBar);
       } else {
-        setSidebarData(SidebarData);
+        setSidebarData(SideBarData);
       }
-     }
-        
+    }
   }, [user]);
 
   useEffect(() => {
@@ -1768,7 +1766,7 @@ const Sidebar = () => {
               {/* {userRole !== "manager"} */}
               {sidebarData.map((mainTittle, index) => {
                 return (
-                <>
+                  <>
                     <li
                       className="menu-title"
                       key={index + 1}
@@ -4328,4 +4326,4 @@ const Sidebar = () => {
   );
 };
 
-export default Sidebar;
+export default SideBar;

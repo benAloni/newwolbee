@@ -8,12 +8,8 @@ import {
 } from "firebase/storage";
 import { CiCirclePlus } from "react-icons/ci";
 import { CiTrash } from "react-icons/ci";
-
-import Sidebar from "../../layout/Sidebar";
-import Header from "../../layout/Header";
-
+import { Header, SideBar } from "../../../layout";
 import { animated, useSpring } from "@react-spring/web";
-
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -285,7 +281,7 @@ const UserSettings = () => {
             )}
           </animated.div>
         </div>
-        <Sidebar></Sidebar>
+        <SideBar></SideBar>
         <Header></Header>
       </div>
 

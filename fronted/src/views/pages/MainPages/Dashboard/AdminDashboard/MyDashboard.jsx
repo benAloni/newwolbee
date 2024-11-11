@@ -1,6 +1,5 @@
 import React from "react";
-import Header from "../../../../layout/Header";
-import Sidebar from "../../../../layout/Sidebar";
+import { Header, SideBar } from "../../../../../layout";
 import Breadcrumbs from "../../../../../components/Breadcrumbs";
 import Statistics from "./statistics";
 import MyStatistics from "./MyStatistics";
@@ -12,7 +11,7 @@ export default function MyDashboard() {
       <div className="page-wrapper">
         <div className="content container-fluid">
           <Header />
-          <Sidebar />
+          <SideBar />
           <MyStatistics />
           {/* <Statistics /> */}
         </div>

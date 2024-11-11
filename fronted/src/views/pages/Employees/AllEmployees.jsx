@@ -13,7 +13,7 @@ import {
 } from "../../../services";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { userProfile } from "../../../imgs";
-import Loading from "../../layout/Loading";
+import { Loading } from "../../../layout";
 import DeleteEmployeeModal from "../../../components/Modals/DeleteEmployeeModal";
 
 const AllEmployees = () => {

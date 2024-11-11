@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import notificationsData from "../../assets/json/notifications";
-import message from "../../assets/json/message";
+import notificationsData from "../assets/json/notifications";
+import message from "../assets/json/message";
 import {
   Avatar_02,
   Applogo,
@@ -10,19 +10,19 @@ import {
   lnFrench,
   lnGerman,
   lnSpanish,
-} from "../../routes/ImagePath";
+} from "../routes/ImagePath";
 import { FaRegBell, FaRegComment } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import i18n from "../../i18n";
-import { userProfile } from "../../imgs";
+// import i18n from "../../i18n";
+import { userProfile } from "../imgs";
 import { useDispatch, useSelector } from "react-redux";
-import { auth } from "../../firebase/firebaseConfig";
-import { logout } from "../../redux";
+import { auth } from "../firebase/firebaseConfig";
+import { logout } from "../redux";
 import { signOut } from "firebase/auth";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import NotificationsPopup from "../../components/Modals/Notifications/NotificationsPopup";
-import { fetchUserProfilePic } from "../../services";
+import NotificationsPopup from "../components/Modals/Notifications/NotificationsPopup";
+import { fetchUserProfilePic } from "../services";
 
 const Header = () => {
   const queryClient = useQueryClient();

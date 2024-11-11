@@ -1,7 +1,6 @@
 import React from "react";
 // import { Table } from "antd";
-import Header from "../../../../layout/Header";
-import Sidebar from "../../../../layout/Sidebar";
+import { Header, SideBar } from "../../../../../layout";
 import Breadcrumbs from "../../../../../components/Breadcrumbs";
 import { Link } from "react-router-dom";
 import { Avatar_02 } from "../../../../../routes/ImagePath";
@@ -123,7 +122,7 @@ const ProvidentFund = () => {
   return (
     <div className="main-wrapper">
       <Header />
-      <Sidebar />
+      <SideBar />
       <div className="page-wrapper">
         {/* Page Content */}
         <div className="content container-fluid">

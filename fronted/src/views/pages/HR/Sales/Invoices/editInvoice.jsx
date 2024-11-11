@@ -1,6 +1,5 @@
 import React from "react";
-import Header from "../../../../layout/Header";
-import Sidebar from "../../../../layout/Sidebar";
+import { Header, SideBar } from "../../../../../layout";
 import Breadcrumbs from "../../../../../components/Breadcrumbs";
 import InvoiceAddEdit from "./invoiceAddEdit";
 
@@ -8,7 +7,7 @@ const EditInvoice = () => {
   return (
     <div>
       <Header />
-      <Sidebar />
+      <SideBar />
       <div className="page-wrapper">
         <div className="content container-fluid">
           <Breadcrumbs

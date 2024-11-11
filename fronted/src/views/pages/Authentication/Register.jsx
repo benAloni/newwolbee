@@ -48,7 +48,7 @@ const Register = () => {
 
   const onSubmit = async (data) => {
     try {
-      const userCredential = await createUserWithEmailAndPassword(
+       await createUserWithEmailAndPassword(
         auth,
         data.email,
         data.password

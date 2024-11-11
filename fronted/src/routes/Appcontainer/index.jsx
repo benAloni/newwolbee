@@ -1,13 +1,11 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { Outlet, Route, Routes, Navigate } from "react-router-dom";
-import Header from "../../views/layout/Header.jsx";
-import Sidebar from "../../views/layout/Sidebar.jsx";
+import { Header, SideBar } from "../../layout";
 import ChatSidebar from "../../components/Mainpages/chatSidebar.jsx";
 import ComponentSidebar from "../../components/ComponentSidebar.jsx";
 import EmailSidebar from "../../components/Mainpages/emailSidebar.jsx";
 import SettingsSidebar from "../../components/SettingsSidebar.jsx";
-
 import BasicInputs from "../../views/pages/Ui_Interface/Forms/BasicInputs.jsx";
 import InputGroups from "../../views/pages/Ui_Interface/Forms/InputGroups.jsx";
 import HorizontalForm from "../../views/pages/Ui_Interface/Forms/HorizontalForm.jsx";
@@ -16,14 +14,6 @@ import Formmask from "../../views/pages/Ui_Interface/Forms/Formmask.jsx";
 import Formvalidation from "../../views/pages/Ui_Interface/Forms/Formvalidation.jsx";
 import TablesBasic from "../../views/pages/Ui_Interface/Tables/TablesBasic.jsx";
 import DataTables from "../../views/pages/Ui_Interface/Tables/DataTables.jsx";
-import PerformanceIndicator from "../../views/pages/Performance/Performance/PerformanceIndicator.jsx";
-import PerformanceReview from "../../views/pages/Performance/Performance/PerformanceReview.jsx";
-import PerformanceAppraisal from "../../views/pages/Performance/Performance/PerformanceAppraisal.jsx";
-import GoalTracking from "../../views/pages/Performance/Goals/GoalTracking.jsx";
-import GoalType from "../../views/pages/Performance/Goals/GoalType.jsx";
-import Trainers from "../../views/pages/Performance/Training/Trainers.jsx";
-import Training from "../../views/pages/Performance/Training/Training.jsx";
-import TrainingType from "../../views/pages/Performance/Training/TrainingType.jsx";
 import AdminDashboard from "../../views/pages/MainPages/Dashboard/AdminDashboard/adminDashboard.jsx";
 import EmployeeDashboard from "../../views/pages/MainPages/Dashboard/EmployeeDashboard/index.jsx";
 import Chat from "../../views/pages/MainPages/Apps/chat/index.jsx";
@@ -44,16 +34,12 @@ import CreateInvoice from "../../views/pages/HR/Sales/Invoices/createInvoice.jsx
 import EditInvoice from "../../views/pages/HR/Sales/Invoices/editInvoice.jsx";
 import InvoiceView from "../../views/pages/HR/Sales/Invoices/invoiceView.jsx";
 import Payments from "../../views/pages/HR/Sales/payments/index.jsx";
-import Promotion from "../../views/pages/Performance/Promotion.jsx";
-import Resignation from "../../views/pages/Performance/Resignation.jsx";
-import Termination from "../../views/pages/Performance/Termination.jsx";
-import Components from "../../views/pages/Ui_Interface/Components/Components.jsx";
+
 import Settings from "../../views/pages/Administration/Settings/Settings.jsx";
 import Localization from "../../views/pages/Administration/Settings/Localization.jsx";
 import ThemeSettings from "../../views/pages/Administration/Settings/ThemeSettings.jsx";
 import RolesPermissions from "../../views/pages/Administration/Settings/RolesPermissions.jsx";
 import EmailSettings from "../../views/pages/Administration/Settings/EmailSettings.jsx";
-import PerformanceSetting from "../../views/pages/Administration/Settings/Performance/PerformanceSetting.jsx";
 import ApprovalSetting from "../../views/pages/Administration/Settings/ApprovalSetting.jsx";
 import InvoiceSettings from "../../views/pages/Administration/Settings/InvoiceSettings.jsx";
 import SalarySettings from "../../views/pages/Administration/Settings/SalarySettings.jsx";
@@ -84,14 +70,10 @@ import Leads from "../../views/pages/Employees/Leads.jsx";
 import Ticket from "../../views/pages/Employees/Ticket.jsx";
 import ClientProfile from "../../views/pages/Profile/ClientProfile.jsx";
 import Profile from "../../views/pages/Profile/Profile.jsx";
-import Subscribtions from "../../views/pages/Subscribtions/Subscribtions.jsx";
-import SubscribedCompany from "../../views/pages/Subscribtions/SubscribedCompany.jsx";
-import SubscribtionsCompany from "../../views/pages/Subscribtions/SubscribtionsCompany.jsx";
 import Search from "../../views/pages/Pages/Search/Search.jsx";
 import Faq from "../../views/pages/Pages/Faq.jsx";
 import Terms from "../../views/pages/Pages/Terms.jsx";
 import PrivacyPolicy from "../../views/pages/Pages/PrivacyPolicy.jsx";
-import BlankPage from "../../views/pages/Pages/BlankPage.jsx";
 import KnowledgeBase from "../../views/pages/Administration/Knowledgebase/KnowledgeBase.jsx";
 import KnowledgeBaseView from "../../views/pages/Administration/Knowledgebase/KnowledgeBaseView.jsx";
 import EmployeeList from "../../views/pages/Employees/EmployeeList.jsx";
@@ -157,12 +139,6 @@ import Notification from "../../views/pages/Ui_Interface/Elements/Notification.j
 import Stickynotes from "../../views/pages/Ui_Interface/Elements/Stickynote.jsx";
 import Timeline from "../../views/pages/Ui_Interface/Elements/Timeline.jsx";
 import Formwizard from "../../views/pages/Ui_Interface/Elements/Formwizard.jsx";
-import Apexchart from "../../views/pages/Ui_Interface/Charts/Apexcharts.jsx";
-import ChartJs from "../../views/pages/Ui_Interface/Charts/Chartjs.jsx";
-import MorrisCharts from "../../views/pages/Ui_Interface/Charts/Morrischarts.jsx";
-import FlotCharts from "../../views/pages/Ui_Interface/Charts/Flotcharts.jsx";
-import PeityCharts from "../../views/pages/Ui_Interface/Charts/Peitycharts.jsx";
-import C3Charts from "../../views/pages/Ui_Interface/Charts/C3charts.jsx";
 import FontAwesomeicons from "../../views/pages/Ui_Interface/Icons/Fontawesomeicons.jsx";
 import FeatherIcons from "../../views/pages/Ui_Interface/Icons/Feathericons.jsx";
 import IonicIcon from "../../views/pages/Ui_Interface/Icons/Ionicicons.jsx";
@@ -177,7 +153,6 @@ import ContactList from "../../views/pages/Crm/ContactList.jsx";
 import ContactGrid from "../../views/pages/Crm/ContactGrid.jsx";
 import DealsDashboard from "../../views/pages/MainPages/Dashboard/DealsDashboard/index.jsx";
 import LeadsDashboard from "../../views/pages/MainPages/Dashboard/LeadsDashboard/index.jsx";
-import ComingSoon from "../../views/pages/Pages/ComingSoon.jsx";
 import TicketDetails from "../../views/pages/Employees/TicketDetails.jsx";
 import Companies from "../../views/pages/Crm/companies.jsx";
 import ContactDetails from "../../views/pages/Crm/ContactDetails.jsx";
@@ -197,20 +172,19 @@ import DealsDetails from "../../views/pages/Crm/DealsDetails.jsx";
 import CompanyEvents from "../../views/pages/Authentication/CompanyEvents.jsx";
 
 import RetentionStatistics from "../../views/pages/MainPages/Dashboard/AdminDashboard/RetentionStatistics.jsx";
-import GiftForEmployee from "../../views/pages/Employees/ForEmployee/GiftForEmployee.jsx";
 import NotificationsBirth from "../../views/pages/MainPages/Apps/notifications/mainNotifications/ShowNotifications/NotificationsBirth.jsx";
 
 const AppContainer = () => {
-  useEffect(() => {
-    localStorage.setItem("colorschema", "orange");
-    localStorage.setItem("layout", "vertical");
-    localStorage.setItem("layoutwidth", "fixed");
-    localStorage.setItem("layoutpos", "fluid");
-    localStorage.setItem("topbartheme", "light");
-    localStorage.setItem("layoutSized", "lg");
-    localStorage.setItem("layoutStyling", "default");
-    localStorage.setItem("layoutSidebarStyle", "dark");
-  }, []);
+  // useEffect(() => {
+  //   localStorage.setItem("colorschema", "orange");
+  //   localStorage.setItem("layout", "vertical");
+  //   localStorage.setItem("layoutwidth", "fixed");
+  //   localStorage.setItem("layoutpos", "fluid");
+  //   localStorage.setItem("topbartheme", "light");
+  //   localStorage.setItem("layoutSized", "lg");
+  //   localStorage.setItem("layoutStyling", "default");
+  //   localStorage.setItem("layoutSidebarStyle", "dark");
+  // }, []);
 
   const routingObjects = [
     {
@@ -252,46 +226,6 @@ const AppContainer = () => {
       id: 8,
       path: "data-tables",
       element: <DataTables />,
-    },
-    {
-      id: 9,
-      path: "performance-indicator",
-      element: <PerformanceIndicator />,
-    },
-    {
-      id: 10,
-      path: "performance",
-      element: <PerformanceReview />,
-    },
-    {
-      id: 11,
-      path: "performance-appraisal",
-      element: <PerformanceAppraisal />,
-    },
-    {
-      id: 12,
-      path: "goal-tracking",
-      element: <GoalTracking />,
-    },
-    {
-      id: 13,
-      path: "goal-type",
-      element: <GoalType />,
-    },
-    {
-      id: 14,
-      path: "trainers",
-      element: <Trainers />,
-    },
-    {
-      id: 15,
-      path: "training",
-      element: <Training />,
-    },
-    {
-      id: 16,
-      path: "training-type",
-      element: <TrainingType />,
     },
     {
       id: 17,
@@ -368,21 +302,6 @@ const AppContainer = () => {
       id: 31,
       path: "payments",
       element: <Payments />,
-    },
-    {
-      id: 32,
-      path: "promotion",
-      element: <Promotion />,
-    },
-    {
-      id: 33,
-      path: "resignation",
-      element: <Resignation />,
-    },
-    {
-      id: 34,
-      path: "termination",
-      element: <Termination />,
     },
     {
       id: 34,
@@ -490,21 +409,6 @@ const AppContainer = () => {
       element: <Profile />,
     },
     {
-      id: 54,
-      path: "subscriptions",
-      element: <Subscribtions />,
-    },
-    {
-      id: 55,
-      path: "subscribed-companies",
-      element: <SubscribedCompany />,
-    },
-    {
-      id: 56,
-      path: "subscriptions-company",
-      element: <SubscribtionsCompany />,
-    },
-    {
       id: 57,
       path: "search",
       element: <Search />,
@@ -515,11 +419,6 @@ const AppContainer = () => {
       element: <Faq />,
     },
     {
-      id: 59,
-      path: "terms",
-      element: <Terms />,
-    },
-    {
       id: 60,
       path: "terms",
       element: <Terms />,
@@ -528,11 +427,6 @@ const AppContainer = () => {
       id: 61,
       path: "privacy-policy",
       element: <PrivacyPolicy />,
-    },
-    {
-      id: 62,
-      path: "blank-page",
-      element: <BlankPage />,
     },
     {
       id: 63,
@@ -748,36 +642,6 @@ const AppContainer = () => {
       element: <Formwizard />,
     },
     {
-      id: 104,
-      path: "apex-charts",
-      element: <Apexchart />,
-    },
-    {
-      id: 105,
-      path: "chartjs",
-      element: <ChartJs />,
-    },
-    {
-      id: 106,
-      path: "morris-charts",
-      element: <MorrisCharts />,
-    },
-    {
-      id: 107,
-      path: "flot-charts",
-      element: <FlotCharts />,
-    },
-    {
-      id: 108,
-      path: "peity-charts",
-      element: <PeityCharts />,
-    },
-    {
-      id: 109,
-      path: "charts-c3",
-      element: <C3Charts />,
-    },
-    {
       id: 110,
       path: "fontawesome-icons",
       element: <FontAwesomeicons />,
@@ -917,14 +781,9 @@ const AppContainer = () => {
       id: 132,
       path: "RetentionStatistics",
       element: <RetentionStatistics />,
-    },
+    },  
     {
       id: 133,
-      path: "foremployee",
-      element: <GiftForEmployee />,
-    },
-    {
-      id: 134,
       path: "NotificationsBirth/:userId",
       element: <NotificationsBirth />,
     },
@@ -955,13 +814,6 @@ const AppContainer = () => {
       id: 5,
       path: "incoming-call",
       element: <IncomingCall />,
-    },
-  ];
-  const ComponentsRoutingeObjects = [
-    {
-      id: 1,
-      path: "components",
-      element: <Components />,
     },
   ];
   const EmailRoutingeObjects = [
@@ -1006,11 +858,6 @@ const AppContainer = () => {
       id: 5,
       path: "email-settings",
       element: <EmailSettings />,
-    },
-    {
-      id: 6,
-      path: "performance-setting",
-      element: <PerformanceSetting />,
     },
     {
       id: 7,
@@ -1173,8 +1020,8 @@ const AppContainer = () => {
   const SidebarLayout = () => (
     <>
       <Header />
-      <Sidebar />
-      <OffCanvas />
+      <SideBar />
+      {/* <OffCanvas /> */}
       <Outlet />
     </>
   );
@@ -1232,7 +1079,7 @@ const AppContainer = () => {
       <div className="main-wrapper" onClick={mobileResponsive}>
         <Routes>
           <Route
-            path="/plan-new-company-event"
+            path="/company-events"
             element={<CompanyEvents></CompanyEvents>}
           />
 
@@ -1244,11 +1091,6 @@ const AppContainer = () => {
 
           <Route path={"/*"} element={<ChatSidebarLayout />}>
             {ChatRoutingeObjects.map((item) => (
-              <Route key={item.id} path={item.path} element={item.element} />
-            ))}
-          </Route>
-          <Route path={"/*"} element={<ComponentSidebarLayout />}>
-            {ComponentsRoutingeObjects.map((item) => (
               <Route key={item.id} path={item.path} element={item.element} />
             ))}
           </Route>

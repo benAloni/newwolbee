@@ -23,6 +23,7 @@ import {
   updateCompanyEvent,
   deleteCompanyEvent,
 } from "../controllers/companyEventsData.js";
+
 const router = express.Router();
 initializeApp({
   //in order to verify user Id tokens

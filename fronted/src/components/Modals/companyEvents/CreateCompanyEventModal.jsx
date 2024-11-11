@@ -6,7 +6,7 @@ import { FaArrowLeft } from "react-icons/fa";
 import HrServiceCompany from "../../../views/pages/Employees/Projects/HrServiceCompany";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 // import './App.css';
 // import hagalil from './hagalil.jpg'
 // import buyMe from './buyMe.webp'
@@ -22,24 +22,24 @@ const CreateCompanyEventModal = ({
   nextModal,
   prevModal,
 }) => {
-  const [selectedTimeOptions, setSelectedTimeOptions] = useState({
-    startingTime: null,
-    endingTime: null,
-  });
-  const [showDatePickerModal, setShowDatePickerModal] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(null);
+  // const [selectedTimeOptions, setSelectedTimeOptions] = useState({
+  //   startingTime: null,
+  //   endingTime: null,
+  // });
   const [selectedTime, setSelectedTime] = useState("");
-
+  // const [selectedDate, setSelectedDate] = useState(null);
   const [selectedRangeBudget, setSelectedRangeBudget] = useState(50);
   const [selectedRangeEmployee, setSelectedRangeEmployee] = useState(1);
   const [selectedTheme, setSelectedTheme] = useState("");
-  const [selectedLocation, setSelectedLocation] = useState("");
 
   const {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors, isSubmitting },
+    watch,
+    control,
   } = useForm();
   const [tasks, setTasks] = useState([
     { id: 1, text: "Confirm the venue booking and layout", completed: false },
@@ -127,33 +127,33 @@ const CreateCompanyEventModal = ({
     setSelectedTheme(theme);
     nextModal();
   };
+
   const handleSelectedTime = (time, name) => {
-    setSelectedTimeOptions((prevData) => ({
-      ...prevData,
-      [name]: time ? time : "",
-    }));
-    nextModal();
+    setValue(name, time);
+    const startingTime = watch("startingTime");
+    const endingTime = watch("endingTime");
   };
 
   const handleDateChange = (date) => {
-    setSelectedDate(date.toISOString());
+    setValue("selectedDate", date.toISOString());
   };
-  const handleLocationSelect = (location) => {
-    setSelectedLocation(location);
+  const selectedLocation = watch("location");
+
+  const handleLocationSelection = (location) => {
+    setValue("location", location); // Update the selected location in the form
     nextModal();
   };
 
   const onSubmit = () => {
-    const eventDetails = {
-      budget: selectedRangeBudget,
-      employees: selectedRangeEmployee,
-      theme: selectedTheme,
-      location: selectedLocation,
-      time: selectedTime,
-      tasks: tasks.filter((task) => task.completed),
-    };
-
-    onClose();
+    // const eventDetails = {
+    //   budget: selectedRangeBudget,
+    //   employees: selectedRangeEmployee,
+    //   theme: selectedTheme,
+    //   location: selectedLocation,
+    //   time: selectedTime,
+    //   tasks: tasks.filter((task) => task.completed),
+    // };
+    // onClose();
   };
 
   const pieData = {
@@ -213,11 +213,11 @@ const CreateCompanyEventModal = ({
   const h1style = {
     textAlign: "center",
     marginBottom: "20px",
+    fontWeight: "bold",
   };
 
   const h2style = {
     textAlign: "center",
-    fontWeight: "bold",
   };
   const buttonStyle = {
     width: "300px",
@@ -232,12 +232,6 @@ const CreateCompanyEventModal = ({
     fontFamily: "'Montserrat', sans-serif",
   };
 
-  const hoverStyle = {
-    backgroundColor: "#F19F29",
-    color: "white",
-    fontSize: "1.4em",
-  };
-
   return (
     <div className="page-wrapper">
       <div className="content container-fluid">
@@ -247,7 +241,7 @@ const CreateCompanyEventModal = ({
               &times;
             </span>
             <form onSubmit={handleSubmit(onSubmit)}>
-              {currentModal !== 1 && (
+              {/* {currentModal !== 1 && currentModal !== 2 && (
                 <button
                   className="eventButton"
                   onClick={prevModal}
@@ -256,17 +250,14 @@ const CreateCompanyEventModal = ({
                 >
                   <FaArrowLeft style={styles.icon} />
                 </button>
-              )}
+              )} */}
 
               {currentModal === 1 && (
                 <>
                   <h1 style={h1style}>Let's plan an event!</h1>
                   <h2 style={h2style}>When would you like the event to be?</h2>
                   <div className="button-container">
-                    <button
-                      className="eventButton"
-                      onClick={() => setShowDatePickerModal(true)}
-                    >
+                    <button className="eventButton" onClick={() => nextModal()}>
                       This month
                     </button>
                     <button className="eventButton">
@@ -279,16 +270,23 @@ const CreateCompanyEventModal = ({
                   </div>
                 </>
               )}
-              {showDatePickerModal && (
+              {currentModal === 2 && (
                 <div className="choose-date-modal">
                   <div>
                     <h1>Pick a date and time for your event</h1>
                     <div className="cal-icon">
-                      <DatePicker
-                        selected={selectedDate}
-                        onChange={(date) => handleDateChange(date)}
-                        dateFormat="dd-MM-yyyy"
-                      />
+                      <Controller
+                        control={control}
+                        name="date-input"
+                        render={({ field }) => (
+                          <DatePicker
+                            placeholderText="Select a date"
+                            onChange={(date) => field.onChange(date)}
+                            selected={field.value}
+                             dateFormat="dd-MM-yyyy"
+                          />
+                        )}
+                      />                   
                     </div>
                     <div>
                       <label htmlFor="starting-time">Choose time</label>
@@ -297,9 +295,9 @@ const CreateCompanyEventModal = ({
                         <input
                           type="time"
                           id="starting-time"
-                          selected={selectedTimeOptions.startingTime}
-                          onChange={(date) =>
-                            handleSelectedTime(date, "startingTime")
+                          {...register("startingTime")}
+                          onChange={(e) =>
+                            handleSelectedTime(e.target.value, "startingTime")
                           }
                         />
                       </div>
@@ -309,54 +307,93 @@ const CreateCompanyEventModal = ({
                         <input
                           type="time"
                           id="ending-time"
-                          selected={selectedTimeOptions.endingTime}
-                          onChange={(date) =>
-                            handleSelectedTime(date, "endingTime")
+                          {...register("endingTime")}
+                          onChange={(e) =>
+                            handleSelectedTime(e.target.value, "endingTime")
                           }
                         />
                       </div>
                     </div>
-
-                    {/* Close and Set Date & Time Buttons */}
-                    <button onClick={() => setShowDatePickerModal(false)}>
-                      Close
-                    </button>
-                    <button onClick={() => setShowDatePickerModal(false)}>
+                    <button onClick={() => prevModal()}>Close</button>
+                    <button
+                      onClick={() => {
+                        nextModal();
+                      }}
+                    >
                       Set date & time
                     </button>
                   </div>
                 </div>
               )}
 
-              {currentModal === 2 && (
+              {currentModal === 3 && (
                 <>
-                  <h1 style={h1style}>Let's Plan!</h1>
-                  <h2 style={h2style}>Where?</h2>
+                  <h2 style={h1style}>Set the location</h2>
+                  <h1 style={h2style}>
+                    Where would you like the location of the event to be?
+                  </h1>
                   <div className="button-container">
                     <button
                       className="eventButton"
-                      onClick={() => handleLocationSelect("On site")}
+                      {...register("onSite")}
+                      onClick={() => nextModal()}
                     >
                       On site
                     </button>
                     <button
                       className="eventButton"
-                      onClick={() => handleLocationSelect("Outside")}
+                      {...register("outside")}
+                      onClick={() => nextModal()}
                     >
                       Outside
                     </button>
-                    <button
-                      className="eventButton"
-                      onClick={() => handleLocationSelect("Help me decide")}
-                    >
+                    <button className="eventButton" onClick={() => nextModal()}>
                       Help me decide
                     </button>
                   </div>
-                  {/* <button className="eventButton" onClick={prevModal}>Back</button> */}
+                  <button className="eventButton" onClick={prevModal}>
+                    Back
+                  </button>
                 </>
               )}
 
-              {currentModal === 3 && (
+              {currentModal === 4 && (
+                <>
+                  <h1 style={h2style}>Number of guests</h1>
+                  <div className="slider-container">
+                    <input
+                      type="range"
+                      min="1"
+                      max="1000"
+                      value={selectedRangeEmployee}
+                      onChange={handleRangeChangeEmployee}
+                      className="slider"
+                      style={{
+                        display: "block",
+                        margin: "0 auto",
+                      }}
+                    />
+                    <div style={h2style} className="slider-value">
+                      {selectedRangeEmployee}
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        gap: "10px",
+                      }}
+                    >
+                      <button className="eventButton" onClick={prevModal}>
+                        Back
+                      </button>
+                      <button className="eventButton" onClick={nextModal}>
+                        Next
+                      </button>
+                    </div>
+                  </div>
+                </>
+              )}
+              {currentModal === 5 && (
                 <>
                   <h1 style={h2style}>Budget</h1>
                   <div className="slider-container">
@@ -391,42 +428,7 @@ const CreateCompanyEventModal = ({
                 </>
               )}
 
-              {currentModal === 4 && (
-                <>
-                  <h1 style={h2style}>Number of guests</h1>
-                  <div className="slider-container">
-                    <input
-                      type="range"
-                      min="1"
-                      max="1000"
-                      value={selectedRangeEmployee}
-                      onChange={handleRangeChangeEmployee}
-                      className="slider"
-                      style={{
-                        display: "block",
-                        margin: "0 auto", // Centers the input horizontally
-                      }}
-                    />
-                    <div style={h2style} className="slider-value">
-                      {selectedRangeEmployee}
-                    </div>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        gap: "10px", // Optional for spacing between buttons
-                      }}
-                    >
-                      {/* <button className="eventButton" onClick={prevModal}>Back</button> */}
-                      <button className="eventButton" onClick={nextModal}>
-                        Next
-                      </button>
-                    </div>
-                  </div>
-                </>
-              )}
-
-              {currentModal === 5 && (
+              {currentModal === 6 && (
                 <>
                   <h1 style={h2style}>Choose theme</h1>
                   <div
@@ -498,7 +500,7 @@ const CreateCompanyEventModal = ({
                 </>
               )}
 
-              {currentModal === 6 && (
+              {currentModal === 7 && (
                 <>
                   <h1 style={h1style}>What your employee wish for</h1>
                   <h2 style={h2style}>Preferred Location & Time</h2>
@@ -572,7 +574,7 @@ const CreateCompanyEventModal = ({
                 </>
               )} */}
 
-              {currentModal === 7 && (
+              {currentModal === 8 && (
                 <>
                   <h1>What your employee wish for</h1>
                   <div className="button-container">
@@ -596,7 +598,7 @@ const CreateCompanyEventModal = ({
                 </>
               )}
 
-              {currentModal === 8 && (
+              {currentModal === 9 && (
                 <>
                   <h1 style={h1style}>Zen at work</h1>
                   <h2 style={h2style}>A Day of yoga and wellness</h2>
@@ -669,7 +671,7 @@ const CreateCompanyEventModal = ({
                 </>
               )}
 
-              {currentModal === 9 && (
+              {currentModal === 10 && (
                 <>
                   <h1 style={h1style}>Zen at work </h1>
                   <h2 style={h2style}> A day of yoga and wellness </h2>
@@ -727,7 +729,7 @@ const CreateCompanyEventModal = ({
                 </>
               )}
 
-              {currentModal === 10 && (
+              {currentModal === 11 && (
                 <>
                   <div>
                     <h1 style={h1style}>Zen at Work</h1>
@@ -838,7 +840,7 @@ const CreateCompanyEventModal = ({
                 </>
               )}
 
-              {currentModal === 11 && (
+              {currentModal === 12 && (
                 <>
                   <div className="popup-content">
                     <h1 style={h1style}>Zen at Work</h1>
@@ -879,7 +881,7 @@ const CreateCompanyEventModal = ({
                 </>
               )}
 
-              {currentModal === 12 && (
+              {currentModal === 13 && (
                 <>
                   <h1>Service Providers</h1>
 
@@ -900,7 +902,7 @@ const CreateCompanyEventModal = ({
                 </>
               )}
 
-              {currentModal === 13 && (
+              {currentModal === 14 && (
                 <>
                   <h1 style={h1style}>Your Plan!</h1>
                   <h2 style={h2style}>Based on your preferences</h2>
@@ -928,7 +930,7 @@ const CreateCompanyEventModal = ({
                     disabled={isSubmitting}
                     type="submit"
                   >
-                      {isSubmitting ? "Submitting..." : "Submit event"}
+                    {isSubmitting ? "Submitting..." : "Submit event"}
                   </button>
                   {/* <button className="eventButton" onClick={prevModal}>Back</button> */}
                 </>
@@ -1059,7 +1061,7 @@ button:focus {
   }
 }
 
-            .eventButton {
+         .eventButton {
               padding: 20px;
               border-radius: 12px;
               border: 2px solid #ddd;
@@ -1075,11 +1077,11 @@ button:focus {
               gap:5px;
               margin:15px;
             }
-  
-            .eventButton:hover {
-              background-color: #e0e0e0;
-              transform: scale(1.05);
-            }
+.eventButton:hover {
+  background-color: #e0e0e0;
+  transform: scale(1.05);
+}
+
   
             .slider-container {
               margin-top: 20px;

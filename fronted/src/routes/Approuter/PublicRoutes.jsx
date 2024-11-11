@@ -6,7 +6,7 @@ import { UNKNOWN_USER_STATE } from "../../redux/features/auth/authSlice";
 const PublicRoutes = () => {
   const { user } = useAuth();
 
-  if (user === UNKNOWN_USER_STATE || user === null) {
+  if (user === UNKNOWN_USER_STATE || user === null || !user.role) {
     return <Outlet/>;
     
   } else {

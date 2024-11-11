@@ -1,6 +1,5 @@
 import React from "react";
-import Header from "../../../../layout/Header";
-import Sidebar from "../../../../layout/Sidebar";
+import { Header, SideBar } from "../../../../../layout";
 import Breadcrumbs from "../../../../../components/Breadcrumbs";
 import { Link } from "react-router-dom";
 import { Table } from "antd";
@@ -67,7 +66,7 @@ const SubCategory = () => {
   return (
     <div className="main-wrapper">
       <Header />
-      <Sidebar />
+      <SideBar />
       <div className="page-wrapper">
         <div className="content container-fluid">
           <Breadcrumbs

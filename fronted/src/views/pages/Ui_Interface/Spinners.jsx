@@ -1,12 +1,8 @@
 import React from 'react'
-import Header from '../../../layout/Header'
-import Sidebar from '../../../layout/Sidebar'
 
 const Spinners = () => {
     return (
         <div>
-            <Header />
-            <Sidebar />
             <div className="page-wrapper">
                 <div className="content container-fluid pb-0">
                     {/* Page Header */}
