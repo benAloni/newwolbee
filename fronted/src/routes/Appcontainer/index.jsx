@@ -6,14 +6,7 @@ import ChatSidebar from "../../components/Mainpages/chatSidebar.jsx";
 import ComponentSidebar from "../../components/ComponentSidebar.jsx";
 import EmailSidebar from "../../components/Mainpages/emailSidebar.jsx";
 import SettingsSidebar from "../../components/SettingsSidebar.jsx";
-import BasicInputs from "../../views/pages/Ui_Interface/Forms/BasicInputs.jsx";
-import InputGroups from "../../views/pages/Ui_Interface/Forms/InputGroups.jsx";
-import HorizontalForm from "../../views/pages/Ui_Interface/Forms/HorizontalForm.jsx";
-import VerticalForm from "../../views/pages/Ui_Interface/Forms/VerticalForm.jsx";
-import Formmask from "../../views/pages/Ui_Interface/Forms/Formmask.jsx";
-import Formvalidation from "../../views/pages/Ui_Interface/Forms/Formvalidation.jsx";
-import TablesBasic from "../../views/pages/Ui_Interface/Tables/TablesBasic.jsx";
-import DataTables from "../../views/pages/Ui_Interface/Tables/DataTables.jsx";
+
 import AdminDashboard from "../../views/pages/MainPages/Dashboard/AdminDashboard/adminDashboard.jsx";
 import EmployeeDashboard from "../../views/pages/MainPages/Dashboard/EmployeeDashboard/index.jsx";
 import Chat from "../../views/pages/MainPages/Apps/chat/index.jsx";
@@ -26,15 +19,6 @@ import Contacts from "../../views/pages/MainPages/Apps/contacts/index.jsx";
 import Email from "../../views/pages/MainPages/Apps/Email/index.jsx";
 import FileManager from "../../views/pages/MainPages/Apps/FileManager/index.jsx";
 import Compose from "../../views/pages/MainPages/Apps/Email/compose.jsx";
-import Estimates from "../../views/pages/HR/Sales/Estimates/index.jsx";
-import CreateEstimate from "../../views/pages/HR/Sales/Estimates/createEstimate.jsx";
-import EditEstimate from "../../views/pages/HR/Sales/Estimates/EditEstimate.jsx";
-import Invoices from "../../views/pages/HR/Sales/Invoices/Index.jsx";
-import CreateInvoice from "../../views/pages/HR/Sales/Invoices/createInvoice.jsx";
-import EditInvoice from "../../views/pages/HR/Sales/Invoices/editInvoice.jsx";
-import InvoiceView from "../../views/pages/HR/Sales/Invoices/invoiceView.jsx";
-import Payments from "../../views/pages/HR/Sales/payments/index.jsx";
-
 import Settings from "../../views/pages/Administration/Settings/Settings.jsx";
 import Localization from "../../views/pages/Administration/Settings/Localization.jsx";
 import ThemeSettings from "../../views/pages/Administration/Settings/ThemeSettings.jsx";
@@ -77,30 +61,7 @@ import PrivacyPolicy from "../../views/pages/Pages/PrivacyPolicy.jsx";
 import KnowledgeBase from "../../views/pages/Administration/Knowledgebase/KnowledgeBase.jsx";
 import KnowledgeBaseView from "../../views/pages/Administration/Knowledgebase/KnowledgeBaseView.jsx";
 import EmployeeList from "../../views/pages/Employees/EmployeeList.jsx";
-import Expenses from "../../views/pages/HR/Sales/Expenses/index.jsx";
 import Activities from "../../views/pages/Administration/Activities/index.jsx";
-import ProvidentFund from "../../views/pages/HR/Sales/ProvidentFund/index.jsx";
-import Taxes from "../../views/pages/HR/Sales/Taxes/index.jsx";
-import Categories from "../../views/pages/HR/Accounting/Categories/index.jsx";
-import SubCategory from "../../views/pages/HR/Accounting/Categories/subCategory.jsx";
-import Budgets from "../../views/pages/HR/Accounting/Budgets.jsx/index.jsx";
-import BudgetExpenses from "../../views/pages/HR/Accounting/BudgetExpenses/index.jsx";
-import BudgetRevenues from "../../views/pages/HR/Accounting/BudgetRevenue/index.jsx";
-import EmployeeSalary from "../../views/pages/HR/Payroll/EmployeeSalary.jsx/index.jsx";
-import PaySlip from "../../views/pages/HR/Payroll/Payslip/index.jsx";
-import PayrollItems from "../../views/pages/HR/Payroll/PayrollItems.jsx/index.jsx";
-import Policies from "../../views/pages/HR/Policies/index.jsx";
-import ExpenseReport from "../../views/pages/HR/Reports/ExpenseReport/index.jsx";
-import InvoiceReport from "../../views/pages/HR/Reports/InvoiceReport/index.jsx";
-import PaymentReport from "../../views/pages/HR/Reports/PaymentReport/index.jsx";
-import ProjectReport from "../../views/pages/HR/Reports/ProjectReport/index.jsx";
-import TaskReport from "../../views/pages/HR/Reports/TaskReport/index.jsx";
-import UserReport from "../../views/pages/HR/Reports/UserReport/index.jsx";
-import EmployeeReport from "../../views/pages/HR/Reports/EmployeeReports/index.jsx";
-import PaySlipReports from "../../views/pages/HR/Reports/PaySlipReports/index.jsx";
-import AttendanceReport from "../../views/pages/HR/Reports/AttendanceReport/index.jsx";
-import LeaveReport from "../../views/pages/HR/Reports/LeaveReport/index.jsx";
-import DailyReports from "../../views/pages/HR/Reports/DailyReports/index.jsx";
 import Assets from "../../views/pages/Administration/Assets/index.jsx";
 import UserDashboard from "../../views/pages/Administration/Jobs/UserJob/UserDashboard/index.jsx";
 import UserAllJobs from "../../views/pages/Administration/Jobs/UserJob/UserAllJobs/index.jsx";
@@ -126,29 +87,7 @@ import Users from "../../views/pages/Administration/Users/index.jsx";
 import ProjectList from "../../views/pages/Employees/Projects/ProjectList.jsx";
 import ProjectView from "../../views/pages/Employees/Projects/ProjectView.jsx";
 import OffCanvas from "../../components/OffCanvas.jsx";
-import FormSelectTwo from "../../views/pages/Ui_Interface/Forms/FormSelectTwo.jsx";
-import FileUpload from "../../views/pages/Ui_Interface/Forms/FileUpload.jsx";
-import Ribbon from "../../views/pages/Ui_Interface/Elements/Ribbon.jsx";
-import Clipboard from "../../views/pages/Ui_Interface/Elements/Clipboard.jsx";
-import Dragdrop from "../../views/pages/Ui_Interface/Elements/Dragdrop.jsx";
-import Ratings from "../../views/pages/Ui_Interface/Elements/Rating.jsx";
-import Texteditor from "../../views/pages/Ui_Interface/Elements/Texteditor.jsx";
-import Counter from "../../views/pages/Ui_Interface/Elements/Counter.jsx";
-import Scrollbar from "../../views/pages/Ui_Interface/Elements/Scrollbar.jsx";
-import Notification from "../../views/pages/Ui_Interface/Elements/Notification.jsx";
-import Stickynotes from "../../views/pages/Ui_Interface/Elements/Stickynote.jsx";
-import Timeline from "../../views/pages/Ui_Interface/Elements/Timeline.jsx";
-import Formwizard from "../../views/pages/Ui_Interface/Elements/Formwizard.jsx";
-import FontAwesomeicons from "../../views/pages/Ui_Interface/Icons/Fontawesomeicons.jsx";
-import FeatherIcons from "../../views/pages/Ui_Interface/Icons/Feathericons.jsx";
-import IonicIcon from "../../views/pages/Ui_Interface/Icons/Ionicicons.jsx";
-import MaterialIcons from "../../views/pages/Ui_Interface/Icons/Materialicons.jsx";
-import Pe7Icon from "../../views/pages/Ui_Interface/Icons/Pe7icons.jsx";
-import SimpleLine from "../../views/pages/Ui_Interface/Icons/Simpleicons.jsx";
-import Themifyicons from "../../views/pages/Ui_Interface/Icons/Themifyicons.jsx";
-import WeatherIcons from "../../views/pages/Ui_Interface/Icons/Weathericons.jsx";
-import Typicons from "../../views/pages/Ui_Interface/Icons/Typicons.jsx";
-import FlagIcons from "../../views/pages/Ui_Interface/Icons/Flagicons.jsx";
+
 import ContactList from "../../views/pages/Crm/ContactList.jsx";
 import ContactGrid from "../../views/pages/Crm/ContactGrid.jsx";
 import DealsDashboard from "../../views/pages/MainPages/Dashboard/DealsDashboard/index.jsx";
@@ -188,44 +127,9 @@ const AppContainer = () => {
 
   const routingObjects = [
     {
-      id: 1,
-      path: "form-basic-inputs",
-      element: <BasicInputs />,
-    },
-    {
       id: 2,
       path: "admin-dashboard",
       element: <AdminDashboard />,
-    },
-    {
-      id: 3,
-      path: "form-horizontal",
-      element: <HorizontalForm />,
-    },
-    {
-      id: 4,
-      path: "form-vertical",
-      element: <VerticalForm />,
-    },
-    {
-      id: 5,
-      path: "form-mask",
-      element: <Formmask />,
-    },
-    {
-      id: 6,
-      path: "form-validation",
-      element: <Formvalidation />,
-    },
-    {
-      id: 7,
-      path: "tables-basic",
-      element: <TablesBasic />,
-    },
-    {
-      id: 8,
-      path: "data-tables",
-      element: <DataTables />,
     },
     {
       id: 17,
@@ -236,11 +140,6 @@ const AppContainer = () => {
       id: 18,
       path: "activities",
       element: <Activities />,
-    },
-    {
-      id: 19,
-      path: "form-input-groups",
-      element: <InputGroups />,
     },
     // {
     //   id: 20,
@@ -262,46 +161,6 @@ const AppContainer = () => {
       id: 23,
       path: "file-manager",
       element: <FileManager />,
-    },
-    {
-      id: 24,
-      path: "estimates",
-      element: <Estimates />,
-    },
-    {
-      id: 25,
-      path: "create-estimate",
-      element: <CreateEstimate />,
-    },
-    {
-      id: 26,
-      path: "edit-estimate",
-      element: <EditEstimate />,
-    },
-    {
-      id: 27,
-      path: "invoices",
-      element: <Invoices />,
-    },
-    {
-      id: 28,
-      path: "create-invoice",
-      element: <CreateInvoice />,
-    },
-    {
-      id: 29,
-      path: "edit-invoice",
-      element: <EditInvoice />,
-    },
-    {
-      id: 30,
-      path: "invoice-view",
-      element: <InvoiceView />,
-    },
-    {
-      id: 31,
-      path: "payments",
-      element: <Payments />,
     },
     {
       id: 34,
@@ -442,129 +301,7 @@ const AppContainer = () => {
       id: 64,
       path: "employees-list",
       element: <EmployeeList />,
-    },
-    {
-      id: 65,
-      path: "expenses",
-      element: <Expenses />,
-    },
-    {
-      id: 66,
-      path: "provident-fund",
-      element: <ProvidentFund />,
-    },
-    {
-      id: 67,
-      path: "taxes",
-      element: <Taxes />,
-    },
-    {
-      id: 68,
-      path: "categories",
-      element: <Categories />,
-    },
-    {
-      id: 69,
-      path: "sub-category",
-      element: <SubCategory />,
-    },
-    {
-      id: 70,
-      path: "budgets",
-      element: <Budgets />,
-    },
-    {
-      id: 71,
-      path: "budget-expenses",
-      element: <BudgetExpenses />,
-    },
-    {
-      id: 72,
-      path: "budget-revenues",
-      element: <BudgetRevenues />,
-    },
-    {
-      id: 73,
-      path: "salary-view",
-      element: <PaySlip />,
-    },
-    {
-      id: 74,
-      path: "payroll-items",
-      element: <PayrollItems />,
-    },
-    {
-      id: 75,
-      path: "policies",
-      element: <Policies />,
-    },
-    {
-      id: 76,
-      path: "salary",
-      element: <EmployeeSalary />,
-    },
-    {
-      id: 77,
-      path: "expense-reports",
-      element: <ExpenseReport />,
-    },
-    {
-      id: 78,
-      path: "invoice-reports",
-      element: <InvoiceReport />,
-    },
-
-    {
-      id: 79,
-      path: "payments-reports",
-      element: <PaymentReport />,
-    },
-    {
-      id: 80,
-      path: "project-reports",
-      element: <ProjectReport />,
-    },
-    {
-      id: 81,
-      path: "task-reports",
-      element: <TaskReport />,
-    },
-    {
-      id: 82,
-      path: "user-reports",
-      element: <UserReport />,
-    },
-    {
-      id: 83,
-      path: "employee-reports",
-      element: <EmployeeReport />,
-    },
-    {
-      id: 84,
-      path: "payslip-reports",
-      element: <PaySlipReports />,
-    },
-    {
-      id: 85,
-      path: "attendance-reports",
-      element: <AttendanceReport />,
-    },
-    {
-      id: 86,
-      path: "attendance-reports",
-      element: <AttendanceReport />,
-    },
-
-    {
-      id: 87,
-      path: "leave-reports",
-      element: <LeaveReport />,
-    },
-    {
-      id: 88,
-      path: "daily-reports",
-      element: <DailyReports />,
-    },
+    },  
     {
       id: 89,
       path: "project-list",
@@ -575,122 +312,8 @@ const AppContainer = () => {
       path: "project-view",
       element: <ProjectView />,
     },
-    {
-      id: 91,
-      path: "form-select2",
-      element: <FormSelectTwo />,
-    },
-    {
-      id: 92,
-      path: "file-upload",
-      element: <FileUpload />,
-    },
-    {
-      id: 93,
-      path: "ribbon",
-      element: <Ribbon />,
-    },
-    {
-      id: 94,
-      path: "clipboard",
-      element: <Clipboard />,
-    },
-    {
-      id: 95,
-      path: "dragdrop",
-      element: <Dragdrop />,
-    },
-    {
-      id: 96,
-      path: "rating",
-      element: <Ratings />,
-    },
-    {
-      id: 97,
-      path: "text-editor",
-      element: <Texteditor />,
-    },
-    {
-      id: 98,
-      path: "counter",
-      element: <Counter />,
-    },
-    {
-      id: 99,
-      path: "scrollbar",
-      element: <Scrollbar />,
-    },
-    {
-      id: 100,
-      path: "notification",
-      element: <Notification />,
-    },
-    {
-      id: 101,
-      path: "stickynote",
-      element: <Stickynotes />,
-    },
-    {
-      id: 102,
-      path: "timeline",
-      element: <Timeline />,
-    },
 
-    {
-      id: 103,
-      path: "form-wizard",
-      element: <Formwizard />,
-    },
-    {
-      id: 110,
-      path: "fontawesome-icons",
-      element: <FontAwesomeicons />,
-    },
-    {
-      id: 111,
-      path: "feather-icons",
-      element: <FeatherIcons />,
-    },
-    {
-      id: 112,
-      path: "ionic-icons",
-      element: <IonicIcon />,
-    },
-    {
-      id: 113,
-      path: "material-icons",
-      element: <MaterialIcons />,
-    },
-    {
-      id: 114,
-      path: "pe7-icons",
-      element: <Pe7Icon />,
-    },
-    {
-      id: 115,
-      path: "simpleline-icons",
-      element: <SimpleLine />,
-    },
-    {
-      id: 116,
-      path: "themify-icons",
-      element: <Themifyicons />,
-    },
-    {
-      id: 117,
-      path: "weather-icons",
-      element: <WeatherIcons />,
-    },
-    {
-      id: 118,
-      path: "typicons",
-      element: <Typicons />,
-    },
-    {
-      id: 119,
-      path: "flag-icons",
-      element: <FlagIcons />,
-    },
+
     {
       id: 120,
       path: "contact-list",
