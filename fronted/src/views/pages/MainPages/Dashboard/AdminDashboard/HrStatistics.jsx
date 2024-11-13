@@ -487,10 +487,7 @@ const TeamSatisfaction = () => {
 
 
   return (
-
-    <>
-   
- 
+    <>   
    <div  style={{
       padding: "0px",
       position: "relative",

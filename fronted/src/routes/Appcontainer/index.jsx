@@ -2,37 +2,9 @@
 import React, { useEffect, useState } from "react";
 import { Outlet, Route, Routes, Navigate } from "react-router-dom";
 import { Header, SideBar } from "../../layout";
-import ChatSidebar from "../../components/Mainpages/chatSidebar.jsx";
-import ComponentSidebar from "../../components/ComponentSidebar.jsx";
-import EmailSidebar from "../../components/Mainpages/emailSidebar.jsx";
-import SettingsSidebar from "../../components/SettingsSidebar.jsx";
-
-import AdminDashboard from "../../views/pages/MainPages/Dashboard/AdminDashboard/adminDashboard.jsx";
 import EmployeeDashboard from "../../views/pages/MainPages/Dashboard/EmployeeDashboard/index.jsx";
-import Chat from "../../views/pages/MainPages/Apps/chat/index.jsx";
-import VoiceCall from "../../views/pages/MainPages/Apps/calls/voiceCall/index.jsx";
-import VideoCall from "../../views/pages/MainPages/Apps/calls/VideoCall/index.jsx";
-import Outgoing from "../../views/pages/MainPages/Apps/calls/outgoingCall/index.jsx";
-import IncomingCall from "../../views/pages/MainPages/Apps/calls/incomingCall/index.jsx";
 import Calendar from "../../views/pages/MainPages/Apps/calendar/Calendar.jsx";
-import Contacts from "../../views/pages/MainPages/Apps/contacts/index.jsx";
-import Email from "../../views/pages/MainPages/Apps/Email/index.jsx";
-import FileManager from "../../views/pages/MainPages/Apps/FileManager/index.jsx";
-import Compose from "../../views/pages/MainPages/Apps/Email/compose.jsx";
-import Settings from "../../views/pages/Administration/Settings/Settings.jsx";
-import Localization from "../../views/pages/Administration/Settings/Localization.jsx";
-import ThemeSettings from "../../views/pages/Administration/Settings/ThemeSettings.jsx";
-import RolesPermissions from "../../views/pages/Administration/Settings/RolesPermissions.jsx";
-import EmailSettings from "../../views/pages/Administration/Settings/EmailSettings.jsx";
-import ApprovalSetting from "../../views/pages/Administration/Settings/ApprovalSetting.jsx";
-import InvoiceSettings from "../../views/pages/Administration/Settings/InvoiceSettings.jsx";
-import SalarySettings from "../../views/pages/Administration/Settings/SalarySettings.jsx";
-import NotificationSettings from "../../views/pages/Administration/Settings/NotificationSettings.jsx";
-import LeaveType from "../../views/pages/Administration/Settings/LeaveType.jsx";
-import ToxboxSetting from "../../views/pages/Administration/Settings/ToxboxSetting.jsx";
-import CronSetting from "../../views/pages/Administration/Settings/CronSetting.jsx";
 import AllEmployees from "../../views/pages/Employees/AllEmployees.jsx";
-import Holidays from "../../views/pages/Employees/Holidays.jsx";
 import AdminLeave from "../../views/pages/Employees/AdminLeave.jsx";
 import EmployeeLeave from "../../views/pages/Employees/EmployeeLeave.jsx";
 import LeaveSettings from "../../views/pages/Employees/LeaveSetting.jsx";
@@ -54,10 +26,6 @@ import Leads from "../../views/pages/Employees/Leads.jsx";
 import Ticket from "../../views/pages/Employees/Ticket.jsx";
 import ClientProfile from "../../views/pages/Profile/ClientProfile.jsx";
 import Profile from "../../views/pages/Profile/Profile.jsx";
-import Search from "../../views/pages/Pages/Search/Search.jsx";
-import Faq from "../../views/pages/Pages/Faq.jsx";
-import Terms from "../../views/pages/Pages/Terms.jsx";
-import PrivacyPolicy from "../../views/pages/Pages/PrivacyPolicy.jsx";
 import KnowledgeBase from "../../views/pages/Administration/Knowledgebase/KnowledgeBase.jsx";
 import KnowledgeBaseView from "../../views/pages/Administration/Knowledgebase/KnowledgeBaseView.jsx";
 import EmployeeList from "../../views/pages/Employees/EmployeeList.jsx";
@@ -86,50 +54,29 @@ import AptitudeResults from "../../views/pages/Administration/Jobs/AptitudeResul
 import Users from "../../views/pages/Administration/Users/index.jsx";
 import ProjectList from "../../views/pages/Employees/Projects/ProjectList.jsx";
 import ProjectView from "../../views/pages/Employees/Projects/ProjectView.jsx";
-import OffCanvas from "../../components/OffCanvas.jsx";
-
-import ContactList from "../../views/pages/Crm/ContactList.jsx";
-import ContactGrid from "../../views/pages/Crm/ContactGrid.jsx";
 import DealsDashboard from "../../views/pages/MainPages/Dashboard/DealsDashboard/index.jsx";
 import LeadsDashboard from "../../views/pages/MainPages/Dashboard/LeadsDashboard/index.jsx";
 import TicketDetails from "../../views/pages/Employees/TicketDetails.jsx";
-import Companies from "../../views/pages/Crm/companies.jsx";
-import ContactDetails from "../../views/pages/Crm/ContactDetails.jsx";
-import LeadsList from "../../views/pages/Crm/LeadsList.jsx";
-import LeadsKanban from "../../views/pages/Crm/LeadsKanban.jsx";
-import LeadsDetails from "../../views/pages/Crm/LeadsDetails.jsx";
-import PipeLine from "../../views/pages/Crm/PipeLine.jsx";
-import CompaniesGrid from "../../views/pages/Crm/CompaniesGrid.jsx";
-import CompanyDetails from "../../views/pages/Crm/CompanyDetails.jsx";
-import Deals from "../../views/pages/Crm/Deals.jsx";
-import DealsKanban from "../../views/pages/Crm/DealsKanban.jsx";
-import Analytics from "../../views/pages/Crm/Analytics.jsx";
-import RecentFiles from "../../views/pages/MainPages/Apps/FileManager/recentFiles.jsx";
-import EmailContent from "../../views/pages/MainPages/Apps/Email/emailContent.jsx";
-import EmailView from "../../views/pages/MainPages/Apps/Email/emailView.jsx";
-import DealsDetails from "../../views/pages/Crm/DealsDetails.jsx";
 import CompanyEvents from "../../views/pages/Authentication/CompanyEvents.jsx";
-
 import RetentionStatistics from "../../views/pages/MainPages/Dashboard/AdminDashboard/RetentionStatistics.jsx";
 import NotificationsBirth from "../../views/pages/MainPages/Apps/notifications/mainNotifications/ShowNotifications/NotificationsBirth.jsx";
-
+import NotificationsPage from "../../views/pages/MainPages/Apps/contacts/NotificationsPage.jsx";
+import HrDashboard from "../../views/pages/MainPages/Dashboard/AdminDashboard/HrDashboard.jsx";
+import MyDashboard from "../../views/pages/MainPages/Dashboard/AdminDashboard/MyDashboard.jsx";
+import UserSettings from "../../views/pages/Authentication/UserSettings.jsx";
 const AppContainer = () => {
-  // useEffect(() => {
-  //   localStorage.setItem("colorschema", "orange");
-  //   localStorage.setItem("layout", "vertical");
-  //   localStorage.setItem("layoutwidth", "fixed");
-  //   localStorage.setItem("layoutpos", "fluid");
-  //   localStorage.setItem("topbartheme", "light");
-  //   localStorage.setItem("layoutSized", "lg");
-  //   localStorage.setItem("layoutStyling", "default");
-  //   localStorage.setItem("layoutSidebarStyle", "dark");
-  // }, []);
+ 
 
   const routingObjects = [
     {
+      id: 1,
+      path: "hrDashboard",
+      element: <HrDashboard />,
+    },
+    {
       id: 2,
-      path: "admin-dashboard",
-      element: <AdminDashboard />,
+      path: "myDashboard",
+      element: <MyDashboard />,
     },
     {
       id: 17,
@@ -148,29 +95,28 @@ const AppContainer = () => {
     // },
     {
       id: 21,
-      path: "events",
+      path: "calendar",
       element: <Calendar />,
     },
     {
       id: 22,
       path: "notifications",
-      element: <Contacts />,
+      element: <NotificationsPage />,
     },
-
     {
       id: 23,
-      path: "file-manager",
-      element: <FileManager />,
+      path: "settings",
+      element: <UserSettings />,
+    },
+    {
+      id: 24,
+      path: "company-events",
+      element: <CompanyEvents />,
     },
     {
       id: 34,
       path: "employees",
       element: <AllEmployees />,
-    },
-    {
-      id: 35,
-      path: "holidays",
-      element: <Holidays />,
     },
     {
       id: 36,
@@ -268,26 +214,6 @@ const AppContainer = () => {
       element: <Profile />,
     },
     {
-      id: 57,
-      path: "search",
-      element: <Search />,
-    },
-    {
-      id: 58,
-      path: "faq",
-      element: <Faq />,
-    },
-    {
-      id: 60,
-      path: "terms",
-      element: <Terms />,
-    },
-    {
-      id: 61,
-      path: "privacy-policy",
-      element: <PrivacyPolicy />,
-    },
-    {
       id: 63,
       path: "knowledgebase",
       element: <KnowledgeBase />,
@@ -301,7 +227,7 @@ const AppContainer = () => {
       id: 64,
       path: "employees-list",
       element: <EmployeeList />,
-    },  
+    },
     {
       id: 89,
       path: "project-list",
@@ -313,17 +239,6 @@ const AppContainer = () => {
       element: <ProjectView />,
     },
 
-
-    {
-      id: 120,
-      path: "contact-list",
-      element: <ContactList />,
-    },
-    {
-      id: 121,
-      path: "contact-grid",
-      element: <ContactGrid />,
-    },
     {
       id: 122,
       path: "deals-dashboard",
@@ -340,71 +255,10 @@ const AppContainer = () => {
       element: <TicketDetails />,
     },
     {
-      id: 125,
-      path: "companies",
-      element: <Companies />,
-    },
-    {
-      id: 126,
-      path: "contact-details",
-      element: <ContactDetails />,
-    },
-    {
-      id: 126,
-      path: "leads-list",
-      element: <LeadsList />,
-    },
-    {
-      id: 127,
-      path: "leads-kanban",
-      element: <LeadsKanban />,
-    },
-    {
-      id: 128,
-      path: "leads-details",
-      element: <LeadsDetails />,
-    },
-    {
-      id: 128,
-      path: "pipeline",
-      element: <PipeLine />,
-    },
-    {
-      id: 129,
-      path: "Companies-grid",
-      element: <CompaniesGrid />,
-    },
-    {
-      id: 130,
-      path: "company-details",
-      element: <CompanyDetails />,
-    },
-    {
-      id: 131,
-      path: "deals",
-      element: <Deals />,
-    },
-    {
-      id: 132,
-      path: "deals-kanban",
-      element: <DealsKanban />,
-    },
-    {
-      id: 130,
-      path: "analytics",
-      element: <Analytics />,
-    },
-    {
-      id: 131,
-      path: "deals-details",
-      element: <DealsDetails />,
-    },
-
-    {
       id: 132,
       path: "RetentionStatistics",
       element: <RetentionStatistics />,
-    },  
+    },
     {
       id: 133,
       path: "NotificationsBirth/:userId",
@@ -412,113 +266,7 @@ const AppContainer = () => {
     },
   ];
 
-  const ChatRoutingeObjects = [
-    {
-      id: 1,
-      path: "chat",
-      element: <Chat />,
-    },
-    {
-      id: 2,
-      path: "voice-call",
-      element: <VoiceCall />,
-    },
-    {
-      id: 3,
-      path: "video-call",
-      element: <VideoCall />,
-    },
-    {
-      id: 4,
-      path: "outgoing-call",
-      element: <Outgoing />,
-    },
-    {
-      id: 5,
-      path: "incoming-call",
-      element: <IncomingCall />,
-    },
-  ];
-  const EmailRoutingeObjects = [
-    {
-      id: 1,
-      path: "inbox",
-      element: <Email />,
-    },
-    {
-      id: 2,
-      path: "compose",
-      element: <Compose />,
-    },
-    {
-      id: 3,
-      path: "mail-view",
-      element: <EmailView />,
-    },
-  ];
-  const SettingsRoutingeObjects = [
-    {
-      id: 1,
-      path: "company-settings",
-      element: <Settings />,
-    },
-    {
-      id: 2,
-      path: "localization",
-      element: <Localization />,
-    },
-    {
-      id: 3,
-      path: "theme-settings",
-      element: <ThemeSettings />,
-    },
-    {
-      id: 4,
-      path: "roles-permissions",
-      element: <RolesPermissions />,
-    },
-    {
-      id: 5,
-      path: "email-settings",
-      element: <EmailSettings />,
-    },
-    {
-      id: 7,
-      path: "approval-setting",
-      element: <ApprovalSetting />,
-    },
-    {
-      id: 8,
-      path: "invoice-settings",
-      element: <InvoiceSettings />,
-    },
-    {
-      id: 9,
-      path: "salary-settings",
-      element: <SalarySettings />,
-    },
-    {
-      id: 10,
-      path: "notifications-settings",
-      element: <NotificationSettings />,
-    },
-    {
-      id: 11,
-      path: "leave-type",
-      element: <LeaveType />,
-    },
-    {
-      id: 14,
-      path: "toxbox-setting",
-      element: <ToxboxSetting />,
-    },
-    {
-      id: 15,
-      path: "cron-setting",
-      element: <CronSetting />,
-    },
-  ];
-  const ProjectRoutingeObjects = [
+  const ProjectRoutingObjects = [
     {
       id: 1,
       path: "tasks",
@@ -526,7 +274,7 @@ const AppContainer = () => {
     },
   ];
 
-  const AdministrationRoutingeObjects = [
+  const AdministrationRoutingObjects = [
     {
       id: 1,
       path: "assets",
@@ -640,40 +388,10 @@ const AppContainer = () => {
     },
   ];
 
-  const SidebarLayout = () => (
+  const Layouts = () => (
     <>
       <Header />
       <SideBar />
-      {/* <OffCanvas /> */}
-      <Outlet />
-    </>
-  );
-  const AuthendicationLayout = () => <div></div>;
-  const ChatSidebarLayout = () => (
-    <>
-      <Header />
-      <ChatSidebar />
-      <Outlet />
-    </>
-  );
-  const ComponentSidebarLayout = () => (
-    <>
-      <Header />
-      <ComponentSidebar />
-      <Outlet />
-    </>
-  );
-  const EmailSidebarLayout = () => (
-    <>
-      <Header />
-      <EmailSidebar />
-      <Outlet />
-    </>
-  );
-  const SettingsSidebarLayout = () => (
-    <>
-      <Header />
-      <SettingsSidebar />
       <Outlet />
     </>
   );
@@ -701,44 +419,24 @@ const AppContainer = () => {
     <>
       <div className="main-wrapper" onClick={mobileResponsive}>
         <Routes>
-          <Route
-            path="/company-events"
-            element={<CompanyEvents></CompanyEvents>}
-          />
-
-          <Route path={"/*"} element={<SidebarLayout />}>
+          <Route path={"/*"} element={<Layouts />}>
             {routingObjects.map((item) => (
               <Route key={item.id} path={item.path} element={item.element} />
             ))}
           </Route>
-
-          <Route path={"/*"} element={<ChatSidebarLayout />}>
-            {ChatRoutingeObjects.map((item) => (
-              <Route key={item.id} path={item.path} element={item.element} />
-            ))}
-          </Route>
-          <Route path={"/*"} element={<EmailSidebarLayout />}>
-            {EmailRoutingeObjects.map((item) => (
-              <Route key={item.id} path={item.path} element={item.element} />
-            ))}
-          </Route>
-          <Route path={"/*"} element={<SettingsSidebarLayout />}>
-            {SettingsRoutingeObjects.map((item) => (
-              <Route key={item.id} path={item.path} element={item.element} />
-            ))}
-          </Route>
+          
           <Route path={"/*"} element={<ProjectSidebarLayout />}>
-            {ProjectRoutingeObjects.map((item) => (
+            {ProjectRoutingObjects.map((item) => (
               <Route key={item.id} path={item.path} element={item.element} />
             ))}
           </Route>
 
-          <Route path={"/*"} element={<SidebarLayout />}>
-            {AdministrationRoutingeObjects.map((item) => (
+          <Route path={"/*"} element={<Layouts />}>
+            {AdministrationRoutingObjects.map((item) => (
               <Route key={item.id} path={item.path} element={item.element} />
             ))}
           </Route>
-          <Route path={"/*"} element={<SidebarLayout />}>
+          <Route path={"/*"} element={<Layouts />}>
             <Route path="*" element={<Navigate to="/" />} />
           </Route>
         </Routes>

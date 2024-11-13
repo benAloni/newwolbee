@@ -4,15 +4,12 @@
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
-    margin-left: -100px; /* הערך הזה יכול לשנות או להסר בהתאם לצרכים שלך */
+    margin-left: -100px; 
 }
 
-/* עיצוב עבור תוכן בתוך המודאל */
-.modal-content-inner {
-    /* הוספת עיצוב לתוכן */
-    width: 100%; /* ניתן להשתמש בגודל רצוי כאן */
-    display: flex;
-  
+.modal-content-inner {  
+    width: 100%; 
+    display: flex;  
     justify-content: center;
     align-items: center;
 }

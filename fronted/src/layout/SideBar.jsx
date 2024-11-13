@@ -1,7 +1,4 @@
-/* eslint-disable eqeqeq */
-/* eslint-disable no-unused-vars */
 
-/* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
 import Scrollbars from "react-custom-scrollbars-2";
 import { useTranslation } from "react-i18next";
@@ -14,16 +11,11 @@ import { useSelector } from "react-redux";
 
 const SideBar = () => {
   const location = useLocation();
-  // const pathname = location.pathname.split("/")[1];
   const pathname = location.pathname;
-  // console.log("pageurl", pathname);
-
   const [sidebarData, setSidebarData] = useState([]);
-
   const [isSidebarExpanded, setSidebarExpanded] = useState(false);
   const [isMouseOverSidebar, setMouseOverSidebar] = useState(false);
   const [submenuDrop, setSubmenudrop] = useState(false);
-
   const [isSideMenu, setSideMenu] = useState("");
   const [level2Menu, setLevel2Menu] = useState("");
   const [level3Menu, setLevel3Menu] = useState("");

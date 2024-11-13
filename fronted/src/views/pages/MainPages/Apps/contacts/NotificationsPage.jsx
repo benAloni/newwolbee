@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import ContactModal from "./contactModal";
 import Notifications from "../notifications/Notifications";
 
-const Contacts = () => {
-  // const [menu, setMenu] = useState(false);
+const NotificationsPage = () => {
   const [windowDimension, detectHW] = useState({
     winWidth: window.innerWidth,
     winHeight: window.innerHeight,
@@ -48,7 +46,6 @@ const Contacts = () => {
               <div className="chat-window">
                 <div
                   className="fixed-header"
-                  style={{ backgroundColor: "	#D3D3D3" }}
                 >
                   <div className="row align-items-center">
                     <div className="col-6">
@@ -79,13 +76,11 @@ const Contacts = () => {
                 <Notifications />
               </div>
             </div>
-          </div>
-          {/* /Contact Wrapper */}
-          <ContactModal />
+          </div>         
         </div>
       </div>
     </>
   );
 };
 
-export default Contacts;
+export default NotificationsPage;

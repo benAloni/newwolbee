@@ -281,8 +281,6 @@ const UserSettings = () => {
             )}
           </animated.div>
         </div>
-        <SideBar></SideBar>
-        <Header></Header>
       </div>
 
       {/* Styles */}
