@@ -9,7 +9,6 @@ import "@fortawesome/fontawesome-free/css/fontawesome.min.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "./assets/css/line-awesome.min.css";
 import "./assets/scss/main.scss";
-import "./assets/css/material.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const queryClient = new QueryClient();

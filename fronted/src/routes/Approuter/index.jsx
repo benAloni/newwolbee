@@ -6,7 +6,6 @@ import Register from "../../views/pages/Authentication/Register";
 import CreateAccount from "../../views/pages/Authentication/CreateAccount";
 import ChangePassword from "../../views/pages/Authentication/ChangePassword";
 import ForgotPassword from "../../views/pages/Authentication/ForgotPassword";
-import UserSettings from "../../views/pages/Authentication/UserSettings";
 import ProtectedRoutes from "./ProtectedRoutes";
 import PublicRoutes from "./PublicRoutes";
 

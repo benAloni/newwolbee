@@ -53,7 +53,7 @@
         menuValue: "Calendar",
         hasSubRoute: false,
         showSubRoute: false,
-        route: "/events",
+        route: "/calendar",
         icon: "la la-calendar",
 
       },
@@ -61,7 +61,7 @@
         menuValue: "Wallet",
         hasSubRoute: false,
         showSubRoute: false,
-        route: "/admin-dashboard",
+        route: "/wallet",
         icon: "la la-dashcube",
       },
       {

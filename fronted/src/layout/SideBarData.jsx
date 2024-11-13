@@ -30,7 +30,7 @@ export const SideBarData = [
         menuValue: "Wallet",
         hasSubRoute: false,
         showSubRoute: false,
-        route: "/admin-dashboard",
+        route: "/wallet",
         icon: "la la-dashcube",
       },
 
@@ -45,7 +45,7 @@ export const SideBarData = [
         menuValue: "Calendar",
         hasSubRoute: false,
         showSubRoute: false,
-        route: "/events",
+        route: "/calendar",
         icon: "la la-calendar",
 
       },
