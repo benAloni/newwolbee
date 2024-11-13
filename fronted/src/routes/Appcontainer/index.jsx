@@ -10,11 +10,8 @@ import Project from "../../views/pages/Employees/Projects/Project.jsx";
 import TaskBoard from "../../views/pages/Employees/Projects/TaskBoard.jsx";
 import ClientProfile from "../../views/pages/Profile/ClientProfile.jsx";
 import Profile from "../../views/pages/Profile/Profile.jsx";
-import KnowledgeBase from "../../views/pages/Administration/Knowledgebase/KnowledgeBase.jsx";
-import KnowledgeBaseView from "../../views/pages/Administration/Knowledgebase/KnowledgeBaseView.jsx";
 import EmployeeList from "../../views/pages/Employees/EmployeeList.jsx";
 import Assets from "../../views/pages/Administration/Assets/index.jsx";
-import Users from "../../views/pages/Administration/Users/index.jsx";
 import DealsDashboard from "../../views/pages/MainPages/Dashboard/DealsDashboard/index.jsx";
 import LeadsDashboard from "../../views/pages/MainPages/Dashboard/LeadsDashboard/index.jsx";
 import CompanyEvents from "../../views/pages/Authentication/CompanyEvents.jsx";
@@ -109,16 +106,6 @@ const AppContainer = () => {
       element: <Profile />,
     },
     {
-      id: 63,
-      path: "knowledgebase",
-      element: <KnowledgeBase />,
-    },
-    {
-      id: 64,
-      path: "knowledgebase-view",
-      element: <KnowledgeBaseView />,
-    },
-    {
       id: 64,
       path: "employees-list",
       element: <EmployeeList />,
@@ -150,12 +137,7 @@ const AppContainer = () => {
       id: 1,
       path: "assets",
       element: <Assets />,
-    }, 
-    {
-      id: 2,
-      path: "users",
-      element: <Users />,
-    },
+    },     
   ];
 
   const Layouts = () => (
