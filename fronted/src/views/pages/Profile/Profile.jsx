@@ -15,14 +15,28 @@ const Profile = () => {
 
   const cachedEmployees = queryClient.getQueryData(["employees", uid]);
   const cachedEmployee = cachedEmployees?.find(emp => emp.id === employeeId);
-  const cachedEmployeeAvatar = cachedEmployee?.avatar;
 
+//Temporary solution..might save employee's avatar in db later on
+  useEffect(() => {
+    if (cachedEmployee?.avatar) {
+      localStorage.setItem("cachedEmployeeAvatar", cachedEmployee.avatar);
+    }
+  }, [cachedEmployee]);
+
+//Retrieve the avatar from local storage if not found in query cache
+  const cachedEmployeeAvatar =
+    cachedEmployee?.avatar || localStorage.getItem("cachedEmployeeAvatar");
 
   const { data: employees } = useQuery({
     queryKey: ["employees"],
     queryFn: fetchEmployees,
     enabled: !!user
   });
+
+  localStorage.setItem("employeeAvatar", cachedEmployeeAvatar)
+  const employeeAvatar = localStorage.getItem("employeeAvatar")
+  console.log(cachedEmployee);
+  
 
   useEffect(() => {
     if(user) {
@@ -31,7 +45,7 @@ const Profile = () => {
         setSelectedEmployee(employee);
       }
     }         
-  }, [employees, employeeId]);
+  }, [employees, employeeId, user]);
 
 
   return (
@@ -48,7 +62,7 @@ const Profile = () => {
                   <div className="profile-view">
                     <div className="profile-img-wrap">
                       <div className="profile-img">
-                          <img src={cachedEmployeeAvatar ? cachedEmployeeAvatar: userProfile}
+                          <img src={employeeAvatar || userProfile}
                           loading="lazy"
                           alt="UserImage" />
                       </div>

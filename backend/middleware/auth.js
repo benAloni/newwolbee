@@ -1,12 +1,10 @@
 import { getAuth } from "firebase-admin/auth";
-
 // check if user is authenticated
 export const isAuthenticated = async (req, res, next) => {
   let { authorization } = req.headers;
   if (!authorization) {
     return res.status(401).json({ error: "Authorization key is missing" });
   }
-    // console.log(req.headers);
   const idToken = authorization.startsWith("Bearer ")
     ? authorization.slice(7)
     : null;
@@ -15,7 +13,7 @@ export const isAuthenticated = async (req, res, next) => {
   }
   try {
     const decodedToken = await getAuth().verifyIdToken(idToken); //check if token is valid - authentication(where does the request come from?)   
-    req.user = decodedToken; //return the user from firebase in the req - identification(who's making the request)    
+    req.user = decodedToken; //return the user from firebase in the req - identification(who's making the request)          
     next();
   } catch (error) {
     console.error("Error verifying token:", error);
@@ -42,19 +40,4 @@ export const isAuthenticated = async (req, res, next) => {
   }
 };
 
-// validate user role
-
-// export const authorizeRoles = (...roles) => {
-//     return (req, res, next) => {
-//       if (!roles.includes(req.user?.role || "")) {
-//         return next(
-//           new Error(
-//             `Role: ${req.user?.role} is not allowed to access this resource`,
-//             403
-//           )
-//         );
-//       }
-//       next();
-//     };
-//   };
 

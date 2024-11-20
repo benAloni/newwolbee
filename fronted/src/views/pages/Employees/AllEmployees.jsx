@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 import AddEmployeeModal from "../../../components/Modals/employeepopup/AddEmployeeModal";
 import Breadcrumbs from "../../../components/Breadcrumbs";
 import EmployeeListFilter from "../../../components/EmployeeListFilter";
-
 import {
   fetchEmployees,
   fetchEmployeesProfilePics,

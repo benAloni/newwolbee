@@ -23,6 +23,7 @@ import {
   updateCompanyEvent,
   deleteCompanyEvent,
 } from "../controllers/companyEventsData.js";
+import checkBirthdays from "../schedulers/checkBirthdays.js";
 
 const router = express.Router();
 initializeApp({
@@ -67,8 +68,12 @@ router.delete("/deleteEvent/:id", deleteEvent);
 //update employee's insights & latest activity
 router.put("/updateEmployeeInsights", updateEmployeeInsights);
 
+router.get("/checkBirthdays", checkBirthdays)
+
 router.get("/getCompanyEvents", getCompanyEvents);
 router.post("/addNewCompanyEvent", addNewCompanyEvent);
 router.put("/updateCompanyEvent", updateCompanyEvent);
 router.delete("/deleteCompanyEvent/:id", deleteCompanyEvent);
+
+
 export default router;

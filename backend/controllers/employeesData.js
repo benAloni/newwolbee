@@ -52,23 +52,19 @@ export const deleteEmployee = async (req, res) => {
       (employee) => employee._id.toString() === id
     );
     if (!employeeToDelete) {
-      return res
-        .status(404)
-        .json({
-          message:
-            "Employee not found or user not authorized to delete this user.",
-        });
+      return res.status(404).json({
+        message:
+          "Employee not found or user not authorized to delete this user.",
+      });
     }
     await EmployeeModel.findByIdAndDelete(employeeToDelete._id);
   } catch (error) {
     console.error("Error deleting employee:", error);
     res.status(500).send("Internal Server Error");
   }
-  res
-    .status(200)
-    .json({
-      message: "Employee deleted successfully."
-    });
+  res.status(200).json({
+    message: "Employee deleted successfully.",
+  });
 };
 export const updateEmployeeVacation = async (req, res) => {
   console.log("Received request to update vacation:", req.body);

@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import dbConnection from "./Connection/dbConnection.js";
 import router from "./routes/index.js";
-
+import checkBirthdays from "./schedulers/checkBirthdays.js";
 const app = express();
 app.use(express.json());
 
