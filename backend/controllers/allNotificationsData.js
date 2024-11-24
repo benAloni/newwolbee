@@ -1,4 +1,5 @@
 import AllNotificationsModel from "../models/AllNotificationsModel.js";
+import EmployeeNotificationsModel from "../models/EmployeeNotificationsModel.js"
 
 export const getAllNotifications = async (req, res) => {
   const {user} = req
@@ -18,6 +19,18 @@ export const getAllNotifications = async (req, res) => {
   }
 };
 
+export const getEmployeesNotifications = async (req, res) => {
+  const {user} = req
+
+  try {
+    const employeesNotifications = await EmployeeNotificationsModel.find({uid: user.uid});
+    if(!employeesNotifications) return
+    res.status(200).json(employeesNotifications);
+  } catch (error) {
+    console.error("Error getting employees notifications:", error);
+    res.status(500).json({ message: "An error occurred while fetching employees notifications data." });
+  }
+};
 
 export const addNotification = async (req, res) => {
   const { notificationsData } = req.body;

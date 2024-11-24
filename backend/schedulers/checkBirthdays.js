@@ -1,4 +1,4 @@
-import EmployeeNotificationsModel from "../models/employeeNotifications.js";
+import EmployeeNotificationsModel from "../models/EmployeeNotificationsModel.js";
 import EmployeeModel from "../models/EmployeesModel.js";
 
 const checkBirthdays = async (req, res) => {

@@ -5,6 +5,7 @@ import { fillUserInfo, verifyAuthentication } from "../controllers/userAuth.js";
 import { getTeams } from "../controllers/teamsData.js";
 import {
   getEmployees,
+  getEmployee,
   addEmployee,
   updateEmployeeVacation,
   updateEmployeeInsights,
@@ -14,6 +15,7 @@ import { getFoodHoliday } from "../controllers/foodHolidays.js";
 import {
   addNotification,
   getAllNotifications,
+  getEmployeesNotifications,
 } from "../controllers/allNotificationsData.js";
 import { addEvent, getEvents, deleteEvent } from "../controllers/eventsData.js";
 import { isAuthenticated } from "../middleware/auth.js";
@@ -24,6 +26,7 @@ import {
   deleteCompanyEvent,
 } from "../controllers/companyEventsData.js";
 import checkBirthdays from "../schedulers/checkBirthdays.js";
+import { getHolidaysOptionsDetails } from "../controllers/holidaysData.js";
 
 const router = express.Router();
 initializeApp({
@@ -45,6 +48,8 @@ router.post("/login", verifyAuthentication);
 router.get("/getTeams", getTeams);
 //get all employees
 router.get("/getEmployees", getEmployees);
+//get an employee by id
+router.get("/getEmployee/:employeeId", getEmployee)
 //add new employee
 router.post("/addEmployee", addEmployee);
 //delete an employee
@@ -68,12 +73,14 @@ router.delete("/deleteEvent/:id", deleteEvent);
 //update employee's insights & latest activity
 router.put("/updateEmployeeInsights", updateEmployeeInsights);
 
-router.get("/checkBirthdays", checkBirthdays)
+router.get("/checkBirthdays", checkBirthdays)//for curl check. 
+router.get("/getEmployeesNotifications", getEmployeesNotifications)//temporary route - till Eden adds the mongoose model discriminator
 
 router.get("/getCompanyEvents", getCompanyEvents);
 router.post("/addNewCompanyEvent", addNewCompanyEvent);
 router.put("/updateCompanyEvent", updateCompanyEvent);
 router.delete("/deleteCompanyEvent/:id", deleteCompanyEvent);
+router.get("/getHolidaysOptionsDetails", getHolidaysOptionsDetails)
 
 
 export default router;

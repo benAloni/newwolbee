@@ -16,7 +16,7 @@ import DealsDashboard from "../../views/pages/MainPages/Dashboard/DealsDashboard
 import LeadsDashboard from "../../views/pages/MainPages/Dashboard/LeadsDashboard/index.jsx";
 import CompanyEvents from "../../views/pages/Authentication/CompanyEvents.jsx";
 import RetentionStatistics from "../../views/pages/MainPages/Dashboard/AdminDashboard/RetentionStatistics.jsx";
-import NotificationsBirth from "../../views/pages/MainPages/Apps/notifications/mainNotifications/ShowNotifications/NotificationsBirth.jsx";
+import BirthdayPresentPage from "../../views/pages/MainPages/Apps/notifications/mainNotifications/ShowNotifications/BirthdayPresentPage.jsx";
 import NotificationsPage from "../../views/pages/MainPages/Apps/contacts/NotificationsPage.jsx";
 import HrDashboard from "../../views/pages/MainPages/Dashboard/AdminDashboard/HrDashboard.jsx";
 import MyDashboard from "../../views/pages/MainPages/Dashboard/AdminDashboard/MyDashboard.jsx";
@@ -127,8 +127,8 @@ const AppContainer = () => {
     },
     {
       id: 133,
-      path: "NotificationsBirth/:userId",
-      element: <NotificationsBirth />,
+      path: "get-a-birthday-present/:employeeId",
+      element: <BirthdayPresentPage />,
     },
   ];
 

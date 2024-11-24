@@ -1,27 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { useSelector } from "react-redux";
-
+import Holidays from "date-holidays";
 import ShowAllNotifications from "./mainNotifications/ShowAllNotifications";
 import HeaderNotifications from "./mainNotifications/HeaderNotifications";
 import ShowNewNotifications from "./mainNotifications/ShowNewNotifications";
-
 import JohnStatistics from "../contacts/JohnStatistics";
-import nicole from "../../../../../imgs/avatar_4.JPG";
-import jacob from "../../../../../imgs/jacob.jpg";
-import john from "../../../../../imgs/avatar_6.JPG";
 import tom from "../../../../../imgs/avatar_2.JPG";
-import employee1 from "../../../../../imgs/avatar_4.JPG";
 import employee2 from "../../../../../imgs/avatar_5.JPG";
 import employee3 from "../../../../../imgs/avatar_6.JPG";
-import employee4 from "../../../../../imgs/avatar_7.JPG";
-import employee5 from "../../../../../imgs/avatar_8.JPG";
-import employee6 from "../../../../../imgs/avatar_10.JPG";
-
-// import employee1 from '../../../../../imgs/avatar_4.jpg';
-// import employee2 from '../../../../../imgs/avatar_6.avif';
 import { Modal, notification } from "antd";
 import off from "../../../../../imgs/off.png";
 import on from "../../../../../imgs/on.png";
@@ -42,7 +29,11 @@ import rating from "../../../../../imgs/rating.png";
 import coffeeCup from "../../../../../imgs/coffeeCup.png";
 import invitationcard from "../../../../../imgs/invitationcard.png";
 import ShowHolidaysNotifications from "./mainNotifications/ShowNotifications/ShowHolidaysNotifications";
-import { fetchEmployees, fetchNotifications } from "../../../../../services";
+import {
+  fetchEmployeesNotifications,
+  fetchNotifications,
+} from "../../../../../services";
+import staticNotificationsData from "./staticNotifications";
 
 const Notifications = () => {
   const navigate = useNavigate();
@@ -59,252 +50,131 @@ const Notifications = () => {
   const [viewOption, setViewOption] = useState("All");
   const [currentPage, setCurrentPage] = useState(0); // Track the current page
   const itemsPerPage = 10; // Number of notifications per page
+  const [notifications, setNotifications] = useState([]);
+  const staticNotifications = staticNotificationsData;
+  const [countryCode, setCountryCode] = useState("IL");
 
-  const [staticNotifications, setStaticNotifications] = useState([
-    {
-      id: 1,
-      importance: "High",
-      priorityNumber: 3,
-      message: "Nicole's birthday is coming soon. Send her a gift!",
-      fullName: "Nicole",
-      link: "/de",
-      className: "Birthday",
-      read: false,
-      viewed: false,
-      dismissed: false,
-      startDay: "2021-08-24",
-      date: "1996-09-08",
-      image: nicole,
-    },
-    {
-      id: 2,
-      importance: "Medium",
-      priorityNumber: 2,
-      message:
-        "Tomorrow is the international pizza day. View your options for spoiling your team!",
-      className: "bg-pink",
-      link: "/task-board",
-      date: "1996-09-08",
-      read: false,
-      dismissed: false,
-      viewed: false,
-    },
-    {
-      id: 3,
-      importance: "High",
-      priorityNumber: 3,
-      fullName: "Fourth of July",
-      message:
-        "The Fourth of July celebration is in one month. Ensure there are food options for those with allergies and dietary preferences.",
-      date: "2024-12-08",
-      className: "bg-info",
-      read: false,
-      dismissed: false,
-      viewed: false,
-    },
-    {
-      id: 4,
-      importance: "High",
-      priorityNumber: 3,
-      message: "Note! A meeting was arranged with Nicole when she is at home",
-      link: "/departments",
-      date: "1996-09-08",
-      read: false,
-      viewed: false,
-      dismissed: false,
-      image: nicole,
-    },
-    {
-      id: 5,
-      importance: "Medium",
-      priorityNumber: 2,
-      message:
-        "Jacob used over 20 days of sick days in the last quarter. Let him know he has reached his limit.",
-      date: "1996-09-08",
-      read: false,
-      viewed: false,
-      dismissed: false,
-      image: jacob,
-    },
-    {
-      id: 6,
-      importance: "Medium",
-      priorityNumber: 2,
-      message: "John's work routine has significantly changed.",
-      link: "/departments",
-      date: "1996-09-08",
-      read: false,
-      dismissed: false,
-      viewed: false,
-      image: john,
-    },
-    {
-      id: 7,
-      importance: "Low",
-      priorityNumber: 1,
-      message:
-        "A Maccabi Tel-Aviv Soccer Game is coming up in a week. Wanna find out who from your workers is a fan of the team?",
-      link: "/task-board",
-      date: "1996-09-08",
-      read: false,
-      viewed: false,
-      dismissed: false,
-    },
-    {
-      id: 8,
-      importance: "High",
-      priorityNumber: 3,
-      message:
-        "john is flying to rome tomorrow - lets make it a real vacation for him.",
-      link: "/low-importance-notification",
-      date: "1996-09-08",
-      className: "vacation",
-      read: false,
-      dismissed: false,
-      viewed: false,
-      image: john,
-    },
-  ]);
-
-  // get notifications
-  // const [events, setEvents] = useState([]);
-
+  // Fetch notifications and employee data
   const fetchData = async () => {
-    const [notifications, employees] = await Promise.all([
+    const [notifications, employeesNotifications] = await Promise.all([
       fetchNotifications(),
-      fetchEmployees(),
+      fetchEmployeesNotifications(),
     ]);
-    return [...notifications, ...employees];
+    console.log(employeesNotifications);
+
+    return [...notifications, ...employeesNotifications];
   };
 
-  // Use React Query to fetch data
   const { data, error, isLoading } = useQuery({
     queryKey: ["allNotificationsData"],
     queryFn: fetchData,
-    staleTime: 0, // Cache data for 1 minute
-    refetchInterval: 0, // 3 minutes
-    refetchOnWindowFocus: true, // Refetch when the window gains focus
+    staleTime: 0,
+    refetchInterval: 0,
+    refetchOnWindowFocus: true,
   });
 
+  // Combined useEffect to fetch holidays and generate notifications
   useEffect(() => {
-    if (data) {
-      const eventNotifications = data.flatMap((event) => {
-        const notifications = [];
+    const fetchHolidaysAndGenerateNotifications = async () => {
+      const currentYear = new Date().getFullYear();
+      const today = new Date();
 
-        // Check for dateOfBirth
-        //add a function here that checks bday is in 3 days
-        if (event.dateOfBirth) {
-          notifications.push({
-            id: `${event._id}-birthday`, // Unique ID for each notification
-            importance: "High",
-            priorityNumber: 3,
-            message: `${
-              event.fullName
-            }'s birthday is coming soon. Don't forget to send ${
-              event.gender === "female" ? "her" : "him"
-            } a gift!`,
-            link: "/events",
-            fullName: event.fullName,
-            read: false,
-            viewed: false,
-            dismissed: false,
-            image: event.image,
-            startDay: event.StartDay,
-            date: event.dateOfBirth,
-            className: `Birthday`,
-          });
+      // Fetch holidays based on country code for the current year
+      const hd = new Holidays(countryCode);
+      const holidayData = hd.getHolidays(currentYear);
+
+      // Format holidays, adjusting to the next year if today's date has passed the holiday date
+      const formattedHolidays = holidayData.map((holiday) => {
+        const holidayDate = new Date(holiday.date);
+        // If holiday has passed, set it to the same date in the next year
+        if (holidayDate < today) {
+          holidayDate.setFullYear(currentYear + 1);
         }
-
-        // Check for vacation
-        if (event.vacation && event.vacation.length > 0) {
-          const vacationStartDate = new Date(
-            event.vacation[0].startDate
-          ).toLocaleDateString();
-
-          notifications.push({
-            id: `${event._id}-vacation`,
-            importance: "High",
-            priorityNumber: 3,
-            message: `${event.fullName} is flying to ${
-              event.vacation[0].destination
-            } on ${vacationStartDate}. Let's make it a real vacation for ${
-              event.gender === "female" ? "her" : "him"
-            }!`,
-            link: "/events",
-            fullName: event.fullName,
-            read: false,
-            viewed: false,
-            dismissed: false,
-            image: event.image,
-            date: event.vacation[0].startDate,
-            className: `vacation`,
-          });
-        }
-
-        // Handle Upcoming Events
-        if (
-          !event.dateOfBirth &&
-          !event.vacation &&
-          new Date(event.start) >= new Date()
-        ) {
-          notifications.push({
-            id: `${event._id}-event`,
-            importance: "Low",
-            priorityNumber: 1,
-            message: `${event.title} is happening on ${new Date(
-              event.start
-            ).toLocaleDateString()}`,
-            fullName: event.title,
-            link: "/events",
-            title: event.title,
-            start: event.start,
-            className: event.className,
-            read: false,
-            viewed: false,
-            dismissed: false,
-            date: event.start,
-            image: event.image,
-          });
-        }
-
-        // Handle Past Events
-        if (
-          !event.dateOfBirth &&
-          !event.vacation &&
-          new Date(event.start) < new Date()
-        ) {
-          const eventDate = new Date(event.start);
-          const nextYear = new Date().getFullYear() + 1;
-          const eventDateNextYear = new Date(eventDate.setFullYear(nextYear));
-          notifications.push({
-            id: `${event._id}-event-next-year`, // Unique ID for each notification
-            importance: "Low",
-            priorityNumber: 1,
-            message: `${
-              event.title
-            } is happening on ${eventDateNextYear.toLocaleDateString()}`,
-            fullName: event.title,
-            link: "/events",
-            title: event.title,
-            start: eventDateNextYear.toISOString(),
-            className: event.className,
-            read: false,
-            viewed: false,
-            dismissed: false,
-            date: eventDateNextYear.toISOString(),
-            image: event.image,
-          });
-        }
-
-        return notifications;
+        return {
+          name: holiday.name,
+          date: holidayDate.toISOString().split("T")[0], // format as YYYY-MM-DD
+        };
       });
-      // Append the new notifications to the existing ones
-      setStaticNotifications((prevNotifications) => [
-        ...prevNotifications,
-        ...eventNotifications,
-      ]);
-    }
-  }, [data]);
+
+      // setHolidays(formattedHolidays);
+
+      // Generate notifications when both data and holidays are available
+      if (data && formattedHolidays.length > 0) {
+        const eventNotifications = data.flatMap((event) => {
+          const notifications = [];
+
+          // Birthday Notification
+          if (event.eventDetails?.type === "birthday") {
+            notifications.push({
+              id: event._id,
+              employeeId: event.eventDetails.employeeId,
+              priority: event.priority,
+              message: event.title,
+              link: "/events",
+              read: false,
+              viewed: false,
+              dismissed: false,
+              image: event.image,
+              startDay: event.notificationCreatedAt,
+              date: event.eventDetails.dateOfTheEvent,
+              className: "Birthday",
+            });
+          }
+
+          // Vacation Notification
+          // if (event.vacation && event.vacation.length > 0) {
+          //   const vacationStartDate = new Date(event.vacation[0].startDate).toLocaleDateString();
+
+          //   notifications.push({
+          //     id: `${event._id}-vacation`,
+          //     priority: "High",
+          //     priorityNumber: 3,
+          //     message: `${event.fullName} is flying to ${event.vacation[0].destination} on ${vacationStartDate}. Let's make it a real vacation for ${event.gender === "female" ? "her" : "him"}!`,
+          //     link: "/events",
+          //     fullName: event.fullName,
+          //     read: false,
+          //     viewed: false,
+          //     dismissed: false,
+          //     image: event.image,
+          //     date: event.vacation[0].startDate,
+          //     className: "vacation",
+          //   });
+          // }
+
+          // Holiday Notification
+
+          // formattedHolidays.forEach(holiday => {
+          //   if (!event.dateOfBirth && !event.vacation && event.title === holiday.name) {
+          //     notifications.push({
+          //       id: `${event._id}-event-${holiday.name}`,
+          //       priority: "Low",
+          //       priorityNumber: 1,
+          //       message: `${holiday.name} is happening on ${new Date(holiday.date).toLocaleDateString()}`,
+          //       fullName: holiday.name,
+          //       link: "/events",
+          //       title: holiday.name,
+          //       start: holiday.date,
+          //       className: event.className,
+          //       read: false,
+          //       viewed: false,
+          //       dismissed: false,
+          //       date: holiday.date,
+          //       image: event.image,
+          //       description: event.description,
+          //       underDescription: event.underDescription,
+          //       options: event.options,
+          //     });
+          //   }
+          // });
+
+          return notifications;
+        });
+        setNotifications([...staticNotifications, ...eventNotifications]);
+      }
+    };
+
+    fetchHolidaysAndGenerateNotifications();
+  }, [data, countryCode]);
 
   //John Answer
   const [modalOpenNo, setModalOpenNo] = useState(false);
@@ -490,9 +360,9 @@ const Notifications = () => {
   };
 
   const titlels = {
-    flexDirection: "column", // שינוי פה גם
-    alignItems: "center", // שינוי פה גם
-    justifyContent: "center", // שינוי פה גם
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
     gap: "20px",
   };
 
@@ -500,25 +370,14 @@ const Notifications = () => {
 
   // Sorting notifications based on the selected option
   if (selectedSortingOption === "A-Z") {
-    staticNotifications.sort((a, b) => a.message.localeCompare(b.message));
+    notifications.sort((a, b) => a.message.localeCompare(b.message));
   } else if (selectedSortingOption === "Z-A") {
-    staticNotifications.sort((a, b) => b.message.localeCompare(a.message));
+    notifications.sort((a, b) => b.message.localeCompare(a.message));
   } else if (selectedSortingOption === "Priority low - high") {
-    staticNotifications.sort((a, b) => a.priorityNumber - b.priorityNumber);
+    notifications.sort((a, b) => a.priorityNumber - b.priorityNumber);
   } else {
-    staticNotifications.sort((a, b) => b.priorityNumber - a.priorityNumber);
+    notifications.sort((a, b) => b.priorityNumber - a.priorityNumber);
   }
-
-  // const markAsViewedAndArchive = (id) => {
-  //   const notification = notifications.find((n) => n.id === id);
-  //   if (notification) {
-  //     setArchivedNotifications((prev) => [
-  //       ...prev,
-  //       { ...notification, viewed: true },
-  //     ]);
-  //     markAsViewed(id);
-  //   }
-  // };
 
   const closeModal = () => {
     setModalOpen(false);
@@ -554,15 +413,16 @@ const Notifications = () => {
   let displayedNotifications = [];
 
   if (viewOption !== "New") {
-    displayedNotifications = staticNotifications.slice(
+    displayedNotifications = notifications.slice(
       currentPage * itemsPerPage,
       (currentPage + 1) * itemsPerPage
     );
+    
   }
 
   // Handle clicking the next page button
   const handleNextPage = () => {
-    if ((currentPage + 1) * itemsPerPage < staticNotifications.length) {
+    if ((currentPage + 1) * itemsPerPage < notifications.length) {
       setCurrentPage(currentPage + 1);
     }
   };
@@ -598,32 +458,27 @@ const Notifications = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState(null);
 
-  const getNotificationId = (userId) => {
-    const notification = staticNotifications.find((val) => val.id === userId);
-    if (notification) {
-      if (notification.className === "Birthday") {
-        const encodedData = encodeURIComponent(JSON.stringify(notification));
-        navigate(`/NotificationsBirth/${encodedData}`);
-      } else if (notification.className === "bg-info") {
-        setShowPopup("bg-info");
-        setModalContent(notification); // Pass the notification data as content
-        setModalOpen(true); // Open the modal
-      } else if (notification.className === "bg-pink") {
-        navigate("/task-board", {
-          state: { data: notification },
-        });
-      } else if (notification.id === 4) {
-        setModalContent(notification); // Pass the notification data as content
-        setModalOpenId4(true); // Open the modal
-      } else if (notification.className === "vacation") {
-        setModalOpenfive(true);
-      } else if (notification.id === 6) {
-        setModalOpenThree(true);
-      } else if (notification.id === 7) {
-        setModalOpenfour(true);
-      } else {
-        alert("no Birthday");
-      }
+  const getNotificationId = (employeeId) => {
+    const notification = notifications.find((val) => val.employeeId === employeeId);
+    if (notification.className === "Birthday") {
+      navigate(`/get-a-birthday-present/${employeeId}`);
+    } else if (notification.className === "bg-info") {
+      setShowPopup("bg-info");
+      setModalContent(notification); // Pass the notification data as content
+      setModalOpen(true); // Open the modal
+    } else if (notification.className === "bg-pink") {
+      navigate("/task-board", {
+        state: { data: notification },
+      });
+    } else if (notification.employeeId === 4) {
+      setModalContent(notification); // Pass the notification data as content
+      setModalOpenId4(true); // Open the modal
+    } else if (notification.className === "vacation") {
+      setModalOpenfive(true);
+    } else if (notification.employeeId === 6) {
+      setModalOpenThree(true);
+    } else if (notification.employeeId === 7) {
+      setModalOpenfour(true);
     }
   };
 
@@ -718,23 +573,21 @@ const Notifications = () => {
         </button>
         <button
           onClick={handleNextPage}
-          disabled={
-            (currentPage + 1) * itemsPerPage >= staticNotifications.length
-          }
+          disabled={(currentPage + 1) * itemsPerPage >= notifications.length}
           style={{
             background:
-              (currentPage + 1) * itemsPerPage >= staticNotifications.length
+              (currentPage + 1) * itemsPerPage >= notifications.length
                 ? "#f2f2f2"
                 : "#FFA500", // light grey when disabled, orange otherwise
             color:
-              (currentPage + 1) * itemsPerPage >= staticNotifications.length
+              (currentPage + 1) * itemsPerPage >= notifications.length
                 ? "#aaa"
                 : "white", // adjust text color for contrast
             border: "none",
             borderRadius: "5px",
             padding: "10px 20px",
             cursor:
-              (currentPage + 1) * itemsPerPage >= staticNotifications.length
+              (currentPage + 1) * itemsPerPage >= notifications.length
                 ? "not-allowed"
                 : "pointer", // change cursor based on state
           }}
@@ -745,17 +598,18 @@ const Notifications = () => {
       <br />
 
       {/* Start new code */}
+      {viewOption === "New" && (
+        <ShowNewNotifications
+          notifications={notifications}
+          getNotificationId={getNotificationId}
+        />
+      )}
 
       {viewOption === "All" && (
         <ShowAllNotifications
           getNotificationId={getNotificationId}
           displayedNotifications={displayedNotifications}
-        />
-      )}
-      {viewOption === "New" && (
-        <ShowNewNotifications
-          notifications={staticNotifications}
-          getNotificationId={getNotificationId}
+          notifications={notifications}
         />
       )}
 
@@ -767,11 +621,7 @@ const Notifications = () => {
       {/* Modal for notification John */}
       <div style={rowStyle}>
         {modalOpenThree && (
-          <Modal
-            onCancel={closeModalThree}
-            visible={modalOpenThree}
-            footer={null}
-          >
+          <Modal onCancel={closeModalThree} open={modalOpenThree} footer={null}>
             <ul style={ulStyle}>
               <li style={listItemStyle}>
                 <h2 style={{ width: "100%" }}>
@@ -795,7 +645,7 @@ const Notifications = () => {
                 <br />
                 <br />
 
-                <h5>Do you know the reason for the change ?</h5>
+                <h5>Do you know the reason for this change ?</h5>
 
                 <br />
               </li>
@@ -868,7 +718,7 @@ const Notifications = () => {
 
       <div>
         {modalOpenYes && modalContentYes && (
-          <Modal onCancel={closeModalYes} visible={modalOpenYes} footer={null}>
+          <Modal onCancel={closeModalYes} open={modalOpenYes} footer={null}>
             <ul style={ulStyle}>
               <li style={listItemStyle}>
                 <h4
@@ -1070,7 +920,7 @@ const Notifications = () => {
 
       <div>
         {modalOpenNo && modalContentNo && (
-          <Modal onCancel={closeModalNo} visible={modalOpenNo} footer={null}>
+          <Modal onCancel={closeModalNo} open={modalOpenNo} footer={null}>
             <ul style={ulStyle}>
               <li style={listItemStyle}>
                 <h4
@@ -1274,7 +1124,7 @@ const Notifications = () => {
       {/* Modal for notification 3 */}
 
       {modalOpenId4 && modalContent && (
-        <Modal onCancel={closeModal} visible={modalOpenId4} footer={null}>
+        <Modal onCancel={closeModal} open={modalOpenId4} footer={null}>
           <ul style={ulStyle}>
             <li style={listItemStyle}>
               <h2 style={{ width: "100%" }}>
@@ -1394,7 +1244,7 @@ const Notifications = () => {
       {/* {Modal for notification 6}  */}
 
       {modalOpenfour && (
-        <Modal onCancel={closeModalfour} visible={modalOpenfour} footer={null}>
+        <Modal onCancel={closeModalfour} open={modalOpenfour} footer={null}>
           <ul style={ulStyle}>
             <li style={listItemStyle}>
               <h2 style={{ width: "100%" }}>Maccabi Tel-Aviv soccer game </h2>
@@ -1570,11 +1420,7 @@ const Notifications = () => {
       {/* {Modal for notification 8}  */}
       <div>
         {modalOpenfive && (
-          <Modal
-            onCancel={closeModalfive}
-            visible={modalOpenfive}
-            footer={null}
-          >
+          <Modal onCancel={closeModalfive} open={modalOpenfive} footer={null}>
             <ul style={ulStyle}>
               <li style={listItemStyle}>
                 <h4
@@ -1592,11 +1438,11 @@ const Notifications = () => {
                   are some ways to help him feel confident leaving work behind{" "}
                   <br />
                   <br />
-                  vacations are vital for employees, offering a break to
-                  recharge and prevent burnout. They boost morale, increase
-                  productivity, and bring a fresh perspective. Encouraging time
-                  off supports work-life balance and leads to a more engaged and
-                  motivated team
+                  vacations are vital for employeesNotifications, offering a
+                  break to recharge and prevent burnout. They boost morale,
+                  increase productivity, and bring a fresh perspective.
+                  Encouraging time off supports work-life balance and leads to a
+                  more engaged and motivated team
                 </h4>
                 <br />
               </li>

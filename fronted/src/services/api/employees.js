@@ -12,6 +12,19 @@ export const fetchEmployees = async () => {
   }
 };
 
+export const fetchEmployee = async (employeeId) => {
+  try {
+    const response = await client.get(`/getEmployee/${employeeId}`);
+    if (response.status === 200) {
+      const employee = response.data;
+      const result = employee[0]
+      return result;
+    }
+  } catch (error) {
+    console.log("Error fetching employee :", error);
+  }
+};
+
 export const addEmployee = async ({ employeeData }) => {
   try {
     const response = await client.post("/addEmployee", {
@@ -27,22 +40,21 @@ export const addEmployee = async ({ employeeData }) => {
     }
   } catch (error) {
     console.log("Error saving employee", error);
-    throw error
-     }
+    throw error;
+  }
 };
 export const deleteEmployee = async (id) => {
   try {
     const response = await client.delete("/deleteEmployee", {
-      data: { id } 
-    })
+      data: { id },
+    });
     if (response.status === 200) {
       return response;
     }
-
   } catch (error) {
     console.log("Error deleting employee", error);
   }
-}
+};
 export const updateEmployeeVacation = async ({
   id,
   purposeOfTrip,

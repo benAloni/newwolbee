@@ -11,7 +11,20 @@ export const getEmployees = async (req, res) => {
   }
   res.status(200).json(employees);
 };
-
+export const getEmployee = async (req, res) => {
+  let employee;
+  const { employeeId } = req.params;
+  try {
+    employee = await EmployeeModel.find({ employeeId });
+    if (!employee) {
+      return res.status(404).json({ message: "Employee not found" });
+    }
+  } catch (error) {
+    console.error("Error finding employee:", error);
+    res.status(500).send("Internal Server Error");
+  }
+  res.status(200).json(employee);
+};
 export const addEmployee = async (req, res) => {
   const { employeeData } = req.body;
   const { user } = req;

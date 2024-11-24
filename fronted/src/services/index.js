@@ -1,22 +1,25 @@
 import { fetchTeams } from "./api/teams";
 import {
   fetchEmployees,
+  fetchEmployee,
   addEmployee,
   deleteEmployee,
   updateEmployeeVacation,
 } from "./api/employees";
 import { fetchUserProfilePic, fetchEmployeesProfilePics } from "./api/profile";
 import { fetchEvents, addEvent } from "./api/calendarEvents";
-import { fetchNotifications } from "./api/notifications";
+import { fetchNotifications, fetchEmployeesNotifications } from "./api/notifications";
 import {
   fetchCompanyEvents,
   addNewCompanyEvent,
   updateCompanyEvent,
   deleteCompanyEvent,
 } from "./api/companyEvents";
+import { fetchHolidaysDetailsOptions } from "./api/holidaysDetails";
 export {
   fetchTeams,
   fetchEmployees,
+  fetchEmployee,
   addEmployee,
   updateEmployeeVacation,
   fetchUserProfilePic,
@@ -29,4 +32,6 @@ export {
   addNewCompanyEvent,
   updateCompanyEvent,
   deleteCompanyEvent,
+  fetchHolidaysDetailsOptions,
+  fetchEmployeesNotifications,
 };

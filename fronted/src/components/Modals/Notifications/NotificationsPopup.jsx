@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { fetchEmployees, fetchNotifications } from "../../../services";
+import { fetchEmployeesNotifications, fetchNotifications } from "../../../services";
 
+//this component needs fixing. ain't working because the obj properties ain't synced
 export default function NotificationsPopup() {
   const [eventsTomorrow, setEventsTomorrow] = useState([]);
 
   const fetchData = async () => {
-    const [notifications, employees] = await Promise.all([
+    const [notifications, employeesNotifications] = await Promise.all([
       fetchNotifications(),
-      fetchEmployees(),
-    ]);
+      fetchEmployeesNotifications(),
+    ]);    
 
-    return [...notifications, ...employees];
+    return [...notifications, ...employeesNotifications];
   };
 
   const { data, error, isLoading } = useQuery({
@@ -22,11 +23,9 @@ export default function NotificationsPopup() {
     refetchOnWindowFocus: true,
   });
 
-  useEffect(() => {
-    if (error) {
-      console.error("Error fetching data:", error);
-    }
+  useEffect(() => {    
     if (data && !isLoading) {
+      
       const newEvents = data.flatMap((val) => {
         const eventsArray = [];
 
