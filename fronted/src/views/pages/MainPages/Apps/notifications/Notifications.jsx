@@ -104,8 +104,8 @@ const Notifications = () => {
           // Birthday Notification
           if (event.eventDetails?.type === "birthday") {
             notifications.push({
-              id: event._id,
-              employeeId: event.eventDetails.employeeId,
+              // id: event._id,
+              id: event.eventDetails.employeeId,
               priority: event.priority,
               message: event.title,
               link: "/events",
@@ -141,30 +141,28 @@ const Notifications = () => {
 
           // Holiday Notification
 
-          // formattedHolidays.forEach(holiday => {
-          //   if (!event.dateOfBirth && !event.vacation && event.title === holiday.name) {
-          //     notifications.push({
-          //       id: `${event._id}-event-${holiday.name}`,
-          //       priority: "Low",
-          //       priorityNumber: 1,
-          //       message: `${holiday.name} is happening on ${new Date(holiday.date).toLocaleDateString()}`,
-          //       fullName: holiday.name,
-          //       link: "/events",
-          //       title: holiday.name,
-          //       start: holiday.date,
-          //       className: event.className,
-          //       read: false,
-          //       viewed: false,
-          //       dismissed: false,
-          //       date: holiday.date,
-          //       image: event.image,
-          //       description: event.description,
-          //       underDescription: event.underDescription,
-          //       options: event.options,
-          //     });
-          //   }
-          // });
-
+          formattedHolidays.forEach(holiday => {
+            if (event.title === holiday.name) {
+              notifications.push({
+                id: event._id,
+                priority: "Low",
+                priorityNumber: 1,
+                message: `${holiday.name} is coming up on ${new Date(holiday.date).toLocaleDateString()}`,
+                fullName: holiday.name,
+                link: "/events",
+                title: holiday.name,
+                start: holiday.date,
+                className: event.className,
+                read: false,
+                viewed: false,
+                dismissed: false,
+                startDay: today,
+                description: event.description,
+                underDescription: event.underDescription,
+                options: event.options,
+              });
+            }
+          });
           return notifications;
         });
         setNotifications([...staticNotifications, ...eventNotifications]);
@@ -456,11 +454,11 @@ const Notifications = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState(null);
 
-  const getNotificationId = (employeeId) => {
-    const notification = notifications.find((val) => val.employeeId === employeeId);
+  const getNotificationId = (id) => {
+    const notification = notifications.find((val) => val.id === id);
     if (notification.className === "Birthday") {
-      navigate(`/get-a-birthday-present/${employeeId}`);
-    } else if (notification.className === "bg-info") {
+      navigate(`/get-a-birthday-present/${id}`);
+    } else if (notification.className === "bg-info" && notification.options !== undefined) {
       setShowPopup("bg-info");
       setModalContent(notification); // Pass the notification data as content
       setModalOpen(true); // Open the modal
@@ -468,14 +466,14 @@ const Notifications = () => {
       navigate("/task-board", {
         state: { data: notification },
       });
-    } else if (notification.employeeId === 4) {
+    } else if (notification.id === 4) {
       setModalContent(notification); // Pass the notification data as content
       setModalOpenId4(true); // Open the modal
     } else if (notification.className === "vacation") {
       setModalOpenfive(true);
-    } else if (notification.employeeId === 6) {
+    } else if (notification.id === 6) {
       setModalOpenThree(true);
-    } else if (notification.employeeId === 7) {
+    } else if (notification.id === 7) {
       setModalOpenfour(true);
     }
   };

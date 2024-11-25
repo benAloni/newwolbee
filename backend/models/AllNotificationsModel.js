@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const AllNotificationsSchema = new mongoose.Schema({
   title: String,
- start: Date,
+  start: Date,
   className: String,
   uid: String,
 });

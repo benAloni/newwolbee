@@ -2,7 +2,7 @@ import nicole from "../../../../../imgs/avatar_4.JPG";
 import jacob from "../../../../../imgs/jacob.jpg";
 import john from "../../../../../imgs/avatar_6.JPG";
  const staticNotifications = [ {
-    employeeId: 1,
+    id: 1,
     priority: "High",
     priorityNumber: 3,
     message: "It's Nicole Miller's birthday tomorrow. Don't forget to send her a gift!",
@@ -17,7 +17,7 @@ import john from "../../../../../imgs/avatar_6.JPG";
     image: nicole,
   },
   {
-    employeeId: 2,
+    id: 2,
     priority: "Medium",
     priorityNumber: 2,
     message:
@@ -31,7 +31,7 @@ import john from "../../../../../imgs/avatar_6.JPG";
     viewed: false,
   },
   {
-    employeeId: 3,
+    id: 3,
     priority: "High",
     priorityNumber: 3,
     fullName: "Fourth of July",
@@ -45,7 +45,7 @@ import john from "../../../../../imgs/avatar_6.JPG";
     viewed: false,
   },
   {
-    employeeId: 4,
+    id: 4,
     priority: "High",
     priorityNumber: 3,
     message: "Note! A meeting was arranged with Nicole when she is at home",
@@ -58,7 +58,7 @@ import john from "../../../../../imgs/avatar_6.JPG";
     image: nicole,
   },
   {
-    employeeId: 5,
+    id: 5,
     priority: "Medium",
     priorityNumber: 2,
     message:
@@ -71,7 +71,7 @@ import john from "../../../../../imgs/avatar_6.JPG";
     image: jacob,
   },
   {
-    employeeId: 6,
+    id: 6,
     priority: "Medium",
     priorityNumber: 2,
     message: "John's work routine has significantly changed.",
@@ -84,7 +84,7 @@ import john from "../../../../../imgs/avatar_6.JPG";
     image: john,
   },
   {
-    employeeId: 7,
+    id: 7,
     priority: "Low",
     priorityNumber: 1,
     message:
@@ -97,7 +97,7 @@ import john from "../../../../../imgs/avatar_6.JPG";
     dismissed: false,
   },
   {
-    employeeId: 8,
+    id: 8,
     priority: "High",
     priorityNumber: 3,
     message:

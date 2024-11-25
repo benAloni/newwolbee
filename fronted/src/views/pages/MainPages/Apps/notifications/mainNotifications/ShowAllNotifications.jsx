@@ -203,7 +203,7 @@ export default function ShowAllNotifications({ displayedNotifications, getNotifi
     // backgroundColor: 'white',
     backgroundColor: notification.dismissed ? "#f2f2f2" : "white",
     transform:
-      hoveredNotificationId === notification.employeeId ? "scale(1.02)" : "scale(1)",
+      hoveredNotificationId === notification.id ? "scale(1.02)" : "scale(1)",
   });
 
   const priorityIndicatorStyle = (priority) => {
@@ -261,8 +261,8 @@ export default function ShowAllNotifications({ displayedNotifications, getNotifi
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
         {displayedNotifications.map((notification) => (          
           <div
-            key={notification.employeeId}
-            onClick={() => getNotificationId(notification.employeeId)}
+            key={notification.id}
+            onClick={() => getNotificationId(notification.id)}
 
             style={{
               ...notificationStyle(notification),
@@ -279,10 +279,10 @@ export default function ShowAllNotifications({ displayedNotifications, getNotifi
               style={{ textDecoration: "none", width: "100%", cursor: "pointer" }}
             >
               <p
-                onMouseOver={() => enterHover(notification.employeeId)}
+                onMouseOver={() => enterHover(notification.id)}
                 onMouseOut={exitHover}
                 style={{
-                  ...messageStyle(notification.employeeId),
+                  ...messageStyle(notification.id),
                   color: notification.read ? "dimgray" : "black",
                 }}
               >
@@ -306,7 +306,7 @@ export default function ShowAllNotifications({ displayedNotifications, getNotifi
               <div
                 style={{ position: "relative" }}
                 onMouseEnter={() =>
-                  setHoveredIcon({ ...hoveredIcon, snooze: notification.employeeId })
+                  setHoveredIcon({ ...hoveredIcon, snooze: notification.id })
                 }
                 onMouseLeave={() =>
                   setHoveredIcon({ ...hoveredIcon, snooze: null })
@@ -318,12 +318,12 @@ export default function ShowAllNotifications({ displayedNotifications, getNotifi
                   style={{ cursor: "pointer" }}
                   width={"27px"}
                   height={"27px"}
-                  onClick={() => togglePostponeInput(notification.employeeId)}
+                  onClick={() => togglePostponeInput(notification.id)}
                 />
                 <div
                   style={{
                     ...tooltipStyle,
-                    ...(hoveredIcon.snooze === notification.employeeId
+                    ...(hoveredIcon.snooze === notification.id
                       ? showTooltipStyle
                       : {}),
                   }}
@@ -334,7 +334,7 @@ export default function ShowAllNotifications({ displayedNotifications, getNotifi
               <div
                 style={{ position: "relative" }}
                 onMouseEnter={() =>
-                  setHoveredIcon({ ...hoveredIcon, dismiss: notification.employeeId })
+                  setHoveredIcon({ ...hoveredIcon, dismiss: notification.id })
                 }
                 onMouseLeave={() =>
                   setHoveredIcon({ ...hoveredIcon, dismiss: null })
@@ -346,12 +346,12 @@ export default function ShowAllNotifications({ displayedNotifications, getNotifi
                   style={{ cursor: "pointer" }}
                   width={"20px"}
                   height={"20px"}
-                  onClick={() => deleteNotification(notification.employeeId)}
+                  onClick={() => deleteNotification(notification.id)}
                 />
                 <div
                   style={{
                     ...tooltipStyle,
-                    ...(hoveredIcon.dismiss === notification.employeeId
+                    ...(hoveredIcon.dismiss === notification.id
                       ? showTooltipStyle
                       : {}),
                   }}
@@ -361,7 +361,7 @@ export default function ShowAllNotifications({ displayedNotifications, getNotifi
               </div>
             </div>
             {/* Postpone window */}
-            {isPostponeBtnClicked === notification.employeeId && (
+            {isPostponeBtnClicked === notification.id && (
               <div style={postponeWindowStyle}>
                 <button
                   style={closeButtonStyle}
@@ -371,7 +371,7 @@ export default function ShowAllNotifications({ displayedNotifications, getNotifi
                 </button>
                 <input
                   type="datetime-local"
-                  id={`datetime-${notification.employeeId}`}
+                  id={`datetime-${notification.id}`}
                   style={{
                     padding: "5px",
                     borderRadius: "5px",
@@ -389,7 +389,7 @@ export default function ShowAllNotifications({ displayedNotifications, getNotifi
                       height: "30px",
                     }}
                     onClick={() =>
-                      postponeNotification(notification.employeeId, selectedDateTime)
+                      postponeNotification(notification.id, selectedDateTime)
                     }
                   >
                     Confirm

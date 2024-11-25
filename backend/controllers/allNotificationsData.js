@@ -5,14 +5,15 @@ export const getAllNotifications = async (req, res) => {
   const {user} = req
 
   try {
-    const allNotifications = await AllNotificationsModel.find({
-      $or: [
-        { uid: user.uid },          // Notifications with the user's uid
-        { uid: { $exists: false } } // Notifications without any uid
-      ]
-    });
-
+    const allNotifications = await AllNotificationsModel.find({     
+         $or: [
+            { uid: user.uid },             // Notifications that match the user's uid
+            { uid: { $exists: false } }    // Notifications that do not have a uid field
+        ] 
+      
+    });   
     res.status(200).json(allNotifications);
+
   } catch (error) {
     console.error("Error getting all notifications:", error);
     res.status(500).json({ message: "An error occurred while fetching notifications data." });
