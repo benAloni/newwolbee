@@ -60,8 +60,6 @@ const Notifications = () => {
       fetchNotifications(),
       fetchEmployeesNotifications(),
     ]);
-    console.log(employeesNotifications);
-
     return [...notifications, ...employeesNotifications];
   };
 

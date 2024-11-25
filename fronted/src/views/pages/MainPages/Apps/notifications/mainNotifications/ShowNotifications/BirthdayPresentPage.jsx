@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { Table } from "antd";
-import axios from "axios";
 import gift from "../../../../../../../imgs/gift.png";
 import notforget from "../../../../../../../imgs/notforget.png";
 import team from "../../../../../../../imgs/team.png";
@@ -15,10 +13,9 @@ import remind from "../../../../../../../imgs/remind.png";
 import { useQuery } from "@tanstack/react-query";
 import { fetchEmployee } from "../../../../../../../services";
 
-
 const BirthdayPresentPage = ({}) => {
   const { employeeId } = useParams();
-  
+
   const { data: employee, isLoading } = useQuery({
     queryKey: ["selectedEmployee"],
     queryFn: () => fetchEmployee(employeeId),
@@ -26,30 +23,58 @@ const BirthdayPresentPage = ({}) => {
 
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-  // const dateOfBirth = new Date(employee?.dateOfBirth);
-  // const startWorkDay = new Date(employee?.startDay);
+  const today = new Date();
+  const currentYear = today.getFullYear();
+  const employeeDateOfBirth = new Date(employee?.dateOfBirth);
+  let formattedDateOfBirth;
+  let employeeYearOfBirth;
+  let ageOfEmployee;
+  if (isNaN(employeeDateOfBirth)) {
+    console.error("Invalid date:", employee?.dateOfBirth);
+  } else {
+    const dayFormatter = new Intl.DateTimeFormat("en-US", { weekday: "long" });
+    const dayOfWeek = dayFormatter.format(employeeDateOfBirth);
+    const dayOfMonth = employeeDateOfBirth.getDate();
+    employeeYearOfBirth = employeeDateOfBirth.getFullYear();
+    const age = currentYear - employeeYearOfBirth;
+    const getOrdinal = (n) => {
+      if (n > 3 && n < 21) return `${n}th`;
+      switch (n % 10) {
+        case 1:
+          return `${n}st`;
+        case 2:
+          return `${n}nd`;
+        case 3:
+          return `${n}rd`;
+        default:
+          return `${n}th`;
+      }
+    };
+    formattedDateOfBirth = `${dayOfWeek} ${getOrdinal(dayOfMonth)}`;
+    ageOfEmployee = getOrdinal(age);
+  }
 
-  // const currentYearBirthday = new Date(
-  //   new Date().getFullYear(),
-  //   dateOfBirth.getMonth(),
-  //   dateOfBirth.getDate()
-  // );
-
-  // const formattedDate = format(currentYearBirthday, "MMMM do, yyyy");
-
-  //-------Employee's age-----------
-  // const today = new Date();
-  // const age = today.getFullYear() - dateOfBirth.getFullYear();
-  // const isBirthdayPassed =
-  //   today <
-  //   new Date(
-  //     today.getFullYear(),
-  //     dateOfBirth.getMonth(),
-  //     dateOfBirth.getDate()
-  //   );
-
-  // const actualAge = isBirthdayPassed ? age - 1 : age;
   // //-------------Employee's seniority--------
+  const employeeStartingDate = new Date(employee?.startDay);
+  let seniorityYears;
+  if (isNaN(employeeStartingDate)) return;
+  else {
+    const employeeStartYear = employeeStartingDate.getFullYear();
+    seniorityYears = currentYear - employeeStartYear;
+
+    //adjust for a case where the employee has not yet had their anniversary this year
+    const formattedEmployeeStartDate = new Date(
+      currentYear,
+      employeeStartingDate.getMonth(),
+      employeeStartingDate.getDate()
+    );
+    //jan is 0 feb is 1
+    const employeeHasNotHadAnniversaryYet = today < formattedEmployeeStartDate;
+    if (employeeHasNotHadAnniversaryYet) {
+      seniorityYears -= 1;
+    }
+  }
+
   // const work = today.getFullYear() - startWorkDay.getFullYear();
   // const isWorkPassed =
   //   today <
@@ -59,7 +84,6 @@ const BirthdayPresentPage = ({}) => {
   //     startWorkDay.getDate()
   //   );
 
-  // const actualWork = isWorkPassed ? work - 1 : work;
   //--------------------------------
 
   const handleOption = (option) => {
@@ -81,7 +105,7 @@ const BirthdayPresentPage = ({}) => {
     background: "#fff",
     margin: "10px", // Small margin between cards
   };
-  
+
   const imageContainerStyle = {
     width: "100px",
     height: "100px",
@@ -93,36 +117,36 @@ const BirthdayPresentPage = ({}) => {
     alignItems: "center",
     border: "2px solid #ddd",
   };
-  
+
   const imgStyle = {
     width: "100%",
     height: "auto",
     borderRadius: "50%",
   };
-  
+
   const projectDetailsTextStyle = {
     padding: "10px",
   };
-  
+
   const rowStyle = {
     display: "flex",
     flexWrap: "wrap",
     justifyContent: "center",
     gap: "20px",
   };
-  
+
   const h3Style = {
     fontSize: "18px",
     margin: "10px 0",
   };
-  
+
   const pStyle = {
     fontSize: "14px",
     color: "#555",
     margin: "5px 0",
   };
-  const employeeFirstName = employee?.fullName.split(" ")[0]
- 
+  const employeeFirstName = employee?.fullName.split(" ")[0];
+
   return (
     <>
       <div className="page-wrapper">
@@ -130,19 +154,24 @@ const BirthdayPresentPage = ({}) => {
           {/* Page Header */}
 
           <div>
-            <h1>{employee?.fullName ? employee.fullName : "Nicole"}'s Birthday</h1>
+            <h1>
+              {employee?.fullName ? employee.fullName : "Nicole"}'s Birthday
+            </h1>
             <br />
             <h4>
-              On  {employee?.fullName ? employee.fullName : "Nicole"} will celebrate {employee?.gender === "male" ? "his" : "her"}{" "}
-               birthday. With  years of dedicated service
-              to the company, she's achieved remarkable milestones.
+              On {formattedDateOfBirth}{" "}
+              {employee?.fullName ? employee.fullName : "Nicole"} will celebrate{" "}
+              {employee?.gender === "male" ? "his" : "her"} {ageOfEmployee}{" "}
+              birthday. With {seniorityYears} years of dedicated service to the
+              company, she's achieved remarkable milestones.
             </h4>
             <br />
             <h3>
-            {employee?.fullName ? employee.fullName : "Nicole"}'s birthday is a perfect chance to express our
-              appreciation for {employee?.gender === "female" ? "her" : "his"} invaluable contributions to the company. A
-              thoughtful word, a small gift, or a simple gesture will do the
-              trick
+              {employee?.fullName ? employee.fullName : "Nicole"}'s birthday is
+              a perfect chance to express our appreciation for{" "}
+              {employee?.gender === "female" ? "her" : "his"} invaluable
+              contributions to the company. A thoughtful word, a small gift, or
+              a simple gesture will do the trick
             </h3>
           </div>
           <br />
@@ -170,8 +199,10 @@ const BirthdayPresentPage = ({}) => {
                 >
                   <h1 style={h3Style}>Personalized gift</h1>
                   <h4 style={pStyle}>
-                    Take the extra mile and give a personalized gift to make {""}
-                    {employeeFirstName ? employeeFirstName : "Nicole"} feel special
+                    Take the extra mile and give a personalized gift to make{" "}
+                    {""}
+                    {employeeFirstName ? employeeFirstName : "Nicole"} feel
+                    special
                   </h4>
                 </div>
               </Link>
@@ -240,7 +271,9 @@ const BirthdayPresentPage = ({}) => {
                 >
                   <h1 style={h3Style}>A small gesture</h1>
                   <h4 style={pStyle}>
-                    Leave a small gift on  {employeeFirstName ? employeeFirstName : "Nicole"}'s desk to show {employee?.gender === "male" ? "him" : "her"} that you
+                    Leave a small gift on{" "}
+                    {employeeFirstName ? employeeFirstName : "Nicole"}'s desk to
+                    show {employee?.gender === "male" ? "him" : "her"} that you
                     care
                   </h4>
                 </div>
@@ -310,8 +343,10 @@ const BirthdayPresentPage = ({}) => {
                 >
                   <h1 style={h3Style}>Let’s say thank you</h1>
                   <h4 style={pStyle}>
-                    Give {employeeFirstName ? employeeFirstName : "Nicole"} a Grant or a Bonus to Show {employee?.gender === "male" ? "him" : "her"}  that {employee?.gender === "male" ? "he" : "she"} is
-                    valued
+                    Give {employeeFirstName ? employeeFirstName : "Nicole"} a
+                    Grant or a Bonus to Show{" "}
+                    {employee?.gender === "male" ? "him" : "her"} that{" "}
+                    {employee?.gender === "male" ? "he" : "she"} is valued
                   </h4>
                 </div>
               </a>
@@ -380,8 +415,10 @@ const BirthdayPresentPage = ({}) => {
                 >
                   <h1 style={h3Style}>Fixable working hours</h1>
                   <h4 style={pStyle}>
-                    Offer {employeeFirstName ? employeeFirstName : "Nicole"} the chance to start late or finish {employee?.gender === "male" ? "his" : "her"} workday
-                    early on {employee?.gender === "male" ? "his" : "her"} birthday
+                    Offer {employeeFirstName ? employeeFirstName : "Nicole"} the
+                    chance to start late or finish{" "}
+                    {employee?.gender === "male" ? "his" : "her"} workday early
+                    on {employee?.gender === "male" ? "his" : "her"} birthday
                   </h4>
                 </div>
               </Link>
@@ -450,7 +487,8 @@ const BirthdayPresentPage = ({}) => {
                 >
                   <h1 style={h3Style}>Personalized birthday card:</h1>
                   <h4 style={pStyle}>
-                    Send {employeeFirstName ? employeeFirstName : "Nicole"} a birthday card or email with a personal touch
+                    Send {employeeFirstName ? employeeFirstName : "Nicole"} a
+                    birthday card or email with a personal touch
                   </h4>
                 </div>
               </Link>
@@ -659,7 +697,9 @@ const BirthdayPresentPage = ({}) => {
                 >
                   <h1 style={h3Style}>Take a day off</h1>
                   <h4 style={pStyle}>
-                    Give {employeeFirstName ? employeeFirstName : "Nicole"} the opportunity to celebrate {employee?.gender === "male" ? "his" : "her"} birthday at
+                    Give {employeeFirstName ? employeeFirstName : "Nicole"} the
+                    opportunity to celebrate{" "}
+                    {employee?.gender === "male" ? "his" : "her"} birthday at
                     home
                   </h4>
                 </div>
@@ -730,7 +770,8 @@ const BirthdayPresentPage = ({}) => {
                   <h1 style={h3Style}>Let’s make it special</h1>
                   <h4 style={pStyle}>
                     Bring in a massage therapist, a chef or Personal Trainer and
-                    make it a special day for {employeeFirstName ? employeeFirstName : "Nicole"}
+                    make it a special day for{" "}
+                    {employeeFirstName ? employeeFirstName : "Nicole"}
                   </h4>
                 </div>
               </Link>
