@@ -23,8 +23,30 @@ export const getEmployeesNotifications = async (req, res) => {
   const {user} = req
 
   try {
-    const employeesNotifications = await EmployeeNotificationsModel.find({uid: user.uid});
-    if(!employeesNotifications) return
+    const today = new Date();
+    const currentMonth = today.getMonth() + 1;
+    const currentDay = today.getDate();
+
+    const employeesNotifications = await EmployeeNotificationsModel.find({
+      uid: user.uid,
+      hasBeenDismissed: { $ne: true },
+      $expr: {
+        $or: [
+           //if the month is greater than the current month
+          { $gt: [{ $month: "$eventDetails.dateOfTheEvent" }, currentMonth] },
+          {
+          //if the month is the same, compare the current day to the event day
+            $and: [
+              { $eq: [{ $month: "$eventDetails.dateOfTheEvent" }, currentMonth] },
+              { $gt: [{ $dayOfMonth: "$eventDetails.dateOfTheEvent" }, currentDay] },
+            ],
+          },
+        ],
+      },
+    });
+    if(!employeesNotifications|| employeesNotifications.length === 0) {
+      return res.status(404).json({ message: "No notifications found." });
+    }
     res.status(200).json(employeesNotifications);
   } catch (error) {
     console.error("Error getting employees notifications:", error);
