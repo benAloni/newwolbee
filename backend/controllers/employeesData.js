@@ -80,8 +80,6 @@ export const deleteEmployee = async (req, res) => {
   });
 };
 export const updateEmployeeVacation = async (req, res) => {
-  console.log("Received request to update vacation:", req.body);
-
   const { id, purposeOfTrip, destination, startDate, endDate } = req.body;
 
   try {
@@ -107,8 +105,6 @@ export const updateEmployeeVacation = async (req, res) => {
       console.log("Employee not found");
       return res.status(404).send("Employee not found");
     }
-
-    console.log("Employee updated successfully:", updatedEmployee);
     res.status(200).json(updatedEmployee);
   } catch (error) {
     console.error("Error updating employee vacation:", error);

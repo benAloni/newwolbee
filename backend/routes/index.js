@@ -27,6 +27,7 @@ import {
 } from "../controllers/companyEventsData.js";
 import checkBirthdays from "../schedulers/checkBirthdays.js";
 import { getHolidaysOptionsDetails } from "../controllers/holidaysData.js";
+import checkEmployeesEvents from "../schedulers/checkEmployeesEvents.js";
 
 const router = express.Router();
 initializeApp({
@@ -74,7 +75,8 @@ router.delete("/deleteEvent/:id", deleteEvent);
 router.put("/updateEmployeeInsights", updateEmployeeInsights);
 
 router.get("/checkBirthdays", checkBirthdays)//for curl check. 
-router.get("/getEmployeesNotifications", getEmployeesNotifications)//temporary route - till Eden adds the mongoose model discriminator
+router.get("/checkEmployeesEventsNotifications", checkEmployeesEvents)//for curl check.
+router.get("/getBirthdayNotifications", getEmployeesNotifications)//temporary route - till Eden adds the mongoose model discriminator
 
 router.get("/getCompanyEvents", getCompanyEvents);
 router.post("/addNewCompanyEvent", addNewCompanyEvent);
