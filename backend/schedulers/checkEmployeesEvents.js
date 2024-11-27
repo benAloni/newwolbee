@@ -7,57 +7,78 @@ const checkEmployeesEvents = async (req, res) => {
   };
 
   const today = normalizeDate(new Date());
+  const currentDate = new Date(today);
+  const tomorrow = new Date(currentDate);
+  const nextWeek = new Date(currentDate);
+  const nextTwoWeeks = new Date(currentDate);
+  const nextMonth = new Date(currentDate);
+
+  currentDate.setDate(today.getDate() + 1);
+  // console.log("today", currentDate);
+  tomorrow.setDate(today.getDate() + 2);
+  // console.log("tomorrow", tomorrow);
+  nextWeek.setDate(today.getDate() + 8);
+  // console.log("nextWeek", nextWeek);
+  nextTwoWeeks.setDate(today.getDate() + 15);
+  // console.log("next 2", nextTwoWeeks);
+  nextMonth.setDate(today.getDate() + 31);
+  // console.log("next month", nextMonth);
+
   //-----tomorrow----------------------------------
-  const tomorrowStart = new Date(today);
-  tomorrowStart.setDate(today.getDate() + 1);
-  const tomorrowEnd = new Date(today);
-  tomorrowEnd.setDate(today.getDate() + 2);
+  const dayBeforeTomorrow = new Date(today);
+  dayBeforeTomorrow.setDate(today.getDate() + 1);
+  const twoDaysAfterTomorrow = new Date(today);
+  twoDaysAfterTomorrow.setDate(today.getDate() + 3);
   //-----next week----------------------------------
-  const nextWeekStart = new Date(today);
-  nextWeekStart.setDate(today.getDate() + 7);
-  const nextWeekEnd = new Date(today);
-  nextWeekEnd.setDate(today.getDate() + 14);
+  const dayBeforeNextWeek = new Date(today);
+  dayBeforeNextWeek.setDate(today.getDate() + 7);
+  console.log("formatted  day beforenext week:", dayBeforeNextWeek);
+  const twoDaysAfterNextWeek = new Date(today);
+  twoDaysAfterNextWeek.setDate(today.getDate() + 9);
+  console.log("formatted next week:", twoDaysAfterNextWeek);
+
   //-----next two weeks-----------------------------
-  const nextTwoWeeksStart = new Date(today);
-  nextTwoWeeksStart.setDate(today.getDate() + 14);
-  const nextTwoWeeksEnd = new Date(today);
-  nextTwoWeeksEnd.setDate(today.getDate() + 28);
+  const dayBeforeNextTwoWeeks = new Date(today);
+  dayBeforeNextTwoWeeks.setDate(today.getDate() + 14);
+  const twoDaysAfterNextTwoWeeks = new Date(today);
+  twoDaysAfterNextTwoWeeks.setDate(today.getDate() + 16);
   //-----next month---------------------------------
-  const nextMonthStart = new Date(today);
-  nextMonthStart.setDate(today.getDate() + 30);
-  const nextMonthEnd = new Date(today);
-  nextMonthEnd.setDate(today.getDate() + 60);
+  const dateBeforeNextMonth = new Date(today);
+  dateBeforeNextMonth.setDate(today.getDate() + 30);
+  const twoDaysAfterNextMonth = new Date(today);
+  twoDaysAfterNextMonth.setDate(today.getDate() + 32);
   //------------------------------------------------
 
   try {
     const employeeWithEventTomorrow = await EmployeeModel.find({
-        vacation: {
-            $elemMatch: {
-              startDate: {
-                $gte: tomorrowStart,
-                $lt: tomorrowEnd,
-              },
-            },
+      //when comparing dates - mongo increases the date by 1 day. meaning dayBeforeTomorrow is today and tomorrow is two days ahead.
+      vacation: {
+        $elemMatch: {
+          startDate: {
+            $gte: dayBeforeTomorrow,
+            $lt: twoDaysAfterTomorrow,
           },
+        },
+      },
     });
-    console.log(employeeWithEventTomorrow);
 
     const employeeWithEventNextWeek = await EmployeeModel.find({
       vacation: {
         $elemMatch: {
           startDate: {
-            $gte: nextWeekStart,
-            $lt: nextWeekEnd,
+            $gte: dayBeforeNextWeek,
+            $lt: twoDaysAfterNextWeek,
           },
         },
       },
-    });       
+    });
+
     const employeeWithEventNextTwoWeeks = await EmployeeModel.find({
       vacation: {
         $elemMatch: {
           startDate: {
-            $gte: nextTwoWeeksStart,
-            $lt: nextTwoWeeksEnd,
+            $gte: dayBeforeNextTwoWeeks,
+            $lt: twoDaysAfterNextTwoWeeks,
           },
         },
       },
@@ -66,8 +87,8 @@ const checkEmployeesEvents = async (req, res) => {
       vacation: {
         $elemMatch: {
           startDate: {
-            $gte: nextMonthStart,
-            $lt: nextMonthEnd,
+            $gte: dateBeforeNextMonth,
+            $lt: twoDaysAfterNextMonth,
           },
         },
       },
@@ -77,11 +98,12 @@ const checkEmployeesEvents = async (req, res) => {
 
     if (employeeWithEventNextMonth.length > 0) {
       for (const employee of employeeWithEventNextMonth) {
+        if (vacation.startDate.getDate() !== nextMonth.getDate()) continue;
         for (const vacation of employee.vacation) {
           const alreadyANotification = await EmployeeNotificationsModel.findOne(
             {
               "eventDetails.type": "vacation",
-              "eventDetails.dateOfTheEvent": vacation.startDate,
+              "eventDetails.dateOfTheEvent": dateBeforeNextMonth,
               "eventDetails.employeeId": employee.employeeId,
             }
           );
@@ -100,11 +122,11 @@ const checkEmployeesEvents = async (req, res) => {
               }!`,
               eventDetails: {
                 type: "vacation",
-                dateOfTheEvent: vacation.startDate,
+                dateOfTheEvent: nextMonth,
                 employeeId: employee.employeeId,
               },
-              notificationCreatedAt: today,
-              notificationDueDate: nextMonthStart,
+              notificationCreatedAt: currentDate,
+              notificationDueDate: nextMonth,
               hasBeenDismissed: false,
               hasBeenHandled: false,
               priority: "Low",
@@ -123,10 +145,11 @@ const checkEmployeesEvents = async (req, res) => {
     if (employeeWithEventNextTwoWeeks.length > 0) {
       for (const employee of employeeWithEventNextTwoWeeks) {
         for (const vacation of employee.vacation) {
+          if (vacation.startDate.getDate() !== nextTwoWeeks.getDate()) continue;
           const alreadyANotification = await EmployeeNotificationsModel.findOne(
             {
               "eventDetails.type": "vacation",
-              "eventDetails.dateOfTheEvent": vacation.startDate,
+              "eventDetails.dateOfTheEvent": dayBeforeNextTwoWeeks,
               "eventDetails.employeeId": employee.employeeId,
             }
           );
@@ -145,11 +168,11 @@ const checkEmployeesEvents = async (req, res) => {
               }!`,
               eventDetails: {
                 type: "vacation",
-                dateOfTheEvent: vacation.startDate,
+                dateOfTheEvent: nextTwoWeeks,
                 employeeId: employee.employeeId,
               },
-              notificationCreatedAt: today,
-              notificationDueDate: nextTwoWeeksStart,
+              notificationCreatedAt: currentDate,
+              notificationDueDate: nextTwoWeeks,
               hasBeenDismissed: false,
               hasBeenHandled: false,
               priority: "Medium",
@@ -164,7 +187,7 @@ const checkEmployeesEvents = async (req, res) => {
             await EmployeeNotificationsModel.findOneAndUpdate(
               {
                 "eventDetails.type": "vacation",
-                "eventDetails.dateOfTheEvent": vacation.startDate,
+                "eventDetails.dateOfTheEvent": dayBeforeNextTwoWeeks,
                 "eventDetails.employeeId": employee.employeeId,
               },
               {
@@ -180,8 +203,8 @@ const checkEmployeesEvents = async (req, res) => {
                   } in two weeks from now.lets make it a real vacation for ${
                     employee.gender === "female" ? "her" : "him"
                   }!`,
-                  notificationCreatedAt: today,
-                  notificationDueDate: nextTwoWeeksStart,
+                  notificationCreatedAt: currentDate,
+                  notificationDueDate: nextTwoWeeks,
                   priority: "Medium",
                 },
               }
@@ -193,15 +216,15 @@ const checkEmployeesEvents = async (req, res) => {
     if (employeeWithEventNextWeek.length > 0) {
       for (const employee of employeeWithEventNextWeek) {
         for (const vacation of employee.vacation) {
-            const vacationIsNextWeekOnly = (vacation.startDate >= nextWeekStart && vacation.startDate < nextWeekEnd)
+          if (vacation.startDate.getDate() !== nextWeek.getDate()) continue;
           const alreadyANotification = await EmployeeNotificationsModel.findOne(
             {
               "eventDetails.type": "vacation",
-              "eventDetails.dateOfTheEvent": nextWeekStart,
+              "eventDetails.dateOfTheEvent": dayBeforeNextWeek,
               "eventDetails.employeeId": employee.employeeId,
             }
           );
-          if (!alreadyANotification && vacationIsNextWeekOnly) {
+          if (!alreadyANotification) {
             const newNotification = new EmployeeNotificationsModel({
               title: `${employee.fullName} is off to ${
                 employee.gender === "female" ? "her" : "his"
@@ -216,11 +239,11 @@ const checkEmployeesEvents = async (req, res) => {
               }!`,
               eventDetails: {
                 type: "vacation",
-                dateOfTheEvent: vacation.startDate,
+                dateOfTheEvent: nextWeek,
                 employeeId: employee.employeeId,
               },
-              notificationCreatedAt: today,
-              notificationDueDate: nextWeekStart,
+              notificationCreatedAt: currentDate,
+              notificationDueDate: nextWeek,
               hasBeenDismissed: false,
               hasBeenHandled: false,
               priority: "Medium",
@@ -235,7 +258,7 @@ const checkEmployeesEvents = async (req, res) => {
             await EmployeeNotificationsModel.findOneAndUpdate(
               {
                 "eventDetails.type": "vacation",
-                "eventDetails.dateOfTheEvent": nextWeekStart,
+                "eventDetails.dateOfTheEvent": dayBeforeNextWeek,
                 "eventDetails.employeeId": employee.employeeId,
               },
               {
@@ -251,8 +274,8 @@ const checkEmployeesEvents = async (req, res) => {
                   } next week. lets make it a real vacation for ${
                     employee.gender === "female" ? "her" : "him"
                   }!`,
-                  notificationCreatedAt: today,
-                  notificationDueDate: nextWeekStart,
+                  notificationCreatedAt: currentDate,
+                  notificationDueDate: nextWeek,
                 },
               }
             );
@@ -263,10 +286,11 @@ const checkEmployeesEvents = async (req, res) => {
     if (employeeWithEventTomorrow.length > 0) {
       for (const employee of employeeWithEventTomorrow) {
         for (const vacation of employee.vacation) {
+          if (vacation.startDate.getDate() !== tomorrow.getDate()) continue;
           const alreadyANotification = await EmployeeNotificationsModel.findOne(
             {
               "eventDetails.type": "vacation",
-              "eventDetails.dateOfTheEvent": tomorrowStart,
+              "eventDetails.dateOfTheEvent": vacation.startDate,
               "eventDetails.employeeId": employee.employeeId,
             }
           );
@@ -281,11 +305,11 @@ const checkEmployeesEvents = async (req, res) => {
               }!`,
               eventDetails: {
                 type: "vacation",
-                dateOfTheEvent: tomorrowStart,
+                dateOfTheEvent: tomorrow,
                 employeeId: employee.employeeId,
               },
-              notificationCreatedAt: today,
-              notificationDueDate: tomorrowStart,
+              notificationCreatedAt: currentDate,
+              notificationDueDate: tomorrow,
               hasBeenDismissed: false,
               hasBeenHandled: false,
               priority: "Medium",
@@ -310,8 +334,8 @@ const checkEmployeesEvents = async (req, res) => {
                   } ${vacation.purposeOfTrip} to ${vacation.purposeOfTrip === "pleasure" ? "trip" : vacation.purposeOfTrip} tomorrow.lets make it a real vacation for ${
                     employee.gender === "female" ? "her" : "him"
                   }!`,
-                  notificationCreatedAt: today,
-                  notificationDueDate: tomorrowStart,
+                  notificationCreatedAt: currentDate,
+                  notificationDueDate: tomorrow,
                 },
               }
             );

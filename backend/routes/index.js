@@ -76,7 +76,7 @@ router.put("/updateEmployeeInsights", updateEmployeeInsights);
 
 router.get("/checkBirthdays", checkBirthdays)//for curl check. 
 router.get("/checkEmployeesEventsNotifications", checkEmployeesEvents)//for curl check.
-router.get("/getBirthdayNotifications", getEmployeesNotifications)//temporary route - till Eden adds the mongoose model discriminator
+router.get("/getEmployeesNotifications", getEmployeesNotifications)//temporary route - till Eden adds the mongoose model discriminator
 
 router.get("/getCompanyEvents", getCompanyEvents);
 router.post("/addNewCompanyEvent", addNewCompanyEvent);
