@@ -18,7 +18,7 @@ import { fetchEmployees, fetchEmployeesProfilePics } from "../../../../../servic
 import EmployeeGrph from "./emplo/EmployeeGrph";
 import { format } from 'date-fns'; // ודא שאתה מתקין את הספריה 'date-fns'
 import  "./scrollBarMainEmployee.css"
-
+import PopUp from "../../../Employees/PopUp";
 
 export default function HrStatistics() {
   // states
@@ -623,7 +623,7 @@ const handleSeeAllClick = () => {
         </div>
   </div>
 </div>
-
+<PopUp></PopUp>
     </div>
   );
 
