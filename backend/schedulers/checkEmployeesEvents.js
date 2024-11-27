@@ -117,7 +117,7 @@ const checkEmployeesEvents = async (req, res) => {
                   : vacation.purposeOfTrip
               } to ${
                 vacation.destination
-              } next month.lets make it a real vacation for ${
+              } next month. lets make it a real vacation for ${
                 employee.gender === "female" ? "her" : "him"
               }!`,
               eventDetails: {
@@ -163,7 +163,7 @@ const checkEmployeesEvents = async (req, res) => {
                   : vacation.purposeOfTrip
               } to ${
                 vacation.destination
-              } in two weeks from now.lets make it a real vacation for ${
+              } in two weeks from now. lets make it a real vacation for ${
                 employee.gender === "female" ? "her" : "him"
               }!`,
               eventDetails: {
@@ -200,7 +200,7 @@ const checkEmployeesEvents = async (req, res) => {
                       : vacation.purposeOfTrip
                   } to ${
                     vacation.destination
-                  } in two weeks from now.lets make it a real vacation for ${
+                  } in two weeks from now. lets make it a real vacation for ${
                     employee.gender === "female" ? "her" : "him"
                   }!`,
                   notificationCreatedAt: currentDate,
@@ -300,7 +300,7 @@ const checkEmployeesEvents = async (req, res) => {
                 employee.gender === "female" ? "her" : "his"
               } ${vacation.purposeOfTrip === "pleasure" ? "trip" : vacation.purposeOfTrip} to ${
                 vacation.destination
-              } tomorrow.lets make it a real vacation for ${
+              } tomorrow. lets make it a real vacation for ${
                 employee.gender === "female" ? "her" : "him"
               }!`,
               eventDetails: {
@@ -331,7 +331,7 @@ const checkEmployeesEvents = async (req, res) => {
                 $set: {
                   title: `${employee.fullName} is off to ${
                     employee.gender === "female" ? "her" : "his"
-                  } ${vacation.purposeOfTrip} to ${vacation.purposeOfTrip === "pleasure" ? "trip" : vacation.purposeOfTrip} tomorrow.lets make it a real vacation for ${
+                  } ${vacation.purposeOfTrip} to ${vacation.purposeOfTrip === "pleasure" ? "trip" : vacation.purposeOfTrip} tomorrow. lets make it a real vacation for ${
                     employee.gender === "female" ? "her" : "him"
                   }!`,
                   notificationCreatedAt: currentDate,

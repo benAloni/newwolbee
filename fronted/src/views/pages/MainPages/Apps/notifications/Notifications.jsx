@@ -120,24 +120,23 @@ const Notifications = () => {
           }
 
           // Vacation Notification
-          // if (event.vacation && event.vacation.length > 0) {
-          //   const vacationStartDate = new Date(event.vacation[0].startDate).toLocaleDateString();
+          if (event.eventDetails?.type === "vacation") {
+            // const vacationStartDate = new Date(event.vacation[0].startDate).toLocaleDateString();
 
-          //   notifications.push({
-          //     id: `${event._id}-vacation`,
-          //     priority: "High",
-          //     priorityNumber: 3,
-          //     message: `${event.fullName} is flying to ${event.vacation[0].destination} on ${vacationStartDate}. Let's make it a real vacation for ${event.gender === "female" ? "her" : "him"}!`,
-          //     link: "/events",
-          //     fullName: event.fullName,
-          //     read: false,
-          //     viewed: false,
-          //     dismissed: false,
-          //     image: event.image,
-          //     date: event.vacation[0].startDate,
-          //     className: "vacation",
-          //   });
-          // }
+            notifications.push({
+              id: event.eventDetails.employeeId,
+              priority: event.priority,
+              message: event.title,
+              link: "/events",
+              read: false,
+              viewed: false,
+              dismissed: false,
+              image: event.image,
+              startDay: event.notificationCreatedAt,
+               date: event.eventDetails.dateOfTheEvent,
+              className: "vacation",
+            });
+          }
 
           // Holiday Notification
 
