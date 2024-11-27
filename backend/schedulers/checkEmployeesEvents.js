@@ -32,10 +32,10 @@ const checkEmployeesEvents = async (req, res) => {
   //-----next week----------------------------------
   const dayBeforeNextWeek = new Date(today);
   dayBeforeNextWeek.setDate(today.getDate() + 7);
-  console.log("formatted  day beforenext week:", dayBeforeNextWeek);
+  // console.log("formatted  day before next week:", dayBeforeNextWeek);
   const twoDaysAfterNextWeek = new Date(today);
   twoDaysAfterNextWeek.setDate(today.getDate() + 9);
-  console.log("formatted next week:", twoDaysAfterNextWeek);
+  // console.log("formatted next week:", twoDaysAfterNextWeek);
 
   //-----next two weeks-----------------------------
   const dayBeforeNextTwoWeeks = new Date(today);
@@ -103,7 +103,7 @@ const checkEmployeesEvents = async (req, res) => {
           const alreadyANotification = await EmployeeNotificationsModel.findOne(
             {
               "eventDetails.type": "vacation",
-              "eventDetails.dateOfTheEvent": dateBeforeNextMonth,
+              "eventDetails.dateOfTheEvent": vacation.startDate,
               "eventDetails.employeeId": employee.employeeId,
             }
           );
@@ -149,7 +149,7 @@ const checkEmployeesEvents = async (req, res) => {
           const alreadyANotification = await EmployeeNotificationsModel.findOne(
             {
               "eventDetails.type": "vacation",
-              "eventDetails.dateOfTheEvent": dayBeforeNextTwoWeeks,
+              "eventDetails.dateOfTheEvent": vacation.startDate,
               "eventDetails.employeeId": employee.employeeId,
             }
           );
@@ -187,7 +187,7 @@ const checkEmployeesEvents = async (req, res) => {
             await EmployeeNotificationsModel.findOneAndUpdate(
               {
                 "eventDetails.type": "vacation",
-                "eventDetails.dateOfTheEvent": dayBeforeNextTwoWeeks,
+                "eventDetails.dateOfTheEvent": vacation.startDate,
                 "eventDetails.employeeId": employee.employeeId,
               },
               {
@@ -220,7 +220,7 @@ const checkEmployeesEvents = async (req, res) => {
           const alreadyANotification = await EmployeeNotificationsModel.findOne(
             {
               "eventDetails.type": "vacation",
-              "eventDetails.dateOfTheEvent": dayBeforeNextWeek,
+              "eventDetails.dateOfTheEvent": vacation.startDate,
               "eventDetails.employeeId": employee.employeeId,
             }
           );
@@ -258,7 +258,7 @@ const checkEmployeesEvents = async (req, res) => {
             await EmployeeNotificationsModel.findOneAndUpdate(
               {
                 "eventDetails.type": "vacation",
-                "eventDetails.dateOfTheEvent": dayBeforeNextWeek,
+                "eventDetails.dateOfTheEvent": vacation.startDate,
                 "eventDetails.employeeId": employee.employeeId,
               },
               {

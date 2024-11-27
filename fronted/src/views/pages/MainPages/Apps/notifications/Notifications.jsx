@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
 import Holidays from "date-holidays";
 import ShowAllNotifications from "./mainNotifications/ShowAllNotifications";
 import HeaderNotifications from "./mainNotifications/HeaderNotifications";
@@ -29,15 +28,17 @@ import rating from "../../../../../imgs/rating.png";
 import coffeeCup from "../../../../../imgs/coffeeCup.png";
 import invitationcard from "../../../../../imgs/invitationcard.png";
 import ShowHolidaysNotifications from "./mainNotifications/ShowNotifications/ShowHolidaysNotifications";
+import { userProfile } from "../../../../../imgs";
 import {
   fetchEmployeesNotifications,
+  fetchEmployeesProfilePics,
   fetchNotifications,
 } from "../../../../../services";
 import staticNotificationsData from "./staticNotifications";
+import { useQuery } from "@tanstack/react-query";
 
 const Notifications = () => {
   const navigate = useNavigate();
-
   const [modalOpenId4, setModalOpenId4] = useState(false);
   const [modalOpenTwo, setModalOpenTwo] = useState(false);
   const [modalOpenThree, setModalOpenThree] = useState(false);
@@ -58,116 +59,133 @@ const Notifications = () => {
   const fetchData = async () => {
     const [notifications, employeesNotifications] = await Promise.all([
       fetchNotifications(),
-      fetchEmployeesNotifications(),
+      getNotificationsWithEmployeesProfilePics(),
     ]);
     return [...notifications, ...employeesNotifications];
   };
-
-  const { data, error, isLoading } = useQuery({
+  const getNotificationsWithEmployeesProfilePics = async () => {
+    let employeesNotificationsWithProfilePics;
+    try {
+      const notifications = await fetchEmployeesNotifications();
+      employeesNotificationsWithProfilePics = await Promise.all(
+        notifications?.map(async (notification) => {
+          const profilePicUrl = await fetchEmployeesProfilePics(
+            notification.uid,
+            notification.eventDetails.employeeId
+          );
+          return {
+            ...notification,
+            avatar: profilePicUrl || userProfile,
+          };
+        })
+      );
+      return employeesNotificationsWithProfilePics;
+    } catch (error) {
+      console.log("Error getting notifications :", error);
+    }
+  };
+  const { data } = useQuery({
     queryKey: ["allNotificationsData"],
     queryFn: fetchData,
-    staleTime: 0,
-    refetchInterval: 0,
-    refetchOnWindowFocus: true,
   });
+  const fetchHolidaysAndGenerateNotifications = async () => {
+    const currentYear = new Date().getFullYear();
+    const today = new Date();
 
+    // Fetch holidays based on country code for the current year
+    const hd = new Holidays(countryCode);
+    const holidayData = hd.getHolidays(currentYear);
+
+    // Format holidays, adjusting to the next year if today's date has passed the holiday date
+    const formattedHolidays = holidayData.map((holiday) => {
+      const holidayDate = new Date(holiday.date);
+      // If holiday has passed, set it to the same date in the next year
+      if (holidayDate < today) {
+        holidayDate.setFullYear(currentYear + 1);
+      }
+      return {
+        name: holiday.name,
+        date: holidayDate.toISOString().split("T")[0], // format as YYYY-MM-DD
+      };
+    });
+
+    // Generate notifications when both data and holidays are available
+    if (data && formattedHolidays.length > 0) {
+      const eventNotifications = data.flatMap((event) => {
+        const notifications = [];
+
+        // Birthday Notification
+        if (event.eventDetails?.type === "birthday") {
+          notifications.push({
+            _id: event._id,
+            id: event.eventDetails.employeeId,
+            priority: event.priority,
+            message: event.title,
+            link: "/events",
+            read: false,
+            viewed: false,
+            dismissed: false,
+            image: event.avatar,
+            startDay: event.notificationCreatedAt,
+            date: event.eventDetails.dateOfTheEvent,
+            className: "Birthday",
+          });
+        }
+
+        // Vacation Notification
+        if (event.eventDetails?.type === "vacation") {
+          const vacationStartDate = new Date(event.notificationCreatedAt);
+          vacationStartDate.setDate(vacationStartDate.getDate() - 1); //subtracting by one day cuz notificationCreatedAt is saved in mongo without time zone
+          notifications.push({
+            _id: event._id,
+            id: event.eventDetails.employeeId,
+            priority: event.priority,
+            message: event.title,
+            link: "/events",
+            read: false,
+            viewed: false,
+            dismissed: false,
+            image: event.avatar,
+            startDay: vacationStartDate,
+            date: event.eventDetails.dateOfTheEvent,
+            className: "vacation",
+          });
+        }
+
+        // Holiday Notification
+
+        // formattedHolidays.forEach((holiday) => {
+        //   if (event.title === holiday.name) {
+        //     notifications.push({
+        //       _id: event._id,
+        //       priority: "Low",
+        //       priorityNumber: 1,
+        //       message: `${holiday.name} is coming up on ${new Date(
+        //         holiday.date
+        //       ).toLocaleDateString()}`,
+        //       fullName: holiday.name,
+        //       link: "/events",
+        //       title: holiday.name,
+        //       start: holiday.date,
+        //       className: event.className,
+        //       read: false,
+        //       viewed: false,
+        //       dismissed: false,
+        //       startDay: today,
+        //       description: event.description,
+        //       underDescription: event.underDescription,
+        //       options: event.options,
+        //     });
+        //   }
+        // });
+
+        return notifications;
+      });
+      setNotifications([...staticNotifications, ...eventNotifications]);
+    }
+  };
   // Combined useEffect to fetch holidays and generate notifications
   useEffect(() => {
-    const fetchHolidaysAndGenerateNotifications = async () => {
-      const currentYear = new Date().getFullYear();
-      const today = new Date();
-
-      // Fetch holidays based on country code for the current year
-      const hd = new Holidays(countryCode);
-      const holidayData = hd.getHolidays(currentYear);
-
-      // Format holidays, adjusting to the next year if today's date has passed the holiday date
-      const formattedHolidays = holidayData.map((holiday) => {
-        const holidayDate = new Date(holiday.date);
-        // If holiday has passed, set it to the same date in the next year
-        if (holidayDate < today) {
-          holidayDate.setFullYear(currentYear + 1);
-        }
-        return {
-          name: holiday.name,
-          date: holidayDate.toISOString().split("T")[0], // format as YYYY-MM-DD
-        };
-      });
-
-      // setHolidays(formattedHolidays);
-
-      // Generate notifications when both data and holidays are available
-      if (data && formattedHolidays.length > 0) {
-        const eventNotifications = data.flatMap((event) => {
-          const notifications = [];
-
-          // Birthday Notification
-          if (event.eventDetails?.type === "birthday") {
-            notifications.push({
-              // id: event._id,
-              id: event.eventDetails.employeeId,
-              priority: event.priority,
-              message: event.title,
-              link: "/events",
-              read: false,
-              viewed: false,
-              dismissed: false,
-              image: event.image,
-              startDay: event.notificationCreatedAt,
-              date: event.eventDetails.dateOfTheEvent,
-              className: "Birthday",
-            });
-          }
-
-          // Vacation Notification
-          if (event.eventDetails?.type === "vacation") {
-            // const vacationStartDate = new Date(event.vacation[0].startDate).toLocaleDateString();
-
-            notifications.push({
-              id: event.eventDetails.employeeId,
-              priority: event.priority,
-              message: event.title,
-              link: "/events",
-              read: false,
-              viewed: false,
-              dismissed: false,
-              image: event.image,
-              startDay: event.notificationCreatedAt,
-               date: event.eventDetails.dateOfTheEvent,
-              className: "vacation",
-            });
-          }
-
-          // Holiday Notification
-
-          formattedHolidays.forEach(holiday => {
-            if (event.title === holiday.name) {
-              notifications.push({
-                id: event._id,
-                priority: "Low",
-                priorityNumber: 1,
-                message: `${holiday.name} is coming up on ${new Date(holiday.date).toLocaleDateString()}`,
-                fullName: holiday.name,
-                link: "/events",
-                title: holiday.name,
-                start: holiday.date,
-                className: event.className,
-                read: false,
-                viewed: false,
-                dismissed: false,
-                startDay: today,
-                description: event.description,
-                underDescription: event.underDescription,
-                options: event.options,
-              });
-            }
-          });
-          return notifications;
-        });
-        setNotifications([...staticNotifications, ...eventNotifications]);
-      }
-    };
-
     fetchHolidaysAndGenerateNotifications();
   }, [data, countryCode]);
 
@@ -412,7 +430,6 @@ const Notifications = () => {
       currentPage * itemsPerPage,
       (currentPage + 1) * itemsPerPage
     );
-    
   }
 
   // Handle clicking the next page button
@@ -453,11 +470,14 @@ const Notifications = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState(null);
 
-  const getNotificationId = (id) => {
-    const notification = notifications.find((val) => val.id === id);
+  const getNotificationId = (mongoId) => {
+    const notification = notifications.find((val) => val._id === mongoId);       
     if (notification.className === "Birthday") {
-      navigate(`/get-a-birthday-present/${id}`);
-    } else if (notification.className === "bg-info" && notification.options !== undefined) {
+      navigate(`/get-a-birthday-present/${notification.id}`);
+    } else if (
+      notification.className === "bg-info" &&
+      notification.options !== undefined
+    ) {
       setShowPopup("bg-info");
       setModalContent(notification); // Pass the notification data as content
       setModalOpen(true); // Open the modal
@@ -465,14 +485,14 @@ const Notifications = () => {
       navigate("/task-board", {
         state: { data: notification },
       });
-    } else if (notification.id === 4) {
+    } else if (notification._id === 44) {
       setModalContent(notification); // Pass the notification data as content
       setModalOpenId4(true); // Open the modal
     } else if (notification.className === "vacation") {
       setModalOpenfive(true);
-    } else if (notification.id === 6) {
+    } else if (notification._id === 66) {
       setModalOpenThree(true);
-    } else if (notification.id === 7) {
+    } else if (notification._id === 77) {
       setModalOpenfour(true);
     }
   };

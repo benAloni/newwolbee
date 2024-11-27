@@ -1,11 +1,13 @@
 import nicole from "../../../../../imgs/avatar_4.JPG";
 import jacob from "../../../../../imgs/jacob.jpg";
 import john from "../../../../../imgs/avatar_6.JPG";
- const staticNotifications = [ {
-    id: 1,
+const staticNotifications = [
+  {
+    _id: 11,
     priority: "High",
     priorityNumber: 3,
-    message: "It's Nicole Miller's birthday tomorrow. Don't forget to send her a gift!",
+    message:
+      "It's Nicole Miller's birthday tomorrow. Don't forget to send her a gift!",
     fullName: "Nicole",
     link: "/de",
     className: "Birthday",
@@ -17,6 +19,7 @@ import john from "../../../../../imgs/avatar_6.JPG";
     image: nicole,
   },
   {
+    _id: 22,
     id: 2,
     priority: "Medium",
     priorityNumber: 2,
@@ -31,20 +34,22 @@ import john from "../../../../../imgs/avatar_6.JPG";
     viewed: false,
   },
   {
+    _id: 33,
     id: 3,
     priority: "High",
     priorityNumber: 3,
     fullName: "Fourth of July",
     message:
       "The Fourth of July celebration is in one month. Ensure there are food options for those with allergies and dietary preferences.",
-      startDay: "2021-08-24",
-      date: "2024-12-08",
+    startDay: "2021-08-24",
+    date: "2024-12-08",
     className: "bg-info",
     read: false,
     dismissed: false,
     viewed: false,
   },
   {
+    _id: 44,
     id: 4,
     priority: "High",
     priorityNumber: 3,
@@ -58,19 +63,21 @@ import john from "../../../../../imgs/avatar_6.JPG";
     image: nicole,
   },
   {
+    _id: 55,
     id: 5,
     priority: "Medium",
     priorityNumber: 2,
     message:
       "Jacob used over 20 days of sick days in the last quarter. Let him know he has reached his limit.",
-      startDay: "2021-08-24",
-      date: "1996-09-08",
+    startDay: "2021-08-24",
+    date: "1996-09-08",
     read: false,
     viewed: false,
     dismissed: false,
     image: jacob,
   },
   {
+    _id: 66,
     id: 6,
     priority: "Medium",
     priorityNumber: 2,
@@ -84,6 +91,7 @@ import john from "../../../../../imgs/avatar_6.JPG";
     image: john,
   },
   {
+    _id: 77,
     id: 7,
     priority: "Low",
     priorityNumber: 1,
@@ -97,6 +105,7 @@ import john from "../../../../../imgs/avatar_6.JPG";
     dismissed: false,
   },
   {
+    _id: 88,
     id: 8,
     priority: "High",
     priorityNumber: 3,
@@ -106,11 +115,11 @@ import john from "../../../../../imgs/avatar_6.JPG";
     startDay: "2021-08-24",
     date: "1996-09-08",
     className: "vacation",
-    read: false,  
+    read: false,
     dismissed: false,
     viewed: false,
     image: john,
   },
-]
+];
 
 export default staticNotifications;
