@@ -1,5 +1,5 @@
 
- const  ManagerSideBar = [
+const  ManagerSideBar = [
   {
     tittle: "Main menu",
     showAsTab: false,
@@ -31,7 +31,7 @@
         menuValue: "Upcoming events",
         hasSubRoute: false,
         showSubRoute: false,
-        route: "/task-board",
+        route: "/upcoming-events",
         icon: "la la-ticket",
       },
       {

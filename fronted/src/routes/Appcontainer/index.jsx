@@ -7,7 +7,7 @@ import Calendar from "../../views/pages/MainPages/Apps/calendar/Calendar.jsx";
 import AllEmployees from "../../views/pages/Employees/AllEmployees.jsx";
 import Department from "../../views/pages/Employees/Department.jsx";
 import Project from "../../views/pages/Employees/Projects/Project.jsx";
-import TaskBoard from "../../views/pages/Employees/Projects/TaskBoard.jsx";
+
 import ClientProfile from "../../views/pages/Profile/ClientProfile.jsx";
 import Profile from "../../views/pages/Profile/Profile.jsx";
 import EmployeeList from "../../views/pages/Employees/EmployeeList.jsx";
@@ -22,7 +22,7 @@ import HrDashboard from "../../views/pages/MainPages/Dashboard/AdminDashboard/Hr
 import MyDashboard from "../../views/pages/MainPages/Dashboard/AdminDashboard/MyDashboard.jsx";
 import UserSettings from "../../views/pages/Authentication/UserSettings.jsx";
 import AdminWallet from "../../views/pages/Administration/Wallet/AdminWallet.jsx";
-
+import UpComingEvents from "../../views/pages/Employees/Projects/mainUpcomingEvents/UpComingEvents.jsx";
 const AppContainer = () => {
  
 
@@ -91,8 +91,8 @@ const AppContainer = () => {
 
     {
       id: 49,
-      path: "task-board",
-      element: <TaskBoard />,
+      path: "upcoming-events",
+      element: <UpComingEvents />,
     },
     
     {
