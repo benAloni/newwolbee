@@ -109,21 +109,7 @@ const Sidebar = () => {
     setSubmenudrop(!submenuDrop);
   };
 
-  const toggleSidebar = (value) => {
-    setSideMenu(value);
-    setSideMenuNew(value);
-  };
-
-  const toggleLvelTwo = (value) => {
-    setLevel2Menu(value);
-  };
-  const toggleLevelThree = (value) => {
-    setLevel3Menu(value);
-  };
-
-  const MenuMore = () => {
-    document.getElementById("more-menu-hidden").classList.toggle("hidden");
-  };
+  
   return (
     <div
       className={`sidebar ${isSidebarExpanded ? "" : "hidden"}`}
