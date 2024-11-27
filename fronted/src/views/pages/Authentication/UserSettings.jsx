@@ -57,8 +57,15 @@ const UserSettings = () => {
   }, [data]);
 
   const triggerUploadImage = () => {
-    document.getElementById("profile-pic").click();
+    const inputElement = document.getElementById("user-profile-pic");
+    if (inputElement) {
+      inputElement.click();
+    } else {
+      console.log("Input element not found");
+    }
   };
+  
+  
   //move this function to profile.js
   const uploadUserImage = async (e) => {
     const file = e.target.files[0];
