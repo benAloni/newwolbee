@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Modal } from "antd";
-import email from "../../../../../../../imgs/email.png";
 import { differenceInDays } from "date-fns";
 import HolidaysOptionsDetails from "./HolidaysOptionsDetails";
 
@@ -21,57 +20,7 @@ export default function ShowHolidaysNotifications({
   const [sortOrder, setSortOrder] = useState("ascending");
   const [sortedOptions, setSortedOptions] = useState([]);
   const [selectedOptionData, setSelectedOptionData] = useState(null);
-
   const [isOptionModalVisible, setIsOptionModalVisible] = useState(false);
-
-  const ulStyle = {
-    margin: 0,
-    padding: 0,
-    textAlign: "center",
-    listStyleType: "none",
-  };
-
-  const listItemStyle = {
-    listStyleType: "none",
-  };
-
-  const imgStyle = {
-    width: "100%",
-    height: "auto",
-    borderRadius: "50%",
-  };
-
-  const smallprojectCardStyle = {
-    width: "250px",
-    boxSizing: "border-box",
-    border: "1px solid #ddd",
-    borderRadius: "8px",
-    overflow: "hidden",
-    textAlign: "center",
-    transition: "transform 0.3s ease",
-    padding: "20px",
-    background: "#fff",
-    margin: "10px",
-    height: "300px",
-  };
-
-  const imageContainerStyle = {
-    width: "100px",
-    height: "100px",
-    margin: "0 auto 10px",
-    borderRadius: "50%",
-    overflow: "hidden",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    border: "2px solid #ddd",
-  };
-
-  const sortingControlsStyle = {
-    position: "relative",
-    right: "20px", // Aligns to the right side
-    textAlign: "right",
-  };
 
   const calculateTimeUntilEvent = () => {
     if (modalContent && modalContent.start) {
@@ -86,10 +35,8 @@ export default function ShowHolidaysNotifications({
 
   useEffect(() => {
     if (modalContent && modalContent.options) {
-      // Sort options based on selected property and order
       const sorted = Object.entries(modalContent.options)
         .sort(([, a], [, b]) => {
-          // Sort based on ascending or descending order
           if (sortOrder === "ascending") {
             return a[selectedOption] < b[selectedOption] ? -1 : 1;
           } else {
@@ -114,153 +61,139 @@ export default function ShowHolidaysNotifications({
 
   const handleOptionClick = (option) => {
     setSelectedOptionData(option);
-    setIsOptionModalVisible(true); // Show the modal for the selected option
+    setIsOptionModalVisible(true);
   };
 
   const closeOptionModal = () => {
     setIsOptionModalVisible(false);
-    setSelectedOptionData(null); // Reset the selected option data
+    setSelectedOptionData(null);
   };
 
   return (
-    <Modal open={modalOpen} onCancel={closeModal} footer={null}>
+    <Modal
+      open={modalOpen}
+      onCancel={closeModal}
+      footer={null}
+      centered
+      bodyStyle={{
+        padding: "20px",
+        borderRadius: "8px",
+        background: "#f7f7f7",
+        boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+      }}
+    >
       {modalContent ? (
         <>
-          <ul style={ulStyle}>
-            <li>
-              <div style={{ backgroundColor: "lightblue" }}>
-                <h2>{modalContent.description}</h2>
-                <h3>{modalContent.underDescription}</h3>
-              </div>
-              <h5>You have:</h5>
-              <div>
-                <h4>employees with gluten allergy 2</h4>
-                <h4>employees are vegetarian 8</h4>
-                <h4>employees are vegan 4</h4>
-              </div>
-            </li>
-          </ul>
+          <header style={{ textAlign: "center", marginBottom: "20px" }}>
+            <h2 style={{ color: "#333", marginBottom: "5px" }}>
+              {modalContent.description}
+            </h2>
+            <h4 style={{ color: "#777" }}>{modalContent.underDescription}</h4>
+          </header>
 
-          <div style={sortingControlsStyle}>
-            <select value={selectedOption} onChange={handleOptionChange}>
-              {Object.keys(optionsData).map((option) => (
-                <option key={option} value={option}>
-                  {option.charAt(0).toUpperCase() + option.slice(1)}
-                </option>
-              ))}
-            </select>
-            <select value={sortOrder} onChange={handleSortOrderChange}>
-              <option value="ascending">Low to High</option>
-              <option value="descending">High to Low</option>
-            </select>
-            <h4>
-              Sorted by:{" "}
-              {selectedOption.charAt(0).toUpperCase() + selectedOption.slice(1)}{" "}
-              ({sortOrder})
-            </h4>
-          </div>
+          <section style={{ textAlign: "center", marginBottom: "20px" }}>
+            <h5 style={{ margin: "10px 0" }}>You have:</h5>
+            <div style={{ display: "flex", justifyContent: "space-evenly" }}>
+              <p>Employees with gluten allergy: <strong>2</strong></p>
+              <p>Vegetarian employees: <strong>8</strong></p>
+              <p>Vegan employees: <strong>4</strong></p>
+            </div>
+          </section>
 
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              flexDirection: "row",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                flexWrap: "wrap",
-                justifyContent: "center",
-              }}
-            >
-              <div
+          <section style={{ marginBottom: "20px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <select
+                value={selectedOption}
+                onChange={handleOptionChange}
                 style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(3, 1fr)",
-                  gap: "20px",
+                  padding: "10px",
+                  borderRadius: "4px",
+                  border: "1px solid #ccc",
+                  background: "#fff",
                 }}
               >
-                {sortedOptions.map((option) => {
-                  const shouldShowOption = daysDifference >= option.time;
-
-                  return (
-                    shouldShowOption && (
-                      <div
-                        key={option.key}
-                        className="project-card"
-                        style={{
-                          ...smallprojectCardStyle,
-                          position: "relative",
-                          overflow: "hidden",
-                          transition: "transform 0.3s ease",
-                        }}
-                        onClick={() => handleOptionClick(option)} // Trigger modal
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.transform = "scale(1.05)";
-                          const optionText =
-                            e.currentTarget.querySelector(".option-text");
-                          if (optionText) {
-                            optionText.style.opacity = 1;
-                          }
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.transform = "scale(1)";
-                          const optionText =
-                            e.currentTarget.querySelector(".option-text");
-                          if (optionText) {
-                            optionText.style.opacity = 0;
-                          }
-                        }}
-                      >
-                        <div
-                          className="image-container"
-                          style={imageContainerStyle}
-                        >
-                          <img
-                            src={email}
-                            alt="Project Seven"
-                            style={imgStyle}
-                          />
-                        </div>
-                        <h3 className="option-title">{option.title}</h3>
-
-                        <h4
-                          className="option-text"
-                          style={{
-                            position: "relative",
-                            top: "5px",
-                            left: "10px",
-                            transition: "opacity 0.3s ease",
-                            color: "black",
-                            opacity: 0,
-                          }}
-                        >
-                          {option.text}
-                        </h4>
-                      </div>
-                    )
-                  );
-                })}
-              </div>
+                {Object.keys(optionsData).map((option) => (
+                  <option key={option} value={option}>
+                    {option.charAt(0).toUpperCase() + option.slice(1)}
+                  </option>
+                ))}
+              </select>
+              <select
+                value={sortOrder}
+                onChange={handleSortOrderChange}
+                style={{
+                  padding: "10px",
+                  borderRadius: "4px",
+                  border: "1px solid #ccc",
+                  background: "#fff",
+                }}
+              >
+                <option value="ascending">Low to High</option>
+                <option value="descending">High to Low</option>
+              </select>
             </div>
-          </div>
+          </section>
+
+          <section
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+              gap: "20px",
+              padding: "10px",
+            }}
+          >
+            {sortedOptions.map((option) => {
+              const shouldShowOption = daysDifference >= option.time;
+              return (
+                shouldShowOption && (
+                  <div
+                    key={option.key}
+                    style={{
+                      background: "#fff",
+                      borderRadius: "8px",
+                      overflow: "hidden",
+                      boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                      cursor: "pointer",
+                      transition: "transform 0.3s ease",
+                    }}
+                    onClick={() => handleOptionClick(option)}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = "scale(1.05)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = "scale(1)";
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: "100%",
+                        height: "150px",
+                        background: `url(${option.imageUrl}) center/cover no-repeat`,
+                      }}
+                    />
+                    <div style={{ padding: "10px", textAlign: "center" }}>
+                      <h4>{option.title}</h4>
+                      <p style={{ color: "#555" }}>{option.text}</p>
+                    </div>
+                  </div>
+                )
+              );
+            })}
+          </section>
+
+          <Modal
+            open={isOptionModalVisible}
+            onCancel={closeOptionModal}
+            footer={null}
+          >
+            {selectedOptionData && (
+              <HolidaysOptionsDetails selectedOptionData={selectedOptionData} />
+            )}
+          </Modal>
         </>
       ) : (
         <p>Loading...</p>
       )}
-
-      {/* Option Details Popup Modal */}
-      <Modal
-        open={isOptionModalVisible}
-        onCancel={closeOptionModal}
-        footer={null}
-      >
-        {selectedOptionData && (
-          <HolidaysOptionsDetails selectedOptionData={selectedOptionData} />
-        )}
-      </Modal>
     </Modal>
   );
 }
