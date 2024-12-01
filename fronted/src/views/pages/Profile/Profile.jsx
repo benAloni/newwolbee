@@ -35,9 +35,7 @@ const Profile = () => {
 
   localStorage.setItem("employeeAvatar", cachedEmployeeAvatar)
   const employeeAvatar = localStorage.getItem("employeeAvatar")
-  console.log(cachedEmployee);
-  
-
+ 
   useEffect(() => {
     if(user) {
       if (employees && employeeId) {

@@ -13,19 +13,28 @@ import remind from "../../../../../../../imgs/remind.png";
 import { useQuery } from "@tanstack/react-query";
 import { fetchEmployee } from "../../../../../../../services";
 
-const BirthdayPresentPage = ({}) => {
+const BirthdayPresentPage = () => {
   const { employeeId } = useParams();
+  const [staticEmployee, setStaticEmployee] = useState(null)
 
-  const { data: employee, isLoading } = useQuery({
-    queryKey: ["selectedEmployee"],
+  const { data: employee } = useQuery({
+    queryKey: ["selectedEmployee", employeeId],
     queryFn: () => fetchEmployee(employeeId),
+    enabled: employeeId !== "1",
   });
+  useEffect(() => {
+    if (employeeId === "1") {
+      setStaticEmployee("Nicole");
+    } else {
+      setStaticEmployee(null); 
+    }
+  }, [employeeId]);
 
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   const today = new Date();
   const currentYear = today.getFullYear();
-  const employeeDateOfBirth = new Date(employee?.dateOfBirth);
+  const employeeDateOfBirth = new Date(employee?.dateOfBirth);  
   let formattedDateOfBirth;
   let employeeYearOfBirth;
   let ageOfEmployee;
@@ -53,12 +62,12 @@ const BirthdayPresentPage = ({}) => {
     formattedDateOfBirth = `${dayOfWeek} ${getOrdinal(dayOfMonth)}`;
     ageOfEmployee = getOrdinal(age);
   }
-
   // //-------------Employee's seniority--------
   const employeeStartingDate = new Date(employee?.startDay);
   let seniorityYears;
-  if (isNaN(employeeStartingDate)) return;
-  else {
+  if (isNaN(employeeStartingDate)) {
+    console.error("Invalid date:", employee?.dateOfBirth)
+  }else {
     const employeeStartYear = employeeStartingDate.getFullYear();
     seniorityYears = currentYear - employeeStartYear;
 
@@ -74,16 +83,6 @@ const BirthdayPresentPage = ({}) => {
       seniorityYears -= 1;
     }
   }
-
-  // const work = today.getFullYear() - startWorkDay.getFullYear();
-  // const isWorkPassed =
-  //   today <
-  //   new Date(
-  //     today.getFullYear(),
-  //     startWorkDay.getMonth(),
-  //     startWorkDay.getDate()
-  //   );
-
   //--------------------------------
 
   const handleOption = (option) => {
@@ -145,7 +144,7 @@ const BirthdayPresentPage = ({}) => {
     color: "#555",
     margin: "5px 0",
   };
-  const employeeFirstName = employee?.fullName.split(" ")[0];
+  const employeeFirstName = staticEmployee || (employee?.fullName?.split(" ")[0] || ""); 
 
   return (
     <>
@@ -155,21 +154,21 @@ const BirthdayPresentPage = ({}) => {
 
           <div>
             <h1>
-              {employee?.fullName ? employee.fullName : "Nicole"}'s Birthday
+              {employeeFirstName && `${employeeFirstName}'s Birthday` }             
             </h1>
             <br />
             <h4>
-              On {formattedDateOfBirth}{" "}
-              {employee?.fullName ? employee.fullName : "Nicole"} will celebrate{" "}
-              {employee?.gender === "male" ? "his" : "her"} {ageOfEmployee}{" "}
-              birthday. With {seniorityYears} years of dedicated service to the
+              {/* On {formattedDateOfBirth}{" "} */}
+              {employeeFirstName} will celebrate{" "}
+              {employee?.gender === "male" ? "his" : "her"} {ageOfEmployee ? ageOfEmployee : "32nd"}{" "}
+              birthday. With {seniorityYears ? seniorityYears : "8"} years of dedicated service to the
               company, she's achieved remarkable milestones.
             </h4>
             <br />
             <h3>
-              {employee?.fullName ? employee.fullName : "Nicole"}'s birthday is
+              {employee?.fullName ? employee.fullName : staticEmployee}'s birthday is
               a perfect chance to express our appreciation for{" "}
-              {employee?.gender === "female" ? "her" : "his"} invaluable
+              {employee?.gender === "male" ? "his" : "her"} invaluable
               contributions to the company. A thoughtful word, a small gift, or
               a simple gesture will do the trick
             </h3>
@@ -201,7 +200,7 @@ const BirthdayPresentPage = ({}) => {
                   <h4 style={pStyle}>
                     Take the extra mile and give a personalized gift to make{" "}
                     {""}
-                    {employeeFirstName ? employeeFirstName : "Nicole"} feel
+                    {employeeFirstName ? employeeFirstName : staticEmployee} feel
                     special
                   </h4>
                 </div>
@@ -272,7 +271,7 @@ const BirthdayPresentPage = ({}) => {
                   <h1 style={h3Style}>A small gesture</h1>
                   <h4 style={pStyle}>
                     Leave a small gift on{" "}
-                    {employeeFirstName ? employeeFirstName : "Nicole"}'s desk to
+                    {employeeFirstName ? employeeFirstName : staticEmployee}'s desk to
                     show {employee?.gender === "male" ? "him" : "her"} that you
                     care
                   </h4>
@@ -343,7 +342,7 @@ const BirthdayPresentPage = ({}) => {
                 >
                   <h1 style={h3Style}>Let’s say thank you</h1>
                   <h4 style={pStyle}>
-                    Give {employeeFirstName ? employeeFirstName : "Nicole"} a
+                    Give {employeeFirstName ? employeeFirstName : staticEmployee} a
                     Grant or a Bonus to Show{" "}
                     {employee?.gender === "male" ? "him" : "her"} that{" "}
                     {employee?.gender === "male" ? "he" : "she"} is valued
@@ -415,7 +414,7 @@ const BirthdayPresentPage = ({}) => {
                 >
                   <h1 style={h3Style}>Fixable working hours</h1>
                   <h4 style={pStyle}>
-                    Offer {employeeFirstName ? employeeFirstName : "Nicole"} the
+                    Offer {employeeFirstName ? employeeFirstName : staticEmployee} the
                     chance to start late or finish{" "}
                     {employee?.gender === "male" ? "his" : "her"} workday early
                     on {employee?.gender === "male" ? "his" : "her"} birthday
@@ -487,7 +486,7 @@ const BirthdayPresentPage = ({}) => {
                 >
                   <h1 style={h3Style}>Personalized birthday card:</h1>
                   <h4 style={pStyle}>
-                    Send {employeeFirstName ? employeeFirstName : "Nicole"} a
+                    Send {employeeFirstName ? employeeFirstName : staticEmployee} a
                     birthday card or email with a personal touch
                   </h4>
                 </div>
@@ -697,7 +696,7 @@ const BirthdayPresentPage = ({}) => {
                 >
                   <h1 style={h3Style}>Take a day off</h1>
                   <h4 style={pStyle}>
-                    Give {employeeFirstName ? employeeFirstName : "Nicole"} the
+                    Give {employeeFirstName} the
                     opportunity to celebrate{" "}
                     {employee?.gender === "male" ? "his" : "her"} birthday at
                     home
@@ -771,7 +770,7 @@ const BirthdayPresentPage = ({}) => {
                   <h4 style={pStyle}>
                     Bring in a massage therapist, a chef or Personal Trainer and
                     make it a special day for{" "}
-                    {employeeFirstName ? employeeFirstName : "Nicole"}
+                    {employeeFirstName ? employeeFirstName : staticEmployee}
                   </h4>
                 </div>
               </Link>

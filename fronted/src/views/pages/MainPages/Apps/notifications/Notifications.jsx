@@ -36,17 +36,15 @@ import {
 } from "../../../../../services";
 import staticNotificationsData from "./staticNotifications";
 import { useQuery } from "@tanstack/react-query";
+import NotificationsModals from "../../../../../components/Modals/Notifications/NotificationsModals";
 
 const Notifications = () => {
   const navigate = useNavigate();
-  const [modalOpenId4, setModalOpenId4] = useState(false);
-  const [modalOpenTwo, setModalOpenTwo] = useState(false);
-  const [modalOpenThree, setModalOpenThree] = useState(false);
-  const [modalContentTwo, setModalContentTwo] = useState(null);
-  const [modalContentThree, setModalContentThree] = useState(null);
-  const [modalOpenfour, setModalOpenfour] = useState(false);
-  const [modalOpenfive, setModalOpenfive] = useState(false);
-  const [modalContentfour, setModalContentfour] = useState(null);
+  const [homeMeetingModal, setHomeMeetingModal] = useState(false);
+  const [employeeWorkRoutineModal, setEmployeeWorkRoutineModal] = useState(false);
+  const [soccerGameModal, setSoccerGameModal] = useState(false);
+  const [vacationModal, setVacationModal] = useState(false);
+
 
   const [viewOption, setViewOption] = useState("All");
   const [currentPage, setCurrentPage] = useState(0); // Track the current page
@@ -128,7 +126,7 @@ const Notifications = () => {
             image: event.avatar,
             startDay: event.notificationCreatedAt,
             date: event.eventDetails.dateOfTheEvent,
-            className: "Birthday",
+            className: "birthday",
           });
         }
 
@@ -189,7 +187,7 @@ const Notifications = () => {
     fetchHolidaysAndGenerateNotifications();
   }, [data, countryCode]);
 
-  //John Answer
+  //John's Answer
   const [modalOpenNo, setModalOpenNo] = useState(false);
   const [modalOpenYes, setModalOpenYes] = useState(false);
   const [modalContentNo, setModalContentNo] = useState(null);
@@ -208,12 +206,12 @@ const Notifications = () => {
   //
   const [isNotificationVisible, setNotificationVisible] = useState(false);
 
-  const closeModalfour = () => {
-    setModalOpenfour(false);
+  const closeSoccerGameModal = () => {
+    setSoccerGameModal(false);
   };
 
-  const closeModalfive = () => {
-    setModalOpenfive(false);
+  const closeVacationModal = () => {
+    setVacationModal(false);
   };
 
   const toggleNotificationVisibility = () => {
@@ -310,11 +308,6 @@ const Notifications = () => {
     height: "80px",
   };
 
-  const h4Style = {
-    fontSize: "22px",
-    margin: "10px 0",
-  };
-
   const projectCardStyle = {
     width: "300px",
     boxSizing: "border-box",
@@ -397,11 +390,8 @@ const Notifications = () => {
     setModalContent(null); // Reset modal content when closing
   };
 
-  const closeModalTwo = () => {
-    setModalOpenTwo(false);
-  };
-  const closeModalThree = () => {
-    setModalOpenThree(false);
+  const closeEmployeeWorkRoutineModal = () => {
+    setEmployeeWorkRoutineModal(false);
   };
 
   // jhon answer
@@ -472,28 +462,28 @@ const Notifications = () => {
 
   const getNotificationId = (mongoId) => {
     const notification = notifications.find((val) => val._id === mongoId);       
-    if (notification.className === "Birthday") {
+    if (notification.className === "birthday") {
       navigate(`/get-a-birthday-present/${notification.id}`);
     } else if (
       notification.className === "bg-info" &&
       notification.options !== undefined
     ) {
       setShowPopup("bg-info");
-      setModalContent(notification); // Pass the notification data as content
-      setModalOpen(true); // Open the modal
+      setModalContent(notification); 
+      setModalOpen(true); 
     } else if (notification.className === "bg-pink") {
       navigate("/task-board", {
         state: { data: notification },
       });
-    } else if (notification._id === 44) {
-      setModalContent(notification); // Pass the notification data as content
-      setModalOpenId4(true); // Open the modal
+    } else if (notification.className === "nicole's-meeting") {
+      setModalContent(notification); 
+      setHomeMeetingModal(true); 
     } else if (notification.className === "vacation") {
-      setModalOpenfive(true);
-    } else if (notification._id === 66) {
-      setModalOpenThree(true);
-    } else if (notification._id === 77) {
-      setModalOpenfour(true);
+      setVacationModal(true);
+    } else if (notification.className === "john's-work-routine") {
+      setEmployeeWorkRoutineModal(true);
+    } else if (notification.className === "soccer-game") {
+      setSoccerGameModal(true);
     }
   };
 
@@ -633,633 +623,55 @@ const Notifications = () => {
         modalContent={modalContent}
         closeModal={closeModal}
       />
-      {/* Modal for notification John */}
+      {/* employee work routine modal*/}
       <div style={rowStyle}>
-        {modalOpenThree && (
-          <Modal onCancel={closeModalThree} open={modalOpenThree} footer={null}>
-            <ul style={ulStyle}>
-              <li style={listItemStyle}>
-                <h2 style={{ width: "100%" }}>
-                  John's work routine has significantly changed!
-                </h2>
-                <br />
-                <h5>
-                  {" "}
-                  This month, john worked 140% of his regular hours, arriving at
-                  the office at his usual <br />
-                  time but departing much later than usual please review john's
-                  work statistics below.{" "}
-                </h5>
-                <br />
-
-                <div>
-                  <JohnStatistics />
-                </div>
-
-                <br />
-                <br />
-                <br />
-
-                <h5>Do you know the reason for this change ?</h5>
-
-                <br />
-              </li>
-            </ul>
-
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                flexDirection: "column",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  flexWrap: "wrap",
-                  justifyContent: "center",
-                }}
-              >
-                <div
-                  onClick={openModalYes}
-                  className="project-card"
-                  style={smallprojectCardStyle1}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.transform = "scale(1.05)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.transform = "scale(1)")
-                  }
-                >
-                  <div
-                    className="project-details"
-                    style={projectDetailsTextStyle}
-                  >
-                    <h1>YES</h1>
-                    <h4>
-                      This is due to <br /> work <br /> assignments
-                    </h4>
-                  </div>
-                </div>
-                <div
-                  onClick={openModalNo}
-                  className="project-card"
-                  style={smallprojectCardStyle1}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.transform = "scale(1.05)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.transform = "scale(1)")
-                  }
-                >
-                  <div
-                    className="project-details"
-                    style={projectDetailsTextStyle}
-                  >
-                    <h1>NO</h1>
-                    <h4>
-                      This is new to <br /> me
-                    </h4>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </Modal>
-        )}
+        <NotificationsModals 
+        employeeWorkRoutineModal={employeeWorkRoutineModal}
+        closeEmployeeWorkRoutineModal={closeEmployeeWorkRoutineModal}
+        openModalYes={openModalYes}
+        openModalNo={openModalNo}
+        />
       </div>
 
       {/* ------- John answer Yes---------- */}
-
       <div>
-        {modalOpenYes && modalContentYes && (
-          <Modal onCancel={closeModalYes} open={modalOpenYes} footer={null}>
-            <ul style={ulStyle}>
-              <li style={listItemStyle}>
-                <h4
-                  style={{
-                    margin: "0",
-                    padding: "0",
-                    lineHeight: "1.6" /* Adjust line height for spacing */,
-                    marginBottom: "1rem" /* Add space below the heading */,
-                  }}
-                >
-                  John is currently working on a big project, and it’s crucial
-                  to show our appreciation for the extra time he's putting in.
-                  Talk to John to acknowledge his efforts and let him know that
-                  you are aware of the change. Additionally, you can consider
-                  the following actions:
-                </h4>
-                <br />
-              </li>
-            </ul>
-
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                flexDirection: "column",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  flexWrap: "wrap",
-                  justifyContent: "center",
-                }}
-              >
-                <div
-                  className="project-card"
-                  style={johnAnswer}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.transform = "scale(1.05)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.transform = "scale(1)")
-                  }
-                >
-                  <div
-                    className="project-details"
-                    style={projectDetailsTextStyle}
-                  >
-                    <h3 style={h4Style}>Show Appreciation</h3>
-                    <h5>
-                      talk to John and make sure he understands that you see his
-                      work and that to appreciate it.
-                    </h5>
-                    <img
-                      src={showAppreciation}
-                      alt="Project Seven"
-                      style={jhonimgStyle}
-                    />
-                  </div>
-                </div>
-                <div
-                  className="project-card"
-                  style={johnAnswer}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.transform = "scale(1.05)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.transform = "scale(1)")
-                  }
-                >
-                  <div
-                    className="project-details"
-                    style={projectDetailsTextStyle}
-                  >
-                    <h3>Additional time:</h3>
-                    <h4 style={h3Style}>
-                      Offer John vacation leave or compensatory time off for the
-                      extra time he has worked.
-                    </h4>
-                    <img
-                      src={additionalTime}
-                      alt="Project Seven"
-                      style={jhonimgStyle}
-                    />
-                  </div>
-                </div>
-                <div
-                  className="project-card"
-                  style={johnAnswer}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.transform = "scale(1.05)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.transform = "scale(1)")
-                  }
-                >
-                  <div
-                    className="project-details"
-                    style={projectDetailsTextStyle}
-                  >
-                    <h3>famliy :</h3>
-                    <h4 style={h3Style}>
-                      Send a small gesture to John's family to show
-                      appreciation.
-                    </h4>
-                    <img
-                      src={family}
-                      alt="Project Seven"
-                      style={jhonimgStyle}
-                    />
-                  </div>
-                </div>
-                <div
-                  className="project-card"
-                  style={johnAnswer}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.transform = "scale(1.05)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.transform = "scale(1)")
-                  }
-                >
-                  <div
-                    className="project-details"
-                    style={projectDetailsTextStyle}
-                  >
-                    <h3>personal time planning:</h3>
-                    <h4 style={h3Style}>
-                      talk to John and make sure he has enough personal personal
-                      time during to project.
-                    </h4>
-                    <img
-                      src={personalTime}
-                      alt="Project Seven"
-                      style={jhonimgStyle}
-                    />
-                  </div>
-                </div>
-                <div
-                  className="project-card"
-                  style={johnAnswer}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.transform = "scale(1.05)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.transform = "scale(1)")
-                  }
-                >
-                  <div
-                    className="project-details"
-                    style={projectDetailsTextStyle}
-                  >
-                    <h3>public recognition:</h3>
-                    <h4 style={h3Style}>
-                      acknowledge John's hard work in a team meeting or through
-                      a wide email.
-                    </h4>
-                    <img
-                      src={publicR}
-                      alt="Project Seven"
-                      style={jhonimgStyle}
-                    />
-                  </div>
-                </div>
-                <div
-                  className="project-card"
-                  style={johnAnswer}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.transform = "scale(1.05)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.transform = "scale(1)")
-                  }
-                >
-                  <div
-                    className="project-details"
-                    style={projectDetailsTextStyle}
-                  >
-                    <h2>bonus or gift:</h2>
-                    <h3 style={h3Style}>
-                      provide a financial bonus or a thoughtful gift card as a
-                      sign of appreciation.
-                    </h3>
-                    <img
-                      src={thankyou}
-                      alt="Project Seven"
-                      style={jhonimgStyle}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </Modal>
-        )}
+      {modalOpenYes && modalContentYes && (
+        <NotificationsModals 
+        modalOpenYes={modalOpenYes}
+        openModalNo={openModalNo}
+        openModalYes={openModalYes}
+        modalContentYes={ modalContentYes}
+        closeModalYes={closeModalYes}
+       />
+      )}        
       </div>
 
-      {/* --------jhon answer no ---------- */}
-
+      {/* --------John answer no ---------- */}
       <div>
         {modalOpenNo && modalContentNo && (
-          <Modal onCancel={closeModalNo} open={modalOpenNo} footer={null}>
-            <ul style={ulStyle}>
-              <li style={listItemStyle}>
-                <h4
-                  style={{
-                    margin: "0",
-                    padding: "0",
-                    lineHeight: "1.6" /* Adjust line height for spacing */,
-                    marginBottom: "1rem" /* Add space below the heading */,
-                  }}
-                >
-                  {" "}
-                  First, it's important to understand why John is working so
-                  many hours and whether it's due to his regular assignments, a
-                  new temporary project or other personal issue. and it's
-                  crucial to show our appreciation for the extra time he's
-                  putting in. Talk to John to acknowledge his efforts and let
-                  him know that you are aware of the change. Additionally, you
-                  can consider the following actions
-                </h4>
-                <br />
-              </li>
-            </ul>
-
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                flexDirection: "column",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  flexWrap: "wrap",
-                  justifyContent: "center",
-                }}
-              >
-                <div
-                  className="project-card"
-                  style={johnAnswer}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.transform = "scale(1.05)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.transform = "scale(1)")
-                  }
-                >
-                  <div
-                    className="project-details"
-                    style={projectDetailsTextStyle}
-                  >
-                    <h3 style={h4Style}>Show Appreciation</h3>
-                    <h5>
-                      talk to John and make sure he understands that you see his
-                      work and that to appreciate it.
-                    </h5>
-                    <img
-                      src={showAppreciation}
-                      alt="Project Seven"
-                      style={jhonimgStyle}
-                    />
-                  </div>
-                </div>
-                <div
-                  className="project-card"
-                  style={johnAnswer}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.transform = "scale(1.05)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.transform = "scale(1)")
-                  }
-                >
-                  <div
-                    className="project-details"
-                    style={projectDetailsTextStyle}
-                  >
-                    <h3>Additional time:</h3>
-                    <h4 style={h3Style}>
-                      Offer John vacation leave or compensatory time off for the
-                      extra time he has worked.
-                    </h4>
-                    <img
-                      src={additionalTime}
-                      alt="Project Seven"
-                      style={jhonimgStyle}
-                    />
-                  </div>
-                </div>
-                <div
-                  className="project-card"
-                  style={johnAnswer}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.transform = "scale(1.05)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.transform = "scale(1)")
-                  }
-                >
-                  <div
-                    className="project-details"
-                    style={projectDetailsTextStyle}
-                  >
-                    <h3>famliy :</h3>
-                    <h4 style={h3Style}>
-                      Send a small gesture to John's family to show
-                      appreciation.
-                    </h4>
-                    <img
-                      src={family}
-                      alt="Project Seven"
-                      style={jhonimgStyle}
-                    />
-                  </div>
-                </div>
-                <div
-                  className="project-card"
-                  style={johnAnswer}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.transform = "scale(1.05)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.transform = "scale(1)")
-                  }
-                >
-                  <div
-                    className="project-details"
-                    style={projectDetailsTextStyle}
-                  >
-                    <h3>personal time planning:</h3>
-                    <h4 style={h3Style}>
-                      talk to John and make sure he has enough personal personal
-                      time during to project.
-                    </h4>
-                    <img
-                      src={personalTime}
-                      alt="Project Seven"
-                      style={jhonimgStyle}
-                    />
-                  </div>
-                </div>
-                <div
-                  className="project-card"
-                  style={johnAnswer}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.transform = "scale(1.05)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.transform = "scale(1)")
-                  }
-                >
-                  <div
-                    className="project-details"
-                    style={projectDetailsTextStyle}
-                  >
-                    <h3>public recognition:</h3>
-                    <h4 style={h3Style}>
-                      acknowledge John's hard work in a team meeting or through
-                      a wide email.
-                    </h4>
-                    <img
-                      src={publicR}
-                      alt="Project Seven"
-                      style={jhonimgStyle}
-                    />
-                  </div>
-                </div>
-                <div
-                  className="project-card"
-                  style={johnAnswer}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.transform = "scale(1.05)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.transform = "scale(1)")
-                  }
-                >
-                  <div
-                    className="project-details"
-                    style={projectDetailsTextStyle}
-                  >
-                    <h2>bonus or gift:</h2>
-                    <h3 style={h3Style}>
-                      provide a financial bonus or a thoughtful gift card as a
-                      sign of appreciation.
-                    </h3>
-                    <img
-                      src={thankyou}
-                      alt="Project Seven"
-                      style={jhonimgStyle}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </Modal>
+          <NotificationsModals 
+          modalOpenNo={modalOpenNo}
+          openModalNo={openModalNo}
+          openModalYes={openModalYes}
+          modalContentNo={ modalContentNo}
+          closeModalNo={closeModalNo}
+          />
         )}
       </div>
 
-      {/* Modal for notification 3 */}
-
-      {modalOpenId4 && modalContent && (
-        <Modal onCancel={closeModal} open={modalOpenId4} footer={null}>
-          <ul style={ulStyle}>
-            <li style={listItemStyle}>
-              <h2 style={{ width: "100%" }}>
-                Nicole is home and she has an appointment with you
-              </h2>
-              <br />
-              <h5>
-                {" "}
-                On Thursday, June 20, 2024, at 16:00, Nicole scheduled a meeting
-                with Emma Carter regarding "Upgrading Security Systems." This
-                time overlaps with Emma’s pre designated important personal
-                time.{" "}
-              </h5>
-              <br />
-              <Link to="#">
-                <button onLoad={""}>see the meeting</button>
-              </Link>
-              <br />
-              <br />
-              <h6>
-                Balancing work and personal life is vital for employee
-                well-being and commitment. This situation is an opportunity to
-                show Emma that you respect her personal time. Just by discussing
-                this with her, you are already making a difference
-              </h6>
-              <br />
-
-              <h4>Here are some things you can do to fix it</h4>
-            </li>
-          </ul>
-
-          <div style={{ display: "flex", flexWrap: "wrap" }}>
-            <div
-              className="project-card"
-              style={smallprojectCardStyle}
-              onMouseEnter={(e) =>
-                (e.currentTarget.style.transform = "scale(1.05)")
-              }
-              onMouseLeave={(e) =>
-                (e.currentTarget.style.transform = "scale(1)")
-              }
-            >
-              <Link to="/project/7">
-                <div className="image-container" style={imageContainerStyle}>
-                  <img
-                    src={rescheduling}
-                    alt="Project Seven"
-                    style={imgStyle}
-                  />
-                </div>
-                <div
-                  className="project-details"
-                  style={projectDetailsTextStyle}
-                >
-                  <h3 style={h3Style}>
-                    Reschedule: Ask the organizer to change the meeting time and
-                    inform Emma
-                  </h3>
-                </div>
-              </Link>
-            </div>
-
-            <div
-              className="project-card"
-              style={smallprojectCardStyle}
-              onMouseEnter={(e) =>
-                (e.currentTarget.style.transform = "scale(1.05)")
-              }
-              onMouseLeave={(e) =>
-                (e.currentTarget.style.transform = "scale(1)")
-              }
-            >
-              <Link to="/project/7">
-                <div className="image-container" style={imageContainerStyle}>
-                  <img src={on} alt="Project Seven" style={imgStyle} />
-                </div>
-                <div
-                  className="project-details"
-                  style={projectDetailsTextStyle}
-                >
-                  <h3 style={h3Style}>
-                    Consult Emma: Check if Emma can attend despite the conflict
-                  </h3>
-                </div>
-              </Link>
-            </div>
-
-            <div
-              className="project-card"
-              style={smallprojectCardStyle}
-              onMouseEnter={(e) =>
-                (e.currentTarget.style.transform = "scale(1.05)")
-              }
-              onMouseLeave={(e) =>
-                (e.currentTarget.style.transform = "scale(1)")
-              }
-            >
-              <Link to="/project/7">
-                <div className="image-container" style={imageContainerStyle}>
-                  <img src={offgift} alt="Project Seven" style={imgStyle} />
-                </div>
-                <div
-                  className="project-details"
-                  style={projectDetailsTextStyle}
-                >
-                  <h3 style={h3Style}>
-                    Explain Necessity: Inform Emma that the meeting is critical
-                    and offer an alternative early leave if needed
-                  </h3>
-                </div>
-              </Link>
-            </div>
-          </div>
-        </Modal>
+      {/*home meeting modal */}
+      {homeMeetingModal && modalContent && (
+        <NotificationsModals 
+        modalContent={modalContent}
+        closeModal={closeModal}
+        homeMeetingModal={homeMeetingModal}
+        />
       )}
 
-      {/* {Modal for notification 6}  */}
+      {/* Soccer game modal}  */}
 
-      {modalOpenfour && (
-        <Modal onCancel={closeModalfour} open={modalOpenfour} footer={null}>
+      {soccerGameModal && (
+        <Modal onCancel={closeSoccerGameModal} open={soccerGameModal} footer={null}>
           <ul style={ulStyle}>
             <li style={listItemStyle}>
               <h2 style={{ width: "100%" }}>Maccabi Tel-Aviv soccer game </h2>
@@ -1432,10 +844,10 @@ const Notifications = () => {
           </div>
         </Modal>
       )}
-      {/* {Modal for notification 8}  */}
+      {/* {vacation modal}  */}
       <div>
-        {modalOpenfive && (
-          <Modal onCancel={closeModalfive} open={modalOpenfive} footer={null}>
+        {vacationModal && (
+          <Modal onCancel={closeVacationModal} open={vacationModal} footer={null}>
             <ul style={ulStyle}>
               <li style={listItemStyle}>
                 <h4

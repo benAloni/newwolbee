@@ -4,13 +4,14 @@ import john from "../../../../../imgs/avatar_6.JPG";
 const staticNotifications = [
   {
     _id: 11,
+    id:1,
     priority: "High",
     priorityNumber: 3,
     message:
       "It's Nicole Miller's birthday tomorrow. Don't forget to send her a gift!",
     fullName: "Nicole",
     link: "/de",
-    className: "Birthday",
+    className: "birthday",
     read: false,
     viewed: false,
     dismissed: false,
@@ -61,6 +62,7 @@ const staticNotifications = [
     viewed: false,
     dismissed: false,
     image: nicole,
+    className: "nicole's-meeting"
   },
   {
     _id: 55,
@@ -89,6 +91,7 @@ const staticNotifications = [
     dismissed: false,
     viewed: false,
     image: john,
+    className: "john's-work-routine"
   },
   {
     _id: 77,
@@ -103,6 +106,7 @@ const staticNotifications = [
     read: false,
     viewed: false,
     dismissed: false,
+    className: "soccer-game"
   },
   {
     _id: 88,
