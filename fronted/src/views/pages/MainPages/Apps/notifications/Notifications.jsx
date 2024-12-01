@@ -4,29 +4,7 @@ import Holidays from "date-holidays";
 import ShowAllNotifications from "./mainNotifications/ShowAllNotifications";
 import HeaderNotifications from "./mainNotifications/HeaderNotifications";
 import ShowNewNotifications from "./mainNotifications/ShowNewNotifications";
-import JohnStatistics from "../contacts/JohnStatistics";
-import tom from "../../../../../imgs/avatar_2.JPG";
-import employee2 from "../../../../../imgs/avatar_5.JPG";
-import employee3 from "../../../../../imgs/avatar_6.JPG";
-import { Modal, notification } from "antd";
-import off from "../../../../../imgs/off.png";
-import on from "../../../../../imgs/on.png";
-import offgift from "../../../../../imgs/giftoff.png";
 import "./modal.css";
-import rescheduling from "../../../../../imgs/rescheduling.png";
-import { TiPin } from "react-icons/ti";
-import thankyou from "../../../../../imgs/thankyou.png";
-import showAppreciation from "../../../../../imgs/showAppreciation.png";
-import personalTime from "../../../../../imgs/personalTime.png";
-import additionalTime from "../../../../../imgs/additionalTime.png";
-import family from "../../../../../imgs/family.png";
-import publicR from "../../../../../imgs/publicR.png";
-import album from "../../../../../imgs/album.png";
-import sweet from "../../../../../imgs/sweet.png";
-import travelPillow from "../../../../../imgs/travelPillow.png";
-import rating from "../../../../../imgs/rating.png";
-import coffeeCup from "../../../../../imgs/coffeeCup.png";
-import invitationcard from "../../../../../imgs/invitationcard.png";
 import ShowHolidaysNotifications from "./mainNotifications/ShowNotifications/ShowHolidaysNotifications";
 import { userProfile } from "../../../../../imgs";
 import {
@@ -40,20 +18,20 @@ import NotificationsModals from "../../../../../components/Modals/Notifications/
 
 const Notifications = () => {
   const navigate = useNavigate();
+  //-------Modals states--------------------------------------------
   const [homeMeetingModal, setHomeMeetingModal] = useState(false);
-  const [employeeWorkRoutineModal, setEmployeeWorkRoutineModal] = useState(false);
+  const [employeeWorkRoutineModal, setEmployeeWorkRoutineModal] =
+    useState(false);
   const [soccerGameModal, setSoccerGameModal] = useState(false);
   const [vacationModal, setVacationModal] = useState(false);
-
-
+  //------------------------------------------------------------------
   const [viewOption, setViewOption] = useState("All");
-  const [currentPage, setCurrentPage] = useState(0); // Track the current page
-  const itemsPerPage = 10; // Number of notifications per page
+  const [currentPage, setCurrentPage] = useState(0); //for tracking current page
+  const itemsPerPage = 10;
   const [notifications, setNotifications] = useState([]);
   const staticNotifications = staticNotificationsData;
   const [countryCode, setCountryCode] = useState("IL");
-
-  // Fetch notifications and employee data
+  const [employeeId, setEmployeeId] = useState(null);
   const fetchData = async () => {
     const [notifications, employeesNotifications] = await Promise.all([
       fetchNotifications(),
@@ -187,13 +165,12 @@ const Notifications = () => {
     fetchHolidaysAndGenerateNotifications();
   }, [data, countryCode]);
 
-  //John's Answer
+  //John's work routine answer---------------------------------------
   const [modalOpenNo, setModalOpenNo] = useState(false);
   const [modalOpenYes, setModalOpenYes] = useState(false);
   const [modalContentNo, setModalContentNo] = useState(null);
   const [modalContentYes, setModalContentYes] = useState(null);
-
-  //-----------
+  //-----------------------------------------------------------------
 
   const [archivedNotifications, setArchivedNotifications] = useState([]);
   const [isPostponeBtnClicked, setIsPostponeBtnClicked] = useState(false);
@@ -201,9 +178,6 @@ const Notifications = () => {
   const [selectedSortingOption, setSelectedSortingOption] = useState(
     "Priority high - low"
   );
-  const [hoveredNotificationId, setHoveredNotificationId] = useState(null);
-
-  //
   const [isNotificationVisible, setNotificationVisible] = useState(false);
 
   const closeSoccerGameModal = () => {
@@ -218,161 +192,12 @@ const Notifications = () => {
     setNotificationVisible(!isNotificationVisible);
   };
 
-  const smallprojectCardStyle = {
-    width: "250px",
-    boxSizing: "border-box",
-    border: "1px solid #ddd",
-    borderRadius: "8px",
-    overflow: "hidden",
-    textAlign: "center",
-    transition: "transform 0.3s ease",
-    padding: "20px",
-    background: "#fff",
-    margin: "10px",
-    height: "300px",
-  };
-  const johnAnswer = {
-    width: "250px",
-    boxSizing: "border-box",
-    border: "1px solid #ddd",
-    borderRadius: "40px",
-    overflow: "hidden",
-    textAlign: "center",
-    transition: "transform 0.3s ease",
-    padding: "18px",
-    background: "#fff",
-    margin: "10px",
-    height: "280px",
-    backgroundColor: "#F0F0F0",
-  };
-
-  const smallprojectCardStyle1 = {
-    width: "250px",
-    boxSizing: "border-box",
-    border: "1px solid #ddd",
-    borderRadius: "25px",
-    overflow: "hidden",
-    textAlign: "center",
-    transition: "transform 0.3s ease",
-    padding: "20px",
-    background: "#D7DBDD",
-    margin: "10px",
-  };
-  const verysmallprojectCardStyle = {
-    width: "250px",
-    boxSizing: "border-box",
-    border: "1px solid #ddd",
-    borderRadius: "8px",
-    overflow: "hidden",
-    textAlign: "center",
-    transition: "transform 0.3s ease",
-    padding: "20px",
-    background: "#fff",
-    margin: "10px",
-    height: "180px",
-  };
-
-  const checkboxStyle = {
-    marginRight: "10px",
-  };
-
-  const buttonStyle = {
-    marginBottom: "10px",
-  };
-
-  const fadeNotificationStyle = {
-    marginLeft: "140px",
-    width: "1000px",
-    position: "fixed",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    backgroundColor: "white",
-    padding: "20px",
-    border: "2px solid #ccc",
-    borderRadius: "8px",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-    animation: isNotificationVisible ? "fadeIn 0.5s" : "fadeOut 0.5s",
-    display: isNotificationVisible ? "flex" : "none",
-    height: "550px",
-    flexDirection: "row", // קו הכי חשוב בשורה זו
-    alignItems: "center",
-    justifyContent: "center",
-    flexWrap: "wrap", // כדי שהקוביות ימשיכו להתפרסם בשורה חדשה כאשר מגיעים לסופה
-    gap: "20px", // רווח בין הקוביות
-    overflow: "auto", // גלילה אוטומטית במקרה שהתוכן חורג מגודל הדיב
-  };
-
-  const jhonimgStyle = {
-    width: "80px",
-    height: "80px",
-  };
-
-  const projectCardStyle = {
-    width: "300px",
-    boxSizing: "border-box",
-    border: "1px solid #ddd",
-    borderRadius: "8px",
-    overflow: "hidden",
-    textAlign: "center",
-    transition: "transform 0.3s ease",
-    padding: "20px",
-    background: "#fff",
-    margin: "10px", // Small margin between cards
-  };
-
-  const imageContainerStyle = {
-    width: "100px",
-    height: "100px",
-    margin: "0 auto 10px",
-    borderRadius: "50%",
-    overflow: "hidden",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    border: "2px solid #ddd",
-  };
-
-  const imgStyle = {
-    width: "100%",
-    height: "auto",
-    borderRadius: "50%",
-  };
-
-  const projectDetailsTextStyle = {
-    padding: "10px",
-  };
-
   const rowStyle = {
     display: "flex",
     flexWrap: "wrap",
     justifyContent: "center",
     gap: "20px",
   };
-
-  const h3Style = {
-    fontSize: "18px",
-    margin: "10px 0",
-  };
-  const h5Style = {
-    fontSize: "14px",
-    margin: "4px 0",
-  };
-
-  const pStyle = {
-    fontSize: "14px",
-    color: "#555",
-    margin: "5px 0",
-  };
-
-  const titlels = {
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: "20px",
-  };
-
-  //
 
   // Sorting notifications based on the selected option
   if (selectedSortingOption === "A-Z") {
@@ -387,15 +212,14 @@ const Notifications = () => {
 
   const closeModal = () => {
     setModalOpen(false);
-    setModalContent(null); // Reset modal content when closing
+    setModalContent(null);
   };
 
   const closeEmployeeWorkRoutineModal = () => {
     setEmployeeWorkRoutineModal(false);
   };
 
-  // jhon answer
-
+  //John's work routine answer--------------
   const openModalNo = (notification) => {
     setModalContentNo(notification);
     setModalOpenNo(true);
@@ -411,7 +235,7 @@ const Notifications = () => {
   const closeModalYes = () => {
     setModalOpenYes(false);
   };
-  // ----------arrows---------
+  // --------------------------------------
   //  Calculate the notifications to be displayed on the current page
   let displayedNotifications = [];
 
@@ -438,30 +262,15 @@ const Notifications = () => {
 
   //---------
 
-  const notificationContainerStyle = {
-    display: "flex",
-    flexDirection: "column",
-    padding: "20px",
-  };
-
-  const ulStyle = {
-    margin: 0,
-    padding: 0,
-    textAlign: "center", // Center align the text
-    listStyleType: "none", // Remove bullet points
-  };
-
-  const listItemStyle = {
-    listStyleType: "none",
-  };
-
   const [showPopup, setShowPopup] = useState("");
 
   const [modalOpen, setModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState(null);
 
   const getNotificationId = (mongoId) => {
-    const notification = notifications.find((val) => val._id === mongoId);       
+    const notification = notifications.find((val) => val._id === mongoId);
+    const employeeMongoId = notification._id;
+    setEmployeeId(employeeMongoId);
     if (notification.className === "birthday") {
       navigate(`/get-a-birthday-present/${notification.id}`);
     } else if (
@@ -469,15 +278,15 @@ const Notifications = () => {
       notification.options !== undefined
     ) {
       setShowPopup("bg-info");
-      setModalContent(notification); 
-      setModalOpen(true); 
+      setModalContent(notification);
+      setModalOpen(true);
     } else if (notification.className === "bg-pink") {
-      navigate("/task-board", {
+      navigate("/upcoming-events", {
         state: { data: notification },
       });
     } else if (notification.className === "nicole's-meeting") {
-      setModalContent(notification); 
-      setHomeMeetingModal(true); 
+      setModalContent(notification);
+      setHomeMeetingModal(true);
     } else if (notification.className === "vacation") {
       setVacationModal(true);
     } else if (notification.className === "john's-work-routine") {
@@ -488,7 +297,7 @@ const Notifications = () => {
   };
 
   return (
-    <div style={notificationContainerStyle}>
+    <div style={{ display: "flex", flexDirection: "column", padding: "20px" }}>
       <div
         className="upperBarOptions"
         style={{
@@ -601,8 +410,6 @@ const Notifications = () => {
         </button>
       </div>
       <br />
-
-      {/* Start new code */}
       {viewOption === "New" && (
         <ShowNewNotifications
           notifications={notifications}
@@ -623,464 +430,70 @@ const Notifications = () => {
         modalContent={modalContent}
         closeModal={closeModal}
       />
+
+      {/* Modals options: */}
+
       {/* employee work routine modal*/}
       <div style={rowStyle}>
-        <NotificationsModals 
-        employeeWorkRoutineModal={employeeWorkRoutineModal}
-        closeEmployeeWorkRoutineModal={closeEmployeeWorkRoutineModal}
-        openModalYes={openModalYes}
-        openModalNo={openModalNo}
+        <NotificationsModals
+          employeeWorkRoutineModal={employeeWorkRoutineModal}
+          closeEmployeeWorkRoutineModal={closeEmployeeWorkRoutineModal}
+          openModalYes={openModalYes}
+          openModalNo={openModalNo}
         />
       </div>
 
       {/* ------- John answer Yes---------- */}
       <div>
-      {modalOpenYes && modalContentYes && (
-        <NotificationsModals 
-        modalOpenYes={modalOpenYes}
-        openModalNo={openModalNo}
-        openModalYes={openModalYes}
-        modalContentYes={ modalContentYes}
-        closeModalYes={closeModalYes}
-       />
-      )}        
+        {modalOpenYes && modalContentYes && (
+          <NotificationsModals
+            modalOpenYes={modalOpenYes}
+            openModalNo={openModalNo}
+            openModalYes={openModalYes}
+            modalContentYes={modalContentYes}
+            closeModalYes={closeModalYes}
+          />
+        )}
       </div>
 
       {/* --------John answer no ---------- */}
       <div>
         {modalOpenNo && modalContentNo && (
-          <NotificationsModals 
-          modalOpenNo={modalOpenNo}
-          openModalNo={openModalNo}
-          openModalYes={openModalYes}
-          modalContentNo={ modalContentNo}
-          closeModalNo={closeModalNo}
+          <NotificationsModals
+            modalOpenNo={modalOpenNo}
+            openModalNo={openModalNo}
+            openModalYes={openModalYes}
+            modalContentNo={modalContentNo}
+            closeModalNo={closeModalNo}
           />
         )}
       </div>
 
       {/*home meeting modal */}
       {homeMeetingModal && modalContent && (
-        <NotificationsModals 
-        modalContent={modalContent}
-        closeModal={closeModal}
-        homeMeetingModal={homeMeetingModal}
+        <NotificationsModals
+          modalContent={modalContent}
+          closeModal={closeModal}
+          homeMeetingModal={homeMeetingModal}
         />
       )}
 
       {/* Soccer game modal}  */}
 
       {soccerGameModal && (
-        <Modal onCancel={closeSoccerGameModal} open={soccerGameModal} footer={null}>
-          <ul style={ulStyle}>
-            <li style={listItemStyle}>
-              <h2 style={{ width: "100%" }}>Maccabi Tel-Aviv soccer game </h2>
-              <br />
-              <h5>
-                {" "}
-                On Sunday, July 07, 2024, at 20:00, There's a Maccabi Tel-Aviv
-                soccer game. Maybe we can arrange a meeting for all the team
-                fans to watch the game together?
-              </h5>
-              <br />
-              <br />
-              <br />
-
-              <h4>Here are the Maccabi Tel-Aviv fans</h4>
-              <br></br>
-            </li>
-          </ul>
-
-          <div
-            style={{
-              display: "flex",
-              flexWrap: "wrap",
-              height: "350px",
-              overflow: "auto",
-              scrollbarWidth: "none",
-              msOverflowStyle: "none",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                width: "100%",
-                padding: "20px",
-                margin: "20px 0",
-              }}
-            >
-              <div className="image-container" style={imageContainerStyle}>
-                <img src={tom} alt="Project Seven" style={imgStyle} />
-              </div>
-              <div className="project-details" style={projectDetailsTextStyle}>
-                <h3 style={h3Style}>Tom</h3>
-              </div>
-
-              <div className="image-container" style={imageContainerStyle}>
-                <img src={employee2} alt="Project Seven" style={imgStyle} />
-              </div>
-              <div className="project-details" style={projectDetailsTextStyle}>
-                <h3 style={h3Style}>Brad</h3>
-              </div>
-
-              <div className="image-container" style={imageContainerStyle}>
-                <img src={employee3} alt="Project Seven" style={imgStyle} />
-              </div>
-              <div className="project-details" style={projectDetailsTextStyle}>
-                <h3 style={h3Style}>John</h3>
-              </div>
-            </div>
-
-            <div
-              className="project-card"
-              style={verysmallprojectCardStyle}
-              onMouseEnter={(e) =>
-                (e.currentTarget.style.transform = "scale(1.05)")
-              }
-              onMouseLeave={(e) =>
-                (e.currentTarget.style.transform = "scale(1)")
-              }
-            >
-              <h4>Flexible Hours:</h4>
-              {/* <div className="image-container" style={imageContainerStyle}>
-                <img src={employee4} alt="Project Seven" style={imgStyle} />
-              </div> */}
-              <div className="project-details" style={projectDetailsTextStyle}>
-                <h3 style={h5Style}>
-                  Consider allowing them to leave a bit early on game day
-                </h3>
-              </div>
-            </div>
-
-            <div
-              className="project-card"
-              style={verysmallprojectCardStyle}
-              onMouseEnter={(e) =>
-                (e.currentTarget.style.transform = "scale(1.05)")
-              }
-              onMouseLeave={(e) =>
-                (e.currentTarget.style.transform = "scale(1)")
-              }
-            >
-              <h4>Team Viewing:</h4>
-              <div className="project-details" style={projectDetailsTextStyle}>
-                <h3 style={h5Style}>
-                  Organize a small viewing event at the office
-                </h3>
-              </div>
-            </div>
-
-            <div
-              className="project-card"
-              style={verysmallprojectCardStyle}
-              onMouseEnter={(e) =>
-                (e.currentTarget.style.transform = "scale(1.05)")
-              }
-              onMouseLeave={(e) =>
-                (e.currentTarget.style.transform = "scale(1)")
-              }
-            >
-              <h4>Good Luck Note:</h4>
-              <div className="project-details" style={projectDetailsTextStyle}>
-                <h3 style={h5Style}>
-                  Leave a note wishing them and their team good luck
-                </h3>
-              </div>
-            </div>
-            <div
-              className="project-card"
-              style={verysmallprojectCardStyle}
-              onMouseEnter={(e) =>
-                (e.currentTarget.style.transform = "scale(1.05)")
-              }
-              onMouseLeave={(e) =>
-                (e.currentTarget.style.transform = "scale(1)")
-              }
-            >
-              <h4>Snacks and a drink:</h4>
-              <div className="project-details" style={projectDetailsTextStyle}>
-                <h3 style={h5Style}>Build together with John a</h3>
-              </div>
-            </div>
-            <div
-              className="project-card"
-              style={verysmallprojectCardStyle}
-              onMouseEnter={(e) =>
-                (e.currentTarget.style.transform = "scale(1.05)")
-              }
-              onMouseLeave={(e) =>
-                (e.currentTarget.style.transform = "scale(1)")
-              }
-            >
-              <h4>Office Decorations: </h4>
-              <div className="project-details" style={projectDetailsTextStyle}>
-                <h3 style={h5Style}>
-                  Decorate the office with their team's colors or flags to
-                  create a festive atmosphere. But, make sure there are no fans
-                  of the opposite team
-                </h3>
-              </div>
-            </div>
-            <div
-              className="project-card"
-              style={verysmallprojectCardStyle}
-              onMouseEnter={(e) =>
-                (e.currentTarget.style.transform = "scale(1.05)")
-              }
-              onMouseLeave={(e) =>
-                (e.currentTarget.style.transform = "scale(1)")
-              }
-            >
-              <h4>Social Media Spotlight:</h4>
-              <div className="project-details" style={projectDetailsTextStyle}>
-                <h3 style={h5Style}>
-                  Feature their enthusiasm on the company's social media
-                  channels with a spotlight post or story
-                </h3>
-              </div>
-            </div>
-          </div>
-        </Modal>
+        <NotificationsModals
+          soccerGameModal={soccerGameModal}
+          closeSoccerGameModal={closeSoccerGameModal}
+        />
       )}
       {/* {vacation modal}  */}
       <div>
         {vacationModal && (
-          <Modal onCancel={closeVacationModal} open={vacationModal} footer={null}>
-            <ul style={ulStyle}>
-              <li style={listItemStyle}>
-                <h4
-                  style={{
-                    margin: "0",
-                    padding: "0",
-                    lineHeight: "1.6" /* Adjust line height for spacing */,
-                    marginBottom: "1rem" /* Add space below the heading */,
-                  }}
-                >
-                  <h3>John's Trip: Recharge and Refresh!</h3>
-                  John will be heading to Rome for an 8-day vacation in two
-                  days. Let's ensure he relaxes and enjoys his time off by
-                  reassuring him that everything at work is in good hands. Here
-                  are some ways to help him feel confident leaving work behind{" "}
-                  <br />
-                  <br />
-                  vacations are vital for employeesNotifications, offering a
-                  break to recharge and prevent burnout. They boost morale,
-                  increase productivity, and bring a fresh perspective.
-                  Encouraging time off supports work-life balance and leads to a
-                  more engaged and motivated team
-                </h4>
-                <br />
-              </li>
-            </ul>
-
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                flexDirection: "column",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  flexWrap: "wrap",
-                  justifyContent: "center",
-                }}
-              >
-                <div
-                  className="project-card"
-                  style={johnAnswer}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.transform = "scale(1.05)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.transform = "scale(1)")
-                  }
-                >
-                  <div
-                    className="project-details"
-                    style={projectDetailsTextStyle}
-                  >
-                    <h4 style={{ fontSize: "24px", marginBottom: "10px" }}>
-                      Have a Great vacation:
-                    </h4>
-                    <h5>
-                      Send John a quick message wishing him a fantastic vacation
-                    </h5>
-                    <br />
-                    <img
-                      src={invitationcard}
-                      alt="Project Seven"
-                      style={jhonimgStyle}
-                    />
-                  </div>
-                </div>
-                <div
-                  className="project-card"
-                  style={johnAnswer}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.transform = "scale(1.05)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.transform = "scale(1)")
-                  }
-                >
-                  <div
-                    className="project-details"
-                    style={projectDetailsTextStyle}
-                  >
-                    <h3
-                      style={{
-                        fontSize: "25px",
-                        marginBottom: "28px",
-                        marginTop: "10px",
-                      }}
-                    >
-                      Airport Treats:
-                    </h3>
-                    <h5 style={{ marginBottom: "18px" }}>
-                      Send John a voucher to use while he's waiting for his
-                      flight
-                    </h5>
-                    <img
-                      src={coffeeCup}
-                      alt="Project Seven"
-                      style={jhonimgStyle}
-                    />
-                  </div>
-                </div>
-                <div
-                  className="project-card"
-                  style={johnAnswer}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.transform = "scale(1.05)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.transform = "scale(1)")
-                  }
-                >
-                  <div
-                    className="project-details"
-                    style={projectDetailsTextStyle}
-                  >
-                    <h3
-                      style={{
-                        fontSize: "25px",
-                        marginBottom: "26px",
-                        marginTop: "10px",
-                      }}
-                    >
-                      Top Trip Tips:
-                    </h3>
-                    <h5 style={{ marginBottom: "21px" }}>
-                      Give John some fantastic recommendations for his trip
-                    </h5>
-                    <img
-                      src={rating}
-                      alt="Project Seven"
-                      style={jhonimgStyle}
-                    />
-                  </div>
-                </div>
-                <div
-                  className="project-card"
-                  style={johnAnswer}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.transform = "scale(1.05)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.transform = "scale(1)")
-                  }
-                >
-                  <div
-                    className="project-details"
-                    style={projectDetailsTextStyle}
-                  >
-                    <h3
-                      style={{
-                        fontSize: "25px",
-                        marginBottom: "26px",
-                        marginTop: "10px",
-                      }}
-                    >
-                      Travel Kit:
-                    </h3>
-                    <h5 style={{ marginBottom: "38px" }}>
-                      Prepare a travel kit for John to use on his trip
-                    </h5>
-                    <img
-                      src={travelPillow}
-                      alt="Project Seven"
-                      style={jhonimgStyle}
-                    />
-                  </div>
-                </div>
-                <div
-                  className="project-card"
-                  style={johnAnswer}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.transform = "scale(1.05)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.transform = "scale(1)")
-                  }
-                >
-                  <div
-                    className="project-details"
-                    style={projectDetailsTextStyle}
-                  >
-                    <h3
-                      style={{
-                        fontSize: "25px",
-                        marginBottom: "26px",
-                        marginTop: "10px",
-                      }}
-                    >
-                      Warm Welcome:
-                    </h3>
-                    <h5 style={{ marginBottom: "21px" }}>
-                      Plan a warm welcome for John when he arrives to his
-                      destination
-                    </h5>
-                    <img src={sweet} alt="Project Seven" style={jhonimgStyle} />
-                  </div>
-                </div>
-                <div
-                  className="project-card"
-                  style={johnAnswer}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.transform = "scale(1.05)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.transform = "scale(1)")
-                  }
-                >
-                  <div
-                    className="project-details"
-                    style={projectDetailsTextStyle}
-                  >
-                    <h2
-                      style={{
-                        fontSize: "25px",
-                        marginBottom: "26px",
-                        marginTop: "10px",
-                      }}
-                    >
-                      vacation Album:
-                    </h2>
-                    <h5 style={{ marginBottom: "21px" }}>
-                      Help John putting together his vacation album when he
-                      returns
-                    </h5>
-                    <img src={album} alt="Project Seven" style={jhonimgStyle} />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </Modal>
+          <NotificationsModals
+            employeeId={employeeId}
+            vacationModal={vacationModal}
+            closeVacationModal={closeVacationModal}
+          />
         )}
       </div>
     </div>

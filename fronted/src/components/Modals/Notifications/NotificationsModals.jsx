@@ -11,11 +11,25 @@ import thankyou from "../../../imgs/thankyou.png"
 // import offgift from "../../../imgs/offgift.png" //add off gift in 705
 import on from "../../../imgs/on.png"
 import rescheduling from "../../../imgs/rescheduling.png"
+import employee2 from "../../../imgs/avatar_5.JPG"
+import employee3 from "../../../imgs/avatar_6.JPG"
+import tom from "../../../imgs/avatar_2.JPG"
+import album from "../../../imgs/album.png";
+import sweet from "../../../imgs/sweet.png";
+import travelPillow from "../../../imgs/travelPillow.png";
+import rating from "../../../imgs/rating.png";
+import coffeeCup from "../../../imgs/coffeeCup.png";
+import invitationCard from "../../../imgs/invitationcard.png";
+import { useQuery } from "@tanstack/react-query";
+import { fetchEmployee } from "../../../services";
 
 const NotificationsModals = ({
   employeeWorkRoutineModal,
   closeEmployeeWorkRoutineModal,
   homeMeetingModal,
+  soccerGameModal,
+  vacationModal,
+  employeeId,
   openModalYes,
   openModalNo,
   modalOpenYes,
@@ -23,10 +37,21 @@ const NotificationsModals = ({
   closeModalYes,
   closeModalNo,
   closeModal,
+  closeVacationModal,
   modalContentYes,
   modalContentNo,
-  modalContent
+  modalContent,
+  closeSoccerGameModal,
 }) => {
+    console.log(employeeId);
+    
+    const {data: employee} = useQuery({
+        queryKey: ["employee", employeeId],
+        queryFn: () => fetchEmployee(employeeId),
+        // enabled:  (employeeId >= 22 && employeeId <= 88)  ||  employeeId === null,
+    })
+    console.log(employee);
+    
     const ulStyle = {
         margin: 0,
         padding: 0,
@@ -36,7 +61,7 @@ const NotificationsModals = ({
       const listItemStyle = {
         listStyleType: "none",
       };
-  const smallprojectCardStyle1 = {
+  const smallProjectCardStyle1 = {
     width: "250px",
     boxSizing: "border-box",
     border: "1px solid #ddd",
@@ -102,7 +127,23 @@ const NotificationsModals = ({
     height: "auto",
     borderRadius: "50%",
   };
-
+  const h5Style = {
+    fontSize: "14px",
+    margin: "4px 0",
+  };
+  const verySmallProjectCardStyle = {
+    width: "250px",
+    boxSizing: "border-box",
+    border: "1px solid #ddd",
+    borderRadius: "8px",
+    overflow: "hidden",
+    textAlign: "center",
+    transition: "transform 0.3s ease",
+    padding: "20px",
+    background: "#fff",
+    margin: "10px",
+    height: "180px",
+  };
   return (
     <>
        {/* employee work routine modal*/}
@@ -159,7 +200,7 @@ const NotificationsModals = ({
               <div
                 onClick={openModalYes}
                 className="project-card"
-                style={smallprojectCardStyle1}
+                style={smallProjectCardStyle1}
                 onMouseEnter={(e) =>
                   (e.currentTarget.style.transform = "scale(1.05)")
                 }
@@ -180,7 +221,7 @@ const NotificationsModals = ({
               <div
                 onClick={openModalNo}
                 className="project-card"
-                style={smallprojectCardStyle1}
+                style={smallProjectCardStyle1}
                 onMouseEnter={(e) =>
                   (e.currentTarget.style.transform = "scale(1.05)")
                 }
@@ -719,6 +760,418 @@ const NotificationsModals = ({
           </div>
         </Modal>
       )}
+        {/* Soccer game modal}  */}
+       {soccerGameModal && (
+        <Modal onCancel={closeSoccerGameModal} open={soccerGameModal} footer={null}>
+          <ul style={ulStyle}>
+            <li style={listItemStyle}>
+              <h2 style={{ width: "100%" }}>Maccabi Tel-Aviv soccer game </h2>
+              <br />
+              <h5>
+                {" "}
+                On Sunday, July 07, 2024, at 20:00, There's a Maccabi Tel-Aviv
+                soccer game. Maybe we can arrange a meeting for all the team
+                fans to watch the game together?
+              </h5>
+              <br />
+              <br />
+              <br />
+
+              <h4>Here are the Maccabi Tel-Aviv fans</h4>
+              <br></br>
+            </li>
+          </ul>
+
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              height: "350px",
+              overflow: "auto",
+              scrollbarWidth: "none",
+              msOverflowStyle: "none",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                width: "100%",
+                padding: "20px",
+                margin: "20px 0",
+              }}
+            >
+              <div className="image-container" style={imageContainerStyle}>
+                <img src={tom} alt="Project Seven" style={imgStyle} />
+              </div>
+              <div className="project-details" style={projectDetailsTextStyle}>
+                <h3 style={h3Style}>Tom</h3>
+              </div>
+
+              <div className="image-container" style={imageContainerStyle}>
+                <img src={employee2} alt="Project Seven" style={imgStyle} />
+              </div>
+              <div className="project-details" style={projectDetailsTextStyle}>
+                <h3 style={h3Style}>Brad</h3>
+              </div>
+
+              <div className="image-container" style={imageContainerStyle}>
+                <img src={employee3} alt="Project Seven" style={imgStyle} />
+              </div>
+              <div className="project-details" style={projectDetailsTextStyle}>
+                <h3 style={h3Style}>John</h3>
+              </div>
+            </div>
+
+            <div
+              className="project-card"
+              style={verySmallProjectCardStyle}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.transform = "scale(1.05)")
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.transform = "scale(1)")
+              }
+            >
+              <h4>Flexible Hours:</h4>
+              {/* <div className="image-container" style={imageContainerStyle}>
+                <img src={employee4} alt="Project Seven" style={imgStyle} />
+              </div> */}
+              <div className="project-details" style={projectDetailsTextStyle}>
+                <h3 style={h5Style}>
+                  Consider allowing them to leave a bit early on game day
+                </h3>
+              </div>
+            </div>
+
+            <div
+              className="project-card"
+              style={verySmallProjectCardStyle}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.transform = "scale(1.05)")
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.transform = "scale(1)")
+              }
+            >
+              <h4>Team Viewing:</h4>
+              <div className="project-details" style={projectDetailsTextStyle}>
+                <h3 style={h5Style}>
+                  Organize a small viewing event at the office
+                </h3>
+              </div>
+            </div>
+
+            <div
+              className="project-card"
+              style={verySmallProjectCardStyle}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.transform = "scale(1.05)")
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.transform = "scale(1)")
+              }
+            >
+              <h4>Good Luck Note:</h4>
+              <div className="project-details" style={projectDetailsTextStyle}>
+                <h3 style={h5Style}>
+                  Leave a note wishing them and their team good luck
+                </h3>
+              </div>
+            </div>
+            <div
+              className="project-card"
+              style={verySmallProjectCardStyle}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.transform = "scale(1.05)")
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.transform = "scale(1)")
+              }
+            >
+              <h4>Snacks and a drink:</h4>
+              <div className="project-details" style={projectDetailsTextStyle}>
+                <h3 style={h5Style}>Build together with John a</h3>
+              </div>
+            </div>
+            <div
+              className="project-card"
+              style={verySmallProjectCardStyle}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.transform = "scale(1.05)")
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.transform = "scale(1)")
+              }
+            >
+              <h4>Office Decorations: </h4>
+              <div className="project-details" style={projectDetailsTextStyle}>
+                <h3 style={h5Style}>
+                  Decorate the office with their team's colors or flags to
+                  create a festive atmosphere. But, make sure there are no fans
+                  of the opposite team
+                </h3>
+              </div>
+            </div>
+            <div
+              className="project-card"
+              style={verySmallProjectCardStyle}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.transform = "scale(1.05)")
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.transform = "scale(1)")
+              }
+            >
+              <h4>Social Media Spotlight:</h4>
+              <div className="project-details" style={projectDetailsTextStyle}>
+                <h3 style={h5Style}>
+                  Feature their enthusiasm on the company's social media
+                  channels with a spotlight post or story
+                </h3>
+              </div>
+            </div>
+          </div>
+        </Modal>
+      )}
+       {/* {vacation modal}  */}
+      {vacationModal && (
+          <Modal onCancel={closeVacationModal} open={vacationModal} footer={null}>
+            <ul style={ulStyle}>
+              <li style={listItemStyle}>
+                <h4
+                  style={{
+                    margin: "0",
+                    padding: "0",
+                    lineHeight: "1.6" ,
+                    marginBottom: "1rem",
+                  }}
+                >
+                  <h3>{employee?.fullName}'s Trip: Recharge and Refresh!</h3>
+                  John will be heading to Rome for an 8-day vacation in two
+                  days. Let's ensure he relaxes and enjoys his time off by
+                  reassuring him that everything at work is in good hands. Here
+                  are some ways to help him feel confident leaving work behind{" "}
+                  <br />
+                  <br />
+                  vacations are vital for employeesNotifications, offering a
+                  break to recharge and prevent burnout. They boost morale,
+                  increase productivity, and bring a fresh perspective.
+                  Encouraging time off supports work-life balance and leads to a
+                  more engaged and motivated team
+                </h4>
+                <br />
+              </li>
+            </ul>
+
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                flexDirection: "column",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  justifyContent: "center",
+                }}
+              >
+                <div
+                  className="project-card"
+                  style={johnAnswer}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.transform = "scale(1.05)")
+                  }
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.transform = "scale(1)")
+                  }
+                >
+                  <div
+                    className="project-details"
+                    style={projectDetailsTextStyle}
+                  >
+                    <h4 style={{ fontSize: "24px", marginBottom: "10px" }}>
+                      Have a Great vacation:
+                    </h4>
+                    <h5>
+                      Send John a quick message wishing him a fantastic vacation
+                    </h5>
+                    <br />
+                    <img
+                      src={invitationCard}
+                      alt="Project Seven"
+                      style={johnImgStyle}
+                    />
+                  </div>
+                </div>
+                <div
+                  className="project-card"
+                  style={johnAnswer}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.transform = "scale(1.05)")
+                  }
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.transform = "scale(1)")
+                  }
+                >
+                  <div
+                    className="project-details"
+                    style={projectDetailsTextStyle}
+                  >
+                    <h3
+                      style={{
+                        fontSize: "25px",
+                        marginBottom: "28px",
+                        marginTop: "10px",
+                      }}
+                    >
+                      Airport Treats:
+                    </h3>
+                    <h5 style={{ marginBottom: "18px" }}>
+                      Send John a voucher to use while he's waiting for his
+                      flight
+                    </h5>
+                    <img
+                      src={coffeeCup}
+                      alt="Project Seven"
+                      style={johnImgStyle}
+                    />
+                  </div>
+                </div>
+                <div
+                  className="project-card"
+                  style={johnAnswer}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.transform = "scale(1.05)")
+                  }
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.transform = "scale(1)")
+                  }
+                >
+                  <div
+                    className="project-details"
+                    style={projectDetailsTextStyle}
+                  >
+                    <h3
+                      style={{
+                        fontSize: "25px",
+                        marginBottom: "26px",
+                        marginTop: "10px",
+                      }}
+                    >
+                      Top Trip Tips:
+                    </h3>
+                    <h5 style={{ marginBottom: "21px" }}>
+                      Give John some fantastic recommendations for his trip
+                    </h5>
+                    <img
+                      src={rating}
+                      alt="Project Seven"
+                      style={johnImgStyle}
+                    />
+                  </div>
+                </div>
+                <div
+                  className="project-card"
+                  style={johnAnswer}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.transform = "scale(1.05)")
+                  }
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.transform = "scale(1)")
+                  }
+                >
+                  <div
+                    className="project-details"
+                    style={projectDetailsTextStyle}
+                  >
+                    <h3
+                      style={{
+                        fontSize: "25px",
+                        marginBottom: "26px",
+                        marginTop: "10px",
+                      }}
+                    >
+                      Travel Kit:
+                    </h3>
+                    <h5 style={{ marginBottom: "38px" }}>
+                      Prepare a travel kit for John to use on his trip
+                    </h5>
+                    <img
+                      src={travelPillow}
+                      alt="Project Seven"
+                      style={johnImgStyle}
+                    />
+                  </div>
+                </div>
+                <div
+                  className="project-card"
+                  style={johnAnswer}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.transform = "scale(1.05)")
+                  }
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.transform = "scale(1)")
+                  }
+                >
+                  <div
+                    className="project-details"
+                    style={projectDetailsTextStyle}
+                  >
+                    <h3
+                      style={{
+                        fontSize: "25px",
+                        marginBottom: "26px",
+                        marginTop: "10px",
+                      }}
+                    >
+                      Warm Welcome:
+                    </h3>
+                    <h5 style={{ marginBottom: "21px" }}>
+                      Plan a warm welcome for John when he arrives to his
+                      destination
+                    </h5>
+                    <img src={sweet} alt="Project Seven" style={johnImgStyle} />
+                  </div>
+                </div>
+                <div
+                  className="project-card"
+                  style={johnAnswer}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.transform = "scale(1.05)")
+                  }
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.transform = "scale(1)")
+                  }
+                >
+                  <div
+                    className="project-details"
+                    style={projectDetailsTextStyle}
+                  >
+                    <h2
+                      style={{
+                        fontSize: "25px",
+                        marginBottom: "26px",
+                        marginTop: "10px",
+                      }}
+                    >
+                      vacation Album:
+                    </h2>
+                    <h5 style={{ marginBottom: "21px" }}>
+                      Help John putting together his vacation album when he
+                      returns
+                    </h5>
+                    <img src={album} alt="Project Seven" style={johnImgStyle} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Modal>
+        )}
     </>
   );
 };

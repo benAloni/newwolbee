@@ -263,7 +263,6 @@ export default function ShowAllNotifications({ displayedNotifications, getNotifi
           <div
             key={notification._id}
             onClick={() => getNotificationId(notification._id)}
-
             style={{
               ...notificationStyle(notification),
               backgroundColor: notification.dismissed ? "#f2f2f2" : "white",
