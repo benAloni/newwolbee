@@ -1,7 +1,6 @@
 import { client } from "../axiosClient/axiosClientApi";
 
 export const fetchNotifications = async () => {
-
   try {
     const response = await client.get("/getAllNotifications");
     if (response.status === 200) {
@@ -21,5 +20,17 @@ export const fetchEmployeesNotifications = async () => {
     }
   } catch (error) {
     console.log("Error fetching employees notifications :", error);
+  }
+};
+export const updateEmployeeNotification = async (updatedData) => { 
+  try {
+    const response = await client.put("updateEmployeeNotification", {
+      updatedData,
+    });
+    if (response.status === 200) {
+      return response;
+    }
+  } catch (error) {
+    console.log("Error updating employee notification :", error);
   }
 };

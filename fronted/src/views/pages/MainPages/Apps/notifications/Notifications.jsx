@@ -72,7 +72,7 @@ const Notifications = () => {
     const eventNotifications = data.flatMap((event) => {
       const notifications = [];
       // Birthday Notification
-      if (event.eventDetails?.type === "birthday") {
+      if (event.eventDetails?.type === "birthday") {        
         notifications.push({
           _id: event._id,
           id: event.eventDetails.employeeId,
@@ -80,8 +80,9 @@ const Notifications = () => {
           message: event.title,
           link: "/events",
           read: false,
-          viewed: false,
-          dismissed: false,
+          notificationDueDate: event.notificationDueDate,
+          hasBeenHandled: event.hasBeenHandled,
+          hasBeenDismissed: event.hasBeenDismissed,
           image: event.avatar,
           startDay: event.notificationCreatedAt,
           date: event.eventDetails.dateOfTheEvent,
@@ -99,8 +100,9 @@ const Notifications = () => {
           message: event.title,
           link: "/events",
           read: false,
-          viewed: false,
-          dismissed: false,
+          notificationDueDate: event.notificationDueDate,
+          hasBeenHandled: event.hasBeenHandled,
+          hasBeenDismissed: event.hasBeenDismissed,
           image: event.avatar,
           startDay: vacationStartDate,
           date: event.eventDetails.dateOfTheEvent,

@@ -55,7 +55,31 @@ export const getEmployeesNotifications = async (req, res) => {
     res.status(500).json({ message: "An error occurred while fetching employees notifications data." });
   }
 };
-
+export const updateEmployeeNotification = async (req, res) => { 
+  const {updatedData} = req.body  
+  try {
+    const updatedEmployeeNotification = await EmployeeNotificationsModel.findByIdAndUpdate(
+      updatedData.id,
+      {       
+          hasBeenDismissed: updatedData.hasBeenDismissed,
+          hasBeenHandled: updatedData.hasBeenHandled,
+          notificationDueDate: updatedData.notificationDueDate       
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    )
+    if (!updatedEmployeeNotification) {
+      console.log("Notification not found");
+      return res.status(404).send("Notification not found");
+    }
+    res.status(200).json(updatedEmployeeNotification);
+  } catch (error) {
+    console.error("Error updating notification:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
 export const addNotification = async (req, res) => {
   const { notificationsData } = req.body;
   const { user } = req;

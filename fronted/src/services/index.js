@@ -8,7 +8,7 @@ import {
 } from "./api/employees";
 import { fetchUserProfilePic, fetchEmployeesProfilePics } from "./api/profile";
 import { fetchEvents, addEvent } from "./api/calendarEvents";
-import { fetchNotifications, fetchEmployeesNotifications } from "./api/notifications";
+import { fetchNotifications, fetchEmployeesNotifications, updateEmployeeNotification } from "./api/notifications";
 import {
   fetchCompanyEvents,
   addNewCompanyEvent,
@@ -34,4 +34,5 @@ export {
   deleteCompanyEvent,
   fetchHolidaysDetailsOptions,
   fetchEmployeesNotifications,
+  updateEmployeeNotification,
 };

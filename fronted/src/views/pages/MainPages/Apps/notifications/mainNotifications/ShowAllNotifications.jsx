@@ -2,14 +2,19 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import snoozeIcon from "../../../../../../imgs/snoozeIcon.png";
 import dismissIcon from "../../../../../../imgs/dismissIcon.png";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { updateEmployeeNotification } from "../../../../../../services/api/notifications";
 
-
-export default function ShowAllNotifications({ displayedNotifications, getNotificationId, notifications }) {
+export default function ShowAllNotifications({
+  displayedNotifications,
+  getNotificationId,
+  notifications,
+}) {
   const navigate = useNavigate();
-  const [notification, setNotification] = useState(null)
+  const [notification, setNotification] = useState(null);
   const [postponedNotifications, setPostponedNotifications] = useState([]);
   const [archivedNotifications, setArchivedNotifications] = useState([]);
-  
+
   const [modalContent, setModalContent] = useState(null);
   const [selectedNotifications, setSelectedNotifications] = useState([]);
   const [isNotificationVisible, setNotificationVisible] = useState(false);
@@ -27,6 +32,7 @@ export default function ShowAllNotifications({ displayedNotifications, getNotifi
 
   const [isPostponeBtnClicked, setIsPostponeBtnClicked] = useState(false);
   const [selectedDateTime, setSelectedDateTime] = useState("");
+  const queryClient = useQueryClient();
 
   const markAsViewed = (id, link) => {
     setNotification((prev) =>
@@ -45,7 +51,6 @@ export default function ShowAllNotifications({ displayedNotifications, getNotifi
     right: "70px",
     paddingLeft: "20px",
     color: "black",
-
   });
 
   const tooltipStyle = {
@@ -151,22 +156,30 @@ export default function ShowAllNotifications({ displayedNotifications, getNotifi
   };
 
   const deleteNotification = (id) => {
-    const notification = notifications?.find((n) => n.id === id);
+    const notification = { ...notifications.find((n) => n._id === id) };    
     if (notification) {
-      // Add the dismissed notification to both archivedNotifications and notifications
-      setArchivedNotifications((prev) => [
-        ...prev,
-        { ...notification, viewed: true },
-      ]);
-      setNotification((prev) => [
-        ...prev.map((notification) =>
-          notification.id === id
-            ? { ...notification, viewed: true, dismissed: true }
-            : notification
-        ),
-      ]);
+      notification.hasBeenDismissed = true;
+      const updatedData = {
+        id: notification._id,
+        hasBeenDismissed: notification.hasBeenDismissed,
+        hasBeenHandled: notification.hasBeenHandled,
+        notificationDueDate: notification.notificationDueDate
+      };  
+      return updatedData;
     }
   };
+  const updateNotification = async (id) => {
+    const updatedData = deleteNotification(id);
+    if (updatedData) {      
+      await updateEmployeeNotification(updatedData); 
+    }
+  };
+  const updateNotificationMutation = useMutation({
+    mutationFn: updateNotification,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["allNotificationsData"])
+    }
+  });
 
   const deleteAllNotifications = () => {
     setNotification([]);
@@ -246,7 +259,7 @@ export default function ShowAllNotifications({ displayedNotifications, getNotifi
     };
   };
 
-  const formatDate = (dateString) => {    
+  const formatDate = (dateString) => {
     const date = new Date(dateString);
     const day = date.getDate(); // Gets the day of the month
     const month = date.toLocaleString("default", { month: "short" }); // Gets the short month name (e.g., "Sep")
@@ -255,154 +268,164 @@ export default function ShowAllNotifications({ displayedNotifications, getNotifi
   };
 
   return (
-    <div style={{ display: 'flex' }}>  
+    <div style={{ display: "flex" }}>
       {/* First div containing the notifications */}
-      <div style={{ width: '100%', }}>  
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-        {displayedNotifications.map((notification) => (          
-          <div
-            key={notification._id}
-            onClick={() => getNotificationId(notification._id)}
-            style={{
-              ...notificationStyle(notification),
-              backgroundColor: notification.dismissed ? "#f2f2f2" : "white",
-            }}
-          >
-            <div style={priorityIndicatorStyle(notification.priority)}>
-              {notification.priority}
-            </div>
+      <div style={{ width: "100%" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+          {displayedNotifications.map((notification) => (
             <div
-              onClick={() => {
-                // your onClick logic here
+              key={notification._id}
+              style={{
+                ...notificationStyle(notification),
+                backgroundColor: notification.dismissed ? "#f2f2f2" : "white",
               }}
-              style={{ textDecoration: "none", width: "100%", cursor: "pointer" }}
             >
-              <p
-                onMouseOver={() => enterHover(notification._id)}
-                onMouseOut={exitHover}
+              <div style={priorityIndicatorStyle(notification.priority)}>
+                {notification.priority}
+              </div>
+              <div
+                 onClick={() => getNotificationId(notification._id)}
                 style={{
-                  ...messageStyle(notification._id),
-                  color: notification.read ? "dimgray" : "black",
+                  textDecoration: "none",
+                  width: "100%",
+                  cursor: "pointer",
                 }}
               >
-                {notification.message}
-              </p>
-            </div>
-            {notification.image && 
-              <img
-                src={notification.image}
-                alt="employee's image"
-                style={{ borderRadius: "16px", marginRight: "20px" }}
-                width={"35px"}
-                height={"32px"}
-              />
-            }
-            <div
-              className="notificationIcons"
-              style={{ display: "flex", gap: "20px" }}
-            >
-              {/* Snooze and dismiss icons */}
-              <div
-                style={{ position: "relative" }}
-                onMouseEnter={() =>
-                  setHoveredIcon({ ...hoveredIcon, snooze: notification._id })
-                }
-                onMouseLeave={() =>
-                  setHoveredIcon({ ...hoveredIcon, snooze: null })
-                }
-              >
-                <img
-                  src={snoozeIcon}
-                  alt="snooze-icon"
-                  style={{ cursor: "pointer" }}
-                  width={"27px"}
-                  height={"27px"}
-                  onClick={() => togglePostponeInput(notification._id)}
-                />
-                <div
+                <p
+                  onMouseOver={() => enterHover(notification._id)}
+                  onMouseOut={exitHover}
                   style={{
-                    ...tooltipStyle,
-                    ...(hoveredIcon.snooze === notification._id
-                      ? showTooltipStyle
-                      : {}),
+                    ...messageStyle(notification._id),
+                    color: notification.read ? "dimgray" : "black",
                   }}
                 >
-                  Snooze
-                </div>
+                  {notification.message}
+                </p>
               </div>
-              <div
-                style={{ position: "relative" }}
-                onMouseEnter={() =>
-                  setHoveredIcon({ ...hoveredIcon, dismiss: notification._id })
-                }
-                onMouseLeave={() =>
-                  setHoveredIcon({ ...hoveredIcon, dismiss: null })
-                }
-              >
+              {notification.image && (
                 <img
-                  src={dismissIcon}
-                  alt="dismiss-icon"
-                  style={{ cursor: "pointer" }}
-                  width={"20px"}
-                  height={"20px"}
-                  onClick={() => deleteNotification(notification._id)}
+                  src={notification.image}
+                  alt="employee's image"
+                  style={{ borderRadius: "16px", marginRight: "20px" }}
+                  width={"35px"}
+                  height={"32px"}
                 />
+              )}
+              <div
+                className="notificationIcons"
+                style={{ display: "flex", gap: "20px" }}
+              >
+                {/* Snooze and dismiss icons */}
                 <div
-                  style={{
-                    ...tooltipStyle,
-                    ...(hoveredIcon.dismiss === notification._id
-                      ? showTooltipStyle
-                      : {}),
-                  }}
+                  style={{ position: "relative" }}
+                  onMouseEnter={() =>
+                    setHoveredIcon({ ...hoveredIcon, snooze: notification._id })
+                  }
+                  onMouseLeave={() =>
+                    setHoveredIcon({ ...hoveredIcon, snooze: null })
+                  }
                 >
-                  Dismiss
-                </div>
-              </div>
-            </div>
-            {/* Postpone window */}
-            {isPostponeBtnClicked === notification._id && (
-              <div style={postponeWindowStyle}>
-                <button
-                  style={closeButtonStyle}
-                  onClick={() => setIsPostponeBtnClicked(false)}
-                >
-                  X
-                </button>
-                <input
-                  type="datetime-local"
-                  id={`datetime-${notification._id}`}
-                  style={{
-                    padding: "5px",
-                    borderRadius: "5px",
-                    marginTop: "20px",
-                  }}
-                  value={selectedDateTime}
-                  onChange={(e) => setSelectedDateTime(e.target.value)}
-                />
-                {selectedDateTime && (
-                  <button
+                  <img
+                    src={snoozeIcon}
+                    alt="snooze-icon"
+                    style={{ cursor: "pointer" }}
+                    width={"27px"}
+                    height={"27px"}
+                    onClick={() => togglePostponeInput(notification._id)}
+                  />
+                  <div
                     style={{
-                      backgroundColor: "#FFC502",
-                      border: "none",
-                      borderRadius: "5px",
-                      height: "30px",
+                      ...tooltipStyle,
+                      ...(hoveredIcon.snooze === notification._id
+                        ? showTooltipStyle
+                        : {}),
                     }}
-                    onClick={() =>
-                      postponeNotification(notification._id, selectedDateTime)
-                    }
                   >
-                    Confirm
-                  </button>
-                )}
+                    Snooze
+                  </div>
+                </div>
+                <div
+                  style={{ position: "relative" }}
+                  onMouseEnter={() =>
+                    setHoveredIcon({
+                      ...hoveredIcon,
+                      dismiss: notification._id,
+                    })
+                  }
+                  onMouseLeave={() =>
+                    setHoveredIcon({ ...hoveredIcon, dismiss: null })
+                  }
+                >
+                  <div
+                    onClick={() => {
+                      updateNotification(notification._id);
+                      updateNotificationMutation.mutate();
+                    }}
+                  >
+                    <img
+                      src={dismissIcon}
+                      alt="dismiss-icon"
+                      style={{ cursor: "pointer" }}
+                      width={"20px"}
+                      height={"20px"}
+                    />
+                    <div
+                      style={{
+                        ...tooltipStyle,
+                        ...(hoveredIcon.dismiss === notification._id
+                          ? showTooltipStyle
+                          : {}),
+                      }}
+                    >
+                      Dismiss
+                    </div>
+                  </div>
+                </div>
               </div>
-            )}
-          </div>
-        ))}
+              {/* Postpone window */}
+              {isPostponeBtnClicked === notification._id && (
+                <div style={postponeWindowStyle}>
+                  <button
+                    style={closeButtonStyle}
+                    onClick={() => setIsPostponeBtnClicked(false)}
+                  >
+                    X
+                  </button>
+                  <input
+                    type="datetime-local"
+                    id={`datetime-${notification._id}`}
+                    style={{
+                      padding: "5px",
+                      borderRadius: "5px",
+                      marginTop: "20px",
+                    }}
+                    value={selectedDateTime}
+                    onChange={(e) => setSelectedDateTime(e.target.value)}
+                  />
+                  {selectedDateTime && (
+                    <button
+                      style={{
+                        backgroundColor: "#FFC502",
+                        border: "none",
+                        borderRadius: "5px",
+                        height: "30px",
+                      }}
+                      onClick={() =>
+                        postponeNotification(notification._id, selectedDateTime)
+                      }
+                    >
+                      Confirm
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
+          ))}
         </div>
       </div>
-      
+
       {/* Second div containing the date and month */}
-      <div style={{ flex: 1}}>  
+      <div style={{ flex: 1 }}>
         {displayedNotifications.map((notification, index) => {
           const { day, month } = formatDate(notification.startDay);
           return (
@@ -411,10 +434,10 @@ export default function ShowAllNotifications({ displayedNotifications, getNotifi
               style={{
                 position: "relative",
                 display: "flex",
-                right:'300px',
-                flexDirection: "column",  // Stack day and month vertically
-                alignItems: "center",      // Center the content
-                justifyContent: "center",  // Center the content vertically
+                right: "300px",
+                flexDirection: "column", // Stack day and month vertically
+                alignItems: "center", // Center the content
+                justifyContent: "center", // Center the content vertically
                 marginBottom: "23px",
                 transition: "transform 0.2s ease-in-out",
                 textAlign: "center",
@@ -428,4 +451,4 @@ export default function ShowAllNotifications({ displayedNotifications, getNotifi
       </div>
     </div>
   );
-}  
+}

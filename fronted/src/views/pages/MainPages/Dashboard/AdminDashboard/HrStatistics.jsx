@@ -84,12 +84,12 @@ export default function HrStatistics() {
   };
 
 
-  const { data: employees, isLoading } = useQuery({
+  const { data: employees } = useQuery({
     queryKey: ["employees"],
     queryFn: getEmployees,
   });
 
-  const { data, isError } = useQuery({
+  const { data } = useQuery({
     queryKey: ["user-profile-pic"],
     queryFn: () => fetchUserProfilePic(user),
     enabled: !!user,
@@ -102,13 +102,13 @@ export default function HrStatistics() {
   
   useEffect(() => {
     if (data) {
-      console.log("Data received:", data); // זה הקישור לתמונה?
+      // console.log("Data received:", data); // זה הקישור לתמונה?
       setUserProfileImage(data);
     }
   }, [data]);
   
   useEffect(() => {
-    console.log("Updated userProfileImage:", userProfileImage); // האם הקישור מתעדכן פה?
+    // console.log("Updated userProfileImage:", userProfileImage); // האם הקישור מתעדכן פה?
   }, [userProfileImage]);
   ;
 
