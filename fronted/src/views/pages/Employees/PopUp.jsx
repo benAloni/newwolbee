@@ -6,7 +6,7 @@ import Select from "react-select";
 import women from "../../../imgs/WomanEvent.png";
 import family from "../../../imgs/FamilyEvent.png";
 import freinds from "../../../imgs/FreindsEvent.png";
-import giftoff from "../../../imgs/giftoff.png";
+import arrows from "../../../imgs/arrows.png";
 import workhome from "../../../imgs/workhome.png";
 import additionalTime from "../../../imgs/additionalTime.png";
 import finance from "../../../imgs/finance.png";
@@ -457,7 +457,7 @@ export default function PopUp() {
                   .map((_, index) => (
                     <div key={index} className="square-button">
                       <img
-                        src={giftoff}
+                        src={arrows}
                         alt="Icon"
                         className="square-button-image"
                       />

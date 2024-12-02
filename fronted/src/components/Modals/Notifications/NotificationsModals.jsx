@@ -2,18 +2,18 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Modal } from "antd";
 import JohnStatistics from "../../../views/pages/MainPages/Apps/contacts/JohnStatistics";
-import publicR from "../../../imgs/publicR.png"
-import family from "../../../imgs/family.png"
-import showAppreciation from "../../../imgs/showAppreciation.png"
-import additionalTime from "../../../imgs/additionalTime.png"
-import personalTime from "../../../imgs/personalTime.png"
-import thankyou from "../../../imgs/thankyou.png"
-// import offgift from "../../../imgs/offgift.png" //add off gift in 705
-import on from "../../../imgs/on.png"
-import rescheduling from "../../../imgs/rescheduling.png"
-import employee2 from "../../../imgs/avatar_5.JPG"
-import employee3 from "../../../imgs/avatar_6.JPG"
-import tom from "../../../imgs/avatar_2.JPG"
+import publicR from "../../../imgs/publicR.png";
+import family from "../../../imgs/family.png";
+import showAppreciation from "../../../imgs/showAppreciation.png";
+import additionalTime from "../../../imgs/additionalTime.png";
+import personalTime from "../../../imgs/personalTime.png";
+import thankyou from "../../../imgs/thankyou.png";
+import arrows from "../../../imgs/arrows.png";
+import on from "../../../imgs/on.png";
+import rescheduling from "../../../imgs/rescheduling.png";
+import employee2 from "../../../imgs/avatar_5.JPG";
+import employee3 from "../../../imgs/avatar_6.JPG";
+import tom from "../../../imgs/avatar_2.JPG";
 import album from "../../../imgs/album.png";
 import sweet from "../../../imgs/sweet.png";
 import travelPillow from "../../../imgs/travelPillow.png";
@@ -43,24 +43,21 @@ const NotificationsModals = ({
   modalContent,
   closeSoccerGameModal,
 }) => {
-    console.log(employeeId);
-    
-    const {data: employee} = useQuery({
-        queryKey: ["employee", employeeId],
-        queryFn: () => fetchEmployee(employeeId),
-        // enabled:  (employeeId >= 22 && employeeId <= 88)  ||  employeeId === null,
-    })
-    console.log(employee);
-    
-    const ulStyle = {
-        margin: 0,
-        padding: 0,
-        textAlign: "center", // Center align the text
-        listStyleType: "none", // Remove bullet points
-      };
-      const listItemStyle = {
-        listStyleType: "none",
-      };
+  const { data: employee } = useQuery({
+    queryKey: ["employee", employeeId],
+    queryFn: () => fetchEmployee(employeeId),
+    // enabled:  (employeeId >= 22 && employeeId <= 88)  ||  employeeId === null,
+  });
+
+  const ulStyle = {
+    margin: 0,
+    padding: 0,
+    textAlign: "center",
+    listStyleType: "none",
+  };
+  const listItemStyle = {
+    listStyleType: "none",
+  };
   const smallProjectCardStyle1 = {
     width: "250px",
     boxSizing: "border-box",
@@ -146,7 +143,7 @@ const NotificationsModals = ({
   };
   return (
     <>
-       {/* employee work routine modal*/}
+      {/* employee work routine modal*/}
       {employeeWorkRoutineModal && (
         <Modal
           onCancel={closeEmployeeWorkRoutineModal}
@@ -243,407 +240,393 @@ const NotificationsModals = ({
           </div>
         </Modal>
       )}
-         {/* ------- John answer Yes---------- */}
-        {modalOpenYes && modalContentYes && (
-          <Modal onCancel={closeModalYes} open={modalOpenYes} footer={null}>
-            <ul style={ulStyle}>
-              <li style={listItemStyle}>
-                <h4
-                  style={{
-                    margin: "0",
-                    padding: "0",
-                    lineHeight: "1.6" /* Adjust line height for spacing */,
-                    marginBottom: "1rem" /* Add space below the heading */,
-                  }}
-                >
-                  John is currently working on a big project, and it’s crucial
-                  to show our appreciation for the extra time he's putting in.
-                  Talk to John to acknowledge his efforts and let him know that
-                  you are aware of the change. Additionally, you can consider
-                  the following actions:
-                </h4>
-                <br />
-              </li>
-            </ul>
+      {/* ------- John answer Yes---------- */}
+      {modalOpenYes && modalContentYes && (
+        <Modal onCancel={closeModalYes} open={modalOpenYes} footer={null}>
+          <ul style={ulStyle}>
+            <li style={listItemStyle}>
+              <h4
+                style={{
+                  margin: "0",
+                  padding: "0",
+                  lineHeight: "1.6" /* Adjust line height for spacing */,
+                  marginBottom: "1rem" /* Add space below the heading */,
+                }}
+              >
+                John is currently working on a big project, and it’s crucial to
+                show our appreciation for the extra time he's putting in. Talk
+                to John to acknowledge his efforts and let him know that you are
+                aware of the change. Additionally, you can consider the
+                following actions:
+              </h4>
+              <br />
+            </li>
+          </ul>
 
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "column",
+            }}
+          >
             <div
               style={{
                 display: "flex",
+                flexWrap: "wrap",
                 justifyContent: "center",
-                alignItems: "center",
-                flexDirection: "column",
               }}
             >
               <div
-                style={{
-                  display: "flex",
-                  flexWrap: "wrap",
-                  justifyContent: "center",
-                }}
+                className="project-card"
+                style={johnAnswer}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.transform = "scale(1.05)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.transform = "scale(1)")
+                }
               >
                 <div
-                  className="project-card"
-                  style={johnAnswer}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.transform = "scale(1.05)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.transform = "scale(1)")
-                  }
+                  className="project-details"
+                  style={projectDetailsTextStyle}
                 >
-                  <div
-                    className="project-details"
-                    style={projectDetailsTextStyle}
-                  >
-                    <h3 style={{ fontSize: "22px", margin: "10px 0" }}>Show Appreciation</h3>
-                    <h5>
-                      talk to John and make sure he understands that you see his
-                      work and that to appreciate it.
-                    </h5>
-                    <img
-                      src={showAppreciation}
-                      alt="Project Seven"
-                      style={johnImgStyle}
-                    />
-                  </div>
+                  <h3 style={{ fontSize: "22px", margin: "10px 0" }}>
+                    Show Appreciation
+                  </h3>
+                  <h5>
+                    talk to John and make sure he understands that you see his
+                    work and that to appreciate it.
+                  </h5>
+                  <img
+                    src={showAppreciation}
+                    alt="Project Seven"
+                    style={johnImgStyle}
+                  />
                 </div>
+              </div>
+              <div
+                className="project-card"
+                style={johnAnswer}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.transform = "scale(1.05)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.transform = "scale(1)")
+                }
+              >
                 <div
-                  className="project-card"
-                  style={johnAnswer}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.transform = "scale(1.05)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.transform = "scale(1)")
-                  }
+                  className="project-details"
+                  style={projectDetailsTextStyle}
                 >
-                  <div
-                    className="project-details"
-                    style={projectDetailsTextStyle}
-                  >
-                    <h3>Additional time:</h3>
-                    <h4 style={h3Style}>
-                      Offer John vacation leave or compensatory time off for the
-                      extra time he has worked.
-                    </h4>
-                    <img
-                      src={additionalTime}
-                      alt="Project Seven"
-                      style={johnImgStyle}
-                    />
-                  </div>
+                  <h3>Additional time:</h3>
+                  <h4 style={h3Style}>
+                    Offer John vacation leave or compensatory time off for the
+                    extra time he has worked.
+                  </h4>
+                  <img
+                    src={additionalTime}
+                    alt="Project Seven"
+                    style={johnImgStyle}
+                  />
                 </div>
+              </div>
+              <div
+                className="project-card"
+                style={johnAnswer}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.transform = "scale(1.05)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.transform = "scale(1)")
+                }
+              >
                 <div
-                  className="project-card"
-                  style={johnAnswer}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.transform = "scale(1.05)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.transform = "scale(1)")
-                  }
+                  className="project-details"
+                  style={projectDetailsTextStyle}
                 >
-                  <div
-                    className="project-details"
-                    style={projectDetailsTextStyle}
-                  >
-                    <h3>famliy :</h3>
-                    <h4 style={h3Style}>
-                      Send a small gesture to John's family to show
-                      appreciation.
-                    </h4>
-                    <img
-                      src={family}
-                      alt="Project Seven"
-                      style={johnImgStyle}
-                    />
-                  </div>
+                  <h3>famliy :</h3>
+                  <h4 style={h3Style}>
+                    Send a small gesture to John's family to show appreciation.
+                  </h4>
+                  <img src={family} alt="Project Seven" style={johnImgStyle} />
                 </div>
+              </div>
+              <div
+                className="project-card"
+                style={johnAnswer}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.transform = "scale(1.05)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.transform = "scale(1)")
+                }
+              >
                 <div
-                  className="project-card"
-                  style={johnAnswer}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.transform = "scale(1.05)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.transform = "scale(1)")
-                  }
+                  className="project-details"
+                  style={projectDetailsTextStyle}
                 >
-                  <div
-                    className="project-details"
-                    style={projectDetailsTextStyle}
-                  >
-                    <h3>personal time planning:</h3>
-                    <h4 style={h3Style}>
-                      talk to John and make sure he has enough personal personal
-                      time during to project.
-                    </h4>
-                    <img
-                      src={personalTime}
-                      alt="Project Seven"
-                      style={johnImgStyle}
-                    />
-                  </div>
+                  <h3>personal time planning:</h3>
+                  <h4 style={h3Style}>
+                    talk to John and make sure he has enough personal personal
+                    time during to project.
+                  </h4>
+                  <img
+                    src={personalTime}
+                    alt="Project Seven"
+                    style={johnImgStyle}
+                  />
                 </div>
+              </div>
+              <div
+                className="project-card"
+                style={johnAnswer}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.transform = "scale(1.05)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.transform = "scale(1)")
+                }
+              >
                 <div
-                  className="project-card"
-                  style={johnAnswer}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.transform = "scale(1.05)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.transform = "scale(1)")
-                  }
+                  className="project-details"
+                  style={projectDetailsTextStyle}
                 >
-                  <div
-                    className="project-details"
-                    style={projectDetailsTextStyle}
-                  >
-                    <h3>public recognition:</h3>
-                    <h4 style={h3Style}>
-                      acknowledge John's hard work in a team meeting or through
-                      a wide email.
-                    </h4>
-                    <img
-                      src={publicR}
-                      alt="Project Seven"
-                      style={johnImgStyle}
-                    />
-                  </div>
+                  <h3>public recognition:</h3>
+                  <h4 style={h3Style}>
+                    acknowledge John's hard work in a team meeting or through a
+                    wide email.
+                  </h4>
+                  <img src={publicR} alt="Project Seven" style={johnImgStyle} />
                 </div>
+              </div>
+              <div
+                className="project-card"
+                style={johnAnswer}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.transform = "scale(1.05)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.transform = "scale(1)")
+                }
+              >
                 <div
-                  className="project-card"
-                  style={johnAnswer}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.transform = "scale(1.05)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.transform = "scale(1)")
-                  }
+                  className="project-details"
+                  style={projectDetailsTextStyle}
                 >
-                  <div
-                    className="project-details"
-                    style={projectDetailsTextStyle}
-                  >
-                    <h2>bonus or gift:</h2>
-                    <h3 style={h3Style}>
-                      provide a financial bonus or a thoughtful gift card as a
-                      sign of appreciation.
-                    </h3>
-                    <img
-                      src={thankyou}
-                      alt="Project Seven"
-                      style={johnImgStyle}
-                    />
-                  </div>
+                  <h2>bonus or gift:</h2>
+                  <h3 style={h3Style}>
+                    provide a financial bonus or a thoughtful gift card as a
+                    sign of appreciation.
+                  </h3>
+                  <img
+                    src={thankyou}
+                    alt="Project Seven"
+                    style={johnImgStyle}
+                  />
                 </div>
               </div>
             </div>
-          </Modal>
-        )}
-        {/* --------John answer no ---------- */}
-        {modalOpenNo && modalContentNo && (
-          <Modal onCancel={closeModalNo} open={modalOpenNo} footer={null}>
-            <ul style={ulStyle}>
-              <li style={listItemStyle}>
-                <h4
-                  style={{
-                    margin: "0",
-                    padding: "0",
-                    lineHeight: "1.6" /* Adjust line height for spacing */,
-                    marginBottom: "1rem" /* Add space below the heading */,
-                  }}
-                >
-                  {" "}
-                  First, it's important to understand why John is working so
-                  many hours and whether it's due to his regular assignments, a
-                  new temporary project or other personal issue. and it's
-                  crucial to show our appreciation for the extra time he's
-                  putting in. Talk to John to acknowledge his efforts and let
-                  him know that you are aware of the change. Additionally, you
-                  can consider the following actions
-                </h4>
-                <br />
-              </li>
-            </ul>
+          </div>
+        </Modal>
+      )}
+      {/* --------John answer no ---------- */}
+      {modalOpenNo && modalContentNo && (
+        <Modal onCancel={closeModalNo} open={modalOpenNo} footer={null}>
+          <ul style={ulStyle}>
+            <li style={listItemStyle}>
+              <h4
+                style={{
+                  margin: "0",
+                  padding: "0",
+                  lineHeight: "1.6" /* Adjust line height for spacing */,
+                  marginBottom: "1rem" /* Add space below the heading */,
+                }}
+              >
+                {" "}
+                First, it's important to understand why John is working so many
+                hours and whether it's due to his regular assignments, a new
+                temporary project or other personal issue. and it's crucial to
+                show our appreciation for the extra time he's putting in. Talk
+                to John to acknowledge his efforts and let him know that you are
+                aware of the change. Additionally, you can consider the
+                following actions
+              </h4>
+              <br />
+            </li>
+          </ul>
 
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "column",
+            }}
+          >
             <div
               style={{
                 display: "flex",
+                flexWrap: "wrap",
                 justifyContent: "center",
-                alignItems: "center",
-                flexDirection: "column",
               }}
             >
               <div
-                style={{
-                  display: "flex",
-                  flexWrap: "wrap",
-                  justifyContent: "center",
-                }}
+                className="project-card"
+                style={johnAnswer}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.transform = "scale(1.05)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.transform = "scale(1)")
+                }
               >
                 <div
-                  className="project-card"
-                  style={johnAnswer}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.transform = "scale(1.05)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.transform = "scale(1)")
-                  }
+                  className="project-details"
+                  style={projectDetailsTextStyle}
                 >
-                  <div
-                    className="project-details"
-                    style={projectDetailsTextStyle}
-                  >
-                    <h3 style={{ fontSize: "22px", margin: "10px 0" }}>Show Appreciation</h3>
-                    <h5>
-                      talk to John and make sure he understands that you see his
-                      work and that to appreciate it.
-                    </h5>
-                    <img
-                      src={showAppreciation}
-                      alt="Project Seven"
-                      style={johnImgStyle}
-                    />
-                  </div>
+                  <h3 style={{ fontSize: "22px", margin: "10px 0" }}>
+                    Show Appreciation
+                  </h3>
+                  <h5>
+                    talk to John and make sure he understands that you see his
+                    work and that to appreciate it.
+                  </h5>
+                  <img
+                    src={showAppreciation}
+                    alt="Project Seven"
+                    style={johnImgStyle}
+                  />
                 </div>
+              </div>
+              <div
+                className="project-card"
+                style={johnAnswer}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.transform = "scale(1.05)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.transform = "scale(1)")
+                }
+              >
                 <div
-                  className="project-card"
-                  style={johnAnswer}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.transform = "scale(1.05)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.transform = "scale(1)")
-                  }
+                  className="project-details"
+                  style={projectDetailsTextStyle}
                 >
-                  <div
-                    className="project-details"
-                    style={projectDetailsTextStyle}
-                  >
-                    <h3>Additional time:</h3>
-                    <h4 style={h3Style}>
-                      Offer John vacation leave or compensatory time off for the
-                      extra time he has worked.
-                    </h4>
-                    <img
-                      src={additionalTime}
-                      alt="Project Seven"
-                      style={johnImgStyle}
-                    />
-                  </div>
+                  <h3>Additional time:</h3>
+                  <h4 style={h3Style}>
+                    Offer John vacation leave or compensatory time off for the
+                    extra time he has worked.
+                  </h4>
+                  <img
+                    src={additionalTime}
+                    alt="Project Seven"
+                    style={johnImgStyle}
+                  />
                 </div>
+              </div>
+              <div
+                className="project-card"
+                style={johnAnswer}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.transform = "scale(1.05)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.transform = "scale(1)")
+                }
+              >
                 <div
-                  className="project-card"
-                  style={johnAnswer}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.transform = "scale(1.05)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.transform = "scale(1)")
-                  }
+                  className="project-details"
+                  style={projectDetailsTextStyle}
                 >
-                  <div
-                    className="project-details"
-                    style={projectDetailsTextStyle}
-                  >
-                    <h3>famliy :</h3>
-                    <h4 style={h3Style}>
-                      Send a small gesture to John's family to show
-                      appreciation.
-                    </h4>
-                    <img
-                      src={family}
-                      alt="Project Seven"
-                      style={johnImgStyle}
-                    />
-                  </div>
+                  <h3>famliy :</h3>
+                  <h4 style={h3Style}>
+                    Send a small gesture to John's family to show appreciation.
+                  </h4>
+                  <img src={family} alt="Project Seven" style={johnImgStyle} />
                 </div>
+              </div>
+              <div
+                className="project-card"
+                style={johnAnswer}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.transform = "scale(1.05)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.transform = "scale(1)")
+                }
+              >
                 <div
-                  className="project-card"
-                  style={johnAnswer}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.transform = "scale(1.05)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.transform = "scale(1)")
-                  }
+                  className="project-details"
+                  style={projectDetailsTextStyle}
                 >
-                  <div
-                    className="project-details"
-                    style={projectDetailsTextStyle}
-                  >
-                    <h3>personal time planning:</h3>
-                    <h4 style={h3Style}>
-                      talk to John and make sure he has enough personal personal
-                      time during to project.
-                    </h4>
-                    <img
-                      src={personalTime}
-                      alt="Project Seven"
-                      style={johnImgStyle}
-                    />
-                  </div>
+                  <h3>personal time planning:</h3>
+                  <h4 style={h3Style}>
+                    talk to John and make sure he has enough personal personal
+                    time during to project.
+                  </h4>
+                  <img
+                    src={personalTime}
+                    alt="Project Seven"
+                    style={johnImgStyle}
+                  />
                 </div>
+              </div>
+              <div
+                className="project-card"
+                style={johnAnswer}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.transform = "scale(1.05)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.transform = "scale(1)")
+                }
+              >
                 <div
-                  className="project-card"
-                  style={johnAnswer}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.transform = "scale(1.05)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.transform = "scale(1)")
-                  }
+                  className="project-details"
+                  style={projectDetailsTextStyle}
                 >
-                  <div
-                    className="project-details"
-                    style={projectDetailsTextStyle}
-                  >
-                    <h3>public recognition:</h3>
-                    <h4 style={h3Style}>
-                      acknowledge John's hard work in a team meeting or through
-                      a wide email.
-                    </h4>
-                    <img
-                      src={publicR}
-                      alt="Project Seven"
-                      style={johnImgStyle}
-                    />
-                  </div>
+                  <h3>public recognition:</h3>
+                  <h4 style={h3Style}>
+                    acknowledge John's hard work in a team meeting or through a
+                    wide email.
+                  </h4>
+                  <img src={publicR} alt="Project Seven" style={johnImgStyle} />
                 </div>
+              </div>
+              <div
+                className="project-card"
+                style={johnAnswer}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.transform = "scale(1.05)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.transform = "scale(1)")
+                }
+              >
                 <div
-                  className="project-card"
-                  style={johnAnswer}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.transform = "scale(1.05)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.transform = "scale(1)")
-                  }
+                  className="project-details"
+                  style={projectDetailsTextStyle}
                 >
-                  <div
-                    className="project-details"
-                    style={projectDetailsTextStyle}
-                  >
-                    <h2>bonus or gift:</h2>
-                    <h3 style={h3Style}>
-                      provide a financial bonus or a thoughtful gift card as a
-                      sign of appreciation.
-                    </h3>
-                    <img
-                      src={thankyou}
-                      alt="Project Seven"
-                      style={johnImgStyle}
-                    />
-                  </div>
+                  <h2>bonus or gift:</h2>
+                  <h3 style={h3Style}>
+                    provide a financial bonus or a thoughtful gift card as a
+                    sign of appreciation.
+                  </h3>
+                  <img
+                    src={thankyou}
+                    alt="Project Seven"
+                    style={johnImgStyle}
+                  />
                 </div>
               </div>
             </div>
-          </Modal>
-        )}
-          {/*home meeting modal */}
-         {homeMeetingModal && modalContent && (
+          </div>
+        </Modal>
+      )}
+      {/*home meeting modal */}
+      {homeMeetingModal && modalContent && (
         <Modal onCancel={closeModal} open={homeMeetingModal} footer={null}>
           <ul style={ulStyle}>
             <li style={listItemStyle}>
@@ -744,7 +727,7 @@ const NotificationsModals = ({
             >
               <Link to="/project/7">
                 <div className="image-container" style={imageContainerStyle}>
-                  <img  alt="Project Seven" style={imgStyle} />
+                  <img src={arrows} alt="Project Seven" style={imgStyle} />
                 </div>
                 <div
                   className="project-details"
@@ -760,9 +743,13 @@ const NotificationsModals = ({
           </div>
         </Modal>
       )}
-        {/* Soccer game modal}  */}
-       {soccerGameModal && (
-        <Modal onCancel={closeSoccerGameModal} open={soccerGameModal} footer={null}>
+      {/* Soccer game modal}  */}
+      {soccerGameModal && (
+        <Modal
+          onCancel={closeSoccerGameModal}
+          open={soccerGameModal}
+          footer={null}
+        >
           <ul style={ulStyle}>
             <li style={listItemStyle}>
               <h2 style={{ width: "100%" }}>Maccabi Tel-Aviv soccer game </h2>
@@ -935,243 +922,237 @@ const NotificationsModals = ({
           </div>
         </Modal>
       )}
-       {/* {vacation modal}  */}
+      {/* {vacation modal}  */}
       {vacationModal && (
-          <Modal onCancel={closeVacationModal} open={vacationModal} footer={null}>
-            <ul style={ulStyle}>
-              <li style={listItemStyle}>
-                <h4
-                  style={{
-                    margin: "0",
-                    padding: "0",
-                    lineHeight: "1.6" ,
-                    marginBottom: "1rem",
-                  }}
-                >
-                  <h3>{employee?.fullName}'s Trip: Recharge and Refresh!</h3>
-                  John will be heading to Rome for an 8-day vacation in two
-                  days. Let's ensure he relaxes and enjoys his time off by
-                  reassuring him that everything at work is in good hands. Here
-                  are some ways to help him feel confident leaving work behind{" "}
-                  <br />
-                  <br />
-                  vacations are vital for employeesNotifications, offering a
-                  break to recharge and prevent burnout. They boost morale,
-                  increase productivity, and bring a fresh perspective.
-                  Encouraging time off supports work-life balance and leads to a
-                  more engaged and motivated team
-                </h4>
+        <Modal onCancel={closeVacationModal} open={vacationModal} footer={null}>
+          <ul style={ulStyle}>
+            <li style={listItemStyle}>
+              <h4
+                style={{
+                  margin: "0",
+                  padding: "0",
+                  lineHeight: "1.6",
+                  marginBottom: "1rem",
+                }}
+              >
+                <h3>{employee?.fullName}'s Trip: Recharge and Refresh!</h3>
+                John will be heading to Rome for an 8-day vacation in two days.
+                Let's ensure he relaxes and enjoys his time off by reassuring
+                him that everything at work is in good hands. Here are some ways
+                to help him feel confident leaving work behind <br />
                 <br />
-              </li>
-            </ul>
+                vacations are vital for employeesNotifications, offering a break
+                to recharge and prevent burnout. They boost morale, increase
+                productivity, and bring a fresh perspective. Encouraging time
+                off supports work-life balance and leads to a more engaged and
+                motivated team
+              </h4>
+              <br />
+            </li>
+          </ul>
 
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "column",
+            }}
+          >
             <div
               style={{
                 display: "flex",
+                flexWrap: "wrap",
                 justifyContent: "center",
-                alignItems: "center",
-                flexDirection: "column",
               }}
             >
               <div
-                style={{
-                  display: "flex",
-                  flexWrap: "wrap",
-                  justifyContent: "center",
-                }}
+                className="project-card"
+                style={johnAnswer}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.transform = "scale(1.05)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.transform = "scale(1)")
+                }
               >
                 <div
-                  className="project-card"
-                  style={johnAnswer}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.transform = "scale(1.05)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.transform = "scale(1)")
-                  }
+                  className="project-details"
+                  style={projectDetailsTextStyle}
                 >
-                  <div
-                    className="project-details"
-                    style={projectDetailsTextStyle}
-                  >
-                    <h4 style={{ fontSize: "24px", marginBottom: "10px" }}>
-                      Have a Great vacation:
-                    </h4>
-                    <h5>
-                      Send John a quick message wishing him a fantastic vacation
-                    </h5>
-                    <br />
-                    <img
-                      src={invitationCard}
-                      alt="Project Seven"
-                      style={johnImgStyle}
-                    />
-                  </div>
+                  <h4 style={{ fontSize: "24px", marginBottom: "10px" }}>
+                    Have a Great vacation:
+                  </h4>
+                  <h5>
+                    Send John a quick message wishing him a fantastic vacation
+                  </h5>
+                  <br />
+                  <img
+                    src={invitationCard}
+                    alt="Project Seven"
+                    style={johnImgStyle}
+                  />
                 </div>
+              </div>
+              <div
+                className="project-card"
+                style={johnAnswer}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.transform = "scale(1.05)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.transform = "scale(1)")
+                }
+              >
                 <div
-                  className="project-card"
-                  style={johnAnswer}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.transform = "scale(1.05)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.transform = "scale(1)")
-                  }
+                  className="project-details"
+                  style={projectDetailsTextStyle}
                 >
-                  <div
-                    className="project-details"
-                    style={projectDetailsTextStyle}
+                  <h3
+                    style={{
+                      fontSize: "25px",
+                      marginBottom: "28px",
+                      marginTop: "10px",
+                    }}
                   >
-                    <h3
-                      style={{
-                        fontSize: "25px",
-                        marginBottom: "28px",
-                        marginTop: "10px",
-                      }}
-                    >
-                      Airport Treats:
-                    </h3>
-                    <h5 style={{ marginBottom: "18px" }}>
-                      Send John a voucher to use while he's waiting for his
-                      flight
-                    </h5>
-                    <img
-                      src={coffeeCup}
-                      alt="Project Seven"
-                      style={johnImgStyle}
-                    />
-                  </div>
+                    Airport Treats:
+                  </h3>
+                  <h5 style={{ marginBottom: "18px" }}>
+                    Send John a voucher to use while he's waiting for his flight
+                  </h5>
+                  <img
+                    src={coffeeCup}
+                    alt="Project Seven"
+                    style={johnImgStyle}
+                  />
                 </div>
+              </div>
+              <div
+                className="project-card"
+                style={johnAnswer}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.transform = "scale(1.05)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.transform = "scale(1)")
+                }
+              >
                 <div
-                  className="project-card"
-                  style={johnAnswer}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.transform = "scale(1.05)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.transform = "scale(1)")
-                  }
+                  className="project-details"
+                  style={projectDetailsTextStyle}
                 >
-                  <div
-                    className="project-details"
-                    style={projectDetailsTextStyle}
+                  <h3
+                    style={{
+                      fontSize: "25px",
+                      marginBottom: "26px",
+                      marginTop: "10px",
+                    }}
                   >
-                    <h3
-                      style={{
-                        fontSize: "25px",
-                        marginBottom: "26px",
-                        marginTop: "10px",
-                      }}
-                    >
-                      Top Trip Tips:
-                    </h3>
-                    <h5 style={{ marginBottom: "21px" }}>
-                      Give John some fantastic recommendations for his trip
-                    </h5>
-                    <img
-                      src={rating}
-                      alt="Project Seven"
-                      style={johnImgStyle}
-                    />
-                  </div>
+                    Top Trip Tips:
+                  </h3>
+                  <h5 style={{ marginBottom: "21px" }}>
+                    Give John some fantastic recommendations for his trip
+                  </h5>
+                  <img src={rating} alt="Project Seven" style={johnImgStyle} />
                 </div>
+              </div>
+              <div
+                className="project-card"
+                style={johnAnswer}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.transform = "scale(1.05)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.transform = "scale(1)")
+                }
+              >
                 <div
-                  className="project-card"
-                  style={johnAnswer}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.transform = "scale(1.05)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.transform = "scale(1)")
-                  }
+                  className="project-details"
+                  style={projectDetailsTextStyle}
                 >
-                  <div
-                    className="project-details"
-                    style={projectDetailsTextStyle}
+                  <h3
+                    style={{
+                      fontSize: "25px",
+                      marginBottom: "26px",
+                      marginTop: "10px",
+                    }}
                   >
-                    <h3
-                      style={{
-                        fontSize: "25px",
-                        marginBottom: "26px",
-                        marginTop: "10px",
-                      }}
-                    >
-                      Travel Kit:
-                    </h3>
-                    <h5 style={{ marginBottom: "38px" }}>
-                      Prepare a travel kit for John to use on his trip
-                    </h5>
-                    <img
-                      src={travelPillow}
-                      alt="Project Seven"
-                      style={johnImgStyle}
-                    />
-                  </div>
+                    Travel Kit:
+                  </h3>
+                  <h5 style={{ marginBottom: "38px" }}>
+                    Prepare a travel kit for John to use on his trip
+                  </h5>
+                  <img
+                    src={travelPillow}
+                    alt="Project Seven"
+                    style={johnImgStyle}
+                  />
                 </div>
+              </div>
+              <div
+                className="project-card"
+                style={johnAnswer}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.transform = "scale(1.05)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.transform = "scale(1)")
+                }
+              >
                 <div
-                  className="project-card"
-                  style={johnAnswer}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.transform = "scale(1.05)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.transform = "scale(1)")
-                  }
+                  className="project-details"
+                  style={projectDetailsTextStyle}
                 >
-                  <div
-                    className="project-details"
-                    style={projectDetailsTextStyle}
+                  <h3
+                    style={{
+                      fontSize: "25px",
+                      marginBottom: "26px",
+                      marginTop: "10px",
+                    }}
                   >
-                    <h3
-                      style={{
-                        fontSize: "25px",
-                        marginBottom: "26px",
-                        marginTop: "10px",
-                      }}
-                    >
-                      Warm Welcome:
-                    </h3>
-                    <h5 style={{ marginBottom: "21px" }}>
-                      Plan a warm welcome for John when he arrives to his
-                      destination
-                    </h5>
-                    <img src={sweet} alt="Project Seven" style={johnImgStyle} />
-                  </div>
+                    Warm Welcome:
+                  </h3>
+                  <h5 style={{ marginBottom: "21px" }}>
+                    Plan a warm welcome for John when he arrives to his
+                    destination
+                  </h5>
+                  <img src={sweet} alt="Project Seven" style={johnImgStyle} />
                 </div>
+              </div>
+              <div
+                className="project-card"
+                style={johnAnswer}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.transform = "scale(1.05)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.transform = "scale(1)")
+                }
+              >
                 <div
-                  className="project-card"
-                  style={johnAnswer}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.transform = "scale(1.05)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.transform = "scale(1)")
-                  }
+                  className="project-details"
+                  style={projectDetailsTextStyle}
                 >
-                  <div
-                    className="project-details"
-                    style={projectDetailsTextStyle}
+                  <h2
+                    style={{
+                      fontSize: "25px",
+                      marginBottom: "26px",
+                      marginTop: "10px",
+                    }}
                   >
-                    <h2
-                      style={{
-                        fontSize: "25px",
-                        marginBottom: "26px",
-                        marginTop: "10px",
-                      }}
-                    >
-                      vacation Album:
-                    </h2>
-                    <h5 style={{ marginBottom: "21px" }}>
-                      Help John putting together his vacation album when he
-                      returns
-                    </h5>
-                    <img src={album} alt="Project Seven" style={johnImgStyle} />
-                  </div>
+                    vacation Album:
+                  </h2>
+                  <h5 style={{ marginBottom: "21px" }}>
+                    Help John putting together his vacation album when he
+                    returns
+                  </h5>
+                  <img src={album} alt="Project Seven" style={johnImgStyle} />
                 </div>
               </div>
             </div>
-          </Modal>
-        )}
+          </div>
+        </Modal>
+      )}
     </>
   );
 };

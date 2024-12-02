@@ -4,7 +4,7 @@ import Sharing from '../../../imgs/Sharing.png';
 import rings from '../../../imgs/rings.png';
 import sick from '../../../imgs/sick.png';
 import baby from '../../../imgs/baby.png';
-import giftoff from '../../../imgs/giftoff.png';
+import arrows from '../../../imgs/arrows.png';
 import reminder from '../../../imgs/reminder.png';
 import rescheduling from '../../../imgs/rescheduling.png'
 
@@ -19,7 +19,7 @@ const BoxSelector = () => {
     { id: 3, name: 'Sick Leave', imageUrl: sick },
     { id: 4, name: 'Vacation Leave', imageUrl: vacation },
     { id: 5, name: 'Engagement', imageUrl: rings },
-    { id: 6, name: 'Work Routine Changes', imageUrl: giftoff },
+    { id: 6, name: 'Work Routine Changes', imageUrl: arrows },
     { id: 7, name: 'Important Dates and Events', imageUrl: rescheduling },
     { id: 8, name: 'Important Life Events', imageUrl: reminder },
   ];

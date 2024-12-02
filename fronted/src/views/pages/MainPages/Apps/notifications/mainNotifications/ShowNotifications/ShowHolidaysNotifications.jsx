@@ -75,7 +75,7 @@ export default function ShowHolidaysNotifications({
       onCancel={closeModal}
       footer={null}
       centered
-      bodyStyle={{
+      styles={{
         padding: "20px",
         borderRadius: "8px",
         background: "#f7f7f7",

@@ -12,6 +12,7 @@ export const getAllNotifications = async (req, res) => {
         ] 
       
     });   
+
     res.status(200).json(allNotifications);
 
   } catch (error) {

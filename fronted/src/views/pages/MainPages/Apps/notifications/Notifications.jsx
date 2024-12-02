@@ -15,6 +15,7 @@ import {
 import staticNotificationsData from "./staticNotifications";
 import { useQuery } from "@tanstack/react-query";
 import NotificationsModals from "../../../../../components/Modals/Notifications/NotificationsModals";
+import { getHolidaysFromApi } from "../../../../../services/api/holidaysDetails";
 
 const Notifications = () => {
   const navigate = useNavigate();
@@ -30,8 +31,8 @@ const Notifications = () => {
   const itemsPerPage = 10;
   const [notifications, setNotifications] = useState([]);
   const staticNotifications = staticNotificationsData;
-  const [countryCode, setCountryCode] = useState("IL");
   const [employeeId, setEmployeeId] = useState(null);
+
   const fetchData = async () => {
     const [notifications, employeesNotifications] = await Promise.all([
       fetchNotifications(),
@@ -64,106 +65,85 @@ const Notifications = () => {
     queryKey: ["allNotificationsData"],
     queryFn: fetchData,
   });
-  const fetchHolidaysAndGenerateNotifications = async () => {
-    const currentYear = new Date().getFullYear();
+  const fetchHolidaysAndGenerateNotifications = async (data) => {
     const today = new Date();
+    const formattedHolidays = await getHolidaysFromApi();
 
-    // Fetch holidays based on country code for the current year
-    const hd = new Holidays(countryCode);
-    const holidayData = hd.getHolidays(currentYear);
-
-    // Format holidays, adjusting to the next year if today's date has passed the holiday date
-    const formattedHolidays = holidayData.map((holiday) => {
-      const holidayDate = new Date(holiday.date);
-      // If holiday has passed, set it to the same date in the next year
-      if (holidayDate < today) {
-        holidayDate.setFullYear(currentYear + 1);
+    const eventNotifications = data.flatMap((event) => {
+      const notifications = [];
+      // Birthday Notification
+      if (event.eventDetails?.type === "birthday") {
+        notifications.push({
+          _id: event._id,
+          id: event.eventDetails.employeeId,
+          priority: event.priority,
+          message: event.title,
+          link: "/events",
+          read: false,
+          viewed: false,
+          dismissed: false,
+          image: event.avatar,
+          startDay: event.notificationCreatedAt,
+          date: event.eventDetails.dateOfTheEvent,
+          className: "birthday",
+        });
       }
-      return {
-        name: holiday.name,
-        date: holidayDate.toISOString().split("T")[0], // format as YYYY-MM-DD
-      };
+      // Vacation Notification
+      if (event.eventDetails?.type === "vacation") {
+        const vacationStartDate = new Date(event.notificationCreatedAt);
+        vacationStartDate.setDate(vacationStartDate.getDate() - 1); //subtracting by one day cuz notificationCreatedAt is saved in mongo without time zone
+        notifications.push({
+          _id: event._id,
+          id: event.eventDetails.employeeId,
+          priority: event.priority,
+          message: event.title,
+          link: "/events",
+          read: false,
+          viewed: false,
+          dismissed: false,
+          image: event.avatar,
+          startDay: vacationStartDate,
+          date: event.eventDetails.dateOfTheEvent,
+          className: "vacation",
+        });
+      }
+      // Holiday Notification
+      if (formattedHolidays.length > 0) {
+        formattedHolidays.forEach((holiday) => {
+          if (event.title === holiday.name) {
+            notifications.push({
+              _id: event._id,
+              priority: "Low",
+              message: `${holiday.name} is coming up on ${new Date(
+                holiday.date
+              ).toLocaleDateString()}`,
+              fullName: holiday.name,
+              link: "/events",
+              title: holiday.name,
+              start: holiday.date,
+              className: event.className,
+              read: false,
+              viewed: false,
+              dismissed: false,
+              startDay: today,
+              description: event.description,
+              underDescription: event.underDescription,
+              options: event.options,
+            });
+          }
+        });
+      }
+
+      return notifications;
     });
-
-    // Generate notifications when both data and holidays are available
-    if (data && formattedHolidays.length > 0) {
-      const eventNotifications = data.flatMap((event) => {
-        const notifications = [];
-
-        // Birthday Notification
-        if (event.eventDetails?.type === "birthday") {
-          notifications.push({
-            _id: event._id,
-            id: event.eventDetails.employeeId,
-            priority: event.priority,
-            message: event.title,
-            link: "/events",
-            read: false,
-            viewed: false,
-            dismissed: false,
-            image: event.avatar,
-            startDay: event.notificationCreatedAt,
-            date: event.eventDetails.dateOfTheEvent,
-            className: "birthday",
-          });
-        }
-
-        // Vacation Notification
-        if (event.eventDetails?.type === "vacation") {
-          const vacationStartDate = new Date(event.notificationCreatedAt);
-          vacationStartDate.setDate(vacationStartDate.getDate() - 1); //subtracting by one day cuz notificationCreatedAt is saved in mongo without time zone
-          notifications.push({
-            _id: event._id,
-            id: event.eventDetails.employeeId,
-            priority: event.priority,
-            message: event.title,
-            link: "/events",
-            read: false,
-            viewed: false,
-            dismissed: false,
-            image: event.avatar,
-            startDay: vacationStartDate,
-            date: event.eventDetails.dateOfTheEvent,
-            className: "vacation",
-          });
-        }
-
-        // Holiday Notification
-
-        // formattedHolidays.forEach((holiday) => {
-        //   if (event.title === holiday.name) {
-        //     notifications.push({
-        //       _id: event._id,
-        //       priority: "Low",
-        //       priorityNumber: 1,
-        //       message: `${holiday.name} is coming up on ${new Date(
-        //         holiday.date
-        //       ).toLocaleDateString()}`,
-        //       fullName: holiday.name,
-        //       link: "/events",
-        //       title: holiday.name,
-        //       start: holiday.date,
-        //       className: event.className,
-        //       read: false,
-        //       viewed: false,
-        //       dismissed: false,
-        //       startDay: today,
-        //       description: event.description,
-        //       underDescription: event.underDescription,
-        //       options: event.options,
-        //     });
-        //   }
-        // });
-
-        return notifications;
-      });
-      setNotifications([...staticNotifications, ...eventNotifications]);
-    }
+    setNotifications([...staticNotifications, ...eventNotifications]);
   };
-  // Combined useEffect to fetch holidays and generate notifications
+
   useEffect(() => {
-    fetchHolidaysAndGenerateNotifications();
-  }, [data, countryCode]);
+    if (data) {
+      fetchHolidaysAndGenerateNotifications(data);
+    }
+  }, [data]);
 
   //John's work routine answer---------------------------------------
   const [modalOpenNo, setModalOpenNo] = useState(false);
@@ -198,16 +178,20 @@ const Notifications = () => {
     justifyContent: "center",
     gap: "20px",
   };
-
+  const priorityOrder = { Low: 1, Medium: 2, High: 3 };
   // Sorting notifications based on the selected option
   if (selectedSortingOption === "A-Z") {
     notifications.sort((a, b) => a.message.localeCompare(b.message));
   } else if (selectedSortingOption === "Z-A") {
     notifications.sort((a, b) => b.message.localeCompare(a.message));
   } else if (selectedSortingOption === "Priority low - high") {
-    notifications.sort((a, b) => a.priorityNumber - b.priorityNumber);
+    notifications.sort(
+      (a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]
+    );
   } else {
-    notifications.sort((a, b) => b.priorityNumber - a.priorityNumber);
+    notifications.sort(
+      (a, b) => priorityOrder[b.priority] - priorityOrder[a.priority]
+    );
   }
 
   const closeModal = () => {
