@@ -25,7 +25,7 @@ export const getHolidaysFromApi = async () => {
   const nextTwoWeeks = new Date(today);
   const nextMonth = new Date(today);
 
-  tomorrow.setDate(today.getDate() + 23);
+  tomorrow.setDate(today.getDate() + 22);
   nextWeek.setDate(today.getDate() + 5);
   nextTwoWeeks.setDate(today.getDate() + 14);
   nextMonth.setDate(today.getDate() + 30);

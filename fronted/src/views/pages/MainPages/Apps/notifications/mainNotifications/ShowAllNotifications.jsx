@@ -4,7 +4,8 @@ import snoozeIcon from "../../../../../../imgs/snoozeIcon.png";
 import dismissIcon from "../../../../../../imgs/dismissIcon.png";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateEmployeeNotification } from "../../../../../../services/api/notifications";
-
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 export default function ShowAllNotifications({
   displayedNotifications,
   getNotificationId,
@@ -14,25 +15,14 @@ export default function ShowAllNotifications({
   const [notification, setNotification] = useState(null);
   const [postponedNotifications, setPostponedNotifications] = useState([]);
   const [archivedNotifications, setArchivedNotifications] = useState([]);
-
-  const [modalContent, setModalContent] = useState(null);
   const [selectedNotifications, setSelectedNotifications] = useState([]);
-  const [isNotificationVisible, setNotificationVisible] = useState(false);
-  const [modalOpenfour, setModalOpenfour] = useState(false);
-  const [modalOpenfive, setModalOpenfive] = useState(false);
-  const [modalContentfour, setModalContentfour] = useState(null);
-  const [modalContentfive, setModalContentfive] = useState(null);
   const [hoveredNotificationId, setHoveredNotificationId] = useState(null);
-
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalOpenTwo, setModalOpenTwo] = useState(false);
-  const [modalOpenThree, setModalOpenThree] = useState(false);
-  const [modalContentTwo, setModalContentTwo] = useState(null);
-  const [modalContentThree, setModalContentThree] = useState(null);
-
   const [isPostponeBtnClicked, setIsPostponeBtnClicked] = useState(false);
-  const [selectedDateTime, setSelectedDateTime] = useState("");
+  const [selectedDate, setSelectedDate] = useState("");
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [date, setDate] = useState("")
   const queryClient = useQueryClient();
+  const today = new Date().toLocaleDateString("en-GB");
 
   const markAsViewed = (id, link) => {
     setNotification((prev) =>
@@ -45,6 +35,103 @@ export default function ShowAllNotifications({
     navigate(link);
   };
 
+  const postponeNotification = (id, date) => {
+    const notification = notifications?.find((n) => n.id === id);
+    if (notification) {
+      setPostponedNotifications((prev) => [
+        ...prev,
+        { ...notification, date },
+      ]);
+      setNotification((prev) => prev.filter((n) => n.id !== id));
+      setIsPostponeBtnClicked(false);
+      setSelectedDate("");
+    }
+  };
+  const handleDatePickerSelect = (date) => {
+    const eventDateForShow = new Date(date)    
+    eventDateForShow.setDate(eventDateForShow.getDate())
+    setSelectedDate(eventDateForShow)   
+    const eventDate = new Date(date)  
+    eventDate.setDate(eventDate.getDate()+1)   
+    setDate(eventDate)
+  }
+  const togglePostponeInput = (id) => {
+    setIsPostponeBtnClicked((prev) => (prev === id ? false : id));
+    setSelectedDate("");
+    setShowDatePicker(false);
+  };
+
+  const enterHover = (id) => {
+    setHoveredNotificationId(id);
+  };
+
+  const exitHover = () => {
+    setHoveredNotificationId(null);
+  };
+
+  const toggleSelectNotification = (id) => {
+    setSelectedNotifications((prev) =>
+      prev.includes(id) ? prev.filter((nid) => nid !== id) : [...prev, id]
+    );
+  };
+
+  const deleteSelectedNotifications = () => {
+    setNotification((prev) =>
+      prev.filter(
+        (notification) => !selectedNotifications.includes(notification.id)
+      )
+    );
+    setSelectedNotifications([]);
+  };
+
+  const deleteNotification = async (id) => {
+    const notification = { ...notifications.find((n) => n._id === id) };
+    if (notification) {
+      const updatedData = {
+        id: notification._id,
+        hasBeenDismissed: true,
+        hasBeenHandled: notification.hasBeenHandled,
+        notificationDueDate: notification.notificationDueDate,
+      };
+      await updateEmployeeNotification(updatedData);
+    }
+  };
+  
+  const snoozeNotification = async (id, eventDate) => {
+    const notification = { ...notifications.find((n) => n._id === id) };
+    if (notification) {     
+      const updatedData = {
+        id: notification._id,
+        hasBeenDismissed: notification.hasBeenDismissed,
+        hasBeenHandled: notification.hasBeenHandled,
+        notificationDueDate: eventDate,
+      };
+      await updateEmployeeNotification(updatedData);
+      setIsPostponeBtnClicked(false);
+    }
+  };
+  const deleteNotificationMutation = useMutation({
+    mutationFn: deleteNotification,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["allNotificationsData"]);
+    },
+  });
+  const snoozeNotificationMutation = useMutation({
+    mutationFn: snoozeNotification,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["allNotificationsData"]);
+    },
+  });
+
+  const calculateReminderDate = (eventDate, daysBefore) => {
+    const dateOfTheEvent = new Date(eventDate);
+    dateOfTheEvent.setDate(dateOfTheEvent.getDate() - daysBefore);
+    return dateOfTheEvent;
+  };
+  const deleteAllNotifications = () => {
+    setNotification([]);
+    setSelectedNotifications([]);
+  };
   const messageStyle = (id) => ({
     textAlign: "left",
     position: "relative",
@@ -66,30 +153,6 @@ export default function ShowAllNotifications({
     left: "50%",
     transform: "translateX(-50%)",
   };
-  const postponeWindowStyle = {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    gap: "10px",
-    position: "absolute",
-    right: "-200px",
-    width: "180px",
-    height: "130px",
-    backgroundColor: "white",
-    padding: "10px",
-    border: "1px solid black",
-    borderRadius: "5px",
-  };
-
-  const closeButtonStyle = {
-    position: "absolute",
-    top: "5px",
-    left: "5px",
-    background: "none",
-    border: "none",
-    fontSize: "18px",
-    cursor: "pointer",
-  };
 
   const showTooltipStyle = {
     visibility: "visible",
@@ -99,106 +162,6 @@ export default function ShowAllNotifications({
     snooze: null,
     dismiss: null,
   });
-
-  const postponeNotification = (id, dateTime) => {
-    const notification = notifications?.find((n) => n.id === id);
-    if (notification) {
-      setPostponedNotifications((prev) => [
-        ...prev,
-        { ...notification, dateTime },
-      ]);
-      setNotification((prev) => prev.filter((n) => n.id !== id));
-      setIsPostponeBtnClicked(false);
-      setSelectedDateTime("");
-    }
-  };
-
-  const togglePostponeInput = (id) => {
-    setIsPostponeBtnClicked((prev) => (prev === id ? false : id));
-    setSelectedDateTime("");
-  };
-
-  const enterHover = (id) => {
-    setHoveredNotificationId(id);
-  };
-
-  const exitHover = () => {
-    setHoveredNotificationId(null);
-  };
-
-  const openModal = (notification) => {
-    setModalContent(notification);
-    setModalOpen(true);
-  };
-
-  const openModalTwo = (notification) => {
-    setModalContentTwo(notification);
-    setModalOpenTwo(true);
-  };
-  const openModalThree = (notification) => {
-    setModalContentThree(notification);
-    setModalOpenThree(true);
-  };
-
-  const toggleSelectNotification = (id) => {
-    setSelectedNotifications((prev) =>
-      prev.includes(id) ? prev.filter((nid) => nid !== id) : [...prev, id]
-    );
-  };
-
-  const deleteSelectedNotifications = () => {
-    setNotification((prev) =>
-      prev.filter(
-        (notification) => !selectedNotifications.includes(notification.id)
-      )
-    );
-    setSelectedNotifications([]);
-  };
-
-  const deleteNotification = (id) => {
-    const notification = { ...notifications.find((n) => n._id === id) };    
-    if (notification) {
-      notification.hasBeenDismissed = true;
-      const updatedData = {
-        id: notification._id,
-        hasBeenDismissed: notification.hasBeenDismissed,
-        hasBeenHandled: notification.hasBeenHandled,
-        notificationDueDate: notification.notificationDueDate
-      };  
-      return updatedData;
-    }
-  };
-  const updateNotification = async (id) => {
-    const updatedData = deleteNotification(id);
-    if (updatedData) {      
-      await updateEmployeeNotification(updatedData); 
-    }
-  };
-  const updateNotificationMutation = useMutation({
-    mutationFn: updateNotification,
-    onSuccess: () => {
-      queryClient.invalidateQueries(["allNotificationsData"])
-    }
-  });
-
-  const deleteAllNotifications = () => {
-    setNotification([]);
-    setSelectedNotifications([]);
-  };
-
-  const handleClick = () => {
-    navigate("/task-board", { state: { fromContact: true } });
-  };
-
-  const openModalfour = (notification) => {
-    setModalContentfour(notification);
-    setModalOpenfour(true);
-  };
-
-  const openModalfive = (notification) => {
-    setModalContentfive(notification);
-    setModalOpenfive(true);
-  };
 
   const notificationStyle = (notification) => ({
     position: "relative",
@@ -218,7 +181,14 @@ export default function ShowAllNotifications({
     transform:
       hoveredNotificationId === notification._id ? "scale(1.02)" : "scale(1)",
   });
-
+  const datePickerStyle = {
+    padding: "5px",
+    borderRadius: "5px",
+    marginTop: "20px",
+    marginLeft: "20px",
+    display: "block",
+    width: "250px",
+  };
   const priorityIndicatorStyle = (priority) => {
     let backgroundColor, color;
 
@@ -284,7 +254,7 @@ export default function ShowAllNotifications({
                 {notification.priority}
               </div>
               <div
-                 onClick={() => getNotificationId(notification._id)}
+                onClick={() => getNotificationId(notification._id)}
                 style={{
                   textDecoration: "none",
                   width: "100%",
@@ -358,8 +328,8 @@ export default function ShowAllNotifications({
                 >
                   <div
                     onClick={() => {
-                      updateNotification(notification._id);
-                      updateNotificationMutation.mutate();
+                      deleteNotification(notification._id);
+                      deleteNotificationMutation.mutate();
                     }}
                   >
                     <img
@@ -384,35 +354,62 @@ export default function ShowAllNotifications({
               </div>
               {/* Postpone window */}
               {isPostponeBtnClicked === notification._id && (
-                <div style={postponeWindowStyle}>
-                  <button
-                    style={closeButtonStyle}
-                    onClick={() => setIsPostponeBtnClicked(false)}
-                  >
-                    X
-                  </button>
-                  <input
-                    type="datetime-local"
-                    id={`datetime-${notification._id}`}
+                <div>
+                  <select
+                    id={`reminder-select-${notification._id}`}
                     style={{
                       padding: "5px",
                       borderRadius: "5px",
-                      marginTop: "20px",
+                      marginLeft: "20px",
                     }}
-                    value={selectedDateTime}
-                    onChange={(e) => setSelectedDateTime(e.target.value)}
-                  />
-                  {selectedDateTime && (
+                    value={selectedDate === "custom" ? "custom" : ""}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (value === "custom") {
+                        setShowDatePicker(true);
+                      } else {
+                        const reminderDate = calculateReminderDate(
+                          notification.date,
+                          value
+                        );
+                        setSelectedDate(reminderDate);
+                        setDate(reminderDate)
+                      }
+                    }}
+                  >
+                    <option value="" disabled>
+                      Choose a date for your reminder
+                    </option>
+                    <option value="1">Remind me 1 day before the event</option>
+                    <option value="3">Remind me 3 days before the event</option>
+                    <option value="custom">Custom date</option>
+                  </select>
+                  {showDatePicker && (
+                    <DatePicker
+                      type="date"
+                      placeholderText={today}
+                      selected={selectedDate}
+                      onChange={handleDatePickerSelect}
+                      dateFormat="dd/MM/yyyy"
+                      id={`date-${notification._id}`}
+                      //styling ain't working for date picker
+                      style={datePickerStyle}
+                    />
+                  )}
+                  {date && (
                     <button
                       style={{
                         backgroundColor: "#FFC502",
                         border: "none",
                         borderRadius: "5px",
                         height: "30px",
+                        marginTop: "10px",
                       }}
-                      onClick={() =>
-                        postponeNotification(notification._id, selectedDateTime)
-                      }
+                      onClick={() => {
+                        snoozeNotification(notification._id, date);
+                        snoozeNotificationMutation.mutate();
+                        postponeNotification(notification._id, date);
+                      }}
                     >
                       Confirm
                     </button>
