@@ -12,11 +12,10 @@ const initializeScheduler = () => {
     async () => {
       console.log("Running birthday notification scheduler...");
       try {
-        // Execute the birthday notification logic
          await checkBirthdays();
          await checkEmployeesEvents();
         console.log("Scheduler run was successful");
-        return result;
+        // return result;
       } catch (error) {
         console.error("Error running birthday scheduler:", error);
       }

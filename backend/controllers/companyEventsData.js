@@ -6,9 +6,7 @@ export const getCompanyEvents = async (req, res) => {
   const { user } = req;
   try {
     // mongoose.set("debug", true);
-
     companyEvents = await CompanyEventModel.find({ uid: user.uid });
-    console.log(companyEvents);
   } catch (error) {
     console.error("Error getting company events:", error);
     return res.status(500).send("Internal Server Error");

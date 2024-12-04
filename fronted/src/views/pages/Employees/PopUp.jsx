@@ -72,7 +72,7 @@ export default function PopUp() {
       console.log("Error getting employees :", error);
     }
   };
-  const { data: employees, isLoading } = useQuery({
+  const { data: employees } = useQuery({
     queryKey: ["employees"],
     queryFn: getEmployees,
     staleTime: 0,
@@ -382,7 +382,6 @@ export default function PopUp() {
                         height: "50%",
                       }}
                     >
-                      
                       <div
                         className="profile-img"
                         style={{
@@ -774,97 +773,6 @@ export default function PopUp() {
                     }),
                   }}
                 />
-
-                <h2 style={{ marginTop: "30px", marginBottom: "10px" }}>
-                  With who?
-                </h2>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    gap: "20px",
-                  }}
-                >
-                  <div
-                    onClick={() => handleImageClick("image1")}
-                    style={{
-                      borderRadius: "10px",
-                      border: `2px solid ${
-                        selectedImage === "image1" ? "green" : "#ccc"
-                      }`,
-                      cursor: "pointer",
-                      width: "100px",
-                      textAlign: "center",
-                      padding: "10px",
-                    }}
-                  >
-                    <img
-                      src={women}
-                      alt="Image 1"
-                      style={{
-                        borderRadius: "10px",
-                        width: "100%",
-                        height: "auto",
-                      }}
-                    />
-                    <div style={{ marginTop: "10px" }}>
-                      {/* <span>Custom text 1</span> */}
-                    </div>
-                  </div>
-                  <div
-                    onClick={() => handleImageClick("image2")}
-                    style={{
-                      borderRadius: "10px",
-                      border: `2px solid ${
-                        selectedImage === "image2" ? "green" : "#ccc"
-                      }`,
-                      cursor: "pointer",
-                      width: "100px",
-                      textAlign: "center",
-                      padding: "10px",
-                    }}
-                  >
-                    <img
-                      src={family}
-                      alt="Image 2"
-                      style={{
-                        borderRadius: "10px",
-                        width: "100%",
-                        height: "auto",
-                      }}
-                    />
-                    <div style={{ marginTop: "10px" }}>
-                      {/* <span>Custom text 2</span> */}
-                    </div>
-                  </div>
-                  <div
-                    onClick={() => handleImageClick("image3")}
-                    style={{
-                      borderRadius: "10px",
-                      border: `2px solid ${
-                        selectedImage === "image3" ? "green" : "#ccc"
-                      }`,
-                      cursor: "pointer",
-                      width: "100px",
-                      textAlign: "center",
-                      padding: "10px",
-                    }}
-                  >
-                    <img
-                      src={freinds}
-                      alt="Image 3"
-                      style={{
-                        borderRadius: "10px",
-                        width: "100%",
-                        height: "auto",
-                      }}
-                    />
-                    <div style={{ marginTop: "10px" }}>
-                      {/* <span>Custom text 3</span> */}
-                    </div>
-                  </div>
-                </div>
-
                 <button
                   onClick={updateVacation}
                   style={{
@@ -905,7 +813,6 @@ export default function PopUp() {
                           ? selectedCountry.label
                           : "No country selected"}
                       </p>
-                      {/* <p><strong>With:</strong> {selectedImage ? `Image ${selectedImage.replace('image', '')}` : 'No image selected'}</p> */}
                       <button
                         onClick={handleCloseModal}
                         style={{

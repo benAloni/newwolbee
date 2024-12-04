@@ -294,7 +294,7 @@ const checkEmployeesEvents = async (req, res) => {
               "eventDetails.employeeId": employee.employeeId,
             }
           );
-          if (!alreadyANotification) {
+          if (!alreadyANotification) {            
             const newNotification = new EmployeeNotificationsModel({
               title: `${employee.fullName} is off to ${
                 employee.gender === "female" ? "her" : "his"
@@ -320,6 +320,8 @@ const checkEmployeesEvents = async (req, res) => {
               ...employeesEventsNotifications,
               newNotification,
             ];
+            console.log(newNotification);
+            
           } else {
             await EmployeeNotificationsModel.findOneAndUpdate(
               {

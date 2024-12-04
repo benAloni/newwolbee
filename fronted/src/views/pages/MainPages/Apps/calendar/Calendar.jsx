@@ -59,6 +59,7 @@ const Calendar = (props) => {
     refetchInterval: 60000, // Refetch every 60 seconds
     refetchOnWindowFocus: true,
   });
+console.log(data);
 
   const addEventMutation = useMutation({
     mutationFn: async (newEvent) => {
@@ -112,10 +113,15 @@ const Calendar = (props) => {
       }));
       const employeeVacationEvents = data.employees.flatMap((employee) => {
         if (employee.vacation && employee.vacation.length > 0) {
-          const vacation = employee.vacation[0];
-          return [
+          return employee.vacation.flatMap((vacation) => [
             {
-              title: `${employee.fullName} is off to ${employee.gender === "female" ? "her": "his"} ${vacation.purposeOfTrip === "pleasure" ? `trip in ${vacation.destination}` : `${vacation.purposeOfTrip} in ${vacation.destination}`} `,
+              title: `${employee.fullName} is off to ${
+                employee.gender === "female" ? "her" : "his"
+              } ${
+                vacation.purposeOfTrip === "pleasure"
+                  ? `trip in ${vacation.destination}`
+                  : `${vacation.purposeOfTrip} in ${vacation.destination}`
+              } `,
               className: "bg-purple",
               start: vacation.startDate,
               end: vacation.startDate,
@@ -123,17 +129,21 @@ const Calendar = (props) => {
             {
               title: `${employee.fullName} is back from ${
                 employee.gender === "female" ? "her" : "him"
-              } ${vacation.purposeOfTrip === "pleasure" ? `trip in ${vacation.destination}`: `${vacation.purposeOfTrip} in ${vacation.destination}`} `,
+              } ${
+                vacation.purposeOfTrip === "pleasure"
+                  ? `trip in ${vacation.destination}`
+                  : `${vacation.purposeOfTrip} in ${vacation.destination}`
+              } `,
               className: "bg-purple",
               start: vacation.endDate,
               end: vacation.endDate,
             },
-          ];
+          ]);
         } else {
-          return [];
+          return []; 
         }
       });
-
+      
       setEvents((prevEvents) => [
         ...employeeVacationEvents,
         ...newEvents,

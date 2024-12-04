@@ -135,6 +135,23 @@ const Notifications = () => {
           }
         });
       }
+      // if(event.uid){
+      //   notifications.push({
+      //     _id: event._id,
+      //     // id: event.eventDetails.employeeId,
+      //     // priority: event.priority,
+      //     message: event.title,
+      //     link: "/events",
+      //     read: false,
+      //     // notificationDueDate: event.notificationDueDate,
+      //     hasBeenHandled: false,
+      //     hasBeenDismissed: false,
+      //     image: event.avatar,
+      //     startDay: event.start,
+      //     // date: event.eventDetails.dateOfTheEvent,
+      //     // className: "birthday",
+      //   });
+      // }
 
       return notifications;
     });

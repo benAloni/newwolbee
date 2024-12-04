@@ -79,3 +79,4 @@ export const getHolidaysFromApi = async () => {
   });
   return formattedHolidays;
 };
+
