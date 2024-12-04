@@ -6,7 +6,7 @@ export const getFoodHoliday =  async (req, res) => {
     FoodHoliday = await FoodHolidaysModel.find({})            
     } catch (error) {
       console.error("Error finding FoodHoliday:", error);
-      res.status(500).send("Internal Server Error");
+      return  res.status(500).send("Internal Server Error");
     }
-    res.status(200).json(FoodHoliday);
+    return res.status(200).json(FoodHoliday);
   }

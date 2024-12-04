@@ -17,6 +17,7 @@ import {
   getAllNotifications,
   getEmployeesNotifications,
   updateEmployeeNotification,
+  deleteNotification,
 } from "../controllers/allNotificationsData.js";
 import { addEvent, getEvents, deleteEvent } from "../controllers/eventsData.js";
 import { isAuthenticated } from "../middleware/auth.js";
@@ -70,6 +71,9 @@ router.post("/addNotification", addNotification);
 router.get("/getAllNotifications", getAllNotifications);
 //update employee notification
 router.put("/updateEmployeeNotification", updateEmployeeNotification);
+//delete notification
+router.delete("/deleteNotification", deleteNotification);
+
 //delete event route
 router.delete("/deleteEvent/:id", deleteEvent);
 //add event note endpoint

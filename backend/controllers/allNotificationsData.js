@@ -12,10 +12,10 @@ export const getAllNotifications = async (req, res) => {
       ],
     });
 
-    res.status(200).json(allNotifications);
+    return res.status(200).json(allNotifications);
   } catch (error) {
     console.error("Error getting all notifications:", error);
-    res.status(500).json({
+    return res.status(500).json({
       message: "An error occurred while fetching notifications data.",
     });
   }
@@ -37,12 +37,24 @@ export const getEmployeesNotifications = async (req, res) => {
           {
             $or: [
               // If the month is greater than the current month
-              { $gt: [{ $month: "$eventDetails.dateOfTheEvent" }, currentMonth] },
+              {
+                $gt: [{ $month: "$eventDetails.dateOfTheEvent" }, currentMonth],
+              },
               {
                 // If the month is the same, compare the current day to the event day
                 $and: [
-                  { $eq: [{ $month: "$eventDetails.dateOfTheEvent" }, currentMonth] },
-                  { $gt: [{ $dayOfMonth: "$eventDetails.dateOfTheEvent" }, currentDay] },
+                  {
+                    $eq: [
+                      { $month: "$eventDetails.dateOfTheEvent" },
+                      currentMonth,
+                    ],
+                  },
+                  {
+                    $gt: [
+                      { $dayOfMonth: "$eventDetails.dateOfTheEvent" },
+                      currentDay,
+                    ],
+                  },
                 ],
               },
             ],
@@ -68,12 +80,12 @@ export const getEmployeesNotifications = async (req, res) => {
       return res.status(404).json({ message: "No notifications found." });
     }
 
-    res.status(200).json(employeesNotifications);
+    return res.status(200).json(employeesNotifications);
   } catch (error) {
     console.error("Error getting employees notifications:", error);
-    res
-      .status(500)
-      .json({ message: "An error occurred while fetching employees notifications data." });
+    return res.status(500).json({
+      message: "An error occurred while fetching employees notifications data.",
+    });
   }
 };
 
@@ -99,10 +111,23 @@ export const updateEmployeeNotification = async (req, res) => {
       // console.log("Notification not found");
       return res.status(404).send("Notification not found");
     }
-    res.status(200).json(updatedEmployeeNotification);
+    return res.status(200).json(updatedEmployeeNotification);
   } catch (error) {
     console.error("Error updating notification:", error);
-    res.status(500).send("Internal Server Error");
+    return res.status(500).send("Internal Server Error");
+  }
+};
+export const deleteNotification = async (req, res) => {
+  const { id } = req.body;
+  const { user } = req;
+
+  try {
+    await EmployeeNotificationsModel.findOneAndDelete({
+      _id: id,
+      [uid]: user.uid,
+    });
+  } catch (error) {
+    return console.error("Error deleting notification:", error);
   }
 };
 export const addNotification = async (req, res) => {
@@ -135,9 +160,8 @@ export const addNotification = async (req, res) => {
       .json({ message: "Notifications added successfully." });
   } catch (error) {
     console.error("Error adding notifications:", error);
-    res
+    return res
       .status(500)
       .json({ message: "An error occurred while adding notifications." });
   }
 };
-

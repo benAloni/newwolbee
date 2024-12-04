@@ -134,9 +134,9 @@ export const updateEmployeeInsights = async (req, res) => {
     }
 
     console.log("Employee updated successfully:", updatedEmployee);
-    res.status(200).json(updatedEmployee);
+    return res.status(200).json(updatedEmployee);
   } catch (error) {
     console.error("Error updating employee's insights:", error);
-    res.status(500).send("Internal Server Error");
+    return res.status(500).send("Internal Server Error");
   }
 };

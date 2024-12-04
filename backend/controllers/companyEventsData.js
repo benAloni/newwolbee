@@ -31,9 +31,9 @@ export const addNewCompanyEvent = async (req, res) => {
     await newCompanyEvent.save();
   } catch (error) {
     console.error("Error saving new company event:", error);
-    res.status(500).send("Internal Server Error");
+    return res.status(500).send("Internal Server Error");
   }
-  res.status(200).json(newCompanyEvent);
+  return res.status(200).json(newCompanyEvent);
 };
 export const updateCompanyEvent = async (req, res) => {
   const {
@@ -70,10 +70,10 @@ export const updateCompanyEvent = async (req, res) => {
     }
   } catch (error) {
     console.error("Error updating company event:", error);
-    res.status(500).send("Internal Server Error");
+    return res.status(500).send("Internal Server Error");
   }
   console.log("Company event updated successfully:", updatedEvent);
-  res.status(200).json(updatedEvent);
+  return res.status(200).json(updatedEvent);
 };
 export const deleteCompanyEvent = async (req, res) => {
   const { user } = req;
@@ -92,9 +92,9 @@ export const deleteCompanyEvent = async (req, res) => {
     await CompanyEventModel.findByIdAndDelete(eventToDelete._id);
   } catch (error) {
     console.error("Error deleting company event:", error);
-    res.status(500).send("Internal Server Error");
+    return  res.status(500).send("Internal Server Error");
   }
-  res.status(200).json({
+  return res.status(200).json({
     message: "Company event deleted successfully.",
   });
 };

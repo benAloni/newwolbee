@@ -2,53 +2,52 @@ import EventModel from "../models/EventModel.js";
 
 export const getEvents = async (req, res) => {
   let events;
-  const {user} = req
+  const { user } = req;
   try {
-    events = await EventModel.find({ uid: user.uid })
+    events = await EventModel.find({ uid: user.uid });
   } catch (error) {
     console.error("Error getting events:", error);
-    res
+    return res
       .status(500)
       .json({ message: "An error occurred while fetching events data." });
   }
-  res.status(200).json(events);
+  return res.status(200).json(events);
 };
 
 export const addEvent = async (req, res) => {
   const { eventData } = req.body;
-  const {user} = req
+  const { user } = req;
   try {
     const newEvent = new EventModel({
-        ...eventData,
-        uid: user.uid,
-      })
-   await newEvent.save()
-   
-   return res.status(200).json(newEvent);
+      ...eventData,
+      uid: user.uid,
+    });
+    await newEvent.save();
+
+    return res.status(200).json(newEvent);
   } catch (error) {
     console.error("Error adding events:", error);
-    res
+    return res
       .status(500)
       .json({ message: "An error occurred while adding an event." });
   }
 };
 
-
 //delete event
 export const deleteEvent = async (req, res) => {
-  const { id } = req.params; 
-  
+  const { id } = req.params;
+
   try {
     const deletedEvent = await EventModel.findByIdAndDelete(id);
 
     if (!deletedEvent) {
-      return res.status(404).json({ message: 'Event not found' });
+      return res.status(404).json({ message: "Event not found" });
     }
 
-    res.status(200).json({ message: 'Event deleted successfully' });
+    return res.status(200).json({ message: "Event deleted successfully" });
   } catch (error) {
-    console.error('Error deleting event:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    console.error("Error deleting event:", error);
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
 

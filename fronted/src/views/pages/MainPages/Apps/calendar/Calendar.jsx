@@ -59,7 +59,6 @@ const Calendar = (props) => {
     refetchInterval: 60000, // Refetch every 60 seconds
     refetchOnWindowFocus: true,
   });
-console.log(data);
 
   const addEventMutation = useMutation({
     mutationFn: async (newEvent) => {

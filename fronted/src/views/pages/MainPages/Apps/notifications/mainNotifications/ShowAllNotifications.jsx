@@ -20,7 +20,7 @@ export default function ShowAllNotifications({
   const [isPostponeBtnClicked, setIsPostponeBtnClicked] = useState(false);
   const [selectedDate, setSelectedDate] = useState("");
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [date, setDate] = useState("")
+  const [date, setDate] = useState("");
   const queryClient = useQueryClient();
   const today = new Date().toLocaleDateString("en-GB");
 
@@ -38,23 +38,20 @@ export default function ShowAllNotifications({
   const postponeNotification = (id, date) => {
     const notification = notifications?.find((n) => n.id === id);
     if (notification) {
-      setPostponedNotifications((prev) => [
-        ...prev,
-        { ...notification, date },
-      ]);
+      setPostponedNotifications((prev) => [...prev, { ...notification, date }]);
       setNotification((prev) => prev.filter((n) => n.id !== id));
       setIsPostponeBtnClicked(false);
       setSelectedDate("");
     }
   };
   const handleDatePickerSelect = (date) => {
-    const eventDateForShow = new Date(date)    
-    eventDateForShow.setDate(eventDateForShow.getDate())
-    setSelectedDate(eventDateForShow)   
-    const eventDate = new Date(date)  
-    eventDate.setDate(eventDate.getDate()+1)   
-    setDate(eventDate)
-  }
+    const eventDateForShow = new Date(date);
+    eventDateForShow.setDate(eventDateForShow.getDate());
+    setSelectedDate(eventDateForShow);
+    const eventDate = new Date(date);
+    eventDate.setDate(eventDate.getDate() + 1);
+    setDate(eventDate);
+  };
   const togglePostponeInput = (id) => {
     setIsPostponeBtnClicked((prev) => (prev === id ? false : id));
     setSelectedDate("");
@@ -96,10 +93,10 @@ export default function ShowAllNotifications({
       await updateEmployeeNotification(updatedData);
     }
   };
-  
+
   const snoozeNotification = async (id, eventDate) => {
     const notification = { ...notifications.find((n) => n._id === id) };
-    if (notification) {     
+    if (notification) {
       const updatedData = {
         id: notification._id,
         hasBeenDismissed: notification.hasBeenDismissed,
@@ -236,6 +233,16 @@ export default function ShowAllNotifications({
 
     return { day, month };
   };
+  const isNotificationTomorrow = (notificationDueDate) => {
+    const tomorrow = new Date();
+    tomorrow.setUTCDate(tomorrow.getUTCDate() + 1); //moving to tomorrow in UTC
+    tomorrow.setUTCHours(0, 0, 0, 0); //normalizing to start of day in UTC
+
+    const eventDueDate = new Date(notificationDueDate);
+    eventDueDate.setUTCHours(0, 0, 0, 0); 
+
+    return tomorrow.getTime() === eventDueDate.getTime();
+  };
 
   return (
     <div style={{ display: "flex" }}>
@@ -286,34 +293,39 @@ export default function ShowAllNotifications({
                 style={{ display: "flex", gap: "20px" }}
               >
                 {/* Snooze and dismiss icons */}
-                <div
-                  style={{ position: "relative" }}
-                  onMouseEnter={() =>
-                    setHoveredIcon({ ...hoveredIcon, snooze: notification._id })
-                  }
-                  onMouseLeave={() =>
-                    setHoveredIcon({ ...hoveredIcon, snooze: null })
-                  }
-                >
-                  <img
-                    src={snoozeIcon}
-                    alt="snooze-icon"
-                    style={{ cursor: "pointer" }}
-                    width={"27px"}
-                    height={"27px"}
-                    onClick={() => togglePostponeInput(notification._id)}
-                  />
+                {isNotificationTomorrow(notification.date) ? null : (
                   <div
-                    style={{
-                      ...tooltipStyle,
-                      ...(hoveredIcon.snooze === notification._id
-                        ? showTooltipStyle
-                        : {}),
-                    }}
+                    style={{ position: "relative" }}
+                    onMouseEnter={() =>
+                      setHoveredIcon({
+                        ...hoveredIcon,
+                        snooze: notification._id,
+                      })
+                    }
+                    onMouseLeave={() =>
+                      setHoveredIcon({ ...hoveredIcon, snooze: null })
+                    }
                   >
-                    Snooze
+                    <img
+                      src={snoozeIcon}
+                      alt="snooze-icon"
+                      style={{ cursor: "pointer" }}
+                      width={"27px"}
+                      height={"27px"}
+                      onClick={() => togglePostponeInput(notification._id)}
+                    />
+                    <div
+                      style={{
+                        ...tooltipStyle,
+                        ...(hoveredIcon.snooze === notification._id
+                          ? showTooltipStyle
+                          : {}),
+                      }}
+                    >
+                      Snooze
+                    </div>
                   </div>
-                </div>
+                )}
                 <div
                   style={{ position: "relative" }}
                   onMouseEnter={() =>
@@ -373,7 +385,7 @@ export default function ShowAllNotifications({
                           value
                         );
                         setSelectedDate(reminderDate);
-                        setDate(reminderDate)
+                        setDate(reminderDate);
                       }
                     }}
                   >
