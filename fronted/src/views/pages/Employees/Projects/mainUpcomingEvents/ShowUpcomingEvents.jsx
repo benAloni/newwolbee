@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import Modal from "react-modal";
 
-// imgs12
+// imgs1
 import pizza from "../../../../../imgs/dismissIcon.png";
 
 export default function ShowUpcomingEvents({ closestEvents }) {
