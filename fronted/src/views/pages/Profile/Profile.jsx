@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import ProfileTab from "./ProfileTab";
+import ProfileVacationAndSickDays from "./ProfileVacationAndSickDays";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSelector } from "react-redux";
 import { fetchEmployees } from "../../../services";
@@ -153,6 +154,15 @@ const Profile = () => {
                   </li>
                   <li className="nav-item">
                     <Link
+                      to="#emp_freeDays"
+                      data-bs-toggle="tab"
+                      className="nav-link"
+                    >
+                      | Vacation and sick days |
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link
                       to="#bank_statutory"
                       data-bs-toggle="tab"
                       className="nav-link"
@@ -184,6 +194,7 @@ const Profile = () => {
           </div>
           {/* Profile Info Tab */}
           <ProfileTab selectedEmployee={selectedEmployee} />
+          <ProfileVacationAndSickDays selectedEmployee={selectedEmployee} />
         </div>
       </div>
     </>

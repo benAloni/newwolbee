@@ -28,7 +28,7 @@ export default function ShowUpcomingEvents({ closestEvents }) {
     }
   }, [location]);
 
-  // Function to find the closest event
+  // Function to find the next closest event that comes after today
   const getClosestEvent = () => {
     const currentDate = new Date();
     let closestEvent = null;
@@ -36,25 +36,27 @@ export default function ShowUpcomingEvents({ closestEvents }) {
 
     closestEvents.forEach((event) => {
       const eventDate = new Date(event.start);
-      const diff = Math.abs(eventDate - currentDate);
-
-      if (diff < closestDiff) {
-        closestDiff = diff;
-        closestEvent = event;
+      // Only consider events that are in the future (after today)
+      if (eventDate > currentDate) {
+        const diff = Math.abs(eventDate - currentDate);
+        if (diff < closestDiff) {
+          closestDiff = diff;
+          closestEvent = event;
+        }
       }
     });
 
     return closestEvent;
   };
 
-  // Find the closest event
+  // Find the closest upcoming event
   const closestEvent = getClosestEvent();
 
   return (
     <div>
       <h1>Upcoming Events</h1>
       <div style={{ display: "flex", flexWrap: "wrap" }}>
-        {closestEvents.map((event) => (
+        {closestEvents.map((event, index) => (
           <div
             key={event._id}
             className="project-card"
@@ -70,22 +72,20 @@ export default function ShowUpcomingEvents({ closestEvents }) {
               backgroundColor: "#fff",
               cursor: "pointer",
               transition: "transform 0.3s ease",
-              position: "relative", // To position the banner
+              position: "relative",
             }}
             onMouseEnter={(e) =>
               (e.currentTarget.style.transform = "scale(1.05)")
             }
-            onMouseLeave={(e) =>
-              (e.currentTarget.style.transform = "scale(1)")
-            }
+            onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
             onClick={() => openModal(event)}
           >
-            {/* Show "closest event" banner if this is the closest event */}
-            {closestEvent && closestEvent._id === event._id && (
+            {/* Show "closest event" banner only for the first event */}
+            {index === 0 && (
               <div
                 style={{
                   position: "absolute",
-                  top: "-0.5rem", // Position above the card
+                  top: "-0.5rem",
                   left: "50%",
                   transform: "translateX(-50%)",
                   backgroundColor: "green",
@@ -95,8 +95,8 @@ export default function ShowUpcomingEvents({ closestEvents }) {
                   fontWeight: "bold",
                   borderRadius: "4px",
                   zIndex: 1,
-                  fontSize: "0.8rem", // Smaller font size
-                  whiteSpace: "nowrap", // Prevent text wrapping
+                  fontSize: "0.8rem",
+                  whiteSpace: "nowrap",
                   marginTop: "5px",
                 }}
               >

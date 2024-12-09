@@ -9,19 +9,6 @@ export default function ForTheEmployeeTab() {
   <h1></h1>
 </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 <div className="fade" id="emp_assets" style={{position:"top"}} >
         <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
         <div style={{ width: 100 }}>
