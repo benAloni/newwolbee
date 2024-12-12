@@ -30,7 +30,10 @@ const Notifications = () => {
   const [currentPage, setCurrentPage] = useState(0); //for tracking current page
   const itemsPerPage = 10;
   const [notifications, setNotifications] = useState([]);
-  const staticNotifications = staticNotificationsData;
+  // const staticNotifications = useRef(staticNotificationsData);
+  const staticNotifications = staticNotificationsData
+  console.log(staticNotifications);
+  
   const [employeeId, setEmployeeId] = useState(null);
 
   const fetchData = async () => {
@@ -69,7 +72,7 @@ const Notifications = () => {
     const today = new Date();
     const formattedHolidays = await getHolidaysFromApi();
 
-    const eventNotifications = data.flatMap((event) => {
+    const eventNotifications = data?.flatMap((event) => {
       const notifications = [];
       // Birthday Notification
       if (event.eventDetails?.type === "birthday") {        
@@ -155,11 +158,16 @@ const Notifications = () => {
 
       return notifications;
     });
-    setNotifications([...staticNotifications, ...eventNotifications]);
+    
+    if(eventNotifications === undefined) {
+      setNotifications([...staticNotifications]);
+    } else {
+      setNotifications([...staticNotifications, ...eventNotifications]);     
+    }
   };
 
   useEffect(() => {
-    if (data) {
+    if (notifications) {
       fetchHolidaysAndGenerateNotifications(data);
     }
   }, [data]);
