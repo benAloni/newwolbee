@@ -27,7 +27,6 @@ app.use(
 // FOR GOOD GOOD PRACTICE. since"" empty env is a red flag
 const port = process.env.PORT ?? 5000;
 
-
 dbConnection().then(() => {
   // initializeScheduler();
   app.use("/api", router);
