@@ -112,6 +112,18 @@ const employeeSchema = new mongoose.Schema({
       endDate: { type: Date },
     },
   ],
+  sickLeave: [
+    {
+      startDate: {type: Date},
+      endDate: {type : Date},
+    }
+  ],
+  remainingSickLeaveDays: {
+    type: Number
+  },
+  remainingVacationLeaveDays: {
+    type: Number
+  },
   uid: { type: String ,
   required: [true, "Please provide uid of the employee creator"],
 },

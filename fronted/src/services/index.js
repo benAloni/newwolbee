@@ -5,6 +5,7 @@ import {
   addEmployee,
   deleteEmployee,
   updateEmployeeVacation,
+  updateEmployeeSickLeave,
 } from "./api/employees";
 import { fetchUserProfilePic, fetchEmployeesProfilePics } from "./api/profile";
 import { fetchEvents, addEvent } from "./api/calendarEvents";
@@ -22,6 +23,7 @@ export {
   fetchEmployee,
   addEmployee,
   updateEmployeeVacation,
+  updateEmployeeSickLeave,
   fetchUserProfilePic,
   fetchEmployeesProfilePics,
   fetchEvents,

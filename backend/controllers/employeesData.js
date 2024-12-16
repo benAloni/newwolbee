@@ -111,7 +111,36 @@ export const updateEmployeeVacation = async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 };
+export const updateEmployeeSickLeave = async (req, res) => {
+  const { id, startDate, endDate } = req.body;
 
+  try {
+    const updatedEmployee = await EmployeeModel.findByIdAndUpdate(
+      id,
+      {
+        $push: {
+          sickLeave: {
+            startDate,
+            endDate,
+          },
+        },
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    if (!updatedEmployee) {
+      console.log("Employee not found");
+      return res.status(404).send("Employee not found");
+    }
+    res.status(200).json(updatedEmployee);
+  } catch (error) {
+    console.error("Error updating employee vacation:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
 export const updateEmployeeInsights = async (req, res) => {
   const { id, topInsights, latestInsights, latestActivity } = req.body;
   try {

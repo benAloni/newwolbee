@@ -27,6 +27,7 @@ import {
   updateEmployeeVacation,
   fetchEmployees,
   fetchEmployeesProfilePics,
+  updateEmployeeSickLeave,
 } from "../../../services";
 import { userProfile } from "../../../imgs";
 import Swal from "sweetalert2";
@@ -36,8 +37,9 @@ export default function PopUp() {
   const [isOpen, setIsOpen] = useState(false);
   const [currentEventType, setCurrentEventType] = useState(null);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
-  const [showEmployeeDetails, setShowEmployeeDetails] = useState(false);
-  const [showNewModal, setShowNewModal] = useState(false);
+  const [showEngagementModal, setShowEngagementModal] = useState(false);
+  const [showVacationModal, setShowVacationModal] = useState(false);
+  const [showSickLeaveModal, setShowSickLeaveModal] = useState(false);
   const [selectedPurposeOfTrip, setSelectedPurposeOfTrip] = useState("");
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
@@ -139,7 +141,12 @@ export default function PopUp() {
       imageUrl: rings,
       onClick: () => openSubModal("Engagement"),
     },
-    { id: 2, name: "Sick leave", imageUrl: sick, onClick: null },
+    {
+      id: 2,
+      name: "Sick leave",
+      imageUrl: sick,
+      onClick: () => openSubModal("Sick Leave"),
+    },
     {
       id: 3,
       name: "Vacation Leave",
@@ -158,25 +165,26 @@ export default function PopUp() {
     setIsOpen(false);
     setCurrentEventType(null);
     setSelectedEmployee(null);
-    setShowEmployeeDetails(false);
-    setShowNewModal(false);
+    setShowEngagementModal(false);
+    setShowVacationModal(false);
   };
 
   const openSubModal = (eventType) => {
     setCurrentEventType(eventType);
-    setShowEmployeeDetails(false);
-    setShowNewModal(false);
+    setShowEngagementModal(false);
+    setShowVacationModal(false);
   };
 
   const handleEmployeeClick = (employee) => {
     setSelectedEmployee(employee);
     if (currentEventType === "Vacation Leave") {
-      setShowNewModal(true);
+      setShowVacationModal(true);
     } else if (currentEventType === "Engagement") {
-      setShowEmployeeDetails(true);
+      setShowEngagementModal(true);
+    } else if (currentEventType === "Sick Leave") {
+      setShowSickLeaveModal(true);        
     }
   };
-
   const handleDateClick = () => {
     setShowStartDatePicker(!showStartDatePicker);
   };
@@ -248,6 +256,35 @@ export default function PopUp() {
       throw error;
     }
   };
+  const updateSickLeave = async () => {
+    if (
+      !selectedEmployee ||
+      !selectedStartDate ||
+      !selectedEndDate
+    ) {
+      console.log("Missing required data");
+      return;
+    }
+    try {
+      const response = await updateEmployeeSickLeave({
+        id: selectedEmployee._id,
+        startDate: selectedStartDate,
+        endDate: selectedEndDate,
+      });
+
+      if (response.status === 200) {
+        Swal.fire(
+          "Success!",
+          `${selectedEmployee.fullName}'s sick leave dates had been added to your calendar successfully`,
+          "success"
+        );
+      }
+    } catch (error) {
+      console.log("Error updating vacation:", error);
+      alert(`Error: ${error.message}`);
+      throw error;
+    }
+  }
   const h1style = {
     textAlign: "center",
     marginBottom: "20px",
@@ -417,11 +454,11 @@ export default function PopUp() {
           )}
 
           {/* Employee details modal */}
-          {showEmployeeDetails && selectedEmployee && (
+          {showEngagementModal && selectedEmployee && (
             <div className="sub-modal">
               <span
                 className="close"
-                onClick={() => setShowEmployeeDetails(false)}
+                onClick={() => setShowEngagementModal(false)}
               >
                 &times;
               </span>
@@ -633,10 +670,13 @@ export default function PopUp() {
           )}
 
           {/* Vacation Modal */}
-          {showNewModal && (
+          {showVacationModal && (
             <div className="sub-modal">
               <h2>{selectedEmployee.name}</h2>
-              <span className="close" onClick={() => setShowNewModal(false)}>
+              <span
+                className="close"
+                onClick={() => setShowVacationModal(false)}
+              >
                 &times;
               </span>
               <div
@@ -830,6 +870,89 @@ export default function PopUp() {
                     </div>
                   </div>
                 )}
+              </div>
+            </div>
+          )}
+          {/* Sick Leave Modal  */}
+          {showSickLeaveModal && (
+            <div className="sub-modal">
+              <span
+                className="close"
+                onClick={() => setShowSickLeaveModal(false)}
+              >
+                &times;
+              </span>
+              <div
+                style={{
+                  width: "800px",
+                  height: "500px",
+                  overflowY: "scroll",
+                  padding: "20px",
+                  border: "1px solid #ccc",
+                  textAlign: "center",
+                }}
+              >
+                <h2 style={{ marginTop: "30px", marginBottom: "10px" }}>
+                  {`Set ${selectedEmployee.fullName}'s sick leave dates`}
+                </h2>
+                <button
+                  onClick={handleDateClick}
+                  style={{
+                    padding: "10px 20px",
+                    borderRadius: "5px",
+                    border: "1px solid #ccc",
+                    cursor: "pointer",
+                  }}
+                >
+                  {formatStartDate(selectedStartDate)}
+                </button>
+                <br />
+                <p>Until</p>
+                <button
+                  onClick={handleEndDateClick}
+                  style={{
+                    padding: "10px 20px",
+                    borderRadius: "5px",
+                    border: "1px solid #ccc",
+                    cursor: "pointer",
+                  }}
+                >
+                  {formatEndDate(selectedEndDate)}
+                </button>
+                {}
+                {showStartDatePicker && (
+                  <div style={{ marginTop: "20px" }}>
+                    <DatePicker
+                      selected={selectedStartDate}
+                      onChange={handleDateChange}
+                      inline
+                    />
+                  </div>
+                )}
+
+                {showEndDatePicker && (
+                  <div style={{ marginTop: "20px" }}>
+                    <DatePicker
+                      selected={selectedEndDate}
+                      onChange={handleEndDateChange}
+                      inline
+                    />
+                  </div>
+                )}
+                <button
+                  onClick={updateSickLeave}
+                  style={{
+                    marginTop: "30px",
+                    padding: "10px 20px",
+                    borderRadius: "5px",
+                    border: "1px solid #ccc",
+                    backgroundColor: "#4CAF50",
+                    color: "white",
+                    cursor: "pointer",
+                  }}
+                >
+                  confirm
+                </button>
               </div>
             </div>
           )}

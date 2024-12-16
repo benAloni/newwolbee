@@ -21,7 +21,7 @@ import "./calen.css";
 import { fetchEvents, fetchEmployees } from "../../../../../services";
 import { auth } from "../../../../../firebase/firebaseConfig";
 
-const Calendar = (props) => {
+const Calendar = () => {
   const [events, setEvents] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
@@ -142,9 +142,30 @@ const Calendar = (props) => {
           return []; 
         }
       });
+      const employeeSickLeaveDates = data.employees.flatMap((employee) => {
+        if (employee.sickLeave && employee.sickLeave.length > 0) {
+          return employee.sickLeave.flatMap((sickLeave) => [
+            {
+              title: `${employee.fullName} is currently in sick leave and won't be available today`,
+              className: "bg-danger",
+              start: sickLeave.startDate,
+              end: sickLeave.startDate,
+            },
+            {
+              title: `${employee.fullName} is back to work from sick leave `,
+              className: "bg-purple",
+              start: sickLeave.endDate,
+              end: sickLeave.endDate,
+            },
+          ]);
+        } else {
+          return []; 
+        }
+      });
       
       setEvents((prevEvents) => [
         ...employeeVacationEvents,
+        ...employeeSickLeaveDates,
         ...newEvents,
         ...employeeBirthdayEvents,
         ...foodHolidayEvents,

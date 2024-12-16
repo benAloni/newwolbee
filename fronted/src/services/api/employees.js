@@ -83,3 +83,27 @@ export const updateEmployeeVacation = async ({
     console.log("Error updating employee's vacation:", error);
   }
 };
+export const updateEmployeeSickLeave = async ({
+  id,
+  startDate,
+  endDate,
+}) => {
+  
+  const selectedStartDate = new Date(startDate)
+  selectedStartDate.setDate(selectedStartDate.getDate() + 1)
+  const selectedEndDate = new Date(endDate)
+  selectedEndDate.setDate(selectedEndDate.getDate() + 1)
+  try {
+    const response = await client.post("/updateEmployeeSickLeave", {
+      id,
+      startDate: selectedStartDate,
+      endDate:selectedEndDate,
+    });
+    if (response.status === 200) {
+      // const result = response.data;
+      return response;
+    }
+  } catch (error) {
+    console.log("Error updating employee's sick leave:", error);
+  }
+};
