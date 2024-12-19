@@ -8,44 +8,45 @@ import { fetchEmployees } from "../../../services";
 import { userProfile } from "../../../imgs";
 
 const Profile = () => {
-  const user = useSelector((state)=> state.auth?.user)
-  const uid = useSelector((state)=> state.auth?.user.uid)
+  const user = useSelector((state) => state.auth?.user);
+  const uid = useSelector((state) => state.auth?.user.uid);
   const { employeeId } = useParams();
   const [selectedEmployee, setSelectedEmployee] = useState(null);
-  const queryClient= useQueryClient()
+  const queryClient = useQueryClient();
 
   const cachedEmployees = queryClient.getQueryData(["employees", uid]);
-  const cachedEmployee = cachedEmployees?.find(emp => emp.id === employeeId);
+  const cachedEmployee = cachedEmployees?.find((emp) => emp.id === employeeId);
 
-//Temporary solution..might save employee's avatar in db later on
+  //Temporary solution..might save employee's avatar in db later on
   useEffect(() => {
     if (cachedEmployee?.avatar) {
       localStorage.setItem("cachedEmployeeAvatar", cachedEmployee.avatar);
     }
   }, [cachedEmployee]);
 
-//Retrieve the avatar from local storage if not found in query cache
+  //Retrieve the avatar from local storage if not found in query cache
   const cachedEmployeeAvatar =
     cachedEmployee?.avatar || localStorage.getItem("cachedEmployeeAvatar");
 
   const { data: employees } = useQuery({
     queryKey: ["employees"],
     queryFn: fetchEmployees,
-    enabled: !!user
+    enabled: !!user,
   });
 
-  localStorage.setItem("employeeAvatar", cachedEmployeeAvatar)
-  const employeeAvatar = localStorage.getItem("employeeAvatar")
- 
+  localStorage.setItem("employeeAvatar", cachedEmployeeAvatar);
+  const employeeAvatar = localStorage.getItem("employeeAvatar");
+
   useEffect(() => {
-    if(user) {
+    if (user) {
       if (employees && employeeId) {
-        const employee = employees.find((employee) => employee._id === employeeId);
+        const employee = employees.find(
+          (employee) => employee._id === employeeId
+        );
         setSelectedEmployee(employee);
       }
-    }         
+    }
   }, [employees, employeeId, user]);
-
 
   return (
     <>
@@ -61,9 +62,11 @@ const Profile = () => {
                   <div className="profile-view">
                     <div className="profile-img-wrap">
                       <div className="profile-img">
-                          <img src={employeeAvatar || userProfile}
+                        <img
+                          src={employeeAvatar || userProfile}
                           loading="lazy"
-                          alt="UserImage" />
+                          alt="UserImage"
+                        />
                       </div>
                     </div>
                     <div className="profile-basic">
@@ -83,7 +86,11 @@ const Profile = () => {
                             <li>
                               <div className="title">Phone:</div>
                               <div className="text">
-                                <Link to={`tel:050-1234567`}>050-1234567</Link>
+                                {selectedEmployee && selectedEmployee.phone && (
+                                  <Link to={selectedEmployee.phone}>
+                                    {selectedEmployee.phone}
+                                  </Link>
+                                )}{" "}
                               </div>
                             </li>
                             <li>

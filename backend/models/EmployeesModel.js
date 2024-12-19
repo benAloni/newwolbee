@@ -60,6 +60,7 @@ const employeeSchema = new mongoose.Schema({
   },
   phone: {
     type: String,
+    required: [true, "Please provide Phone Number"],
   },
   maritalStatus: {
     type: String,

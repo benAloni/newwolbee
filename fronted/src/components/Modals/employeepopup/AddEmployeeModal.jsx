@@ -438,7 +438,7 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
                       placeholder="Interesting fact"
                     />
                   </div>
-                  <div className="input-block mb-3">
+                  <div className="input-block mb-3 col-sm-6">
                     <label className="col-form-label">
                       Favorite Singer <span className="text-danger">*</span>
                     </label>
@@ -450,7 +450,23 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
                       placeholder={`favorite singer`}
                     />
                   </div>
-
+                  <div className="input-block mb-3 col-sm-6">
+                    <label className="col-form-label">
+                      Phone Number <span className="text-danger">*</span>
+                    </label>
+                    <input
+                      className={`form-control ${
+                        errors.phone ? "border-danger" : ""
+                      }`}
+                      type="text"
+                      name="phone"
+                      {...register("phone")}
+                      placeholder="Employee's phone"
+                    />
+                    {errors.phone && (
+                      <div className="text-danger">{errors.phone}</div>
+                    )}
+                  </div>
                   <div className="col-sm-12">
                     <div className="input-block mb-3">
                       <label className="col-form-label">
