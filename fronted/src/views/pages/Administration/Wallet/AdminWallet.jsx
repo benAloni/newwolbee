@@ -1,7 +1,7 @@
 import React from "react";
 import Breadcrumbs from "../../../../components/Breadcrumbs";
-import Charts from "../../MainPages/Dashboard/AdminDashboard/charts";
-import Statistics from "../../MainPages/Dashboard/AdminDashboard/statistics";
+import Charts from "../../MainPages/Dashboards/Admin/charts";
+import Statistics from "../../MainPages/Dashboards/Admin/statistics";
 
 
 const AdminWallet = () => {

@@ -1,13 +1,12 @@
 import React from "react";
-// import Header from "../../../../layout/Header";
 import Sidebar from "../../../../../layout/SideBar";
-import HrStatistics from "./HrStatistics";
+import AdminStatistics from "./AdminStatistics";
 
-export default function HrDashboard() {
+export default function AdminDashboard() {
   return (
     <div className="content container-fluid">
       <Sidebar />
-      <HrStatistics />
+      <AdminStatistics />
     </div>
   );
 }

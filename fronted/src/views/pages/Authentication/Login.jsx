@@ -54,9 +54,9 @@ const Login = () => {
         tokenData.claims.role === undefined
       ) {
         if (tokenData.claims.role === "manager") {
-          navigate("/hrDashboard");
+          navigate("/adminDashboard");
         } else if (tokenData.claims.role === "otherUser") {
-          navigate("/myDashboard");
+          navigate("/hrDashboard");
         } else {
           navigate("/create-account");
         }
@@ -84,9 +84,9 @@ const Login = () => {
         tokenData.claims.role === undefined
       ) {
         if (tokenData.claims.role === "manager") {
-          navigate("/hrDashboard");
+          navigate("/adminDashboard");
         } else if (tokenData.claims.role === "otherUser") {
-          navigate("/myDashboard");
+          navigate("/hrDashboard");
         } else {
           navigate("/create-account");
         }

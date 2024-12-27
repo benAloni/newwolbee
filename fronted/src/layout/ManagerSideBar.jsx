@@ -9,7 +9,7 @@ const  ManagerSideBar = [
         menuValue: "Home page",
         hasSubRoute: false,
         showSubRoute: false,
-        route: "/hrDashboard",
+        route: "/adminDashboard",
         icon: "la la-user",
       },
       {

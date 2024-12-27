@@ -9,7 +9,7 @@ export const managerSideBarData = [
         menuValue: "Home Page",
         hasSubRoute: false,
         showSubRoute: false,
-        route: "/hrDashboard",
+        route: "/adminDashboard",
         icon: "la la-user",
       },
       {

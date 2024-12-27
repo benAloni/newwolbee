@@ -11,9 +11,9 @@ const PublicRoutes = () => {
     
   } else {
     if(user.role === "manager"){
-        return <Navigate to={"/hrDashboard"}/>
+        return <Navigate to={"/adminDashboard"}/>
     } else if(user.role === "otherUser"){
-        return <Navigate to={"/myDashboard"}/>
+        return <Navigate to={"/hrDashboard"}/>
     }
   }
 };

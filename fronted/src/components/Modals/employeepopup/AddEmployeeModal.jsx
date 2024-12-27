@@ -77,6 +77,7 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
       team: selectedTeam,
       gender: selectedGender,
       maritalStatus: selectedMaritalStatus,
+      
     };
     try {
       const response = await addEmployee({

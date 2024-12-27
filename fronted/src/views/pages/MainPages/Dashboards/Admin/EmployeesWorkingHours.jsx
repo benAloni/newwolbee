@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useSelector } from 'react-redux';
-import { fetchEmployees, fetchEmployeesProfilePics } from '../../../../../../services';
-import "../scrollBarMainEmployee.css"
-const EmployeeGrph = () => {
+import { fetchEmployees, fetchEmployeesProfilePics } from '../../../../../services';
+
+const EmployeesWorkingHours = () => {
   const [animated, setAnimated] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredEmployees, setFilteredEmployees] = useState([]);
@@ -33,7 +33,7 @@ const EmployeeGrph = () => {
     }
   };
 
-  const { data: employees = [], isLoading } = useQuery({
+  const { data: employees , isLoading } = useQuery({
     queryKey: ['employees'],
     queryFn: getEmployees,
   });
@@ -42,10 +42,10 @@ const EmployeeGrph = () => {
     setAnimated(true);
   }, []);
 
-  useEffect(() => {
-    if (employees.length) {
+  useEffect(() => {    
+    if (employees?.length > 0) {      
       const filtered = employees.filter((employee) =>
-        employee.fullName.toLowerCase().includes(searchTerm.toLowerCase())
+        employee.fullName.includes(searchTerm)
       );
       setFilteredEmployees(filtered);
     }
@@ -153,4 +153,4 @@ const EmployeeGrph = () => {
   );
 };
 
-export default EmployeeGrph;
+export default EmployeesWorkingHours;

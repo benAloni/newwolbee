@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Outlet, Route, Routes, Navigate } from "react-router-dom";
 import { Header, SideBar } from "../../layout";
-import EmployeeDashboard from "../../views/pages/MainPages/Dashboard/EmployeeDashboard/index.jsx";
+import EmployeeDashboard from "../../views/pages/MainPages/Dashboards/EmployeeDashboard/index.jsx";
 import Calendar from "../../views/pages/MainPages/Apps/calendar/Calendar.jsx";
 import AllEmployees from "../../views/pages/Employees/AllEmployees.jsx";
 import Department from "../../views/pages/Employees/Department.jsx";
@@ -12,14 +12,14 @@ import ClientProfile from "../../views/pages/Profile/ClientProfile.jsx";
 import Profile from "../../views/pages/Profile/Profile.jsx";
 import EmployeeList from "../../views/pages/Employees/EmployeeList.jsx";
 import Assets from "../../views/pages/Administration/Assets/index.jsx";
-import DealsDashboard from "../../views/pages/MainPages/Dashboard/DealsDashboard/index.jsx";
-import LeadsDashboard from "../../views/pages/MainPages/Dashboard/LeadsDashboard/index.jsx";
+import DealsDashboard from "../../views/pages/MainPages/Dashboards/DealsDashboard/index.jsx";
+import LeadsDashboard from "../../views/pages/MainPages/Dashboards/LeadsDashboard/index.jsx";
 import CompanyEvents from "../../views/pages/Authentication/CompanyEvents.jsx";
-import RetentionStatistics from "../../views/pages/MainPages/Dashboard/AdminDashboard/RetentionStatistics.jsx";
+import RetentionStatistics from "../../views/pages/MainPages/Dashboards/Admin/RetentionStatistics.jsx";
 import BirthdayPresentPage from "../../views/pages/MainPages/Apps/notifications/mainNotifications/ShowNotifications/BirthdayPresentPage.jsx";
 import NotificationsPage from "../../views/pages/MainPages/Apps/contacts/NotificationsPage.jsx";
-import HrDashboard from "../../views/pages/MainPages/Dashboard/AdminDashboard/HrDashboard.jsx";
-import MyDashboard from "../../views/pages/MainPages/Dashboard/AdminDashboard/MyDashboard.jsx";
+import AdminDashboard from "../../views/pages/MainPages/Dashboards/Admin/AdminDashboard.jsx";
+import HrDashboard from "../../views/pages/MainPages/Dashboards/Hr/HrDashboard.jsx";
 import UserSettings from "../../views/pages/Authentication/UserSettings.jsx";
 import AdminWallet from "../../views/pages/Administration/Wallet/AdminWallet.jsx";
 import UpComingEvents from "../../views/pages/Employees/Projects/mainUpcomingEvents/UpComingEvents.jsx";
@@ -29,13 +29,13 @@ const AppContainer = () => {
   const routingObjects = [
     {
       id: 1,
-      path: "hrDashboard",
-      element: <HrDashboard />,
+      path: "adminDashboard",
+      element: <AdminDashboard />,
     },
     {
       id: 2,
-      path: "myDashboard",
-      element: <MyDashboard />,
+      path: "hrDashboard",
+      element: <HrDashboard />,
     },
     {
       id: 17,

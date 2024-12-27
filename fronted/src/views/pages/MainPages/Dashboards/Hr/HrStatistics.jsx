@@ -28,11 +28,9 @@ import selena from "../../../../../imgs/avatar_10.JPG";
 import emma from "../../../../../imgs/avatar_11.JPG";
 import sofia from "../../../../../imgs/avatar_12.JPG";
 import Select from "react-select";
-import ProgressBar from "./ProgressBar";
+import ProgressBar from "../Admin/ProgressBar";
 import { AlignCenter } from "react-feather";
 import { auth } from "../../../../../firebase/firebaseConfig";
-import { Modal, notification } from "antd";
-import LisaWeb from "./emplo/Lisa";
 import sick from "../../../../../imgs/sick.png"
 import vacation from "../../../../../imgs/vacation.png"
 import personal from "../../../../../imgs/personal.png"
@@ -42,7 +40,6 @@ import PopUp from "../../../Employees/PopUp";
 // import satisfaction1 from "../../../../../imgs/growth4.png"
 // import growth from "../../../../../imgs/growth5.png"
 
-// console.log(auth.currentUser.getIdTokenResult());
 export default function HrStatistics() {
   const [selectedTeam, setSelectedTeam] = useState("");
   const [values, setValues] = useState([]);

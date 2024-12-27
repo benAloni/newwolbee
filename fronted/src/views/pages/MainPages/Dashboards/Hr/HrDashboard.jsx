@@ -1,15 +1,13 @@
 import React from "react";
-import Breadcrumbs from "../../../../../components/Breadcrumbs";
-import Statistics from "./statistics";
-import MyStatistics from "./MyStatistics";
+import HrStatistics from "../Hr/HrStatistics";
 
 
-export default function MyDashboard() {
+export default function HrDashboard() {
   return (
     <div className="main-wrapper">
       <div className="page-wrapper">
         <div className="content container-fluid">
-          <MyStatistics />
+          <HrStatistics />
           {/* <Statistics /> */}
         </div>
       </div>
