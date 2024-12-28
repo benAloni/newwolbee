@@ -5,13 +5,8 @@ import { useSelector } from "react-redux";
 import AddEmployeeModal from "../../../components/Modals/employeepopup/AddEmployeeModal";
 import Breadcrumbs from "../../../components/Breadcrumbs";
 import EmployeeListFilter from "../../../components/EmployeeListFilter";
-import {
-  fetchEmployees,
-  fetchEmployeesProfilePics,
-  fetchTeams,
-} from "../../../services";
+import { fetchEmployees, fetchTeams } from "../../../services";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { userProfile } from "../../../imgs";
 import { Loading } from "../../../layout";
 import DeleteEmployeeModal from "../../../components/Modals/DeleteEmployeeModal";
 
@@ -36,34 +31,9 @@ const AllEmployees = () => {
     }
   }, [user]);
 
-  const getEmployees = async () => {
-    let employeesWithProfilePics;
-    try {
-      const employees = await fetchEmployees();
-
-      employeesWithProfilePics = await Promise.all(
-        employees?.map(async (employee) => {
-          const profilePicUrl = await fetchEmployeesProfilePics(
-            uid,
-            employee.employeeId
-          );
-          return {
-            ...employee,
-            id: employee._id,
-            employeeId: employee.employeeId,
-            avatar: profilePicUrl || userProfile,
-          };
-        })
-      );
-      queryClient.setQueryData(["employees", uid], employeesWithProfilePics);
-      return employeesWithProfilePics;
-    } catch (error) {
-      console.log("Error getting employees :", error);
-    }
-  };
   const { data: employees, isLoading } = useQuery({
     queryKey: ["employees"],
-    queryFn: getEmployees,
+    queryFn: fetchEmployees,
   });
 
   const { data: teams } = useQuery({
@@ -155,6 +125,7 @@ const AllEmployees = () => {
               >
                 <div className="profile-widget">
                   <div className="profile-img">
+                    {console.log("Rendering Image URL: ", employee.imageUrl)}
                     <Link
                       to={{
                         pathname: `/profile/${employee._id}`,
@@ -175,7 +146,7 @@ const AllEmployees = () => {
                       </span>
                       <img
                         loading="lazy"
-                        src={employee.avatar}
+                        src={employee.imageUrl}
                         alt={employee.fullName}
                       />
                     </Link>
@@ -231,7 +202,7 @@ const AllEmployees = () => {
       <AddEmployeeModal
         onEmployeeAdded={() => queryClient.invalidateQueries(["employees"])}
       />
-      <DeleteEmployeeModal employee={employeeToDelete}/>
+      <DeleteEmployeeModal employee={employeeToDelete} />
     </div>
   );
 };

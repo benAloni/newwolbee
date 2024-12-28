@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import EditPersonalInfoModal from "../../../components/Modals/EditPersonalInfoModal";
 import { ListItem, ProjectDetails } from "./ProfileContent";
 
-const ProfileTab = ({selectedEmployee}) => {
+const EditEmployeeProfile = ({selectedEmployee}) => {
   
   const personalInfoData = [
     { id: 1, title: "Passport No.", text: "9876543210" },
@@ -94,6 +94,7 @@ const ProfileTab = ({selectedEmployee}) => {
                     Personal Information{" "}
                     <Link
                       to="#"
+                      // img={selectedEmployee?.imgUrl}
                       className="edit-icon"
                       data-bs-toggle="modal"
                       data-bs-target="#personal_info_modal"
@@ -323,4 +324,4 @@ const ProfileTab = ({selectedEmployee}) => {
   );
 };
 
-export default ProfileTab;
+export default EditEmployeeProfile;

@@ -4,12 +4,10 @@ import { useQueryClient, useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import Select from "react-select";
 import { fetchTeams } from "../../../../../services";
-import axios from "axios";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { userProfile } from "../../../../../imgs";
 import HelfBar from "./HelfBar";
-import { app, auth, storage } from "../../../../../firebase/firebaseConfig";
 import { fetchUserProfilePic } from "../../../../../services";
 import {
   fetchEmployees,
@@ -35,8 +33,6 @@ export default function AdminStatistics() {
   const [greeting, setGreeting] = useState("");
   const [filteredEmployees, setFilteredEmployees] = useState([]);
 
-  // useQuery
-  const uid = useSelector((state) => state.auth?.user.uid);
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -56,40 +52,9 @@ export default function AdminStatistics() {
     setGreeting(dayPeriod); // Set the greeting message
   }, []);
 
-  const getEmployees = async () => {
-    let employeesWithProfilePics;
-    try {
-      const employees = await fetchEmployees();
-      employeesWithProfilePics = await Promise.all(
-        employees.map(async (employee) => {
-          const profilePicUrl = await fetchEmployeesProfilePics(
-            uid,
-            employee.employeeId
-          );
-          return {
-            ...employee,
-            id: employee._id,
-            employeeFullName: employee.fullName,
-            avatar: profilePicUrl || userProfile,
-          };
-        })
-      );
-      queryClient.setQueryData(["employees", uid], employeesWithProfilePics);
-      return employeesWithProfilePics;
-    } catch (error) {
-      console.log("Error getting employees :", error);
-    }
-  };
-
   const { data: employees } = useQuery({
     queryKey: ["employees"],
-    queryFn: getEmployees,
-  });
-
-  const { data } = useQuery({
-    queryKey: ["user-profile-pic"],
-    queryFn: () => fetchUserProfilePic(user),
-    enabled: !!user,
+    queryFn: fetchEmployees,
   });
 
   const { data: teams } = useQuery({
@@ -97,16 +62,6 @@ export default function AdminStatistics() {
     queryFn: fetchTeams,
   });
 
-  useEffect(() => {
-    if (data) {
-      // console.log("Data received:", data); // זה הקישור לתמונה?
-      setUserProfileImage(data);
-    }
-  }, [data]);
-
-  useEffect(() => {
-    // console.log("Updated userProfileImage:", userProfileImage); // האם הקישור מתעדכן פה?
-  }, [userProfileImage]);
   useEffect(() => {
     if (employees) {
       const filteredTeam = selectedTeam
@@ -422,7 +377,7 @@ export default function AdminStatistics() {
                         >
                           <img
                             loading="lazy"
-                            src={employee.avatar}
+                            src={employee.imageUrl}
                             alt={employee.fullName}
                             style={{
                               width: "80px",

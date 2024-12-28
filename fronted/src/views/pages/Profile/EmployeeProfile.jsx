@@ -1,32 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import ProfileTab from "./ProfileTab";
+import EditEmployeeProfile from "./EditEmployeeProfile";
 import ProfileVacationAndSickDays from "./ProfileVacationAndSickDays";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSelector } from "react-redux";
 import { fetchEmployees } from "../../../services";
 import { userProfile } from "../../../imgs";
 
-const Profile = () => {
+const EmployeeProfile = () => {
   const user = useSelector((state) => state.auth?.user);
-  const uid = useSelector((state) => state.auth?.user.uid);
   const { employeeId } = useParams();
   const [selectedEmployee, setSelectedEmployee] = useState(null);
-  const queryClient = useQueryClient();
-
-  const cachedEmployees = queryClient.getQueryData(["employees", uid]);
-  const cachedEmployee = cachedEmployees?.find((emp) => emp.id === employeeId);
-
-  //Temporary solution..might save employee's avatar in db later on
-  useEffect(() => {
-    if (cachedEmployee?.avatar) {
-      localStorage.setItem("cachedEmployeeAvatar", cachedEmployee.avatar);
-    }
-  }, [cachedEmployee]);
-
-  //Retrieve the avatar from local storage if not found in query cache
-  const cachedEmployeeAvatar =
-    cachedEmployee?.avatar || localStorage.getItem("cachedEmployeeAvatar");
 
   const { data: employees } = useQuery({
     queryKey: ["employees"],
@@ -34,8 +18,6 @@ const Profile = () => {
     enabled: !!user,
   });
 
-  localStorage.setItem("employeeAvatar", cachedEmployeeAvatar);
-  const employeeAvatar = localStorage.getItem("employeeAvatar");
 
   useEffect(() => {
     if (user) {
@@ -44,6 +26,8 @@ const Profile = () => {
           (employee) => employee._id === employeeId
         );
         setSelectedEmployee(employee);
+        console.log(selectedEmployee);
+        
       }
     }
   }, [employees, employeeId, user]);
@@ -63,7 +47,7 @@ const Profile = () => {
                     <div className="profile-img-wrap">
                       <div className="profile-img">
                         <img
-                          src={employeeAvatar || userProfile}
+                          src={selectedEmployee?.imageUrl}
                           loading="lazy"
                           alt="UserImage"
                         />
@@ -200,7 +184,7 @@ const Profile = () => {
             </div>
           </div>
           {/* Profile Info Tab */}
-          <ProfileTab selectedEmployee={selectedEmployee} />
+          <EditEmployeeProfile selectedEmployee={selectedEmployee} />
           <ProfileVacationAndSickDays selectedEmployee={selectedEmployee} />
         </div>
       </div>
@@ -208,4 +192,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default EmployeeProfile;

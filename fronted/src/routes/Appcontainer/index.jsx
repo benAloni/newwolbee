@@ -9,7 +9,7 @@ import Department from "../../views/pages/Employees/Department.jsx";
 import Project from "../../views/pages/Employees/Projects/Project.jsx";
 
 import ClientProfile from "../../views/pages/Profile/ClientProfile.jsx";
-import Profile from "../../views/pages/Profile/Profile.jsx";
+import EmployeeProfile from "../../views/pages/Profile/EmployeeProfile.jsx";
 import EmployeeList from "../../views/pages/Employees/EmployeeList.jsx";
 import Assets from "../../views/pages/Administration/Assets/index.jsx";
 import DealsDashboard from "../../views/pages/MainPages/Dashboards/DealsDashboard/index.jsx";
@@ -103,7 +103,7 @@ const AppContainer = () => {
     {
       id: 53,
       path: "profile/:employeeId",
-      element: <Profile />,
+      element: <EmployeeProfile />,
     },
     {
       id: 64,

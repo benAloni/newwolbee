@@ -22,7 +22,6 @@ import { userProfile } from "../../../imgs";
 import { useSelector } from "react-redux";
 
 const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
-  // const [addEmployeeModalOpen, setAddEmployeeModalOpen] = useState(false);
   const [selectedGender, setSelectedGender] = useState("");
   const [selectedMaritalStatus, setSelectedMaritalStatus] = useState("");
   const [selectedTeam, setSelectedTeam] = useState("");
@@ -71,20 +70,24 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
   });
 
   const onSubmit = async (data) => {
-    const formData = {
-      ...data,
-      ...employeeDates,
-      team: selectedTeam,
-      gender: selectedGender,
-      maritalStatus: selectedMaritalStatus,
-      
-    };
     try {
+     const uploadedEmployeeProfileImage = await uploadEmployeeImage();
+      let formData;
+         formData = {
+          ...data,
+          ...employeeDates,
+          team: selectedTeam,
+          gender: selectedGender,
+          maritalStatus: selectedMaritalStatus,
+          imageUrl: uploadedEmployeeProfileImage,
+        };
+
+      console.log(formData.imageUrl);
+
       const response = await addEmployee({
         employeeData: formData,
       });
       if (response.status === 200) {
-        await uploadEmployeeImage();
         Swal.fire(
           "Success!",
           `${data.fullName} has been added successfully to our employees`,
@@ -129,34 +132,13 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
     try {
       const snapshot = await uploadBytes(storageRef, employeeProfileImage);
       const url = await getDownloadURL(snapshot.ref);
-      setEmployeeProfileImage(url);
+      console.log("Uploaded image URL:", url);
       queryClient.invalidateQueries(["employees"]);
+      return url;
     } catch (error) {
       console.log("Error uploading image:", error.message);
     }
   };
-
-  // // Mutation for adding a notification
-  // const addNotificationMutation = useMutation({
-  //   mutationFn: async (eventData) => {
-  //     const response = await axios.post(
-  //       `${process.env.REACT_APP_SERVER_URI}/addNotification`,
-  //       { notificationsData: [eventData] },
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${user.token}`,
-  //         },
-  //       }
-  //     );
-  //     return response.data;
-  //   },
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries(["employees"]);
-  //   },
-  //   onError: (error) => {
-  //     console.error("Error adding notification:", error);
-  //   },
-  // });
 
   return (
     <>

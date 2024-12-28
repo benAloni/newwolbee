@@ -60,7 +60,7 @@ const employeeSchema = new mongoose.Schema({
   },
   phone: {
     type: String,
-    required: [true, "Please provide Phone Number"],
+    // required: [true, "Please provide Phone Number"],
   },
   maritalStatus: {
     type: String,
@@ -115,19 +115,23 @@ const employeeSchema = new mongoose.Schema({
   ],
   sickLeave: [
     {
-      startDate: {type: Date},
-      endDate: {type : Date},
-    }
+      startDate: { type: Date },
+      endDate: { type: Date },
+    },
   ],
   remainingSickLeaveDays: {
-    type: Number
+    type: Number,
   },
   remainingVacationLeaveDays: {
-    type: Number
+    type: Number,
   },
-  uid: { type: String ,
-  required: [true, "Please provide uid of the employee creator"],
-},
+  uid: {
+    type: String,
+    required: [true, "Please provide uid of the employee creator"],
+  },
+  imageUrl: {
+    type: String,
+  },
 });
 
 const EmployeeModel = mongoose.model("memployee", employeeSchema);
