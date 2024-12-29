@@ -31,6 +31,7 @@ import {
 import checkBirthdays from "../schedulers/checkBirthdays.js";
 import { getHolidaysOptionsDetails } from "../controllers/holidaysData.js";
 import checkEmployeesEvents from "../schedulers/checkEmployeesEvents.js";
+import {saveUserImageUrl} from "../controllers/userSettings.js"
 
 const router = express.Router();
 initializeApp({
@@ -93,6 +94,8 @@ router.post("/addNewCompanyEvent", addNewCompanyEvent);
 router.put("/updateCompanyEvent", updateCompanyEvent);
 router.delete("/deleteCompanyEvent/:id", deleteCompanyEvent);
 router.get("/getHolidaysOptionsDetails", getHolidaysOptionsDetails)
+
+router.post("/saveUserImageUrl", saveUserImageUrl)
 
 
 export default router;

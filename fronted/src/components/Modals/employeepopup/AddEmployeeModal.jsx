@@ -82,8 +82,6 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
           imageUrl: uploadedEmployeeProfileImage,
         };
 
-      console.log(formData.imageUrl);
-
       const response = await addEmployee({
         employeeData: formData,
       });

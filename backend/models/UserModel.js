@@ -18,6 +18,9 @@ const userSchema = new mongoose.Schema({
         type : String,
         required : [true, "please provide a role"]
     },
+    imageUrl: {
+        type: String,
+    }
 })
 
 const UserModel = mongoose.model('users', userSchema);

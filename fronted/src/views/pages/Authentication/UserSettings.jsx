@@ -8,7 +8,6 @@ import {
 } from "firebase/storage";
 import { CiCirclePlus } from "react-icons/ci";
 import { CiTrash } from "react-icons/ci";
-import { Header, SideBar } from "../../../layout";
 import { animated, useSpring } from "@react-spring/web";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
@@ -18,7 +17,6 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import dayjs from "dayjs";
 import BoxSelector from "./Barsettings";
-import manager from "../../../imgs/managerProfilePic.jpg";
 import { useSelector } from "react-redux";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetchUserProfilePic, uploadEmployeeImage } from "../../../services";
@@ -65,8 +63,6 @@ const UserSettings = () => {
     }
   };
   
-  
-  //move this function to profile.js
   const uploadUserImage = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -76,9 +72,9 @@ const UserSettings = () => {
     try {
       const snapShot = await uploadBytes(storageRef, file);
       const url = await getDownloadURL(snapShot.ref);
-      console.log(url);
       setUserProfileImage(url);
       queryClient.invalidateQueries(["user-profile-pic"]);
+      return url;
     } catch (error) {
       console.log("Error uploading user image:", error.message);
     }

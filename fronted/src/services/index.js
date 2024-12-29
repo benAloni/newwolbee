@@ -17,6 +17,7 @@ import {
   deleteCompanyEvent,
 } from "./api/companyEvents";
 import { fetchHolidaysDetailsOptions } from "./api/holidaysDetails";
+import {saveUserImageUrl} from "./api/userSettings"
 export {
   fetchTeams,
   fetchEmployees,
@@ -37,4 +38,5 @@ export {
   fetchHolidaysDetailsOptions,
   fetchEmployeesNotifications,
   updateEmployeeNotification,
+  saveUserImageUrl,
 };
