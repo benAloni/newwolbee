@@ -1,39 +1,32 @@
-/* eslint-disable eqeqeq */
-/* eslint-disable no-unused-vars */
 
-/* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
 import Scrollbars from "react-custom-scrollbars-2";
 import { useTranslation } from "react-i18next";
 // import { withRouter } from "react-router-dom";
 import { Link, useLocation } from "react-router-dom";
-import { SidebarData } from "./SideBarData";
-import { managerSideBarData } from "./HrSideBarData";
+import { managerSideBarData } from "./ManagerSideBar";
+import { hrSidebarData } from "./HrSideBar";
 import * as Icon from "react-feather";
 import { useSelector } from "react-redux";
 import { logout } from "../redux";
 import { signOut } from "firebase/auth";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { auth } from "../firebase/firebaseConfig";
-import { useDispatch } from 'react-redux';
-import { useQueryClient } from '@tanstack/react-query';
-import logo from "./logo.png"
+import { useDispatch } from "react-redux";
+import { useQueryClient } from "@tanstack/react-query";
+import logo from "./logo.png";
 
-const Sidebar = () => {
-
+const SideBar = () => {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
- 
+
   const pathname = location.pathname;
   const [sidebarData, setSidebarData] = useState([]);
-
   const [isSidebarExpanded, setSidebarExpanded] = useState(false);
   const [isMouseOverSidebar, setMouseOverSidebar] = useState(false);
   const [submenuDrop, setSubmenudrop] = useState(false);
-
-
 
   const handleLogout = () => {
     dispatch(logout());
@@ -44,17 +37,15 @@ const Sidebar = () => {
     navigate("/");
   };
 
-
   const user = useSelector((state) => state.auth.user);
   useEffect(() => {
     if (user && user.role) {
       if (user.role === "manager") {
         setSidebarData(managerSideBarData);
       } else {
-        setSidebarData(SidebarData);
+        setSidebarData(hrSidebarData);
       }
     }
-
   }, [user]);
 
   useEffect(() => {
@@ -84,13 +75,13 @@ const Sidebar = () => {
       updatedSection.menu = section.menu.map((menuItem) =>
         menu.menuValue != menuItem.menuValue
           ? {
-            ...menuItem,
-            showSubRoute: false,
-          }
+              ...menuItem,
+              showSubRoute: false,
+            }
           : {
-            ...menuItem,
-            showSubRoute: !menu.showSubRoute,
-          }
+              ...menuItem,
+              showSubRoute: !menu.showSubRoute,
+            }
       );
       return updatedSection;
     });
@@ -109,7 +100,6 @@ const Sidebar = () => {
     setSubmenudrop(!submenuDrop);
   };
 
-  
   return (
     <div
       className={`sidebar ${isSidebarExpanded ? "" : "hidden"}`}
@@ -119,23 +109,28 @@ const Sidebar = () => {
     >
       <div className="sidebar-inner slimscroll" style={{ overflow: false }}>
         <div id="sidebar-menu" className="sidebar-menu">
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '20px' }}>
-  <img 
-    src={logo} 
-    alt="logo" 
-    style={{
-      width: '70px', /* גודל התמונה */
-      height: '70px', /* גובה התמונה */
-      borderRadius: '50%', /* עיגול לתמונה */
-      objectFit: 'cover', /* שומר על פרופורציות התמונה */
-      // border: '2px solid #000', /* קו מסביב לתמונה */
-      display: 'block',
-    }} 
-  />
-</div>
-        
-            
-          
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              padding: "20px",
+            }}
+          >
+            <img
+              src={logo}
+              alt="logo"
+              style={{
+                width: "70px" /* גודל התמונה */,
+                height: "70px" /* גובה התמונה */,
+                borderRadius: "50%" /* עיגול לתמונה */,
+                objectFit: "cover" /* שומר על פרופורציות התמונה */,
+                // border: '2px solid #000', /* קו מסביב לתמונה */
+                display: "block",
+              }}
+            />
+          </div>
+
           <Scrollbars
             autoHide={false}
             autoHideTimeout={1000}
@@ -148,20 +143,20 @@ const Sidebar = () => {
             hideTracksWhenNotNeeded={true}
           >
             <ul
-      className="sidebar-vertical"
-      id="veritical-sidebar"
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'flex-start',
-        justifyContent: 'flex-start',
-        padding: '10px',
-        margin: 0,
-        listStyleType: 'none',
-        height: '100%',
-        width: '100%',
-      }}
-    >
+              className="sidebar-vertical"
+              id="veritical-sidebar"
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-start",
+                justifyContent: "flex-start",
+                padding: "10px",
+                margin: 0,
+                listStyleType: "none",
+                height: "100%",
+                width: "100%",
+              }}
+            >
               {/* {userRole !== "manager"} */}
               {sidebarData.map((mainTittle, index) => {
                 return (
@@ -302,8 +297,6 @@ const Sidebar = () => {
                         </>
                       );
                     })}
-
-
                   </>
                 );
               })}
@@ -312,23 +305,22 @@ const Sidebar = () => {
         </div>
 
         <div style={{ marginBottom: "20px" }}>
-  <div style={{ marginTop: "140px", marginLeft: "20px" }}> 
-    <div className="new">
-      <Link style={{ color: "black" }} to="/settings">Setting</Link>
-    </div>
-    <div className="new">
-      <a style={{ color: "black" }} onClick={handleLogout}>Sign Out</a>
-    </div>
-  </div>
-</div>
-
-</div>
-
-  
+          <div style={{ marginTop: "140px", marginLeft: "20px" }}>
+            <div className="new">
+              <Link style={{ color: "black" }} to="/settings">
+                Setting
+              </Link>
+            </div>
+            <div className="new">
+              <a style={{ color: "black" }} onClick={handleLogout}>
+                Sign Out
+              </a>
+            </div>
           </div>
-      
-  
+        </div>
+      </div>
+    </div>
   );
 };
 
-export default Sidebar;
+export default SideBar;

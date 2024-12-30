@@ -79,9 +79,9 @@ const { data: employees, isLoading, error } = useQuery({
             <h2>Select Employee for {currentEventType}</h2>
             {isLoading && <p>Loading employees...</p>}
             {error && <p>Failed to load employees: {error.message}</p>}
-            {!isLoading && employees && (
+            {/* {!isLoading && employees && (
               <EmployeeGrid employees={employees} onEmployeeClick={handleEmployeeClick} />
-            )}
+            )} */}
           </div>
         )}
 
@@ -89,9 +89,9 @@ const { data: employees, isLoading, error } = useQuery({
           <VacationModal employeeName={selectedEmployee?.fullName} />
         )}
 
-        {currentPage === 'dateSelection' && currentEventType === 'Sick Leave' && (
+        {/* {currentPage === 'dateSelection' && currentEventType === 'Sick Leave' && (
           <SickLeaveModal employeeName={selectedEmployee?.fullName} />
-        )}
+        )} */}
       </Modal>
     </div>
   );

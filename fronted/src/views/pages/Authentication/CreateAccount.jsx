@@ -45,9 +45,9 @@ const CreateAccount = () => {
       const refreshedToken = await auth.currentUser.getIdTokenResult(true);
       if (response.status === 201) {
         if (refreshedToken.claims.role === "manager") {
-          navigate("/adminDashboard");
+          navigate("/manager-dashboard");
         } else {
-          navigate("/hrDashboard");
+          navigate("/hr-dashboard");
         }
       } 
     } catch (error) {

@@ -97,7 +97,7 @@ const Breadcrumbs = (props) => {
         </div>
       </div>
     );
-  } else if (location.pathname === "/admin-dashboard") {
+  } else if (location.pathname === "/manager-dashboard") {
     addButton = (
       <div className="row">
         <div className="col">
@@ -115,7 +115,7 @@ const Breadcrumbs = (props) => {
           <h3 className="page-title">{props.maintitle}</h3>
           <ul className="breadcrumb">
             <li className="breadcrumb-item">
-              <Link to="/admin-dashboard">{props.title}</Link>
+              <Link to="/manager-dashboard">{props.title}</Link>
             </li>
             <li className="breadcrumb-item active">{props.subtitle}</li>
           </ul>
@@ -322,7 +322,7 @@ const Breadcrumbs = (props) => {
           <h3 className="page-title">{props.maintitle}</h3>
           <ul className="breadcrumb">
             <li className="breadcrumb-item">
-              <Link to="/admin-dashboard">{props.title}</Link>
+              <Link to="/manager-dashboard">{props.title}</Link>
             </li>
             <li className="breadcrumb-item active">{props.subtitle}</li>
           </ul>

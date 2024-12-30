@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { Outlet, Route, Routes, Navigate } from "react-router-dom";
-import { Header, SideBar } from "../../layout";
+import {SideBar, Header} from "../../layout";
 import EmployeeDashboard from "../../views/pages/MainPages/Dashboards/EmployeeDashboard/index.jsx";
 import Calendar from "../../views/pages/MainPages/Apps/calendar/Calendar.jsx";
 import AllEmployees from "../../views/pages/Employees/AllEmployees.jsx";
@@ -29,12 +29,12 @@ const AppContainer = () => {
   const routingObjects = [
     {
       id: 1,
-      path: "adminDashboard",
+      path: "manager-dashboard",
       element: <AdminDashboard />,
     },
     {
       id: 2,
-      path: "hrDashboard",
+      path: "hr-dashboard",
       element: <HrDashboard />,
     },
     {
@@ -122,7 +122,7 @@ const AppContainer = () => {
     },
     {
       id: 132,
-      path: "RetentionStatistics",
+      path: "retention-statistics",
       element: <RetentionStatistics />,
     },
     {
@@ -148,21 +148,9 @@ const AppContainer = () => {
     </>
   );
   
-  const mobileResponsive = (event) => {
-    const excludedHeader = document.querySelector(".header");
-    const excludedSidebar = document.querySelector(".sidebar");
-
-    if (
-      !excludedHeader.contains(event.target) &&
-      !excludedSidebar.contains(event.target)
-    ) {
-      document.body.classList.remove("slide-nav");
-    }
-  };
-
   return (
     <>
-      <div className="main-wrapper" onClick={mobileResponsive}>
+      <div className="main-wrapper" >
         <Routes>
           <Route path={"/*"} element={<Layouts />}>
             {routingObjects.map((item) => (

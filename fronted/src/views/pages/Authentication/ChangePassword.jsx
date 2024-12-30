@@ -10,7 +10,7 @@ const ChangePassword = () => {
           <div className="account-content">
             {/* Account Logo */}
             <div className="account-logo">
-              <Link to="/admin-dashboard">
+              <Link to="/manager-dashboard">
                 <img src={Applogo} alt="Dreamguy's Technologies" />
               </Link>
             </div>
@@ -32,7 +32,7 @@ const ChangePassword = () => {
                   </div>
                   <div className="submit-section mb-4">
                     <Link
-                      to="/admin-dashboard"
+                      to="/manager-dashboard"
                       className="btn btn-primary submit-btn"
                     >
                       Update Password

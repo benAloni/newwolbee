@@ -32,7 +32,6 @@ const Notifications = () => {
   const [notifications, setNotifications] = useState([]);
   // const staticNotifications = useRef(staticNotificationsData);
   const staticNotifications = staticNotificationsData
-  console.log(staticNotifications);
   
   const [employeeId, setEmployeeId] = useState(null);
 

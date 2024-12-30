@@ -1,9 +1,7 @@
 import Header from "./Header";
-import ManagerSideBar from "./ManagerSideBar";
 import Loading from "./Loading";
+import { managerSideBarData } from "./ManagerSideBar";
+import { hrSidebarData } from "./HrSideBar";
 import SideBar from "./SideBar";
-import { SidebarData } from "./SideBarData";
 
-
-
-export {Header, ManagerSideBar, Loading, SideBar, SidebarData}
+export { Header, Loading, SideBar, managerSideBarData, hrSidebarData };

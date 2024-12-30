@@ -1,19 +1,19 @@
 
-const  ManagerSideBar = [
+export const managerSideBarData = [
   {
-    tittle: "Main menu",
+    // tittle: "Main menu",
     showAsTab: false,
     separateRoute: false,
     menu: [
       {
-        menuValue: "Home page",
+        menuValue: "Home Page",
         hasSubRoute: false,
         showSubRoute: false,
-        route: "/adminDashboard",
+        route: "/manager-dashboard",
         icon: "la la-user",
       },
       {
-        menuValue: "Your employees",
+        menuValue: "Your Employees",
         hasSubRoute: false,
         showSubRoute: false,
         route: "/employees",
@@ -28,14 +28,14 @@ const  ManagerSideBar = [
         // style: getMenuItemStyle('Upcoming events'),
       },
       {
-        menuValue: "Upcoming events",
+        menuValue: "Events",
         hasSubRoute: false,
         showSubRoute: false,
         route: "/upcoming-events",
         icon: "la la-ticket",
       },
       {
-        menuValue: "Company events",
+        menuValue: "Company event",
         hasSubRoute: false,
         showSubRoute: false,
         route: "/company-events",
@@ -43,7 +43,7 @@ const  ManagerSideBar = [
       },
 
       {
-        menuValue: "Personalized gifts",
+        menuValue: "Gifts",
         hasSubRoute: false,
         showSubRoute: false,
         route: "#",
@@ -64,22 +64,7 @@ const  ManagerSideBar = [
         route: "/wallet",
         icon: "la la-dashcube",
       },
-      {
-        menuValue: "To do list",
-        hasSubRoute: false,
-        showSubRoute: false,
-        route: "#",
-        icon: "la la-list",
-      },
-
-      {
-        menuValue: "Useful info",
-        hasSubRoute: false,
-        showSubRoute: false,
-        route: "#",
-        icon: "la la-info",
-      },
+     
     ],
   },
 ];
-export default ManagerSideBar;
