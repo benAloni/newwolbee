@@ -125,7 +125,6 @@ const AllEmployees = () => {
               >
                 <div className="profile-widget">
                   <div className="profile-img">
-                    {console.log("Rendering Image URL: ", employee.imageUrl)}
                     <Link
                       to={{
                         pathname: `/profile/${employee._id}`,

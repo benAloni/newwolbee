@@ -25,55 +25,18 @@ export const getEmployeesNotifications = async (req, res) => {
   const { user } = req;
 
   try {
-    const today = new Date();
-    const currentMonth = today.getMonth() + 1;
-    const currentDay = today.getDate();
+    const today = new Date(); 
+    const todayStart = new Date(today.setHours(0, 0, 0, 0)); 
 
     const employeesNotifications = await EmployeeNotificationsModel.find({
       uid: user.uid,
       hasBeenDismissed: { $ne: true },
-      $expr: {
-        $and: [
-          {
-            $or: [
-              // If the month is greater than the current month
-              {
-                $gt: [{ $month: "$eventDetails.dateOfTheEvent" }, currentMonth],
-              },
-              {
-                // If the month is the same, compare the current day to the event day
-                $and: [
-                  {
-                    $eq: [
-                      { $month: "$eventDetails.dateOfTheEvent" },
-                      currentMonth,
-                    ],
-                  },
-                  {
-                    $gt: [
-                      { $dayOfMonth: "$eventDetails.dateOfTheEvent" },
-                      currentDay,
-                    ],
-                  },
-                ],
-              },
-            ],
-          },
-          // Ensuring notificationDueDate is equal to dateOfTheEvent
-          {
-            $eq: [
-              { $month: "$notificationDueDate" },
-              { $month: "$eventDetails.dateOfTheEvent" },
-            ],
-          },
-          {
-            $eq: [
-              { $dayOfMonth: "$notificationDueDate" },
-              { $dayOfMonth: "$eventDetails.dateOfTheEvent" },
-            ],
-          },
-        ],
-      },
+      $and: [
+        //comparing eventDetails.dateOfTheEvent to ensure it's in the future
+        {
+          "eventDetails.dateOfTheEvent": { $gte: todayStart },
+        },       
+      ],
     });
 
     if (!employeesNotifications || employeesNotifications.length === 0) {
@@ -89,9 +52,10 @@ export const getEmployeesNotifications = async (req, res) => {
   }
 };
 
+
 export const updateEmployeeNotification = async (req, res) => {
   const { updatedData } = req.body;
-  const notificationDueDate = updatedData.notificationDueDate;
+  const reminderDate = updatedData.reminderDate;
 
   try {
     const updatedEmployeeNotification =
@@ -100,7 +64,7 @@ export const updateEmployeeNotification = async (req, res) => {
         {
           hasBeenDismissed: updatedData.hasBeenDismissed,
           hasBeenHandled: updatedData.hasBeenHandled,
-          notificationDueDate,
+          reminderDate,
         },
         {
           new: true,

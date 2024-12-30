@@ -7,7 +7,7 @@ import {
   updateEmployeeVacation,
   updateEmployeeSickLeave,
 } from "./api/employees";
-import { fetchUserProfilePic, fetchEmployeesProfilePics } from "./api/profile";
+import { fetchUserProfilePic,fetchEmployeesProfilePics } from "./api/profile";
 import { fetchEvents, addEvent } from "./api/calendarEvents";
 import { fetchNotifications, fetchEmployeesNotifications, updateEmployeeNotification } from "./api/notifications";
 import {
@@ -26,7 +26,6 @@ export {
   updateEmployeeVacation,
   updateEmployeeSickLeave,
   fetchUserProfilePic,
-  fetchEmployeesProfilePics,
   fetchEvents,
   addEvent,
   fetchNotifications,
@@ -38,5 +37,5 @@ export {
   fetchHolidaysDetailsOptions,
   fetchEmployeesNotifications,
   updateEmployeeNotification,
-  saveUserImageUrl,
+  fetchEmployeesProfilePics,
 };

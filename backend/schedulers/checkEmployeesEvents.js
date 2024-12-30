@@ -126,7 +126,7 @@ const checkEmployeesEvents = async (req, res) => {
                 employeeId: employee.employeeId,
               },
               notificationCreatedAt: currentDate,
-              notificationDueDate: nextMonth,
+              reminderDate: nextMonth,
               hasBeenDismissed: false,
               hasBeenHandled: false,
               priority: "Low",
@@ -172,7 +172,7 @@ const checkEmployeesEvents = async (req, res) => {
                 employeeId: employee.employeeId,
               },
               notificationCreatedAt: currentDate,
-              notificationDueDate: nextTwoWeeks,
+              reminderDate: nextTwoWeeks,
               hasBeenDismissed: false,
               hasBeenHandled: false,
               priority: "Medium",
@@ -204,7 +204,7 @@ const checkEmployeesEvents = async (req, res) => {
                     employee.gender === "female" ? "her" : "him"
                   }!`,
                   notificationCreatedAt: currentDate,
-                  notificationDueDate: nextTwoWeeks,
+                  reminderDate: nextTwoWeeks,
                   priority: "Medium",
                 },
               }
@@ -243,7 +243,7 @@ const checkEmployeesEvents = async (req, res) => {
                 employeeId: employee.employeeId,
               },
               notificationCreatedAt: currentDate,
-              notificationDueDate: nextWeek,
+              reminderDate: nextWeek,
               hasBeenDismissed: false,
               hasBeenHandled: false,
               priority: "Medium",
@@ -275,7 +275,7 @@ const checkEmployeesEvents = async (req, res) => {
                     employee.gender === "female" ? "her" : "him"
                   }!`,
                   notificationCreatedAt: currentDate,
-                  notificationDueDate: nextWeek,
+                  reminderDate: nextWeek,
                 },
               }
             );
@@ -309,7 +309,7 @@ const checkEmployeesEvents = async (req, res) => {
                 employeeId: employee.employeeId,
               },
               notificationCreatedAt: currentDate,
-              notificationDueDate: tomorrow,
+              reminderDate: tomorrow,
               hasBeenDismissed: false,
               hasBeenHandled: false,
               priority: "Medium",
@@ -320,7 +320,6 @@ const checkEmployeesEvents = async (req, res) => {
               ...employeesEventsNotifications,
               newNotification,
             ];
-            console.log(newNotification);
             
           } else {
             await EmployeeNotificationsModel.findOneAndUpdate(
@@ -337,7 +336,7 @@ const checkEmployeesEvents = async (req, res) => {
                     employee.gender === "female" ? "her" : "him"
                   }!`,
                   notificationCreatedAt: currentDate,
-                  notificationDueDate: tomorrow,
+                  reminderDate: tomorrow,
                 },
               }
             );

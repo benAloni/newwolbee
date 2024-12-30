@@ -44,6 +44,16 @@ const checkBirthdays = async (req, res) => {
     //if there is an employee who's birthday is coming up in 2 weeks: create a notification about it
     if (employeeWithBirthdayNextTwoWeeks.length > 0) {
       for (const employee of employeeWithBirthdayNextTwoWeeks) {
+
+        const birthdayMonth = employee.dateOfBirth.getMonth() + 1;
+        const birthdayDay = employee.dateOfBirth.getDate();
+
+        let eventYear = today.getFullYear();
+        if (birthdayMonth < today.getMonth() + 1 || (birthdayMonth === 1 && today.getMonth() === 11)) {
+          eventYear += 1; //using the next year if the birthday is in January and today's month is December
+        }
+        const dateOfTheEvent = new Date(eventYear, birthdayMonth - 1, birthdayDay);
+       
         const newNotificationForABirthdayNextTwoWeeks =
           new EmployeeNotificationsModel({
             title: `${
@@ -53,11 +63,11 @@ const checkBirthdays = async (req, res) => {
             } a gift.`,
             eventDetails: {
               type: "birthday",
-              dateOfTheEvent: employee.dateOfBirth,
+              dateOfTheEvent,
               employeeId: employee.employeeId,
             },
             notificationCreatedAt: today,
-            notificationDueDate: nextTwoWeeks,
+            reminderDate: nextTwoWeeks,
             hasBeenDismissed: false,
             hasBeenHandled: false,
             priority: "Low",
@@ -70,13 +80,22 @@ const checkBirthdays = async (req, res) => {
     //if there is an employee who's birthday is coming up next week: create a notification about it or update the current notification
     if (employeeWithBirthdayNextWeek.length > 0) {
       for (const employee of employeeWithBirthdayNextWeek) {
+        const birthdayMonth = employee.dateOfBirth.getMonth() + 1;
+        const birthdayDay = employee.dateOfBirth.getDate();
+
+        let eventYear = today.getFullYear();
+        if (birthdayMonth < today.getMonth() + 1 || (birthdayMonth === 1 && today.getMonth() === 11)) {
+          eventYear += 1; 
+        }
+        const dateOfTheEvent = new Date(eventYear, birthdayMonth - 1, birthdayDay);
         const alreadyANotification = await EmployeeNotificationsModel.findOne({
           "eventDetails.type": "birthday",
-          "eventDetails.dateOfTheEvent": employee.dateOfBirth,
+          "eventDetails.dateOfTheEvent": dateOfTheEvent,
           "eventDetails.employeeId": employee.employeeId,
         });
 
         if (!alreadyANotification) {
+         
           const newNotificationForABirthdayNextWeek =
             new EmployeeNotificationsModel({
               title: `${
@@ -86,11 +105,11 @@ const checkBirthdays = async (req, res) => {
               } a gift.`,
               eventDetails: {
                 type: "birthday",
-                dateOfTheEvent: employee.dateOfBirth,
+                dateOfTheEvent,
                 employeeId: employee.employeeId,
               },
               notificationCreatedAt: today,
-              notificationDueDate: nextWeek,
+              reminderDate: nextWeek,
               hasBeenDismissed: false,
               hasBeenHandled: false,
               priority: "Medium",
@@ -101,7 +120,6 @@ const checkBirthdays = async (req, res) => {
             ...birthdayNotifications,
             newNotificationForABirthdayNextWeek,
           ];
-          console.log(birthdayNotifications);
           
         } else {
           await EmployeeNotificationsModel.findOneAndUpdate(
@@ -118,7 +136,7 @@ const checkBirthdays = async (req, res) => {
                   employee.gender === "female" ? "her" : "him"
                 } a gift.`,
                 notificationCreatedAt: today,
-                notificationDueDate: nextWeek,
+                reminderDate: nextWeek,
                 priority: "Medium",
               },
             },
@@ -150,7 +168,7 @@ const checkBirthdays = async (req, res) => {
                 employeeId: employee.employeeId,
               },
               notificationCreatedAt: today,
-              notificationDueDate: tomorrow,
+              reminderDate: tomorrow,
               hasBeenDismissed: false,
               hasBeenHandled: false,
               priority: "High",
@@ -176,7 +194,7 @@ const checkBirthdays = async (req, res) => {
                   employee.gender === "female" ? "her" : "him"
                 } a gift.`,
                 notificationCreatedAt: today,
-                notificationDueDate: tomorrow,
+                reminderDate: tomorrow,
                 priority: "High",
               },
             },

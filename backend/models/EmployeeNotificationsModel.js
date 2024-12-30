@@ -16,7 +16,6 @@ const EmployeeNotificationsSchema = new mongoose.Schema({
       }
     },
     notificationCreatedAt: Date,
-    notificationDueDate: Date,
     reminderDate: Date,
     hasBeenDismissed: Boolean,
     hasBeenHandled: Boolean,

@@ -8,6 +8,7 @@ import "./modal.css";
 import ShowHolidaysNotifications from "./mainNotifications/ShowNotifications/ShowHolidaysNotifications";
 import { userProfile } from "../../../../../imgs";
 import {
+  fetchEmployee,
   fetchEmployeesNotifications,
   fetchEmployeesProfilePics,
   fetchNotifications,
@@ -31,8 +32,8 @@ const Notifications = () => {
   const itemsPerPage = 10;
   const [notifications, setNotifications] = useState([]);
   // const staticNotifications = useRef(staticNotificationsData);
-  const staticNotifications = staticNotificationsData
-  
+  const staticNotifications = staticNotificationsData;
+
   const [employeeId, setEmployeeId] = useState(null);
 
   const fetchData = async () => {
@@ -48,13 +49,10 @@ const Notifications = () => {
       const notifications = await fetchEmployeesNotifications();
       employeesNotificationsWithProfilePics = await Promise.all(
         notifications?.map(async (notification) => {
-          const profilePicUrl = await fetchEmployeesProfilePics(
-            notification.uid,
-            notification.eventDetails.employeeId
-          );
+          const employee = await fetchEmployee(notification.eventDetails.employeeId);
           return {
             ...notification,
-            avatar: profilePicUrl || userProfile,
+            imageUrl: employee.imageUrl || userProfile,
           };
         })
       );
@@ -74,7 +72,7 @@ const Notifications = () => {
     const eventNotifications = data?.flatMap((event) => {
       const notifications = [];
       // Birthday Notification
-      if (event.eventDetails?.type === "birthday") {        
+      if (event.eventDetails?.type === "birthday") {
         notifications.push({
           _id: event._id,
           id: event.eventDetails.employeeId,
@@ -82,10 +80,10 @@ const Notifications = () => {
           message: event.title,
           link: "/events",
           read: false,
-          notificationDueDate: event.notificationDueDate,
+          reminderDate: event.reminderDate,
           hasBeenHandled: event.hasBeenHandled,
           hasBeenDismissed: event.hasBeenDismissed,
-          image: event.avatar,
+          image: event.imageUrl,
           startDay: event.notificationCreatedAt,
           date: event.eventDetails.dateOfTheEvent,
           className: "birthday",
@@ -102,10 +100,10 @@ const Notifications = () => {
           message: event.title,
           link: "/events",
           read: false,
-          notificationDueDate: event.notificationDueDate,
+          reminderDate: event.reminderDate,
           hasBeenHandled: event.hasBeenHandled,
           hasBeenDismissed: event.hasBeenDismissed,
-          image: event.avatar,
+          image: event.imageUrl,
           startDay: vacationStartDate,
           date: event.eventDetails.dateOfTheEvent,
           className: "vacation",
@@ -145,10 +143,10 @@ const Notifications = () => {
       //     message: event.title,
       //     link: "/events",
       //     read: false,
-      //     // notificationDueDate: event.notificationDueDate,
+      //     // reminderDate: event.reminderDate,
       //     hasBeenHandled: false,
       //     hasBeenDismissed: false,
-      //     image: event.avatar,
+      //     image: event.imageUrl,
       //     startDay: event.start,
       //     // date: event.eventDetails.dateOfTheEvent,
       //     // className: "birthday",
@@ -157,11 +155,11 @@ const Notifications = () => {
 
       return notifications;
     });
-    
-    if(eventNotifications === undefined) {
+
+    if (eventNotifications === undefined) {
       setNotifications([...staticNotifications]);
     } else {
-      setNotifications([...staticNotifications, ...eventNotifications]);     
+      setNotifications([...staticNotifications, ...eventNotifications]);
     }
   };
 

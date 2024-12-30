@@ -6,11 +6,12 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateEmployeeNotification } from "../../../../../../services/api/notifications";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-export default function ShowAllNotifications({
+
+const ShowAllNotifications = ({
   displayedNotifications,
   getNotificationId,
   notifications,
-}) {
+}) => {
   const navigate = useNavigate();
   const [notification, setNotification] = useState(null);
   const [postponedNotifications, setPostponedNotifications] = useState([]);
@@ -88,7 +89,7 @@ export default function ShowAllNotifications({
         id: notification._id,
         hasBeenDismissed: true,
         hasBeenHandled: notification.hasBeenHandled,
-        notificationDueDate: notification.notificationDueDate,
+        reminderDate: notification.reminderDate,
       };
       await updateEmployeeNotification(updatedData);
     }
@@ -101,7 +102,7 @@ export default function ShowAllNotifications({
         id: notification._id,
         hasBeenDismissed: notification.hasBeenDismissed,
         hasBeenHandled: notification.hasBeenHandled,
-        notificationDueDate: eventDate,
+        reminderDate: eventDate,
       };
       await updateEmployeeNotification(updatedData);
       setIsPostponeBtnClicked(false);
@@ -228,18 +229,18 @@ export default function ShowAllNotifications({
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    const day = date.getDate(); // Gets the day of the month
-    const month = date.toLocaleString("default", { month: "short" }); // Gets the short month name (e.g., "Sep")
+    const day = date.getDate();
+    const month = date.toLocaleString("default", { month: "short" });
 
     return { day, month };
   };
-  const isNotificationTomorrow = (notificationDueDate) => {
+  const isNotificationTomorrow = (reminderDate) => {
     const tomorrow = new Date();
     tomorrow.setUTCDate(tomorrow.getUTCDate() + 1); //moving to tomorrow in UTC
     tomorrow.setUTCHours(0, 0, 0, 0); //normalizing to start of day in UTC
 
-    const eventDueDate = new Date(notificationDueDate);
-    eventDueDate.setUTCHours(0, 0, 0, 0); 
+    const eventDueDate = new Date(reminderDate);
+    eventDueDate.setUTCHours(0, 0, 0, 0);
 
     return tomorrow.getTime() === eventDueDate.getTime();
   };
@@ -460,4 +461,5 @@ export default function ShowAllNotifications({
       </div>
     </div>
   );
-}
+};
+export default ShowAllNotifications;
