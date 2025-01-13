@@ -614,7 +614,7 @@ export default function AdminStatistics() {
           </div>
         </div>
       </div>
-      {/* <PopUp></PopUp> */}
+      <PopUp></PopUp>
     </div>
   );
 }
