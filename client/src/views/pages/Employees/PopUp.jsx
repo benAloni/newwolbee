@@ -35,7 +35,6 @@ import {
 import { userProfile } from "../../../imgs";
 import Swal from "sweetalert2";
 import { useSelector } from "react-redux";
-import { updateChildCareIssues } from "../../../services/api/employees";
 
 export default function PopUp() {
 
@@ -305,39 +304,36 @@ const [childName, setChildName] = useState(""); // שם הילד (לא חובה)
     }
   }
 
-  const updateChildCareIssues = async () => {
-    // בדיקת נתונים
-    if (
-      !selectedEmployee ||
-      !selectedStartDate ||
-      !selectedEndDate
-    ) {
-      console.log("Missing required data");
-      Swal.fire("Error", "Please fill in all required fields.", "error");
-      return;
-    }
+  // const updateChildCareIssues = async () => {
+  //   if (
+  //     !selectedEmployee ||
+  //     !selectedStartDate ||
+  //     !selectedEndDate
+  //   ) {
+  //     console.log("Missing required data");
+  //     Swal.fire("Error", "Please fill in all required fields.", "error");
+  //     return;
+  //   }
   
-    try {
-      // קריאה לפונקציה שמעדכנת את הנתונים (בלי שם הילד)
-      const response = await updateEmployeeChildCareIssues({
-        id: selectedEmployee._id,
-        startDate: selectedStartDate,
-        endDate: selectedEndDate,
-      });
+  //   try {
+  //     const response = await updateEmployeeChildCareIssues({
+  //       id: selectedEmployee._id,
+  //       startDate: selectedStartDate,
+  //       endDate: selectedEndDate,
+  //     });
   
-      // בדיקת סטטוס התגובה
-      if (response.status === 200) {
-        Swal.fire(
-          "Success!",
-          `${selectedEmployee.fullName}'s childcare dates have been added successfully!`,
-          "success"
-        );
-      }
-    } catch (error) {
-      console.log("Error updating childcare issues:", error);
-      Swal.fire("Error", `An error occurred: ${error.message}`, "error");
-    }
-  };
+  //     if (response.status === 200) {
+  //       Swal.fire(
+  //         "Success!",
+  //         `${selectedEmployee.fullName}'s childcare dates have been added successfully!`,
+  //         "success"
+  //       );
+  //     }
+  //   } catch (error) {
+  //     console.log("Error updating childcare issues:", error);
+  //     Swal.fire("Error", `An error occurred: ${error.message}`, "error");
+  //   }
+  // };
   
   
   
@@ -1056,7 +1052,7 @@ const [childName, setChildName] = useState(""); // שם הילד (לא חובה)
       </div>
 
       <button
-        onClick={updateChildCareIssues}
+        // onClick={updateChildCareIssues}
         style={{
           marginTop: "30px",
           padding: "10px 20px",
