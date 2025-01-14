@@ -21,6 +21,7 @@ app.use(
       "http://localhost:3000",
       "https://newwolbee-l7cc.onrender.com",
       "https://216.24.57.252:443",
+      "https://app.wolbee.com"
     ],
     credentials: true,
   })
