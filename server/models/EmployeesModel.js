@@ -33,6 +33,9 @@ const employeeSchema = new mongoose.Schema({
   religion: {
     type: String,
   },
+  ethnicGroup: {
+    type: String,
+  },
   passport: {
     type: String,
   },
@@ -57,16 +60,17 @@ const employeeSchema = new mongoose.Schema({
   },
   email: {
     type: String,
+    required: [true, "Please provide email address"],
   },
   phone: {
     type: String,
-    // required: [true, "Please provide Phone Number"],
+    required: [true, "Please provide Phone Number"],
   },
   maritalStatus: {
     type: String,
   },
   children: {
-    type: String,
+    type: Number,
   },
   startDay: {
     type: Date,

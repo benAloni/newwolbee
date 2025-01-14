@@ -3,6 +3,7 @@ import EmployeeModel from "../models/EmployeesModel.js";
 export const getEmployees = async (req, res) => {
   let employees;
   const { user } = req;
+
   try {
     employees = await EmployeeModel.find({ uid: user.uid });
   } catch (error) {

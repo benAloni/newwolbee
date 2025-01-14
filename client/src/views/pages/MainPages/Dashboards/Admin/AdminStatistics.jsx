@@ -10,7 +10,7 @@ import { userProfile } from "../../../../../imgs";
 import EmployeesVacationUtilizationBar from "./EmployeesVacationUtilization";
 import {
   fetchEmployees,
-  fetchEmployeesProfilePics,
+  fetchUserProfilePic
 } from "../../../../../services";
 import EmployeesWorkingHours from "./EmployeesWorkingHours";
 import { format } from "date-fns";
@@ -21,14 +21,12 @@ export default function AdminStatistics() {
   // states
   const [selectedTeam, setSelectedTeam] = useState("");
   const [userProfileImage, setUserProfileImage] = useState("");
-  const [values, setValues] = useState([]);
-  const [allEmployees, setAllEmployees] = useState([]);
   const [favoriteEmployees, setFavoriteEmployees] = useState([]);
   const [startIndex, setStartIndex] = useState(0);
   const [percentage, setPercentage] = useState(0);
   const [progress, setProgress] = useState(0);
   const username = useSelector((state) => state.auth.user?.fullName);
-  const user = useSelector((state) => state.auth?.user.uid);
+  const uid = useSelector((state) => state.auth?.user.uid);
   const [greeting, setGreeting] = useState("");
   const [filteredEmployees, setFilteredEmployees] = useState([]);
 
@@ -55,7 +53,11 @@ export default function AdminStatistics() {
     queryKey: ["employees"],
     queryFn: fetchEmployees,
   });
-
+  const { data: profileImg } = useQuery({
+    queryKey: ["user-profile-pic"],
+    queryFn: () => fetchUserProfilePic(uid),
+    enabled: !!uid,
+  });
   const { data: teams } = useQuery({
     queryKey: ["teams"],
     queryFn: fetchTeams,
@@ -69,13 +71,17 @@ export default function AdminStatistics() {
 
       setFilteredEmployees(filteredTeam);
     }
+    if(profileImg) {
+      setUserProfileImage(profileImg)
+    } else {
+      setUserProfileImage(userProfile)
+    }
   }, [selectedTeam, employees]);
 
   const handleSelect = (option) => {
     setSelectedTeam(option.label);
     queryClient.invalidateQueries(["employees"]);
   };
-
 
   const sortEmployeesByBirthday = (employees) => {
     const currentDate = new Date();
@@ -184,7 +190,6 @@ export default function AdminStatistics() {
       borderColor: "#BEBDBB",
       borderRadius: "3.5%",
       margin: "20px",
-      
     },
     header: {
       display: "flex",
@@ -249,15 +254,13 @@ export default function AdminStatistics() {
         style={{ marginTop: "20px", fontWeight: "1000", height: "100px" }}
       >
         <div className="newUser" style={{ marginLeft: "1130px" }}>
-          <span> {username ? `Hey ${username}! ` : "Admin"}</span>
+          <span> {username ? `Hey ${username}! ` : "User"}</span>
           <span className="user-img me-1">
             <img
-              style={{ width: "30px", height: "30px", marginLeft: "5px" }}
+              style={{ width: "30px", height: "30px", marginLeft: "5px",  borderRadius: "50%", 
+                objectFit: "cover"}}
               src={userProfileImage || userProfile}
               alt="Profile"
-              onError={() =>
-                console.error("Error loading image:", userProfileImage)
-              }
             />
 
             <span className="status online" />
@@ -618,7 +621,7 @@ export default function AdminStatistics() {
           </div>
         </div>
       </div>
-      <CreateEmployeeEvent/>
+      <CreateEmployeeEvent />
     </div>
   );
 }

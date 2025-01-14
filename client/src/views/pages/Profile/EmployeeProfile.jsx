@@ -26,7 +26,7 @@ const EmployeeProfile = () => {
           (employee) => employee._id === employeeId
         );
         setSelectedEmployee(employee);
-        console.log(selectedEmployee);
+        // console.log(selectedEmployee);
         
       }
     }
@@ -78,12 +78,12 @@ const EmployeeProfile = () => {
                               </div>
                             </li>
                             <li>
-                              <div className="title">Mail:</div>
+                              <div className="title">Email:</div>
                               <div className="text">
                                 <Link
-                                  to={`mailto:${selectedEmployee?.fullName}@gmail.com`}
+                                  to={`mailto:${selectedEmployee?.email}`}
                                 >
-                                  {selectedEmployee?.fullName + "@gmail.com"}
+                                  {selectedEmployee?.email}
                                 </Link>
                               </div>
                             </li>

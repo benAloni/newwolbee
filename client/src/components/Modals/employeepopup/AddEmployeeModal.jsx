@@ -21,11 +21,12 @@ import {
 import { userProfile } from "../../../imgs";
 import { useSelector } from "react-redux";
 
-const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
+const AddEmployeeModal = ({ onEmployeeAdded }) => {
   const [selectedGender, setSelectedGender] = useState("");
   const [selectedMaritalStatus, setSelectedMaritalStatus] = useState("");
   const [selectedTeam, setSelectedTeam] = useState("");
-
+  const [selectedReligion, setSelectedReligion] = useState("");
+  const [selectedEthnicGroup, setSelectedEthnicGroup] = useState("");
   const [employeeDates, setEmployeeDates] = useState({
     dateOfBirth: null,
     startDay: null,
@@ -45,12 +46,16 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
   const uid = useSelector((state) => state.auth?.user.uid);
   const employeeId = watch("employeeId");
   const genderRef = useRef();
+  const religionRef = useRef();
+  const ethnicGroupRef = useRef();
   const maritalStatusRef = useRef();
   const teamRef = useRef();
 
   const resetForm = () => {
     reset();
     genderRef.current.clearValue();
+    religionRef.current.clearValue();
+    ethnicGroupRef.current.clearValue();
     maritalStatusRef.current.clearValue();
     teamRef.current.clearValue();
     setSelectedImage(userProfile);
@@ -71,16 +76,18 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
 
   const onSubmit = async (data) => {
     try {
-     const uploadedEmployeeProfileImage = await uploadEmployeeImage();
+      const uploadedEmployeeProfileImage = await uploadEmployeeImage();
       let formData;
-         formData = {
-          ...data,
-          ...employeeDates,
-          team: selectedTeam,
-          gender: selectedGender,
-          maritalStatus: selectedMaritalStatus,
-          imageUrl: uploadedEmployeeProfileImage,
-        };
+      formData = {
+        ...data,
+        ...employeeDates,
+        team: selectedTeam,
+        gender: selectedGender,
+        religion: selectedReligion,
+        ethnicGroup: selectedEthnicGroup,
+        maritalStatus: selectedMaritalStatus,
+        imageUrl: uploadedEmployeeProfileImage,
+      };
 
       const response = await addEmployee({
         employeeData: formData,
@@ -218,7 +225,40 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
                       )}
                     </div>
                   </div>
-
+                  <div className="input-block mb-3 col-sm-6">
+                    <label className="col-form-label">
+                      Phone Number <span className="text-danger">*</span>
+                    </label>
+                    <input
+                      className={`form-control ${
+                        errors.phone ? "border-danger" : ""
+                      }`}
+                      type="text"
+                      name="phone"
+                      {...register("phone")}
+                      placeholder="Employee's phone"
+                    />
+                    {errors.phone && (
+                      <div className="text-danger">{errors.phone}</div>
+                    )}
+                  </div>
+                  <div className="input-block mb-3 col-sm-6">
+                    <label className="col-form-label">
+                      Email <span className="text-danger">*</span>
+                    </label>
+                    <input
+                      className={`form-control ${
+                        errors.email ? "border-danger" : ""
+                      }`}
+                      type="email"
+                      name="email"
+                      {...register("email")}
+                      placeholder="Employee's email"
+                    />
+                    {errors.email && (
+                      <div className="text-danger">{errors.email}</div>
+                    )}
+                  </div>
                   <div className="col-sm-6">
                     <div className="input-block mb-3">
                       <label className="col-form-label">
@@ -267,7 +307,7 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
 
                   <div className="input-block mb-3 col-sm-6">
                     <label className="col-form-label">
-                      Date of birth <span className="text-danger">*</span>
+                      Date Of Birth <span className="text-danger">*</span>
                     </label>
                     <div className="cal-icon">
                       <DatePicker
@@ -286,7 +326,59 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
                       )}
                     </div>
                   </div>
+                  <div className="input-block mb-3 col-sm-6">
+                    <label className="col-form-label">
+                      Religion <span className="text-danger">*</span>
+                    </label>
+                    <Select
+                      ref={religionRef}
+                      options={[
+                        { value: "Judaism", label: "Judaism" },
+                        { value: "Christianity", label: "Christianity" },
+                        { value: "Druze", label: "Druze" },
+                        { value: "Islam", label: "Islam" },
+                        { value: "Hinduism", label: "Hinduism" },
+                        { value: "Buddhism", label: "Buddhism" },
+                        { value: "Atheist", label: "Atheist" },
+                        { value: "Other", label: "Other" },
+                      ]}
+                      placeholder="Select religion"
+                      onChange={(selectedOption) =>
+                        setSelectedReligion(
+                          selectedOption ? selectedOption.value : ""
+                        )
+                      }
+                      isClearable
+                      name="religion"
+                    />
+                  </div>
+                  <div className="input-block mb-3 col-sm-6">
+                    <label className="col-form-label">
+                      Ethnic Group <span className="text-danger">*</span>
+                    </label>
 
+                    <Select
+                      ref={ethnicGroupRef}
+                      options={[
+                        { value: "ethiopian", label: "Ethiopian" },
+                        { value: "druze", label: "Druze" },
+                        { value: "russian", label: "Russian" },
+                        { value: "yemeni", label: "Yemeni" },
+                        { value: "moroccan", label: "Moroccan" },
+                        { value: "mexican", label: "Mexican" },
+                        { value: "hindu", label: "Hindu" },
+                        { value: "Other", label: "Other" },
+                      ]}
+                      placeholder="Select ethnic group"
+                      onChange={(selectedOption) =>
+                        setSelectedEthnicGroup(
+                          selectedOption ? selectedOption.value : ""
+                        )
+                      }
+                      isClearable
+                      name="ethnicGroup"
+                    />
+                  </div>
                   <div className="input-block mb-3 col-sm-6">
                     <label className="col-form-label">
                       Address <span className="text-danger">*</span>
@@ -315,7 +407,7 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
                         { value: "female", label: "Female" },
                         { value: "other", label: "Other" },
                       ]}
-                      placeholder="Select A Gender"
+                      placeholder="Select a gender"
                       onChange={(selectedOption) =>
                         setSelectedGender(
                           selectedOption ? selectedOption.value : ""
@@ -338,7 +430,7 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
                         { value: "divorced", label: "Divorced" },
                         { value: "separated ", label: "Separated " },
                       ]}
-                      placeholder="Select A Marital Status"
+                      placeholder="Select marital status"
                       onChange={(selectedOption) =>
                         setSelectedMaritalStatus(
                           selectedOption ? selectedOption.value : ""
@@ -350,7 +442,7 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
                   </div>
                   <div className="input-block mb-3 col-sm-6">
                     <label className="col-form-label">
-                      Anniversary <span className="text-danger">*</span>
+                      Wedding Anniversary
                     </label>
                     <div className="cal-icon">
                       <DatePicker
@@ -371,10 +463,8 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
                   </div>
                   <div className="input-block mb-3 col-sm-6">
                     <label className="col-form-label">
-                      Children
-                      <span className="text-danger">
-                        * If true insert number of children. Otherwise write no.
-                      </span>
+                      No.Children
+                      <span className="text-danger"> *</span>
                     </label>
                     <input
                       className={"form-control"}
@@ -419,7 +509,7 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
                       placeholder="Interesting fact"
                     />
                   </div>
-                  <div className="input-block mb-3 col-sm-6">
+                  <div className="input-block mb-3 col-sm-8">
                     <label className="col-form-label">
                       Favorite Singer <span className="text-danger">*</span>
                     </label>
@@ -430,23 +520,6 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
                       {...register("favoriteSinger")}
                       placeholder={`favorite singer`}
                     />
-                  </div>
-                  <div className="input-block mb-3 col-sm-6">
-                    <label className="col-form-label">
-                      Phone Number <span className="text-danger">*</span>
-                    </label>
-                    <input
-                      className={`form-control ${
-                        errors.phone ? "border-danger" : ""
-                      }`}
-                      type="text"
-                      name="phone"
-                      {...register("phone")}
-                      placeholder="Employee's phone"
-                    />
-                    {errors.phone && (
-                      <div className="text-danger">{errors.phone}</div>
-                    )}
                   </div>
                   <div className="col-sm-12">
                     <div className="input-block mb-3">
@@ -553,8 +626,6 @@ const AddEmployeeModal = ({ onClose, isOpen, onEmployeeAdded }) => {
                     <div
                       className="d-flex flex-column align-items-center text-center"
                       style={{
-                        border: "2px solid rgb(71, 89, 114)",
-                        padding: "25px",
                         borderRadius: "100%",
                         height: "10rem",
                         width: "fit-content",
