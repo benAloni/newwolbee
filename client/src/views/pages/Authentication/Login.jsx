@@ -160,7 +160,7 @@ const Login = () => {
                             </Link>
                           </div>
                         </div>
-                        <div style={{ position: "relative" }}>
+                        <div style={{ position: "relative" , color:"black"}}>
                           <input
                             type={passwordEye ? "password" : "text"}
                             id="password"

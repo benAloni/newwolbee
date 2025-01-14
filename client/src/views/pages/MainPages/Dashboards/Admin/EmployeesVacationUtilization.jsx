@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 
-const HelfBar = ({ percentage }) => {
+const EmployeesVacationUtilizationBar = ({ percentage }) => {
   const [currentValue, setCurrentValue] = useState(0);
 
   useEffect(() => {
     let animationFrame;
     let start = null;
 
-    const duration = 3000; // משך האנימציה במילישניות
+    const duration = 3000; 
     const animate = (timestamp) => {
       if (!start) start = timestamp;
       const progress = timestamp - start;
@@ -25,9 +25,9 @@ const HelfBar = ({ percentage }) => {
     return () => cancelAnimationFrame(animationFrame);
   }, [percentage]);
 
-  const rotation = 45 + currentValue * 1.8; // חישוב הזווית
+  const rotation = 45 + currentValue * 1.8; 
 
-  // סגנונות
+ 
   const styles = {
     progress: {
       position: "relative",
@@ -37,30 +37,30 @@ const HelfBar = ({ percentage }) => {
     barOverflow: {
       position: "relative",
       overflow: "hidden",
-      width: "200px", // גודל חדש
-      height: "100px", // חצי הגובה
+      width: "200px", 
+      height: "100px", 
       marginBottom: "-20px",
     },
     bar: {
         position: "absolute",
         top: 0,
         left: 0,
-        width: "200px", // גודל חדש
-        height: "200px", // גודל מלא
+        width: "200px", 
+        height: "200px", 
         borderRadius: "50%",
         boxSizing: "border-box",
-        border: "12px solid transparent", // צבע גבול שקוף כדי לשלוט ידנית
-        borderBottomColor: `hsl(${240 + (currentValue / 2)}, 100%, 50%)`, // כחול משתנה בהדרגה
-        borderRightColor: `hsl(${240 + (currentValue / 2)}, 100%, 50%)`, // כחול משתנה בהדרגה
-        borderRightColor: "#0bf", // צבע כחול לימין
-        borderTopColor: "#eee", // צבע אפור לחלק העליון
-        borderLeftColor: "#eee", // צבע אפור לשמאל
+        border: "12px solid transparent", 
+        borderBottomColor: `hsl(${240 + (currentValue / 2)}, 100%, 50%)`, 
+        borderRightColor: `hsl(${240 + (currentValue / 2)}, 100%, 50%)`, 
+        borderRightColor: "#0bf", 
+        borderTopColor: "#eee", 
+        borderLeftColor: "#eee", 
         transform: `rotate(${rotation}deg)`,
       },
   
     percentage: {
       display: "inline-block",
-      fontSize: "32px", // הגדלת טקסט האחוזים
+      fontSize: "32px", 
       fontWeight: "bold",
     },
   };
@@ -74,21 +74,5 @@ const HelfBar = ({ percentage }) => {
     </div>
   );
 };
+export default EmployeesVacationUtilizationBar;
 
-const App = () => {
-  return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        // height: "100vh", // גובה מסך מלא/
-        backgroundColor: "#f9f9f9", // צבע רקע רך
-      }}
-    >
-      <HelfBar percentage={56.5} />
-    </div>
-  );
-};
-
-export default App;

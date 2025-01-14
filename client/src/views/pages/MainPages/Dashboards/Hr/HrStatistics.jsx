@@ -35,7 +35,7 @@ import sick from "../../../../../imgs/sick.png"
 import vacation from "../../../../../imgs/vacation.png"
 import personal from "../../../../../imgs/personal.png"
 import converction from "../../../../../imgs/contact.png"
-import PopUp from "../../../Employees/PopUp";
+import CreateEmployeeEvent from "../../../Employees/CreateEmployeeEvent";
 // import Satisfaction from "../../../../../imgs/Satisfaction.png"
 // import satisfaction1 from "../../../../../imgs/growth4.png"
 // import growth from "../../../../../imgs/growth5.png"
@@ -941,7 +941,7 @@ const TeamSatisfaction = () => {
   </div> 
         </div>
       </div>
-      {/* <PopUp></PopUp> */}
+      {/* <CreateEmployeeEvent></CreateEmployeeEvent> */}
  </div>
  </div>
  </>

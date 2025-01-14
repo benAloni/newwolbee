@@ -132,7 +132,7 @@ const Register = () => {
                       <label className="col-form-label">Password</label>
                       <div
                         className="pass-group"
-                        style={{ position: "relative" }}
+                        style={{ position: "relative", color:"black" }}
                       >
                         <input
                           type={passwordEye ? "password" : "text"}
@@ -164,7 +164,7 @@ const Register = () => {
                       <label className="col-form-label">Confirm Password</label>
                       <div
                         className="pass-group"
-                        style={{ position: "relative" }}
+                        style={{ position: "relative", color:"black" }}
                       >
                         <input
                           type={confirmPasswordEye ? "password" : "text"}

@@ -2,11 +2,9 @@
 import React, { useEffect, useState } from "react";
 import Scrollbars from "react-custom-scrollbars-2";
 import { useTranslation } from "react-i18next";
-// import { withRouter } from "react-router-dom";
 import { Link, useLocation } from "react-router-dom";
 import { managerSideBarData } from "./ManagerSideBar";
 import { hrSidebarData } from "./HrSideBar";
-import * as Icon from "react-feather";
 import { useSelector } from "react-redux";
 import { logout } from "../redux";
 import { signOut } from "firebase/auth";
@@ -308,7 +306,7 @@ const SideBar = () => {
           <div style={{ marginTop: "140px", marginLeft: "20px" }}>
             <div className="new">
               <Link style={{ color: "black" }} to="/settings">
-                Setting
+                Settings
               </Link>
             </div>
             <div className="new">

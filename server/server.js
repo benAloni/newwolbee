@@ -14,10 +14,11 @@ app.use(express.static("fronted"));
 app.use(
   cors({
     origin: [
+      "http://wolbee.com",
       "http://www.wolbee.com",
+      "http://app.wolbee.com",
       "https://wolbee-front-gkfchuwp6q-uc.a.run.app",
       "http://localhost:3000",
-      "http://localhost:3001",
       "https://newwolbee-l7cc.onrender.com",
       "https://216.24.57.252:443",
     ],

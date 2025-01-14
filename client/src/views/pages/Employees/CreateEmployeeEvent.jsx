@@ -3,9 +3,6 @@ import { useMutation } from "@tanstack/react-query";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from "react-select";
-import women from "../../../imgs/WomanEvent.png";
-import family from "../../../imgs/FamilyEvent.png";
-import freinds from "../../../imgs/FreindsEvent.png";
 import arrows from "../../../imgs/arrows.png";
 import workhome from "../../../imgs/workhome.png";
 import additionalTime from "../../../imgs/additionalTime.png";
@@ -21,6 +18,7 @@ import flight from "../../../imgs/flight.png";
 import chase from "../../../imgs/chase.png";
 import Temporary from "../../../imgs/Temporary.png";
 import vacation from "../../../imgs/off.png";
+import europeanCountries from "../../../assets/json/countries";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import "./popup.css";
 import { updateEmployeeChildCareIssues } from "../../../services/api/employees";
@@ -29,15 +27,12 @@ import {
   fetchEmployees,
   fetchEmployeesProfilePics,
   updateEmployeeSickLeave,
-  
-
 } from "../../../services";
 import { userProfile } from "../../../imgs";
 import Swal from "sweetalert2";
 import { useSelector } from "react-redux";
 
-export default function PopUp() {
-
+export default function CreateEmployeeEvent() {
   const [isOpen, setIsOpen] = useState(false);
   const [currentEventType, setCurrentEventType] = useState(null);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
@@ -53,8 +48,8 @@ export default function PopUp() {
   const [selectedImage, setSelectedImage] = useState(null);
   const [showChildcareIssues, setShowChildcareIssues] = useState(false);
   const [showModal, setShowModal] = useState(false);
- 
-const [childName, setChildName] = useState(""); // שם הילד (לא חובה)
+
+  const [childName, setChildName] = useState("");
   const queryClient = useQueryClient();
   const uid = useSelector((state) => state.auth?.user.uid);
 
@@ -89,58 +84,6 @@ const [childName, setChildName] = useState(""); // שם הילד (לא חובה)
     refetchOnWindowFocus: true,
   });
 
-  const europeanCountries = [
-    { value: "albania", label: "Albania" },
-    { value: "andorra", label: "Andorra" },
-    { value: "armenia", label: "Armenia" },
-    { value: "austria", label: "Austria" },
-    { value: "azerbaijan", label: "Azerbaijan" },
-    { value: "belgium", label: "Belgium" },
-    { value: "bosnia", label: "Bosnia and Herzegovina" },
-    { value: "bulgaria", label: "Bulgaria" },
-    { value: "croatia", label: "Croatia" },
-    { value: "cyprus", label: "Cyprus" },
-    { value: "czech-republic", label: "Czech Republic" },
-    { value: "denmark", label: "Denmark" },
-    { value: "estonia", label: "Estonia" },
-    { value: "finland", label: "Finland" },
-    { value: "france", label: "France" },
-    { value: "georgia", label: "Georgia" },
-    { value: "germany", label: "Germany" },
-    { value: "greece", label: "Greece" },
-    { value: "hungary", label: "Hungary" },
-    { value: "iceland", label: "Iceland" },
-    { value: "ireland", label: "Ireland" },
-    { value: "israel", label: "israel" },
-    { value: "italy", label: "Italy" },
-    { value: "kazakhstan", label: "Kazakhstan" },
-    { value: "kosovo", label: "Kosovo" },
-    { value: "latvia", label: "Latvia" },
-    { value: "liechtenstein", label: "Liechtenstein" },
-    { value: "lithuania", label: "Lithuania" },
-    { value: "luxembourg", label: "Luxembourg" },
-    { value: "malta", label: "Malta" },
-    { value: "moldova", label: "Moldova" },
-    { value: "monaco", label: "Monaco" },
-    { value: "montenegro", label: "Montenegro" },
-    { value: "netherlands", label: "Netherlands" },
-    { value: "north-macedonia", label: "North Macedonia" },
-    { value: "norway", label: "Norway" },
-    { value: "poland", label: "Poland" },
-    { value: "portugal", label: "Portugal" },
-    { value: "romania", label: "Romania" },
-    { value: "san-marino", label: "San Marino" },
-    { value: "serbia", label: "Serbia" },
-    { value: "slovakia", label: "Slovakia" },
-    { value: "slovenia", label: "Slovenia" },
-    { value: "spain", label: "Spain" },
-    { value: "sweden", label: "Sweden" },
-    { value: "switzerland", label: "Switzerland" },
-    { value: "turkey", label: "Turkey" },
-    { value: "ukraine", label: "Ukraine" },
-    { value: "vatican", label: "Vatican City" },
-  ];
-
   const events = [
     {
       id: 1,
@@ -160,14 +103,15 @@ const [childName, setChildName] = useState(""); // שם הילד (לא חובה)
       imageUrl: vacation,
       onClick: () => openSubModal("Vacation Leave"),
     },
-     { id: 5, 
-      name: "Childcare Issues", 
-      imageUrl: chase, 
-      onClick: () => openSubModal("Childcare Issues")
+    {
+      id: 5,
+      name: "Childcare Issues",
+      imageUrl: chase,
+      onClick: () => openSubModal("Childcare Issues"),
     },
 
     { id: 4, name: "Personal Celebrations", imageUrl: gift, onClick: null },
-   
+
     { id: 6, name: "Pregnancy", imageUrl: baby, onClick: null },
     { id: 7, name: "Housing Issues", imageUrl: house, onClick: null },
     { id: 8, name: "Flight", imageUrl: flight, onClick: null },
@@ -180,14 +124,14 @@ const [childName, setChildName] = useState(""); // שם הילד (לא חובה)
     setSelectedEmployee(null);
     setShowEngagementModal(false);
     setShowVacationModal(false);
-    setShowChildcareIssues(false)
+    setShowChildcareIssues(false);
   };
 
   const openSubModal = (eventType) => {
     setCurrentEventType(eventType);
     setShowEngagementModal(false);
     setShowVacationModal(false);
-    setShowChildcareIssues(false)
+    setShowChildcareIssues(false);
   };
 
   const handleEmployeeClick = (employee) => {
@@ -197,11 +141,10 @@ const [childName, setChildName] = useState(""); // שם הילד (לא חובה)
     } else if (currentEventType === "Engagement") {
       setShowEngagementModal(true);
     } else if (currentEventType === "Sick Leave") {
-      setShowSickLeaveModal(true);        
+      setShowSickLeaveModal(true);
     } else if (currentEventType === "Childcare Issues") {
-      setShowChildcareIssues(true);        
+      setShowChildcareIssues(true);
     }
-
   };
   const handleDateClick = () => {
     setShowStartDatePicker(!showStartDatePicker);
@@ -275,11 +218,7 @@ const [childName, setChildName] = useState(""); // שם הילד (לא חובה)
     }
   };
   const updateSickLeave = async () => {
-    if (
-      !selectedEmployee ||
-      !selectedStartDate ||
-      !selectedEndDate
-    ) {
+    if (!selectedEmployee || !selectedStartDate || !selectedEndDate) {
       console.log("Missing required data");
       return;
     }
@@ -302,7 +241,7 @@ const [childName, setChildName] = useState(""); // שם הילד (לא חובה)
       alert(`Error: ${error.message}`);
       throw error;
     }
-  }
+  };
 
   // const updateChildCareIssues = async () => {
   //   if (
@@ -314,14 +253,14 @@ const [childName, setChildName] = useState(""); // שם הילד (לא חובה)
   //     Swal.fire("Error", "Please fill in all required fields.", "error");
   //     return;
   //   }
-  
+
   //   try {
   //     const response = await updateEmployeeChildCareIssues({
   //       id: selectedEmployee._id,
   //       startDate: selectedStartDate,
   //       endDate: selectedEndDate,
   //     });
-  
+
   //     if (response.status === 200) {
   //       Swal.fire(
   //         "Success!",
@@ -334,10 +273,7 @@ const [childName, setChildName] = useState(""); // שם הילד (לא חובה)
   //     Swal.fire("Error", `An error occurred: ${error.message}`, "error");
   //   }
   // };
-  
-  
-  
- 
+
   const h1style = {
     textAlign: "center",
     marginBottom: "20px",
@@ -369,7 +305,7 @@ const [childName, setChildName] = useState(""); // שם הילד (לא חובה)
     textAlign: "center",
   };
   return (
-    <div className="App">
+    <div>
       <style>
         {`.modal {
       display: ${isOpen ? "block" : "none"};
@@ -1010,94 +946,101 @@ const [childName, setChildName] = useState(""); // שם הילד (לא חובה)
             </div>
           )}
 
-{/* child care  */}
-{showChildcareIssues && (
-  <div className="sub-modal">
-    <h2>{selectedEmployee.name}</h2>
-    <span
-      className="close"
-      onClick={() => setShowChildcareIssues(false)}
-    >
-      &times;
-    </span>
-    <div
-      style={{
-        width: "800px",
-        height: "500px",
-        overflowY: "scroll",
-        padding: "20px",
-        border: "1px solid #ccc",
-        textAlign: "center",
-      }}
-    >
-      <h2 style={{ marginBottom: "20px" }}>Child Care Issue</h2>
-      <h2 style={{ marginTop: "30px", marginBottom: "10px" }}>When?</h2>
-      <div style={{ display: "flex", justifyContent: "center", gap: "20px" }}>
-        <div>
-          <label>From:</label>
-          <DatePicker
-            selected={selectedStartDate}
-            onChange={handleDateChange}
-            placeholderText="Select start date"
-          />
-        </div>
-        <div>
-          <label>To:</label>
-          <DatePicker
-            selected={selectedEndDate}
-            onChange={handleEndDateChange}
-            placeholderText="Select end date"
-          />
-        </div>
-      </div>
+          {/* child care  */}
+          {showChildcareIssues && (
+            <div className="sub-modal">
+              <h2>{selectedEmployee.name}</h2>
+              <span
+                className="close"
+                onClick={() => setShowChildcareIssues(false)}
+              >
+                &times;
+              </span>
+              <div
+                style={{
+                  width: "800px",
+                  height: "500px",
+                  overflowY: "scroll",
+                  padding: "20px",
+                  border: "1px solid #ccc",
+                  textAlign: "center",
+                }}
+              >
+                <h2 style={{ marginBottom: "20px" }}>Child Care Issue</h2>
+                <h2 style={{ marginTop: "30px", marginBottom: "10px" }}>
+                  When?
+                </h2>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    gap: "20px",
+                  }}
+                >
+                  <div>
+                    <label>From:</label>
+                    <DatePicker
+                      selected={selectedStartDate}
+                      onChange={handleDateChange}
+                      placeholderText="Select start date"
+                    />
+                  </div>
+                  <div>
+                    <label>To:</label>
+                    <DatePicker
+                      selected={selectedEndDate}
+                      onChange={handleEndDateChange}
+                      placeholderText="Select end date"
+                    />
+                  </div>
+                </div>
 
-      <button
-        // onClick={updateChildCareIssues}
-        style={{
-          marginTop: "30px",
-          padding: "10px 20px",
-          borderRadius: "5px",
-          border: "1px solid #ccc",
-          backgroundColor: "#4CAF50",
-          color: "white",
-          cursor: "pointer",
-        }}
-      >
-        Confirm
-      </button>
+                <button
+                  // onClick={updateChildCareIssues}
+                  style={{
+                    marginTop: "30px",
+                    padding: "10px 20px",
+                    borderRadius: "5px",
+                    border: "1px solid #ccc",
+                    backgroundColor: "#4CAF50",
+                    color: "white",
+                    cursor: "pointer",
+                  }}
+                >
+                  Confirm
+                </button>
 
-      {showModal && (
-        <div style={overlayStyle}>
-          <div style={modalContentStyle}>
-            <h2>Event Registration Successful</h2>
-            <p>
-              <strong>From:</strong> {formatStartDate(selectedStartDate)}
-            </p>
-            <p>
-              <strong>To:</strong> {formatEndDate(selectedEndDate)}
-            </p>
-            <button
-              onClick={handleCloseModal}
-              style={{
-                marginTop: "20px",
-                padding: "10px 20px",
-                borderRadius: "5px",
-                border: "1px solid #ccc",
-                backgroundColor: "#f44336",
-                color: "white",
-                cursor: "pointer",
-              }}
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
-    </div>
-  </div>
-)}
-
-
+                {showModal && (
+                  <div style={overlayStyle}>
+                    <div style={modalContentStyle}>
+                      <h2>Event Registration Successful</h2>
+                      <p>
+                        <strong>From:</strong>{" "}
+                        {formatStartDate(selectedStartDate)}
+                      </p>
+                      <p>
+                        <strong>To:</strong> {formatEndDate(selectedEndDate)}
+                      </p>
+                      <button
+                        onClick={handleCloseModal}
+                        style={{
+                          marginTop: "20px",
+                          padding: "10px 20px",
+                          borderRadius: "5px",
+                          border: "1px solid #ccc",
+                          backgroundColor: "#f44336",
+                          color: "white",
+                          cursor: "pointer",
+                        }}
+                      >
+                        Close
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

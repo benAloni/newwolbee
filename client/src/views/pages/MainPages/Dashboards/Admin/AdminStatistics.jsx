@@ -7,16 +7,15 @@ import { fetchTeams } from "../../../../../services";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { userProfile } from "../../../../../imgs";
-import HelfBar from "./HelfBar";
-import { fetchUserProfilePic } from "../../../../../services";
+import EmployeesVacationUtilizationBar from "./EmployeesVacationUtilization";
 import {
   fetchEmployees,
   fetchEmployeesProfilePics,
 } from "../../../../../services";
 import EmployeesWorkingHours from "./EmployeesWorkingHours";
-import { format } from "date-fns"; 
+import { format } from "date-fns";
 import "./scrollBarMainEmployee.css";
-import PopUp from "../../../Employees/PopUp";
+import CreateEmployeeEvent from "../../../Employees/CreateEmployeeEvent";
 
 export default function AdminStatistics() {
   // states
@@ -77,9 +76,6 @@ export default function AdminStatistics() {
     queryClient.invalidateQueries(["employees"]);
   };
 
-  // ___________________
-
-  // __________________
 
   const sortEmployeesByBirthday = (employees) => {
     const currentDate = new Date();
@@ -183,9 +179,12 @@ export default function AdminStatistics() {
     card: {
       width: "368px",
       height: "300px",
-      backgroundColor: "#fffef8",
+      borderWidth: "2px",
+      borderStyle: "solid",
+      borderColor: "#BEBDBB",
+      borderRadius: "3.5%",
       margin: "20px",
-      borderRadius: "2.5%",
+      
     },
     header: {
       display: "flex",
@@ -194,10 +193,9 @@ export default function AdminStatistics() {
     title: {
       fontSize: "22px",
       fontWeight: "700",
-      // fontFamily: "Outfit Light",
       marginLeft: "70px",
       marginTop: "25px",
-      textAlign: "center", // מרכז את הטקסט
+      textAlign: "center",
     },
 
     seeAllButton: {
@@ -217,22 +215,18 @@ export default function AdminStatistics() {
     },
     birthdayItem: {
       fontSize: "18px",
-      // fontFamily: "Outfit Light",
       marginBottom: "15px",
     },
     date: {
       marginRight: "10px",
       fontWeight: "bold",
-      // fontFamily: "Outfit Light",
     },
     name: {
       fontWeight: "bold",
-      // fontFamily: "Outfit Light",
     },
     hobby: {
       marginTop: "4px",
       fontSize: "14px",
-      // fontFamily: "Outfit Light",
       color: "#555",
       fontWeight: "bold", // Makes the text bold
     },
@@ -244,8 +238,7 @@ export default function AdminStatistics() {
       style={{
         marginLeft: "195px",
         height: "100%",
-        background:
-          "linear-gradient(to bottom right, #ffcc80, rgb(28 105 123 / 3%))",
+        background: "#F7F7F7",
         position: "fixed",
         width: "100%",
         marginBottom: "80px",
@@ -320,12 +313,14 @@ export default function AdminStatistics() {
           >
             {/* Members Card */}
             <div
-              className="newCard"
+              className="data-container"
               style={{
                 width: "480px",
                 margin: "20px",
-                backgroundColor: "rgba(255, 254, 248, 0.8)", // שקיפות של 80% לקוביה
-                borderRadius: "2.5%",
+                borderWidth: "2px",
+                borderStyle: "solid",
+                borderColor: "#BEBDBB",
+                borderRadius: "3.5%",
                 maxHeight: "340px",
               }}
             >
@@ -335,7 +330,7 @@ export default function AdminStatistics() {
                   marginLeft: "-15px",
                   marginTop: "22px",
                   fontWeight: "700",
-                  textAlign: "center", // מרכז את הכותרת
+                  textAlign: "center",
                 }}
               >
                 Members
@@ -414,18 +409,20 @@ export default function AdminStatistics() {
 
             {/* Team Satisfaction Card */}
             <div
-              className="newCard"
+              className="data-container"
               style={{
                 width: "300px",
                 height: "300px",
                 margin: "20px",
-                backgroundColor: "rgba(255, 254, 248, 0.8)", // שקיפות של 80% לקוביה
-                borderRadius: "2.5%",
+                borderWidth: "2px",
+                borderStyle: "solid",
+                borderColor: "#BEBDBB",
+                borderRadius: "3.5%",
                 display: "flex",
                 flexDirection: "column",
-                alignItems: "center", // מרכוז של התוכן בגרף
-                justifyContent: "center", // מרכוז של התוכן בגרף
-                textAlign: "center", // מרכוז הכותרת
+                alignItems: "center",
+                justifyContent: "center",
+                textAlign: "center",
               }}
             >
               <h3
@@ -436,8 +433,8 @@ export default function AdminStatistics() {
               </h3>
               <div
                 style={{
-                  width: "180px", // הגדלה של העיגול
-                  height: "180px", // הגדלה של העיגול
+                  width: "180px",
+                  height: "180px",
                   marginTop: "20px",
                 }}
               >
@@ -450,7 +447,7 @@ export default function AdminStatistics() {
                     trailColor: "#cfccca",
                     strokeLinecap: "round",
                     pathTransitionDuration: 0.5,
-                    strokeWidth: 6, // הדקתי את הקו של העיגול
+                    strokeWidth: 6,
                   })}
                 />
               </div>
@@ -458,13 +455,15 @@ export default function AdminStatistics() {
 
             {/* Utilization of Vacation Days */}
             <div
-              className="newCard"
+              className="data-container"
               style={{
                 width: "368px",
                 margin: "20px",
-                backgroundColor: "rgba(255, 254, 248, 0.8)", // שקיפות של 80% לקוביה
-                borderRadius: "2.5%",
-                textAlign: "center", // מרכז את הכותרת
+                borderWidth: "2px",
+                borderStyle: "solid",
+                borderColor: "#BEBDBB",
+                borderRadius: "3.5%",
+                textAlign: "center",
               }}
             >
               <h3
@@ -473,7 +472,7 @@ export default function AdminStatistics() {
                   marginLeft: "15px",
                   marginTop: "25px",
                   fontWeight: "700",
-                  textAlign: "center", // מרכז את הכותרת
+                  textAlign: "center",
                 }}
               >
                 Utilization of Vacation Days
@@ -488,8 +487,7 @@ export default function AdminStatistics() {
                   marginTop: "20px",
                 }}
               >
-                {/* מרכז את הגרף */}
-                <HelfBar />
+                <EmployeesVacationUtilizationBar percentage={56.5} />
               </div>
               <div
                 style={{
@@ -513,13 +511,15 @@ export default function AdminStatistics() {
           <div style={{ height: "270px", display: "flex" }}>
             {/* Employees Over 100% Hours Card */}
             <div
-              className="newCard"
+              className="data-container"
               style={{
                 width: "480px",
                 height: "300px",
                 margin: "20px",
-                backgroundColor: "rgba(255, 254, 248, 0.8)", // שקיפות של 80% לקוביה
-                borderRadius: "2.5%",
+                borderWidth: "2px",
+                borderStyle: "solid",
+                borderColor: "#BEBDBB",
+                borderRadius: "3.5%",
               }}
             >
               <h3
@@ -528,29 +528,33 @@ export default function AdminStatistics() {
                   marginLeft: "15px",
                   marginTop: "25px",
                   fontWeight: "700",
-                  textAlign: "center", // מרכז את הכותרת
+                  textAlign: "center",
                 }}
               >
                 Employees Over 100% Hours
               </h3>
 
-              <EmployeesWorkingHours employees={employees}></EmployeesWorkingHours>
+              <EmployeesWorkingHours
+                employees={employees}
+              ></EmployeesWorkingHours>
             </div>
 
             {/* Conversations 1:1 Card */}
             <div
-              className="newCard"
+              className="data-container"
               style={{
                 width: "300px",
                 height: "300px",
                 margin: "20px",
-                backgroundColor: "rgba(255, 254, 248, 0.8)", // שקיפות של 80% לקוביה
-                borderRadius: "2.5%",
+                borderWidth: "2px",
+                borderStyle: "solid",
+                borderColor: "#BEBDBB",
+                borderRadius: "3.5%",
                 display: "flex",
                 flexDirection: "column",
-                alignItems: "center", // מרכוז של התוכן בגרף
-                justifyContent: "center", // מרכוז של התוכן בגרף
-                textAlign: "center", // מרכוז הכותרת
+                alignItems: "center",
+                justifyContent: "center",
+                textAlign: "center",
               }}
             >
               <h3
@@ -561,8 +565,8 @@ export default function AdminStatistics() {
               </h3>
               <div
                 style={{
-                  width: "180px", // הגדלה של העיגול
-                  height: "180px", // הגדלה של העיגול
+                  width: "180px",
+                  height: "180px",
                   marginTop: "20px",
                 }}
               >
@@ -575,7 +579,7 @@ export default function AdminStatistics() {
                     trailColor: "#cfccca",
                     strokeLinecap: "round",
                     pathTransitionDuration: 0.5,
-                    strokeWidth: 6, // הדקתי את הקו של העיגול
+                    strokeWidth: 6,
                   })}
                 />
               </div>
@@ -614,7 +618,7 @@ export default function AdminStatistics() {
           </div>
         </div>
       </div>
-      <PopUp></PopUp>
+      <CreateEmployeeEvent/>
     </div>
   );
 }
