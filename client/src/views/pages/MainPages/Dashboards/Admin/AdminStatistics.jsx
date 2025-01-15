@@ -8,13 +8,9 @@ import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { userProfile } from "../../../../../imgs";
 import EmployeesVacationUtilizationBar from "./EmployeesVacationUtilization";
-import {
-  fetchEmployees,
-  fetchUserProfilePic
-} from "../../../../../services";
+import { fetchEmployees, fetchUserProfilePic } from "../../../../../services";
 import EmployeesWorkingHours from "./EmployeesWorkingHours";
 import { format } from "date-fns";
-import "./scrollBarMainEmployee.css";
 import CreateEmployeeEvent from "../../../Employees/CreateEmployeeEvent";
 
 export default function AdminStatistics() {
@@ -71,10 +67,10 @@ export default function AdminStatistics() {
 
       setFilteredEmployees(filteredTeam);
     }
-    if(profileImg) {
-      setUserProfileImage(profileImg)
+    if (profileImg) {
+      setUserProfileImage(profileImg);
     } else {
-      setUserProfileImage(userProfile)
+      setUserProfileImage(userProfile);
     }
   }, [selectedTeam, employees]);
 
@@ -178,450 +174,148 @@ export default function AdminStatistics() {
     dayPeriod: "long",
   });
 
-  // _______________
-  // css
 
-  const styles = {
-    card: {
-      width: "368px",
-      height: "300px",
-      borderWidth: "2px",
-      borderStyle: "solid",
-      borderColor: "#BEBDBB",
-      borderRadius: "3.5%",
-      margin: "20px",
-    },
-    header: {
-      display: "flex",
-      justifyContent: "space-between",
-    },
-    title: {
-      fontSize: "22px",
-      fontWeight: "700",
-      marginLeft: "70px",
-      marginTop: "25px",
-      textAlign: "center",
-    },
-
-    seeAllButton: {
-      fontSize: "16px",
-      color: "black",
-      background: "none",
-      border: "none",
-      cursor: "pointer",
-      marginTop: "25px",
-    },
-    birthdayList: {
-      listStyle: "none",
-      padding: "0",
-      margin: "0",
-      marginTop: "10px",
-      marginLeft: "15px",
-    },
-    birthdayItem: {
-      fontSize: "18px",
-      marginBottom: "15px",
-    },
-    date: {
-      marginRight: "10px",
-      fontWeight: "bold",
-    },
-    name: {
-      fontWeight: "bold",
-    },
-    hobby: {
-      marginTop: "4px",
-      fontSize: "14px",
-      color: "#555",
-      fontWeight: "bold", // Makes the text bold
-    },
-  };
 
   return (
-    <div
-      className="newHrS"
-      style={{
-        marginLeft: "195px",
-        height: "100%",
-        background: "#F7F7F7",
-        position: "fixed",
-        width: "100%",
-        marginBottom: "80px",
-      }}
-    >
-      <div
-        className="newHeader"
-        style={{ marginTop: "20px", fontWeight: "1000", height: "100px" }}
-      >
-        <div className="newUser" style={{ marginLeft: "1130px" }}>
-          <span> {username ? `Hey ${username}! ` : "User"}</span>
-          <span className="user-img me-1">
-            <img
-              style={{ width: "30px", height: "30px", marginLeft: "5px",  borderRadius: "50%", 
-                objectFit: "cover"}}
-              src={userProfileImage || userProfile}
-              alt="Profile"
-            />
-
-            <span className="status online" />
-          </span>
-        </div>
-        <div className="newHrS" style={{ display: "flex" }}>
-          <div>
-            <h1
-              className="nH1"
-              style={{
-                textAlign: "left",
-                top: "50px",
-                marginLeft: "65px",
-                fontWeight: "850",
-                fontSize: "40px",
-              }}
-            >
-              {greeting}
-            </h1>
-          </div>
-          <div
-            className="newSelect"
-            style={{
-              padding: "0px",
-              position: "relative",
-              top: "5px",
-              borderRadius: "10px",
-              width: "500px",
-              height: "50px",
-              textAlign: "center",
-              margin: "0 auto",
-              left: "340px",
-              bottom: "0px",
-            }}
-          >
-            <Select
-              options={teams?.map((team) => ({
-                value: team._id,
-                label: team.name,
-              }))}
-              onChange={handleSelect}
-              placeholder="Select a team"
-              className="w-50 m-3"
-            />
-          </div>
+    <div className="admin-dashboard">
+      <div className="user-profile-container">
+          <img
+            className="user-profile"
+            src={userProfileImage || userProfile}
+            alt="Profile"
+          />
+          <span className="status online" />
+      </div>
+    <div className="dashboard-header">
+      
+      <div className="header-content">
+        <h1 className="greeting">{greeting}, {username ? ` ${username} ` : "User"}</h1>
+        <div className="newSelect">
+          <Select
+            options={teams?.map((team) => ({
+              value: team._id,
+              label: team.name,
+            }))}
+            onChange={handleSelect}
+            placeholder="Select a team"
+            className="w-50 m-3"
+          />
         </div>
       </div>
-      <div style={{ height: "80vh", overflowY: "auto", padding: "10px" }}>
-        <div className="newContent" style={{ marginLeft: "50px" }}>
-          <div
-            className="newRow1"
-            style={{ display: "flex", flexWrap: "wrap" }}
-          >
-            {/* Members Card */}
-            <div
-              className="data-container"
-              style={{
-                width: "480px",
-                margin: "20px",
-                borderWidth: "2px",
-                borderStyle: "solid",
-                borderColor: "#BEBDBB",
-                borderRadius: "3.5%",
-                maxHeight: "340px",
-              }}
-            >
-              <h3
-                className="titelH3"
-                style={{
-                  marginLeft: "-15px",
-                  marginTop: "22px",
-                  fontWeight: "700",
-                  textAlign: "center",
-                }}
-              >
-                Members
-              </h3>
-
-              <br />
-              <div
-                className="scrollableContent"
-                style={{
-                  maxHeight: "220px",
-                  overflowY: "auto",
-                  padding: "10px",
-                }}
-              >
-                <div
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(3, 1fr)",
-                    gap: "15px",
-                    marginTop: "20px",
-                  }}
-                >
-                  {/* Render Employees */}
-                  {employees &&
-                    filteredEmployees?.map((employee) => (
-                      <div
-                        key={employee._id}
-                        className="profile-img"
-                        style={{
-                          textAlign: "center",
-                          borderRadius: "10px",
-                          padding: "20px",
-                          backgroundColor: "#fffef8",
-                        }}
-                      >
-                        <Link
-                          to={`/profile/${employee._id}`}
-                          className="avatar"
-                        >
-                          <img
-                            loading="lazy"
-                            src={employee.imageUrl}
-                            alt={employee.fullName}
-                            style={{
-                              width: "80px",
-                              height: "80px",
-                              borderRadius: "50%",
-                              marginBottom: "8px",
-                            }}
-                          />
-                        </Link>
-                        <h4
-                          className="user-name"
-                          style={{
-                            fontSize: "12px",
-                            margin: "0",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            whiteSpace: "nowrap",
-                          }}
-                        >
-                          <Link
-                            to={`/profile/${employee._id}`}
-                            style={{ textDecoration: "none", color: "inherit" }}
-                          >
-                            <br />
-                            <br />
-                            {employee.fullName}
-                          </Link>
-                        </h4>
-                      </div>
-                    ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Team Satisfaction Card */}
-            <div
-              className="data-container"
-              style={{
-                width: "300px",
-                height: "300px",
-                margin: "20px",
-                borderWidth: "2px",
-                borderStyle: "solid",
-                borderColor: "#BEBDBB",
-                borderRadius: "3.5%",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                textAlign: "center",
-              }}
-            >
-              <h3
-                className="titelH3"
-                style={{ marginTop: "-15px", fontWeight: "700" }}
-              >
-                Team Satisfaction
-              </h3>
-              <div
-                style={{
-                  width: "180px",
-                  height: "180px",
-                  marginTop: "20px",
-                }}
-              >
-                <CircularProgressbar
-                  value={percentage}
-                  text={`${Math.round(percentage)}%`}
-                  styles={buildStyles({
-                    textColor: "black",
-                    pathColor: "#ffb28d",
-                    trailColor: "#cfccca",
-                    strokeLinecap: "round",
-                    pathTransitionDuration: 0.5,
-                    strokeWidth: 6,
-                  })}
-                />
-              </div>
-            </div>
-
-            {/* Utilization of Vacation Days */}
-            <div
-              className="data-container"
-              style={{
-                width: "368px",
-                margin: "20px",
-                borderWidth: "2px",
-                borderStyle: "solid",
-                borderColor: "#BEBDBB",
-                borderRadius: "3.5%",
-                textAlign: "center",
-              }}
-            >
-              <h3
-                className="titelH3"
-                style={{
-                  marginLeft: "15px",
-                  marginTop: "25px",
-                  fontWeight: "700",
-                  textAlign: "center",
-                }}
-              >
-                Utilization of Vacation Days
-              </h3>
-
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  flexDirection: "column",
-                  marginTop: "20px",
-                }}
-              >
-                <EmployeesVacationUtilizationBar percentage={56.5} />
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  flexDirection: "column",
-                  marginTop: "20px",
-                }}
-              >
-                <h5 style={{ textAlign: "center", opacity: 0.8 }}>
-                  At this stage of the year, it is
-                </h5>
-                <h5 style={{ textAlign: "center", opacity: 0.8 }}>
-                  recommended to use at least 76%
-                </h5>
-              </div>
-            </div>
-          </div>
-
-          <div style={{ height: "270px", display: "flex" }}>
-            {/* Employees Over 100% Hours Card */}
-            <div
-              className="data-container"
-              style={{
-                width: "480px",
-                height: "300px",
-                margin: "20px",
-                borderWidth: "2px",
-                borderStyle: "solid",
-                borderColor: "#BEBDBB",
-                borderRadius: "3.5%",
-              }}
-            >
-              <h3
-                className="titelH3"
-                style={{
-                  marginLeft: "15px",
-                  marginTop: "25px",
-                  fontWeight: "700",
-                  textAlign: "center",
-                }}
-              >
-                Employees Over 100% Hours
-              </h3>
-
-              <EmployeesWorkingHours
-                employees={employees}
-              ></EmployeesWorkingHours>
-            </div>
-
-            {/* Conversations 1:1 Card */}
-            <div
-              className="data-container"
-              style={{
-                width: "300px",
-                height: "300px",
-                margin: "20px",
-                borderWidth: "2px",
-                borderStyle: "solid",
-                borderColor: "#BEBDBB",
-                borderRadius: "3.5%",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                textAlign: "center",
-              }}
-            >
-              <h3
-                className="titelH3"
-                style={{ marginTop: "-15px", fontWeight: "700" }}
-              >
-                Conversations 1:1
-              </h3>
-              <div
-                style={{
-                  width: "180px",
-                  height: "180px",
-                  marginTop: "20px",
-                }}
-              >
-                <CircularProgressbar
-                  value={percentage}
-                  text={"5/8"}
-                  styles={buildStyles({
-                    textColor: "black",
-                    pathColor: "rgb(20 117 119)",
-                    trailColor: "#cfccca",
-                    strokeLinecap: "round",
-                    pathTransitionDuration: 0.5,
-                    strokeWidth: 6,
-                  })}
-                />
-              </div>
-            </div>
-
-            {/* Upcoming Birthdays Card */}
-            <div style={styles.card}>
-              <div style={styles.header}>
-                <h3 style={styles.title}>Upcoming Birthdays</h3>
-
-                <button style={styles.seeAllButton} onClick={handleSeeAllClick}>
-                  {"next >"}
-                </button>
-
-                <br />
-                <br />
-              </div>
-              <ul style={styles.birthdayList}>
-                {employeesFormattedBirthdays().map((employee, index) => (
-                  <li key={index} style={styles.birthdayItem}>
-                    <span style={styles.date}>
-                      {new Date(employee.birthdayThisYear).toLocaleDateString(
-                        "en-GB",
-                        {
-                          day: "2-digit",
-                          month: "2-digit",
-                        }
-                      )}
-                    </span>
-                    <span style={styles.name}>{employee.fullName}</span>
-                    <div style={styles.hobby}>{employee.interestingFact}</div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-      <CreateEmployeeEvent />
     </div>
+  
+    <div className="dashboard-statistics">
+      {/* Members Card */}
+      <div className="data-container">
+        <h3 className="h3">Members</h3>
+        <div className="scrollableContent">
+          <div className="grid-container members-card">
+            {employees &&
+              filteredEmployees?.map((employee) => (
+                <div key={employee._id} className="profile-img">
+                  <Link to={`/profile/${employee._id}`} className="avatar">
+                    <img
+                      loading="lazy"
+                      src={employee.imageUrl}
+                      alt={employee.fullName}
+                      className="employee-image"
+                    />
+                  </Link>
+                  <span className="employee-fullname">
+                    <Link to={`/profile/${employee._id}`} >
+                      {employee.fullName}
+                    </Link>
+                  </span>
+                </div>
+              ))}
+          </div>
+        </div>
+      </div>
+  
+      {/* Team Satisfaction Card */}
+      <div className="data-container">
+        <h3 className="h3">Team Satisfaction</h3>
+        <div className="progress-circle">
+          <CircularProgressbar
+            value={percentage}
+            text={`${Math.round(percentage)}%`}
+            styles={buildStyles({
+              textColor: "black",
+              pathColor: "#ffb28d",
+              trailColor: "#cfccca",
+              strokeLinecap: "round",
+              pathTransitionDuration: 0.5,
+              strokeWidth: 6,
+            })}
+          />
+        </div>
+      </div>
+  
+      {/* Utilization of Vacation Days */}
+      <div className="data-container vacation-card">
+        <h3 className="h3">Utilization of Vacation Days</h3>
+        <div className="vacation-bar">
+          <EmployeesVacationUtilizationBar percentage={56.5} />
+        </div>
+        <div className="vacation-info">
+          <h5>At this stage of the year, it is</h5>
+          <h5>recommended to use at least 76%</h5>
+        </div>
+      </div>
+  
+      {/* Employees Over 100% Hours */}
+      <div className="data-container">
+        <h3 className="h3">Employees Over 100% Hours</h3>
+        <EmployeesWorkingHours employees={employees} />
+      </div>
+  
+      {/* Conversations 1:1 */}
+      <div className="data-container">
+        <h3 className="h3">Conversations 1:1</h3>
+        <div className="progress-circle">
+          <CircularProgressbar
+            value={percentage}
+            text={"5/8"}
+            styles={buildStyles({
+              textColor: "black",
+              pathColor: "rgb(20 117 119)",
+              trailColor: "#cfccca",
+              strokeLinecap: "round",
+              pathTransitionDuration: 0.5,
+              strokeWidth: 6,
+            })}
+          />
+        </div>
+      </div>
+  
+      {/* Upcoming Birthdays */}
+      <div className="data-container birthday-card">
+        <div className="card-header">
+          <h3 className="card-title">Upcoming Birthdays</h3>
+          <button className="see-all-button" onClick={handleSeeAllClick}>
+            {"next >"}
+          </button>
+        </div>
+        <ul className="birthday-list">
+          {employeesFormattedBirthdays().map((employee, index) => (
+            <li key={index} className="birthday-item">
+              <span className="birthday-date">
+                {new Date(employee.birthdayThisYear).toLocaleDateString("en-GB", {
+                  day: "2-digit",
+                  month: "2-digit",
+                })}
+              </span>
+              <span className="employee-fullName">{employee.fullName}</span>
+              <div className="employee-interesting-fact">{employee.interestingFact}</div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  
+    <CreateEmployeeEvent />
+  </div>
+  
+  
   );
 }
