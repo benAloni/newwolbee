@@ -13,7 +13,6 @@ import interactionPlugin from "@fullcalendar/interaction/index.js";
 import rrulePlugin from "@fullcalendar/rrule";
 import Hol from "./Hol";
 import axios from "axios";
-import CalendarModal from "../../../../../components/Modals/calendar/CalendarModal";
 import CalendarEventsPopup from "../../../../../components/Modals/calendar/calendarEventsPopup";
 import { useSelector } from "react-redux";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -47,8 +46,8 @@ const Calendar = () => {
 
     return {
       events: eventsResponse,
-      foodHolidays: foodHolidaysResponse.data, 
-      employees: employeesResponse, 
+      foodHolidays: foodHolidaysResponse.data,
+      employees: employeesResponse,
     };
   };
 
@@ -59,26 +58,6 @@ const Calendar = () => {
     refetchInterval: 60000, // Refetch every 60 seconds
     refetchOnWindowFocus: true,
   });
-
-  const addEventMutation = useMutation({
-    mutationFn: async (newEvent) => {
-      const token = await auth.currentUser.getIdToken();
-      await axios.post(
-        `${process.env.REACT_APP_SERVER_URI}/addEvent`,
-        newEvent,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries(["calendarData"]);
-    },
-  });
-
-  const addEvent = (newEvent) => {
-    addEventMutation.mutate(newEvent);
-  };
 
   const handleCountryChange = (event) => {
     setCountryCode(event.target.value);
@@ -102,14 +81,17 @@ const Calendar = () => {
         },
       }));
 
-      const employeeBirthdayEvents = data.employees.map((employee) => ({
-        title: `${employee.fullName}'s birthday`,
-        className: "bg-purple",
-        rrule: {
-          freq: "YEARLY",
-          dtstart: employee.dateOfBirth,
-        },
-      }));
+      const employeeBirthdayEvents = data.employees.map((employee) => {
+        return {
+          title: `${employee.fullName}'s birthday`,
+          className: "bg-purple",
+          rrule: {
+            freq: "YEARLY",
+            dtstart: new Date(employee.dateOfBirth),
+          },
+        };
+      });
+
       const employeeVacationEvents = data.employees.flatMap((employee) => {
         if (employee.vacation && employee.vacation.length > 0) {
           return employee.vacation.flatMap((vacation) => [
@@ -139,7 +121,7 @@ const Calendar = () => {
             },
           ]);
         } else {
-          return []; 
+          return [];
         }
       });
       const employeeSickLeaveDates = data.employees.flatMap((employee) => {
@@ -159,10 +141,10 @@ const Calendar = () => {
             },
           ]);
         } else {
-          return []; 
+          return [];
         }
       });
-      
+
       setEvents((prevEvents) => [
         ...employeeVacationEvents,
         ...employeeSickLeaveDates,
@@ -258,17 +240,6 @@ const Calendar = () => {
                 </select>
               </div>
             </div>
-            <div className="col-auto float-end ms-auto">
-              <Link
-                to="#"
-                className="btn add-btn"
-                data-bs-toggle="modal"
-                data-bs-target="#add_event"
-                ref={linkRef}
-              >
-                <i className="fa-solid fa-plus" /> Add Event
-              </Link>
-            </div>
           </div>
         </div>
         <div className="row">
@@ -311,12 +282,7 @@ const Calendar = () => {
         </div>
       </div>
       {HolComponent}
-      <CalendarModal
-        addEvent={(event) => {
-          addEvent(event);
-          setShowModal(false);
-        }}
-      />
+
       <CalendarEventsPopup
         show={showModal}
         handleClose={() => setShowModal(false)}
