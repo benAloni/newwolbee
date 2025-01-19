@@ -36,6 +36,14 @@
   margin-top: 2vmin;
   padding: 0.3vmin;
 }
+span.employee-fullname {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  display: block;
+}
+a{
+  color: #000;
+}
 .profile-img {
   width: 40px;
   height: 40px;
@@ -273,10 +281,6 @@
     width: 6.5vmin;
     height: 6.5vmin;
   }
-  span.employee-fullname {
-    margin-top: 15px;
-    display: block;
-  }
   .progress-circle {
     width: 20vmin;
     height: 20vmin;
@@ -351,11 +355,6 @@
     width: 5vmin;
     height: 5vmin;
     margin: 20px;
-  }
-  span.employee-fullname {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    display: block;
   }
   .progress-circle {
     width: 20vmin;
