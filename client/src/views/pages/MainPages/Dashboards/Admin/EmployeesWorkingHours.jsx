@@ -60,19 +60,18 @@ const EmployeesWorkingHours = () => {
   // Component styling
   const sectionStyle = {
     width: '100%',
+    height: '100%',
+    padding: "10px",
     maxWidth: '30rem',
-    padding: '1rem',
     borderRadius: '0.5rem',
-    margin: 'auto',
-    fontFamily: "'Bitter', sans-serif",
     fontSize: '1rem',
     color: '#101820',
     backgroundColor: '#f8f8f8',
   };
 
   const searchStyle = {
-    marginBottom: '1rem',
     padding: '0.5rem',
+    marginBottom: "10px",
     borderRadius: '0.3rem',
     border: '1px solid #ccc',
     width: '100%',
@@ -83,23 +82,26 @@ const EmployeesWorkingHours = () => {
   const chartStyle = {
     display: 'grid',
     gridTemplateColumns: '1fr',
-    // gap: '0.5rem',
+    gap: '0.5rem',
     alignItems: 'center',
     maxHeight: '180px',
-    overflowY: 'auto', // מאפשר גלילה
+    overflowY: 'auto', 
+    scrollbarWidth: 'none', //For Firefox
+    msOverflowStyle: 'none',
+    
   };
 
   const listItemStyle = {
     display: 'flex',
     alignItems: 'center',
     padding: '0.3rem 0',
-    justifyContent: 'space-between', // יישור שמות העובדים בצד אחד
+    justifyContent: 'space-between', 
   };
 
   const labelStyle = {
     marginRight: '0.5rem',
     fontWeight: 'bold',
-    flex: 1, // מאפשר לי ליישר את השם על פני כל רוחב התיבה
+    flex: 1, 
   };
 
   const barContainerStyle = {
@@ -136,7 +138,7 @@ const EmployeesWorkingHours = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
             style={searchStyle}
           />
-          <ul className="scrollableContent" style={chartStyle}>
+          <ul style={chartStyle}>
             {percentageData.map((employee) => (
               <li key={employee.id} style={listItemStyle}>
                 <span style={labelStyle}>{employee.fullName}</span>
