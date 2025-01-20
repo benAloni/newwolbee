@@ -20,11 +20,10 @@ img {
 a {
 	text-decoration: none;
   outline: none;
-	color: $primary;
 	cursor: pointer;
 	@include transition(all 0.2s ease);
 	&:hover {
-		color: $primary-hover;
+		color: #13658b;
 		@include transition(all 0.2s ease);
 	}
 	&:focus {

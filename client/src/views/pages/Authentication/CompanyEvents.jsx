@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
-import { SideBar, Header } from "../../../layout";
 import CreateCompanyEventModal from "../../../components/Modals/companyEvents/CreateCompanyEventModal";
 import { fetchCompanyEvents } from "../../../services";
 import { useQuery } from "@tanstack/react-query";
@@ -27,8 +26,6 @@ export default function CompanyEvents() {
   return (
     <div className="page-wrapper">
       <div className="content container-fluid">
-        <SideBar />
-        <Header />
         <h1 style={{ textAlign: "center", direction: "rtl" }}>
           Company's events
         </h1>
