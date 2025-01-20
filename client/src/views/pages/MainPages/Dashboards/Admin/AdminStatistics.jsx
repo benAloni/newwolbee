@@ -11,8 +11,8 @@ import EmployeesVacationUtilizationBar from "./EmployeesVacationUtilization";
 import { fetchEmployees, fetchUserProfilePic } from "../../../../../services";
 import EmployeesWorkingHours from "./EmployeesWorkingHours";
 import { format } from "date-fns";
-import CreateEmployeeEvent from "../../../Employees/CreateEmployeeEvent";
-import { GrLinkNext } from "react-icons/gr";
+import CreateEmployeeEvent from "../../../Employees/personallyEvents/CreateEmployeeEvent";
+
 export default function AdminStatistics() {
   // states
   const [selectedTeam, setSelectedTeam] = useState("");
@@ -174,148 +174,148 @@ export default function AdminStatistics() {
     dayPeriod: "long",
   });
 
+
+
   return (
     <div className="admin-dashboard">
       <div className="user-profile-container">
-        <img
-          className="user-profile"
-          src={userProfileImage || userProfile}
-          alt="Profile"
-        />
-        <span className="status online" />
+          <img
+            className="user-profile"
+            src={userProfileImage || userProfile}
+            alt="Profile"
+          />
+          <span className="status online" />
       </div>
-      <div className="dashboard-header">
-        <div className="header-content">
-          <h1 className="greeting">
-            {greeting}, {username ? ` ${username} ` : "User"}
-          </h1>
-          <div className="newSelect">
-            <Select
-              options={teams?.map((team) => ({
-                value: team._id,
-                label: team.name,
-              }))}
-              onChange={handleSelect}
-              placeholder="Select a team"
-              className="w-50 m-3"
-            />
-          </div>
+    <div className="dashboard-header">
+      
+      <div className="header-content">
+        <h1 className="greeting">{greeting}, {username ? ` ${username} ` : "User"}</h1>
+        <div className="newSelect">
+          <Select
+            options={teams?.map((team) => ({
+              value: team._id,
+              label: team.name,
+            }))}
+            onChange={handleSelect}
+            placeholder="Select a team"
+            className="w-50 m-3"
+          />
         </div>
       </div>
-
-      <div className="dashboard-statistics">
-        {/* Members Card */}
-        <div className="data-container">
-          <h3 className="h3">Members</h3>
-            <div className="members-card">
-              {employees &&
-                filteredEmployees?.map((employee) => (
-                  <div key={employee._id} className="profile-img">
-                    <Link to={`/profile/${employee._id}`} className="avatar">
-                      <img
-                        loading="lazy"
-                        src={employee.imageUrl}
-                        alt={employee.fullName}
-                        className="employee-image"
-                      />
-                    </Link>
-                    <span className="employee-fullname">
-                      <Link to={`/profile/${employee._id}`}>
-                        {employee.fullName}
-                      </Link>
-                    </span>
-                  </div>
-                ))}
-            </div>
-        </div>
-
-        {/* Team Satisfaction Card */}
-        <div className="data-container">
-          <h3 className="h3">Team Satisfaction</h3>
-          <div className="progress-circle">
-            <CircularProgressbar
-              value={percentage}
-              text={`${Math.round(percentage)}%`}
-              styles={buildStyles({
-                textColor: "black",
-                pathColor: "#ffb28d",
-                trailColor: "#cfccca",
-                strokeLinecap: "round",
-                pathTransitionDuration: 0.5,
-                strokeWidth: 6,
-              })}
-            />
-          </div>
-        </div>
-
-        {/* Utilization of Vacation Days */}
-        <div className="data-container vacation-card">
-          <h3 className="h3">Utilization of Vacation Days</h3>
-          <div className="vacation-bar">
-            <EmployeesVacationUtilizationBar percentage={56.5} />
-          </div>
-          <div className="vacation-info">
-            <h5>At this stage of the year, it is</h5>
-            <h5>recommended to use at least 76%</h5>
-          </div>
-        </div>
-
-        {/* Employees Over 100% Hours */}
-        <div className="data-container members-hours-card">
-          <h3 className="h3">Employees Over 100% Hours</h3>
-            <EmployeesWorkingHours employees={employees} />
-        </div>
-
-        {/* Conversations 1:1 */}
-        <div className="data-container">
-          <h3 className="h3">Conversations 1:1</h3>
-          <div className="progress-circle">
-            <CircularProgressbar
-              value={percentage}
-              text={"5/8"}
-              styles={buildStyles({
-                textColor: "black",
-                pathColor: "rgb(20 117 119)",
-                trailColor: "#cfccca",
-                strokeLinecap: "round",
-                pathTransitionDuration: 0.5,
-                strokeWidth: 6,
-              })}
-            />
-          </div>
-        </div>
-
-        {/* Upcoming Birthdays */}
-        <div className="data-container birthday-card">
-          <div className="card-header">
-            <h3 className="card-title">Upcoming Birthdays</h3>
-            <span className="next-button" onClick={handleSeeAllClick}>
-            <GrLinkNext />
-            </span>
-          </div>
-          <ul className="birthday-list">
-            {employeesFormattedBirthdays().map((employee, index) => (
-              <li key={index} className="birthday-item">
-                <span className="birthday-date">
-                  {new Date(employee.birthdayThisYear).toLocaleDateString(
-                    "en-GB",
-                    {
-                      day: "2-digit",
-                      month: "2-digit",
-                    }
-                  )}
-                </span>
-                <span className="employee-fullName">{employee.fullName}</span>
-                <div className="employee-interesting-fact">
-                  {employee.interestingFact}
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-
-      <CreateEmployeeEvent />
     </div>
+  
+    <div className="dashboard-statistics">
+      {/* Members Card */}
+      <div className="data-container">
+        <h3 className="h3">Members</h3>
+        <div className="scrollableContent">
+          <div className="grid-container members-card">
+            {employees &&
+              filteredEmployees?.map((employee) => (
+                <div key={employee._id} className="profile-img">
+                  <Link to={`/profile/${employee._id}`} className="avatar">
+                    <img
+                      loading="lazy"
+                      src={employee.imageUrl}
+                      alt={employee.fullName}
+                      className="employee-image"
+                    />
+                  </Link>
+                  <span className="employee-fullname">
+                    <Link to={`/profile/${employee._id}`} >
+                      {employee.fullName}
+                    </Link>
+                  </span>
+                </div>
+              ))}
+          </div>
+        </div>
+      </div>
+  
+      {/* Team Satisfaction Card */}
+      <div className="data-container">
+        <h3 className="h3">Team Satisfaction</h3>
+        <div className="progress-circle">
+          <CircularProgressbar
+            value={percentage}
+            text={`${Math.round(percentage)}%`}
+            styles={buildStyles({
+              textColor: "black",
+              pathColor: "#ffb28d",
+              trailColor: "#cfccca",
+              strokeLinecap: "round",
+              pathTransitionDuration: 0.5,
+              strokeWidth: 6,
+            })}
+          />
+        </div>
+      </div>
+  
+      {/* Utilization of Vacation Days */}
+      <div className="data-container vacation-card">
+        <h3 className="h3">Utilization of Vacation Days</h3>
+        <div className="vacation-bar">
+          <EmployeesVacationUtilizationBar percentage={56.5} />
+        </div>
+        <div className="vacation-info">
+          <h5>At this stage of the year, it is</h5>
+          <h5>recommended to use at least 76%</h5>
+        </div>
+      </div>
+  
+      {/* Employees Over 100% Hours */}
+      <div className="data-container">
+        <h3 className="h3">Employees Over 100% Hours</h3>
+        <EmployeesWorkingHours employees={employees} />
+      </div>
+  
+      {/* Conversations 1:1 */}
+      <div className="data-container">
+        <h3 className="h3">Conversations 1:1</h3>
+        <div className="progress-circle">
+          <CircularProgressbar
+            value={percentage}
+            text={"5/8"}
+            styles={buildStyles({
+              textColor: "black",
+              pathColor: "rgb(20 117 119)",
+              trailColor: "#cfccca",
+              strokeLinecap: "round",
+              pathTransitionDuration: 0.5,
+              strokeWidth: 6,
+            })}
+          />
+        </div>
+      </div>
+  
+      {/* Upcoming Birthdays */}
+      <div className="data-container birthday-card">
+        <div className="card-header">
+          <h3 className="card-title">Upcoming Birthdays</h3>
+          <button className="see-all-button" onClick={handleSeeAllClick}>
+            {"next >"}
+          </button>
+        </div>
+        <ul className="birthday-list">
+          {employeesFormattedBirthdays().map((employee, index) => (
+            <li key={index} className="birthday-item">
+              <span className="birthday-date">
+                {new Date(employee.birthdayThisYear).toLocaleDateString("en-GB", {
+                  day: "2-digit",
+                  month: "2-digit",
+                })}
+              </span>
+              <span className="employee-fullName">{employee.fullName}</span>
+              <div className="employee-interesting-fact">{employee.interestingFact}</div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  
+    <CreateEmployeeEvent />
+  </div>
+  
+  
   );
 }
