@@ -19,7 +19,7 @@ const EventButton = ({ event, onClick }) => (
       backgroundColor: '#f9f9f9',
     }}
   >
-    <img
+    {/* <img
       src={event.imageUrl}
       alt={event.name}
       style={{
@@ -27,7 +27,7 @@ const EventButton = ({ event, onClick }) => (
         width: '80px',
         height: '80px',
       }}
-    />
+    /> */}
     <span>{event.name}</span>
   </button>
 );

@@ -11,7 +11,7 @@ import EmployeesVacationUtilizationBar from "./EmployeesVacationUtilization";
 import { fetchEmployees, fetchUserProfilePic } from "../../../../../services";
 import EmployeesWorkingHours from "./EmployeesWorkingHours";
 import { format } from "date-fns";
-import CreateEmployeeEvent from "../../../Employees/CreateEmployeeEvent";
+import CreateEmployeeEvent from "../../../Employees/personallyEvents/CreateEmployeeEvent";
 
 export default function AdminStatistics() {
   // states

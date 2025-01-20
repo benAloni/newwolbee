@@ -135,7 +135,7 @@ const Calendar = () => {
             },
             {
               title: `${employee.fullName} is back to work from sick leave `,
-              className: "bg-purple",
+              className: "bg-danger",
               start: sickLeave.endDate,
               end: sickLeave.endDate,
             },
