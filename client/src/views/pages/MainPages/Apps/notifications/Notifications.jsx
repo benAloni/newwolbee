@@ -4,7 +4,7 @@ import Holidays from "date-holidays";
 import ShowAllNotifications from "./mainNotifications/ShowAllNotifications";
 import HeaderNotifications from "./mainNotifications/HeaderNotifications";
 import ShowNewNotifications from "./mainNotifications/ShowNewNotifications";
-import "./modal.css";
+import "./css/modal.css";
 import ShowHolidaysNotifications from "./mainNotifications/ShowNotifications/ShowHolidaysNotifications";
 import { userProfile } from "../../../../../imgs";
 import {

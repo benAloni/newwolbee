@@ -5,13 +5,14 @@ export default function HeaderNotifications({setViewOption}) {
 
       
   return (
-    <div>        <div
+    <div>    
+          <div
     className="viewOptions"
     style={{
       display: "flex",
       justifyContent: "right",
       position: "relative",
-      right: "260px",
+      right: "500px",
       top: "5px",
     }}
   >
@@ -50,6 +51,7 @@ export default function HeaderNotifications({setViewOption}) {
         Archive
       </li>
     </ul>
-  </div></div>
+  </div>
+  </div>
   )
 }
