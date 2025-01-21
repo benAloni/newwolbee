@@ -69,28 +69,22 @@ const employeeSchema = new mongoose.Schema({
   maritalStatus: {
     type: String,
   },
-  children: {
-    type: Number,
-  },
-  myChildren: [
+  children: [
     {
-      name: { type: String, 
-        required: [true, "Please provide a name"] 
-      },
+      name: { type: String },
       gender: {
         type: String,
-        required: [true, "Please provide a gender"],
       },
       dateOfBirth: {
         type: Date,
-        required: [true, "Please provide date of birth"],
       },
-      sickLeave: [
-        {
-          startDate: { type: Date },
-          endDate: { type: Date },
-        },
-      ],
+    },
+  ],
+  childrenEvents: [
+    {
+      typeOfEvent: { type: String },
+      startDate: { type: Date },
+      endDate: { type: Date },
     },
   ],
   startDay: {
