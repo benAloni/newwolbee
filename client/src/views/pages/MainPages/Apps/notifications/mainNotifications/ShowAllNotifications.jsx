@@ -1,10 +1,11 @@
-// ShowAllNotifications.js
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import snoozeIcon from "../../../../../../imgs/snoozeIcon.png";
 import dismissIcon from "../../../../../../imgs/dismissIcon.png";
+import DatePicker from "react-datepicker";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateEmployeeNotification } from "../../../../../../services/api/notifications";
+import "react-datepicker/dist/react-datepicker.css";
 import "../css/showallnotification.css";
 
 const ShowAllNotifications = ({
@@ -13,35 +14,44 @@ const ShowAllNotifications = ({
   notifications,
 }) => {
   const navigate = useNavigate();
-  const [hoveredNotificationId, setHoveredNotificationId] = useState(null);
   const [hoveredIcon, setHoveredIcon] = useState({ snooze: null, dismiss: null });
+  const [isPostponeBtnClicked, setIsPostponeBtnClicked] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
   const queryClient = useQueryClient();
 
-  const deleteNotification = async (id) => {
-    const notification = notifications?.find((n) => n._id === id);
-    if (notification) {
-      const updatedData = {
-        id: notification._id,
-        hasBeenDismissed: true,
-        hasBeenHandled: notification.hasBeenHandled,
-        reminderDate: notification.reminderDate,
-      };
-      await updateEmployeeNotification(updatedData);
+  // Move notification to archive
+  const archiveNotification = async (id, reminderDate) => {
+    try {
+      const notification = notifications.find((n) => n._id === id);
+      if (notification) {
+        const updatedData = {
+          id: notification._id,
+          hasBeenDismissed: false,
+          hasBeenHandled: notification.hasBeenHandled,
+          reminderDate,
+          archived: true,
+        };
+        await updateEmployeeNotification(updatedData);
+      }
+    } catch (error) {
+      console.error("Error archiving notification:", error);
     }
   };
 
-  const deleteNotificationMutation = useMutation({
-    mutationFn: deleteNotification,
+  // React Query Mutations
+  const archiveNotificationMutation = useMutation({
+    mutationFn: archiveNotification,
     onSuccess: () => {
       queryClient.invalidateQueries(["allNotificationsData"]);
     },
   });
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const day = date.getDate();
-    const month = date.toLocaleString("default", { month: "short" });
-    return { day, month };
+  const handleDatePickerSelect = (date) => {
+    setSelectedDate(date);
+  };
+
+  const togglePostponeInput = (id) => {
+    setIsPostponeBtnClicked((prev) => (prev === id ? false : id));
   };
 
   return (
@@ -51,9 +61,9 @@ const ShowAllNotifications = ({
           key={notification._id}
           className={`notification-item ${notification.dismissed ? "dismissed" : ""}`}
         >
-          <div className={`priority-indicator ${notification.priority}`}>{
-            notification.priority
-          }</div>
+          <div className={`priority-indicator ${notification.priority}`}>
+            {notification.priority}
+          </div>
           <div
             onClick={() => getNotificationId(notification._id)}
             className="notification-message"
@@ -72,6 +82,7 @@ const ShowAllNotifications = ({
             />
           )}
           <div className="notification-icons">
+            {/* Snooze Button */}
             <div
               className="icon-container"
               onMouseEnter={() =>
@@ -85,10 +96,40 @@ const ShowAllNotifications = ({
                 src={snoozeIcon}
                 alt="snooze-icon"
                 className="icon snooze-icon"
+                onClick={() => togglePostponeInput(notification._id)}
               />
+              {isPostponeBtnClicked === notification._id && (
+                <div className="postpone-container">
+                 <DatePicker
+  selected={selectedDate}
+  onChange={handleDatePickerSelect}
+  dateFormat="dd/MM/yyyy"
+  className="custom-datepicker"
+  calendarClassName="custom-calendar"
+  popperPlacement="bottom-start"
+  portalId="root" 
+/>
+
+
+                  <button
+                    className="postpone-confirm-btn"
+                    onClick={() => {
+                      archiveNotificationMutation.mutate({
+                        id: notification._id,
+                        reminderDate: selectedDate,
+                      });
+                      setIsPostponeBtnClicked(false);
+                    }}
+                  >
+                    Confirm
+                  </button>
+                </div>
+              )}
             </div>
+            {/* Delete Button */}
             <div
               className="icon-container"
+              onClick={() => archiveNotificationMutation.mutate({ id: notification._id })}
               onMouseEnter={() =>
                 setHoveredIcon({ ...hoveredIcon, dismiss: notification._id })
               }
@@ -100,7 +141,6 @@ const ShowAllNotifications = ({
                 src={dismissIcon}
                 alt="dismiss-icon"
                 className="icon dismiss-icon"
-                onClick={() => deleteNotificationMutation.mutate(notification._id)}
               />
             </div>
           </div>

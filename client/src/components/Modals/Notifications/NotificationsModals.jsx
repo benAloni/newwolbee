@@ -59,7 +59,7 @@ const NotificationsModals = ({
     listStyleType: "none",
   };
   const smallProjectCardStyle1 = {
-    width: "250px",
+    width: "400px",
     boxSizing: "border-box",
     border: "1px solid #ddd",
     borderRadius: "25px",
@@ -143,6 +143,7 @@ const NotificationsModals = ({
   };
   return (
     <>
+
       {/* employee work routine modal*/}
       {employeeWorkRoutineModal && (
         <Modal

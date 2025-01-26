@@ -45,7 +45,7 @@ const NotificationsPage = () => {
             <div className="col-lg-12 message-view">
               <div className="chat-window">
                 <div
-                  className="fixed-header"
+                  
                 >
                   <div className="row align-items-center">
                     <div className="col-6">
@@ -73,6 +73,8 @@ const NotificationsPage = () => {
                     </div>
                   </div>
                 </div>
+                <br />
+               
                 <Notifications />
               </div>
             </div>

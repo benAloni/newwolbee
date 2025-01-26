@@ -4,7 +4,8 @@ import Holidays from "date-holidays";
 import ShowAllNotifications from "./mainNotifications/ShowAllNotifications";
 import HeaderNotifications from "./mainNotifications/HeaderNotifications";
 import ShowNewNotifications from "./mainNotifications/ShowNewNotifications";
-import "./css/modal.css";
+import "./css/notifications.css";
+
 import ShowHolidaysNotifications from "./mainNotifications/ShowNotifications/ShowHolidaysNotifications";
 import { userProfile } from "../../../../../imgs";
 import {
@@ -22,8 +23,7 @@ const Notifications = () => {
   const navigate = useNavigate();
   //-------Modals states--------------------------------------------
   const [homeMeetingModal, setHomeMeetingModal] = useState(false);
-  const [employeeWorkRoutineModal, setEmployeeWorkRoutineModal] =
-    useState(false);
+  const [employeeWorkRoutineModal, setEmployeeWorkRoutineModal] = useState(false);
   const [soccerGameModal, setSoccerGameModal] = useState(false);
   const [vacationModal, setVacationModal] = useState(false);
   //------------------------------------------------------------------
@@ -31,7 +31,6 @@ const Notifications = () => {
   const [currentPage, setCurrentPage] = useState(0); //for tracking current page
   const itemsPerPage = 10;
   const [notifications, setNotifications] = useState([]);
-  // const staticNotifications = useRef(staticNotificationsData);
   const staticNotifications = staticNotificationsData;
 
   const [employeeId, setEmployeeId] = useState(null);
@@ -135,24 +134,6 @@ const Notifications = () => {
           }
         });
       }
-      // if(event.uid){
-      //   notifications.push({
-      //     _id: event._id,
-      //     // id: event.eventDetails.employeeId,
-      //     // priority: event.priority,
-      //     message: event.title,
-      //     link: "/events",
-      //     read: false,
-      //     // reminderDate: event.reminderDate,
-      //     hasBeenHandled: false,
-      //     hasBeenDismissed: false,
-      //     image: event.imageUrl,
-      //     startDay: event.start,
-      //     // date: event.eventDetails.dateOfTheEvent,
-      //     // className: "birthday",
-      //   });
-      // }
-
       return notifications;
     });
 
@@ -169,12 +150,10 @@ const Notifications = () => {
     }
   }, [data]);
 
-  //John's work routine answer---------------------------------------
   const [modalOpenNo, setModalOpenNo] = useState(false);
   const [modalOpenYes, setModalOpenYes] = useState(false);
   const [modalContentNo, setModalContentNo] = useState(null);
   const [modalContentYes, setModalContentYes] = useState(null);
-  //-----------------------------------------------------------------
 
   const [archivedNotifications, setArchivedNotifications] = useState([]);
   const [isPostponeBtnClicked, setIsPostponeBtnClicked] = useState(false);
@@ -227,7 +206,6 @@ const Notifications = () => {
     setEmployeeWorkRoutineModal(false);
   };
 
-  //John's work routine answer--------------
   const openModalNo = (notification) => {
     setModalContentNo(notification);
     setModalOpenNo(true);
@@ -243,8 +221,7 @@ const Notifications = () => {
   const closeModalYes = () => {
     setModalOpenYes(false);
   };
-  // --------------------------------------
-  //  Calculate the notifications to be displayed on the current page
+
   let displayedNotifications = [];
 
   if (viewOption !== "New") {
@@ -254,21 +231,17 @@ const Notifications = () => {
     );
   }
 
-  // Handle clicking the next page button
   const handleNextPage = () => {
     if ((currentPage + 1) * itemsPerPage < notifications.length) {
       setCurrentPage(currentPage + 1);
     }
   };
 
-  // Handle clicking the previous page button
   const handlePreviousPage = () => {
     if (currentPage > 0) {
       setCurrentPage(currentPage - 1);
     }
   };
-
-  //---------
 
   const [showPopup, setShowPopup] = useState("");
 
@@ -305,133 +278,54 @@ const Notifications = () => {
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", padding: "20px" }}>
-      <div
-        className="upperBarOptions"
-        style={{
-          display: "flex",
-          justifyContent: "right",
-          gap: "70px",
-        }}
-      >
-        <HeaderNotifications
-          setViewOption={setViewOption}
-          displayedNotifications={displayedNotifications}
-        />
-        <div
-          className="filterDiv"
-          style={{
-            display: "flex",
-            justifyContent: "right",
-            position: "relative",
-            right: "120px",
-          }}
-        >
-          <label htmlFor="notificationFilter">
-            Filter by:{" "}
-            <select
-              id="notificationFilter"
-              style={{
-                borderRadius: "5px",
-                padding: "7px",
-                backgroundColor: "#f7b500",
-                border: "none",
-                marginRight: "30px",
-              }}
-            >
-              <option>Choose filter...</option>
-              <option value="Employee name">Employee name</option>
-              <option value="Event">Event</option>
-            </select>
-          </label>
-        </div>
-        <div
-          className="notificationsSorting"
-          style={{
-            display: "flex",
-            justifyContent: "right",
-            position: "relative",
-            right: "170px",
-          }}
-        >
-          <label htmlFor="notificationSort">
-            Sort by:{" "}
-            <select
-              id="notificationSort"
-              style={{
-                borderRadius: "5px",
-                padding: "7px",
-                backgroundColor: "#f7b500",
-                border: "none",
-                marginRight: "30px",
-              }}
-              onChange={(e) => setSelectedSortingOption(e.target.value)}
-            >
-              <option value="Priority high - low">Priority high - low</option>
-              <option value="Priority low - high">Priority low - high</option>
-              <option value="A-Z">A-Z</option>
-              <option value="Z-A">Z-A</option>
-            </select>
-          </label>
+    <div className="notifications-wrapper">
+      <div className="upper-bar">
+        <HeaderNotifications setViewOption={setViewOption} />
+        <div className="filter-container">
+          <select className="filter-select">
+            <option>Choose filter...</option>
+            <option value="Employee name">Employee name</option>
+            <option value="Event">Event</option>
+          </select>
+          <select
+            className="sort-select"
+            onChange={(e) => setSelectedSortingOption(e.target.value)}
+          >
+            <option value="Priority high - low">Priority high - low</option>
+            <option value="Priority low - high">Priority low - high</option>
+            <option value="A-Z">A-Z</option>
+            <option value="Z-A">Z-A</option>
+          </select>
         </div>
       </div>
-      <br />
-      <br />
-      {/* Pagination Controls */}
-      <div style={{ marginTop: "-40px" }}>
+      <div className="pagination-controls">
         <button
           onClick={handlePreviousPage}
           disabled={currentPage === 0}
-          style={{
-            background: currentPage === 0 ? "#f2f2f2" : "#FFA500", // light grey when disabled, orange otherwise
-            color: currentPage === 0 ? "#aaa" : "white", // adjust text color for contrast
-            border: "none",
-            borderRadius: "5px",
-            padding: "10px 20px",
-            cursor: currentPage === 0 ? "not-allowed" : "pointer", // change cursor based on state
-          }}
         >
           ⬅
         </button>
         <button
           onClick={handleNextPage}
           disabled={(currentPage + 1) * itemsPerPage >= notifications.length}
-          style={{
-            background:
-              (currentPage + 1) * itemsPerPage >= notifications.length
-                ? "#f2f2f2"
-                : "#FFA500", // light grey when disabled, orange otherwise
-            color:
-              (currentPage + 1) * itemsPerPage >= notifications.length
-                ? "#aaa"
-                : "white", // adjust text color for contrast
-            border: "none",
-            borderRadius: "5px",
-            padding: "10px 20px",
-            cursor:
-              (currentPage + 1) * itemsPerPage >= notifications.length
-                ? "not-allowed"
-                : "pointer", // change cursor based on state
-          }}
         >
           ➡
         </button>
       </div>
-      <br />
-      {viewOption === "New" && (
-        <ShowNewNotifications
-          notifications={notifications}
-          getNotificationId={getNotificationId}
-        />
-      )}
-
-      {viewOption === "All" && (
-        <ShowAllNotifications
-          getNotificationId={getNotificationId}
-          displayedNotifications={displayedNotifications}
-          notifications={notifications}
-        />
-      )}
+      <div className="notifications-body">
+        {viewOption === "New" ? (
+          <ShowNewNotifications
+            notifications={notifications}
+            getNotificationId={getNotificationId}
+          />
+        ) : (
+          <ShowAllNotifications
+            getNotificationId={getNotificationId}
+            displayedNotifications={displayedNotifications}
+            notifications={notifications}
+          />
+        )}
+      </div>
 
       <ShowHolidaysNotifications
         modalOpen={modalOpen}
@@ -439,20 +333,13 @@ const Notifications = () => {
         closeModal={closeModal}
       />
 
-      {/* Modals options: */}
-
-      {/* employee work routine modal*/}
-      <div style={rowStyle}>
+      <div className="modals-section">
         <NotificationsModals
           employeeWorkRoutineModal={employeeWorkRoutineModal}
           closeEmployeeWorkRoutineModal={closeEmployeeWorkRoutineModal}
           openModalYes={openModalYes}
           openModalNo={openModalNo}
         />
-      </div>
-
-      {/* ------- John answer Yes---------- */}
-      <div>
         {modalOpenYes && modalContentYes && (
           <NotificationsModals
             modalOpenYes={modalOpenYes}
@@ -462,10 +349,6 @@ const Notifications = () => {
             closeModalYes={closeModalYes}
           />
         )}
-      </div>
-
-      {/* --------John answer no ---------- */}
-      <div>
         {modalOpenNo && modalContentNo && (
           <NotificationsModals
             modalOpenNo={modalOpenNo}
@@ -475,27 +358,19 @@ const Notifications = () => {
             closeModalNo={closeModalNo}
           />
         )}
-      </div>
-
-      {/*home meeting modal */}
-      {homeMeetingModal && modalContent && (
-        <NotificationsModals
-          modalContent={modalContent}
-          closeModal={closeModal}
-          homeMeetingModal={homeMeetingModal}
-        />
-      )}
-
-      {/* Soccer game modal}  */}
-
-      {soccerGameModal && (
-        <NotificationsModals
-          soccerGameModal={soccerGameModal}
-          closeSoccerGameModal={closeSoccerGameModal}
-        />
-      )}
-      {/* {vacation modal}  */}
-      <div>
+        {homeMeetingModal && modalContent && (
+          <NotificationsModals
+            modalContent={modalContent}
+            closeModal={closeModal}
+            homeMeetingModal={homeMeetingModal}
+          />
+        )}
+        {soccerGameModal && (
+          <NotificationsModals
+            soccerGameModal={soccerGameModal}
+            closeSoccerGameModal={closeSoccerGameModal}
+          />
+        )}
         {vacationModal && (
           <NotificationsModals
             employeeId={employeeId}
