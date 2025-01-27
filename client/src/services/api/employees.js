@@ -25,7 +25,7 @@ export const fetchEmployee = async (employeeId) => {
   }
 };
 
-export const addEmployee = async ({ employeeData }) => {
+export const addEmployee = async ({ employeeData }) => {    
   try {
     const response = await client.post("/addEmployee", {
       employeeData,

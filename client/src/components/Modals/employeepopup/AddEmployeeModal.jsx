@@ -26,7 +26,8 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
   const [selectedMaritalStatus, setSelectedMaritalStatus] = useState("");
   const [selectedTeam, setSelectedTeam] = useState("");
   const [selectedReligion, setSelectedReligion] = useState("");
-  const [selectedEthnicGroup, setSelectedEthnicGroup] = useState("");
+  const [childrenCount, setChildrenCount] = useState(0);
+  const [selectedEthnicity, setSelectedEthnicity] = useState("");
   const [employeeDates, setEmployeeDates] = useState({
     dateOfBirth: null,
     startDay: null,
@@ -40,6 +41,7 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
     register,
     handleSubmit,
     reset,
+    setValue,
     watch,
     formState: { errors, isSubmitting },
   } = useForm();
@@ -47,7 +49,7 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
   const employeeId = watch("employeeId");
   const genderRef = useRef();
   const religionRef = useRef();
-  const ethnicGroupRef = useRef();
+  const ethnicityRef = useRef();
   const maritalStatusRef = useRef();
   const teamRef = useRef();
 
@@ -55,11 +57,16 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
     reset();
     genderRef.current.clearValue();
     religionRef.current.clearValue();
-    ethnicGroupRef.current.clearValue();
+    ethnicityRef.current.clearValue();
     maritalStatusRef.current.clearValue();
     teamRef.current.clearValue();
+    setChildrenCount(0);
     setSelectedImage(userProfile);
-    setEmployeeDates("");
+    setEmployeeDates({
+      dateOfBirth: null,
+      startDay: null,
+      anniversary: null,
+    });
   };
 
   const { data: teams } = useQuery({
@@ -84,11 +91,10 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
         team: selectedTeam,
         gender: selectedGender,
         religion: selectedReligion,
-        ethnicGroup: selectedEthnicGroup,
+        ethnicity: selectedEthnicity,
         maritalStatus: selectedMaritalStatus,
         imageUrl: uploadedEmployeeProfileImage,
       };
-
       const response = await addEmployee({
         employeeData: formData,
       });
@@ -120,6 +126,18 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
       [name]: date ? date.toISOString() : "",
     }));
   };
+
+  const handleChildrenChange = (e) => {
+    const count = parseInt(e.target.value) || 0;
+    setChildrenCount(count);
+
+    for (let i = 0; i < count; i++) {
+      setValue(`children[${i}].fullName`, "");
+      setValue(`children[${i}].gender`, "");
+      setValue(`children[${i}].dateOfBirth`, null);
+    }
+  };
+
   const onImageChange = (event) => {
     if (event.target.files && event.target.files[0]) {
       setSelectedImage(URL.createObjectURL(event.target.files[0]));
@@ -333,12 +351,12 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                     <Select
                       ref={religionRef}
                       options={[
-                        { value: "Judaism", label: "Judaism" },
-                        { value: "Christianity", label: "Christianity" },
+                        { value: "Jewish", label: "Jewish" },
+                        { value: "Christian", label: "Christian" },
                         { value: "Druze", label: "Druze" },
-                        { value: "Islam", label: "Islam" },
-                        { value: "Hinduism", label: "Hinduism" },
-                        { value: "Buddhism", label: "Buddhism" },
+                        { value: "Muslim", label: "Muslim" },
+                        { value: "Hindu", label: "Hindu" },
+                        { value: "Buddhist", label: "Buddhist" },
                         { value: "Atheist", label: "Atheist" },
                         { value: "Other", label: "Other" },
                       ]}
@@ -354,29 +372,42 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                   </div>
                   <div className="input-block mb-3 col-sm-6">
                     <label className="col-form-label">
-                      Ethnic Group <span className="text-danger">*</span>
+                      Ethnicity <span className="text-danger">*</span>
                     </label>
 
                     <Select
-                      ref={ethnicGroupRef}
+                      ref={ethnicityRef}
                       options={[
-                        { value: "ethiopian", label: "Ethiopian" },
-                        { value: "druze", label: "Druze" },
-                        { value: "russian", label: "Russian" },
-                        { value: "yemeni", label: "Yemeni" },
-                        { value: "moroccan", label: "Moroccan" },
-                        { value: "mexican", label: "Mexican" },
-                        { value: "hindu", label: "Hindu" },
+                        { value: "Ethiopian", label: "Ethiopian" },
+                        { value: "Druze", label: "Druze" },
+                        { value: "Russian", label: "Russian" },
+                        { value: "Ukrainian", label: "Ukrainian" },
+                        { value: "Georgian", label: "Georgian" },
+                        { value: "Belarusian", label: "Belarusian" },
+                        { value: "Azerbaijani", label: "Azerbaijani" },
+                        { value: "Romanian", label: "Romanian" },
+                        { value: "Hungarian", label: "Hungarian" },
+                        { value: "Italian", label: "Italian" },
+                        { value: "Polish", label: "Polish" },
+                        { value: "German", label: "German" },
+                        { value: "Tripolitan", label: "Tripolitan" },
+                        { value: "Syrian", label: "Syrian" },
+                        { value: "Iraqi", label: "Iraqi" },
+                        { value: "Persian", label: "Persian" },
+                        { value: "Yemeni", label: "Yemeni" },
+                        { value: "Moroccan", label: "Moroccan" },
+                        { value: "Mexican", label: "Mexican" },
+                        { value: "Hindu", label: "Hindu" },
                         { value: "Other", label: "Other" },
                       ]}
-                      placeholder="Select ethnic group"
+                      placeholder="Select ethnicity"
                       onChange={(selectedOption) =>
-                        setSelectedEthnicGroup(
+                        setSelectedEthnicity(
                           selectedOption ? selectedOption.value : ""
                         )
                       }
                       isClearable
-                      name="ethnicGroup"
+                      name="ethnicity"
                     />
                   </div>
                   <div className="input-block mb-3 col-sm-6">
@@ -424,11 +455,11 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                     <Select
                       ref={maritalStatusRef}
                       options={[
-                        { value: "single", label: "Single" },
-                        { value: "married", label: "Married" },
-                        { value: "widowed", label: "Widowed" },
-                        { value: "divorced", label: "Divorced" },
-                        { value: "separated ", label: "Separated " },
+                        { value: "Single", label: "Single" },
+                        { value: "Married", label: "Married" },
+                        { value: "Widowed", label: "Widowed" },
+                        { value: "Divorced", label: "Divorced" },
+                        { value: "Separated ", label: "Separated " },
                       ]}
                       placeholder="Select marital status"
                       onChange={(selectedOption) =>
@@ -440,6 +471,113 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                       name="maritalStatus"
                     />
                   </div>
+                  {selectedMaritalStatus === "Married" && (
+                    <div className="input-block mb-3">
+                      <div className="col-12">
+                        <h5 className="mb-3">Spouse Details</h5>
+                      </div>
+                      {/* Spouse's Full Name */}
+                      <label className="col-form-label">
+                        Spouse's Full Name
+                        <span className="text-danger"> *</span>
+                      </label>
+                      <div className="row mb-3">
+                        <div className="col-sm-12">
+                          <input
+                            className={"form-control"}
+                            type="text"
+                            name="spouseFullName"
+                            {...register("spouseFullName")}
+                            placeholder="Employee's Spouse Full Name"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Spouse's Gender */}
+                      <label className="col-form-label">
+                        Spouse's Gender <span className="text-danger"> *</span>
+                      </label>
+                      <div className="row mb-3">
+                        <div className="col-sm-12">
+                          <Select
+                            options={[
+                              { value: "male", label: "Male" },
+                              { value: "female", label: "Female" },
+                              { value: "other", label: "Other" },
+                            ]}
+                            placeholder="Select spouse's gender"
+                            onChange={(selectedOption) =>
+                              setValue("genderOfSpouse", selectedOption?.value)
+                            }
+                            isClearable
+                            name="spouseGender"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Spouse's Date of Birth */}
+                      <label className="col-form-label">
+                        Spouse's Date of Birth{" "}
+                        <span className="text-danger"> *</span>
+                      </label>
+                      <div className="row mb-3">
+                        <div className="col-sm-12">
+                          <div className="cal-icon">
+                            <DatePicker
+                              selected={watch("spouseDateOfBirth")}
+                              onChange={(date) =>
+                                setValue("spouseDateOfBirth", date)
+                              }
+                              className={`form-control ${
+                                errors?.spouseDateOfBirth?.dateOfBirth
+                                  ? "border-danger"
+                                  : ""
+                              }`}
+                              dateFormat="dd-MM-yyyy"
+                              name={"spouseDateOfBirth"}
+                            />
+                            {errors?.spouse?.dateOfBirth && (
+                              <div className="text-danger">
+                                {errors?.spouse?.dateOfBirth.message}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                      {/* Spouse's Full Name */}
+                      <label className="col-form-label">
+                        Spouse's Nationality
+                        <span className="text-danger"> *</span>
+                      </label>
+                      <div className="row mb-3">
+                        <div className="col-sm-12">
+                          <input
+                            className={"form-control"}
+                            type="text"
+                            name="spouseNationality"
+                            {...register("spouseNationality")}
+                            placeholder="Spouse's Nationality"
+                          />
+                        </div>
+                      </div>
+                      {/* Spouse's Full Name */}
+                      <label className="col-form-label">
+                        Spouse's Employment Status
+                        <span className="text-danger"> *</span>
+                      </label>
+                      <div className="row mb-3">
+                        <div className="col-sm-12">
+                          <input
+                            className={"form-control"}
+                            type="text"
+                            name="spouseEmploymentStatus"
+                            {...register("spouseEmploymentStatus")}
+                            placeholder="Spouse's Employment Status"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
                   <div className="input-block mb-3 col-sm-6">
                     <label className="col-form-label">
                       Wedding Anniversary
@@ -463,18 +601,102 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                   </div>
                   <div className="input-block mb-3 col-sm-6">
                     <label className="col-form-label">
-                      No.Children
+                      No. Of Children
                       <span className="text-danger"> *</span>
                     </label>
                     <input
                       className={"form-control"}
                       type="text"
                       name="children"
-                      {...register("children")}
-                      placeholder="Employee's nubmer of children"
+                      {...register("children", {
+                        onChange: handleChildrenChange,
+                      })}
+                      placeholder="Employee's number of children"
                     />
                   </div>
-
+                  {Array.from({ length: childrenCount }).map((_, index) => (
+                    <div key={index} className="row mb-4">
+                      {/* Child Details Header */}
+                      <div className="col-12">
+                        <h5 className="mb-3">
+                          {`${
+                            index === 0
+                              ? "First"
+                              : index === 1
+                              ? "Second"
+                              : index === 2
+                              ? "Third"
+                              : `${index + 1}th`
+                          } Child Details`}
+                        </h5>
+                      </div>
+                      {/* Child's Full Name */}
+                      <div className="input-block col-md-4">
+                        <label className="col-form-label">
+                          Child's Full Name{" "}
+                          <span className="text-danger"> *</span>
+                        </label>
+                        <input
+                          className="form-control"
+                          type="text"
+                          name={`children[${index}].fullName`}
+                          {...register(`children[${index}].fullName`, {
+                            required: true,
+                          })}
+                          placeholder="Child's Full Name"
+                        />
+                      </div>
+                      {/* Child's Gender */}
+                      <div className="input-block col-md-4">
+                        <label className="col-form-label">
+                          Child's Gender <span className="text-danger"> *</span>
+                        </label>
+                        <Select
+                          options={[
+                            { value: "boy", label: "Boy" },
+                            { value: "girl", label: "Girl" },
+                            { value: "other", label: "Other" },
+                          ]}
+                          placeholder="Select child's gender"
+                          onChange={(selectedOption) =>
+                            setValue(
+                              `children[${index}].gender`,
+                              selectedOption?.value
+                            )
+                          }
+                          isClearable
+                          name={`children[${index}].gender`}
+                        />
+                      </div>
+                      {/* Child's Date of Birth */}
+                      <div className="input-block col-md-4">
+                        <label className="col-form-label">
+                          Child's Date of Birth{" "}
+                          <span className="text-danger"> *</span>
+                        </label>
+                        <div className="cal-icon">
+                          <DatePicker
+                            selected={watch(`children[${index}].dateOfBirth`)}
+                            onChange={(date) =>
+                              setValue(`children[${index}].dateOfBirth`, date)
+                            }
+                            className={`form-control ${
+                              errors?.children?.[index]?.dateOfBirth
+                                ? "border-danger"
+                                : ""
+                            }`}
+                            dateFormat="dd-MM-yyyy"
+                            name={`children[${index}].dateOfBirth`}
+                          />
+                          {errors?.children?.[index]?.dateOfBirth && (
+                            <div className="text-danger">
+                              {errors?.children?.[index]?.dateOfBirth.message}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}                 
                   <div className="input-block mb-3 col-sm-6">
                     <label className="col-form-label">
                       Start Day <span className="text-danger">*</span>
@@ -616,6 +838,54 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                             name="hobbies"
                             {...register("hobby3")}
                             placeholder="Hobby 3"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-sm-12">
+                    <div className="input-block mb-3">
+                    <div className="col-12">
+                        <h5 className="mb-3">Emergency Contact  Details</h5>
+                      </div>                     
+                      <div className="row mb-3">
+                        <div className="col-sm-4">
+                          <label className="col-form-label">
+                            Full Name{" "}
+                            <span className="text-danger">*</span>
+                          </label>
+                          <input
+                            className={`form-control`}
+                            type="text"
+                            name="contactFullName"
+                            {...register("contactFullName")}
+                            placeholder="Contact's Full Name"
+                          />
+                        </div>
+                        <div className="col-sm-4">
+                          <label className="col-form-label">
+                          Relationship Type{" "}
+                            <span className="text-danger">*</span>
+                          </label>
+                          <input
+                            className={`form-control`}
+                            type="text"
+                            name="contactRelationType"
+                            {...register("contactRelationType")}
+                            placeholder="Contact's Relation Type"
+                          />
+                        </div>
+                        <div className="col-sm-4">
+                          <label className="col-form-label">
+                            Phone Number{" "}
+                            <span className="text-danger">*</span>
+                          </label>
+                          <input
+                            className={`form-control`}
+                            type="text"
+                            name="contactPhone"
+                            {...register("contactPhone")}
+                            placeholder="Contact's Phone Number"
                           />
                         </div>
                       </div>

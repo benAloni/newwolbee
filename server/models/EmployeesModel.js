@@ -33,11 +33,14 @@ const employeeSchema = new mongoose.Schema({
   religion: {
     type: String,
   },
-  ethnicGroup: {
+  ethnicity: {
     type: String,
   },
-  passport: {
+  passportNumber: {
     type: String,
+  },
+  passportExpDate: {
+    type: Date,
   },
   gender: {
     type: String,
@@ -69,9 +72,23 @@ const employeeSchema = new mongoose.Schema({
   maritalStatus: {
     type: String,
   },
-  children: [
+  anniversary: {
+    type: Date,
+  },
+  spouseInfo: {
+    fullName: { type: String },
+    gender: {
+      type: String,
+    },
+    dateOfBirth: {
+      type: Date,
+    },
+    nationality: { type: String },
+    employmentStatus: { type: String },
+  },
+  childrenInfo: [
     {
-      name: { type: String },
+      fullName: { type: String },
       gender: {
         type: String,
       },
@@ -87,13 +104,17 @@ const employeeSchema = new mongoose.Schema({
       endDate: { type: Date },
     },
   ],
+  emergencyContact:
+    {
+      fullName: { type: String },
+      relationshipType: { type: String },
+      phone: { type: String },
+    },
   startDay: {
     type: Date,
     required: [true, "Please provide start date in the company"],
   },
-  anniversary: {
-    type: Date,
-  },
+  
   latestActivity: {
     type: Array,
   },

@@ -29,7 +29,7 @@ export const getEmployee = async (req, res) => {
 export const addEmployee = async (req, res) => {
   const { employeeData } = req.body;
   const { user } = req;
-
+  
   try {
     const employeeAlreadyExists = await EmployeeModel.findOne({
       employeeId: employeeData.employeeId,
@@ -41,6 +41,7 @@ export const addEmployee = async (req, res) => {
     }
     const newEmployee = new EmployeeModel({
       ...employeeData,
+      childrenInfo: employeeData.children,
       favoriteFoods: [employeeData.food1, employeeData.food2],
       favoriteRestaurants: [employeeData.restaurant1, employeeData.restaurant2],
       hobbies: [employeeData.hobby1, employeeData.hobby2, employeeData.hobby3],

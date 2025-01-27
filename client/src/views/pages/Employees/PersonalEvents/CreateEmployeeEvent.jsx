@@ -35,7 +35,6 @@ export default function CreateEmployeeEvent() {
     },
     enabled: fetchCount < 3,  // Only fetch 3 times
   });
-  console.log(employees);
   
 
   // Define the events array
