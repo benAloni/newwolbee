@@ -8,7 +8,7 @@ import "./popup.css";
 import { useMutation, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { auth } from '../../../../firebase/firebaseConfig';
-import ChildrenOfWorkers from "./EmployeesChildren";
+import EmployeesChildren from "./EmployeesChildren";
 
 export default function CreateEmployeeEvent() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -34,8 +34,7 @@ export default function CreateEmployeeEvent() {
       return response.json();
     },
     enabled: fetchCount < 3,  // Only fetch 3 times
-  });
-  
+  });  
 
   // Define the events array
   const events = [
@@ -136,9 +135,7 @@ export default function CreateEmployeeEvent() {
     } catch (error) {
       console.error("Error updating vacation:", error);
     }
-  };
-  
-  
+  };  
   
   
 
@@ -163,7 +160,7 @@ export default function CreateEmployeeEvent() {
     onError: (error) => {
       console.error('Error updating sick day:', error);
     },
-  });
+  });  
 
   const updateSickDay = async () => {
     try {
@@ -267,7 +264,7 @@ export default function CreateEmployeeEvent() {
           />
         )}
         {currentPage === "dateSelection" && currentEventType === "children of workers" && (
-          <ChildrenOfWorkers
+          <EmployeesChildren
             employeeName={selectedEmployee?.fullName}
             selectedStartDate={selectedStartDate}
             selectedEndDate={selectedEndDate}

@@ -107,3 +107,31 @@ export const updateEmployeeSickLeave = async ({
     console.log("Error updating employee's sick leave:", error);
   }
 };
+
+
+export const addFamilyMember = async ({
+  id,
+  name,
+  relationship,
+  gender,
+  dateOfBirth,
+  phone,
+}) => {
+
+  try {
+    const response = await client.post("/addFamilyMember", {
+      id,
+      name,
+      relationship,
+      gender,
+      dateOfBirth,
+      phone,
+    });
+    if (response.status === 200) {
+      // const result = response.data;
+      return response;
+    }
+  } catch (error) {
+    console.log("Error updating employee's vacation:", error);
+  }
+};

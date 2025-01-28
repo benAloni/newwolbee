@@ -45,6 +45,7 @@ export const addEmployee = async (req, res) => {
       favoriteFoods: [employeeData.food1, employeeData.food2],
       favoriteRestaurants: [employeeData.restaurant1, employeeData.restaurant2],
       hobbies: [employeeData.hobby1, employeeData.hobby2, employeeData.hobby3],
+      familyMembers: [],
       uid: user.uid,
     });
     await newEmployee.save();
@@ -115,7 +116,6 @@ export const updateEmployeeVacation = async (req, res) => {
 };
 export const updateEmployeeSickLeave = async (req, res) => {
   const { id, startDate, endDate } = req.body;
-
   try {
     const updatedEmployee = await EmployeeModel.findByIdAndUpdate(
       id,
@@ -144,6 +144,7 @@ export const updateEmployeeSickLeave = async (req, res) => {
   }
 };
 export const updateEmployeeInsights = async (req, res) => {
+
   const { id, topInsights, latestInsights, latestActivity } = req.body;
   try {
     const updatedEmployee = await EmployeeModel.findByIdAndUpdate(
@@ -169,5 +170,36 @@ export const updateEmployeeInsights = async (req, res) => {
   } catch (error) {
     console.error("Error updating employee's insights:", error);
     return res.status(500).send("Internal Server Error");
+  }
+};
+
+export const addFamilyMember = async (req, res) => {
+  const { id, name, relationship, gender, dateOfBirth, phone } = req.body;
+
+  try {
+    const updatedEmployee = await EmployeeModel.findOneAndUpdate(
+      { _id: id },
+      {
+        $push: {
+          familyMembers: {
+            name,
+            relationship,
+            gender,
+            dateOfBirth,
+            phone,
+          },
+        },
+      },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedEmployee) {
+      return res.status(404).send("Employee not found");
+    }
+
+    res.status(200).json(updatedEmployee);
+  } catch (error) {
+    console.error("Error adding family member:", error);
+    res.status(500).send("Internal Server Error");
   }
 };

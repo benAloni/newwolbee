@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import EditEmployeeProfile from "./EditEmployeeProfile";
+import EditEmployeeProfile from "./GeneralInfo/EditEmployeeProfile";
 import ProfileVacationAndSickDays from "./ProfileVacationAndSickDays";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSelector } from "react-redux";
@@ -26,7 +26,6 @@ const EmployeeProfile = () => {
           (employee) => employee._id === employeeId
         );
         setSelectedEmployee(employee);
-        // console.log(selectedEmployee);
         
       }
     }

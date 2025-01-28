@@ -11,6 +11,7 @@ import {
   updateEmployeeInsights,
   updateEmployeeSickLeave,
   deleteEmployee,
+  addFamilyMember,
 } from "../controllers/employeesData.js";
 import { getFoodHoliday } from "../controllers/foodHolidays.js";
 import {
@@ -63,6 +64,8 @@ router.delete("/deleteEmployee", deleteEmployee);
 router.post("/updateEmployeeVacation", updateEmployeeVacation);
 //update employee sick leave 
 router.post("/updateEmployeeSickLeave", updateEmployeeSickLeave)
+
+router.post("/addFamilyMember", addFamilyMember);
 //get all food holidays
 router.get("/getFoodHoliday", getFoodHoliday);
 //get all events
