@@ -12,6 +12,7 @@ import {
   updateEmployeeSickLeave,
   deleteEmployee,
   addFamilyMember,
+  addSonEvent,
 } from "../controllers/employeesData.js";
 import { getFoodHoliday } from "../controllers/foodHolidays.js";
 import {
@@ -66,6 +67,8 @@ router.post("/updateEmployeeVacation", updateEmployeeVacation);
 router.post("/updateEmployeeSickLeave", updateEmployeeSickLeave)
 
 router.post("/addFamilyMember", addFamilyMember);
+
+router.post('/addSonEvents', addSonEvent);  // This should match the endpoint you're calling
 //get all food holidays
 router.get("/getFoodHoliday", getFoodHoliday);
 //get all events

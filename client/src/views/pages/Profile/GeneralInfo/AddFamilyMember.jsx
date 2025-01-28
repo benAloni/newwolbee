@@ -59,9 +59,6 @@ export default function AddFamilyMember({ selectedEmployee }) {
     },
   });
 
-console.log(selectedEmployee);
-
-
   const addFamily = async () => {
     try {
       const familyMemberData = {

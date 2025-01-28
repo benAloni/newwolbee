@@ -86,30 +86,20 @@ const employeeSchema = new mongoose.Schema({
     nationality: { type: String },
     employmentStatus: { type: String },
   },
-  familyMembers: [
-    {
-      name:{ 
-        type: String 
+    familyMembers: [
+      {
+        name: { type: String },
+        relationship: { type: String },
+        gender: { type: String },
+        dateOfBirth: { type: Date },
+        phone: { type: Number },
+        childrenEvents: [{ 
+          typeOfEvent: { type: String },
+          startDate: { type: Date },
+          endDate: { type: Date }
+        }],
       },
-      relationship:{
-        type:String
-      },
-      gender: {
-        type: String,
-      },
-      dateOfBirth: {
-        type: Date,
-      },
-      phone:{
-        type:Number,
-      },
-    childrenEvents: {
-        typeOfEvent: { type: String },
-        startDate: { type: Date },
-        endDate: { type: Date },
-      },
-    },
-  ],
+    ],
   emergencyContact:
     {
       fullName: { type: String },

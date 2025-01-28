@@ -135,3 +135,28 @@ export const addFamilyMember = async ({
     console.log("Error updating employee's vacation:", error);
   }
 };
+
+export const addSonEvents = async ({ employeeId, childName, eventType, startDate, endDate }) => {
+  try {
+    // Prepare the data for the child event
+    const selectedStartDate = new Date(startDate);
+    selectedStartDate.setDate(selectedStartDate.getDate() + 1);  // Adjust date if needed
+
+    const selectedEndDate = new Date(endDate);
+    selectedEndDate.setDate(selectedEndDate.getDate() + 1);  // Adjust date if needed
+
+    const response = await client.post("/addSonEvent", {
+      id,
+      childName,
+      eventType,  // e.g., "Sick Leave", "Vacation"
+      startDate: selectedStartDate,
+      endDate: selectedEndDate,
+    });
+
+    if (response.status === 200) {
+      return response;
+    }
+  } catch (error) {
+    console.log("Error adding son's event:", error);
+  }
+};

@@ -203,3 +203,33 @@ export const addFamilyMember = async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 };
+
+export const addSonEvent = async (req, res) => {
+  const { id, childName, eventType, startDate, endDate } = req.body;
+
+  try {
+    // Find the employee and child by ID and name
+    const updatedEmployee = await EmployeeModel.findOneAndUpdate(
+      { _id: id, "familyMembers.name": childName }, // Find employee and specific child by name
+      {
+        $push: {
+          "familyMembers.$.childrenEvents": { // Push to the childrenEvents array for the matching child
+            typeOfEvent: eventType,
+            startDate,
+            endDate,
+          },
+        },
+      },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedEmployee) {
+      return res.status(404).send("Employee or child not found");
+    }
+
+    res.status(200).json(updatedEmployee); // Return the updated employee data
+  } catch (error) {
+    console.error("Error in addSonEvent:", error);
+    res.status(500).send(`Internal Server Error: ${error.message}`);
+  }
+};

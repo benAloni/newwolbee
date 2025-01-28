@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal } from "react-bootstrap";
+import { Modal, Button } from "react-bootstrap";
 import EventButton from "../EventButton";
 import VacationModal from "./VacationModal";
 import SickLeaveModal from "./SickLeaveModal";
@@ -34,7 +34,7 @@ export default function CreateEmployeeEvent() {
       return response.json();
     },
     enabled: fetchCount < 3,  // Only fetch 3 times
-  });  
+  });
 
   // Define the events array
   const events = [
@@ -108,11 +108,11 @@ export default function CreateEmployeeEvent() {
       // Create the start and end dates, and ensure the time is set to midnight (local timezone)
       const formattedStartDate = new Date(selectedStartDate);
       const formattedEndDate = new Date(selectedEndDate);
-  
+
       // Get the local date format (YYYY-MM-DD) without the time zone impact
       const startDateString = `${formattedStartDate.getFullYear()}-${(formattedStartDate.getMonth() + 1).toString().padStart(2, '0')}-${formattedStartDate.getDate().toString().padStart(2, '0')}`;
       const endDateString = `${formattedEndDate.getFullYear()}-${(formattedEndDate.getMonth() + 1).toString().padStart(2, '0')}-${formattedEndDate.getDate().toString().padStart(2, '0')}`;
-  
+
       // Prepare the vacation data object with the relevant fields
       const vacationData = {
         id: selectedEmployee.id,
@@ -120,24 +120,22 @@ export default function CreateEmployeeEvent() {
         destination: selectedCountry?.value,
         startDate: startDateString, // Send the start date in local format
         endDate: endDateString,     // Send the end date in local format
-      };  
+      };
       // Trigger the mutation to send data to the backend
       await updateVacationMutation.mutateAsync(vacationData);
-  
+
       // Reset the state after success
       setSelectedStartDate(null);
       setSelectedEndDate(null);
       setSelectedPurpose(null);
       setSelectedCountry(null);
-  
+
       closeModal(); // Close the modal after updating
-  
+
     } catch (error) {
       console.error("Error updating vacation:", error);
     }
-  };  
-  
-  
+  };
 
   // --------------------SickDayMutation---------------------
   const updateSickDayMutation = useMutation({
@@ -160,36 +158,70 @@ export default function CreateEmployeeEvent() {
     onError: (error) => {
       console.error('Error updating sick day:', error);
     },
-  });  
+  });
 
   const updateSickDay = async () => {
     try {
       // Create the start and end dates, and ensure the time is set to midnight (local timezone)
       const formattedStartDate = new Date(selectedStartDate);
       const formattedEndDate = new Date(selectedEndDate);
-  
+
       // Get the local date format (YYYY-MM-DD) without the time zone impact
       const startDateString = `${formattedStartDate.getFullYear()}-${(formattedStartDate.getMonth() + 1).toString().padStart(2, '0')}-${formattedStartDate.getDate().toString().padStart(2, '0')}`;
       const endDateString = `${formattedEndDate.getFullYear()}-${(formattedEndDate.getMonth() + 1).toString().padStart(2, '0')}-${formattedEndDate.getDate().toString().padStart(2, '0')}`;
-  
+
       // Prepare the vacation data object with the relevant fields
       const sickDayData = {
         id: selectedEmployee.id,
         startDate: startDateString, // Send the start date in local format
         endDate: endDateString,     // Send the end date in local format
-      };  
-      
+      };
+
       // Trigger the mutation to send data to the backend
       await updateSickDayMutation.mutateAsync(sickDayData);
-  
+
       // Reset the state after success
       setSelectedStartDate(null);
       setSelectedEndDate(null);
-  
+
       closeModal(); // Close the modal after updating
-  
+
     } catch (error) {
       console.error("Error updating sick day:", error);
+    }
+  };
+
+  //-------------------- son events---------------
+  
+  const handleAddSickDay = async (selectedSon, startDate, endDate) => {
+
+    try {
+      // Prepare the sick day data
+      const sonEvents = {
+        id: selectedEmployee._id,
+        childName: selectedSon.name,
+        startDate,
+        endDate,
+      };
+  
+      // Get the token fr om Firebase auth
+      const token = await auth.currentUser.getIdToken();
+  
+      // Make the API call to add the sick day event
+      const response = await axios.post(
+        `${process.env.REACT_APP_SERVER_URI}/addSonEvents`, // Use your actual API endpoint here
+        sonEvents,  // Pass the son events data
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,  // Send token in Authorization header
+          },
+        }
+      );
+  
+      console.log('Sick day added:', response.data);  // Log the response data
+      // Optionally update local state if needed
+    } catch (error) {
+      console.error('Error adding sick day:', error);
     }
   };
 
@@ -263,17 +295,17 @@ export default function CreateEmployeeEvent() {
             closeModal={closeModal}
           />
         )}
-        {currentPage === "dateSelection" && currentEventType === "children of workers" && (
+
+{currentPage === "dateSelection" && selectedEmployee && (
           <EmployeesChildren
-            employeeName={selectedEmployee?.fullName}
-            selectedStartDate={selectedStartDate}
-            selectedEndDate={selectedEndDate}
-            setSelectedStartDate={setSelectedStartDate}
-            setSelectedEndDate={setSelectedEndDate}
-            updateSickDay={updateSickDay}
+            employeeName={selectedEmployee.fullName}
+            familyMembers={selectedEmployee.familyMembers}
             closeModal={closeModal}
+            onAddSickDay={handleAddSickDay} // Pass the handleAddSickDay function
+            onAddVacation={() => {}}
           />
         )}
+
       </Modal>
     </div>
   );
