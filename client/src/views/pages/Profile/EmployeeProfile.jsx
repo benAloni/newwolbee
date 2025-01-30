@@ -4,32 +4,27 @@ import EditEmployeeProfile from "./GeneralInfo/EditEmployeeProfile";
 import ProfileVacationAndSickDays from "./ProfileVacationAndSickDays";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSelector } from "react-redux";
-import { fetchEmployees } from "../../../services";
-import { userProfile } from "../../../imgs";
+import { fetchEmployee } from "../../../services";
 
 const EmployeeProfile = () => {
   const user = useSelector((state) => state.auth?.user);
   const { employeeId } = useParams();
   const [selectedEmployee, setSelectedEmployee] = useState(null);
 
-  const { data: employees } = useQuery({
-    queryKey: ["employees"],
-    queryFn: fetchEmployees,
-    enabled: !!user,
+  const { data } = useQuery({
+    queryKey: ["employee", employeeId],
+    queryFn: () => fetchEmployee(employeeId),
+    enabled: !!user && !!employeeId,
   });
 
 
   useEffect(() => {
     if (user) {
-      if (employees && employeeId) {
-        const employee = employees.find(
-          (employee) => employee._id === employeeId
-        );
-        setSelectedEmployee(employee);
-        
+      if (data && employeeId) {              
+        setSelectedEmployee(data);        
       }
     }
-  }, [employees, employeeId, user]);
+  }, [data, employeeId, user]);
 
   return (
     <>

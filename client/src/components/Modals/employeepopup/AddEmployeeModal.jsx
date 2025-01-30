@@ -215,6 +215,7 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                         name="employeeId"
                         {...register("employeeId")}
                         placeholder="Employee Id"
+                        maxLength={9}
                       />
                       {errors.employeeId && (
                         <div className="text-danger">{errors.employeeId}</div>
@@ -235,6 +236,7 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                         name="employeeOfManagerId"
                         {...register("employeeOfManagerId")}
                         placeholder="Employee's manager Id"
+                        maxLength={9}
                       />
                       {errors.employeeOfManagerId && (
                         <div className="text-danger">
@@ -255,6 +257,7 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                       name="phone"
                       {...register("phone")}
                       placeholder="Employee's phone"
+                      maxLength={10}
                     />
                     {errors.phone && (
                       <div className="text-danger">{errors.phone}</div>
@@ -483,13 +486,13 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                       </label>
                       <div className="row mb-3">
                         <div className="col-sm-12">
-                          <input
+                          {/* <input
                             className={"form-control"}
                             type="text"
                             name="spouseFullName"
                             {...register("spouseFullName")}
                             placeholder="Employee's Spouse Full Name"
-                          />
+                          /> */}
                         </div>
                       </div>
 
@@ -499,7 +502,7 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                       </label>
                       <div className="row mb-3">
                         <div className="col-sm-12">
-                          <Select
+                          {/* <Select
                             options={[
                               { value: "male", label: "Male" },
                               { value: "female", label: "Female" },
@@ -511,7 +514,7 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                             }
                             isClearable
                             name="spouseGender"
-                          />
+                          /> */}
                         </div>
                       </div>
 
@@ -523,7 +526,7 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                       <div className="row mb-3">
                         <div className="col-sm-12">
                           <div className="cal-icon">
-                            <DatePicker
+                            {/* <DatePicker
                               selected={watch("spouseDateOfBirth")}
                               onChange={(date) =>
                                 setValue("spouseDateOfBirth", date)
@@ -535,7 +538,7 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                               }`}
                               dateFormat="dd-MM-yyyy"
                               name={"spouseDateOfBirth"}
-                            />
+                            /> */}
                             {errors?.spouse?.dateOfBirth && (
                               <div className="text-danger">
                                 {errors?.spouse?.dateOfBirth.message}
@@ -544,36 +547,36 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                           </div>
                         </div>
                       </div>
-                      {/* Spouse's Full Name */}
+                      {/* Spouse's Nationality */}
                       <label className="col-form-label">
                         Spouse's Nationality
                         <span className="text-danger"> *</span>
                       </label>
                       <div className="row mb-3">
                         <div className="col-sm-12">
-                          <input
+                          {/* <input
                             className={"form-control"}
                             type="text"
                             name="spouseNationality"
                             {...register("spouseNationality")}
                             placeholder="Spouse's Nationality"
-                          />
+                          /> */}
                         </div>
                       </div>
-                      {/* Spouse's Full Name */}
+                      {/* Spouse's Employment Status */}
                       <label className="col-form-label">
                         Spouse's Employment Status
                         <span className="text-danger"> *</span>
                       </label>
                       <div className="row mb-3">
                         <div className="col-sm-12">
-                          <input
+                          {/* <input
                             className={"form-control"}
                             type="text"
                             name="spouseEmploymentStatus"
                             {...register("spouseEmploymentStatus")}
                             placeholder="Spouse's Employment Status"
-                          />
+                          /> */}
                         </div>
                       </div>
                     </div>
@@ -614,6 +617,7 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                       placeholder="Employee's number of children"
                     />
                   </div>
+                
                   {Array.from({ length: childrenCount }).map((_, index) => (
                     <div key={index} className="row mb-4">
                       {/* Child Details Header */}
@@ -636,7 +640,7 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                           Child's Full Name{" "}
                           <span className="text-danger"> *</span>
                         </label>
-                        <input
+                        {/* <input
                           className="form-control"
                           type="text"
                           name={`children[${index}].fullName`}
@@ -644,14 +648,14 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                             required: true,
                           })}
                           placeholder="Child's Full Name"
-                        />
+                        /> */}
                       </div>
                       {/* Child's Gender */}
                       <div className="input-block col-md-4">
                         <label className="col-form-label">
                           Child's Gender <span className="text-danger"> *</span>
                         </label>
-                        <Select
+                        {/* <Select
                           options={[
                             { value: "boy", label: "Boy" },
                             { value: "girl", label: "Girl" },
@@ -666,7 +670,7 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                           }
                           isClearable
                           name={`children[${index}].gender`}
-                        />
+                        /> */}
                       </div>
                       {/* Child's Date of Birth */}
                       <div className="input-block col-md-4">
@@ -675,7 +679,7 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                           <span className="text-danger"> *</span>
                         </label>
                         <div className="cal-icon">
-                          <DatePicker
+                          {/* <DatePicker
                             selected={watch(`children[${index}].dateOfBirth`)}
                             onChange={(date) =>
                               setValue(`children[${index}].dateOfBirth`, date)
@@ -687,7 +691,7 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                             }`}
                             dateFormat="dd-MM-yyyy"
                             name={`children[${index}].dateOfBirth`}
-                          />
+                          /> */}
                           {errors?.children?.[index]?.dateOfBirth && (
                             <div className="text-danger">
                               {errors?.children?.[index]?.dateOfBirth.message}
@@ -696,7 +700,7 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                         </div>
                       </div>
                     </div>
-                  ))}                 
+                  ))}    
                   <div className="input-block mb-3 col-sm-6">
                     <label className="col-form-label">
                       Start Day <span className="text-danger">*</span>
@@ -843,7 +847,7 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                       </div>
                     </div>
                   </div>
-                  <div className="col-sm-12">
+                  {/* <div className="col-sm-12">
                     <div className="input-block mb-3">
                     <div className="col-12">
                         <h5 className="mb-3">Emergency Contact  Details</h5>
@@ -890,7 +894,7 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
 
                   <div className="d-flex justify-content-center mt-5 mb-2 ">
                     <div

@@ -187,36 +187,37 @@ export const ProjectDetails = ({ selectedEmployee }) => {
             <h3 style={titleStyle}>Top Insights</h3>
             <hr />
             <div style={{ marginLeft: "15px" }}>
-              {[...new Set(selectedEmployee?.topInsights)].map(
-                (insight, index) => (
-                  <div
-                    key={index}
-                    style={{
-                      display: "flex",
-                      flexDirection: "column", // Stack insights vertically
-                      marginBottom: "20px", // Space between each insight
-                    }}
-                  >
+              {selectedEmployee?.topInsights && 
+                [...new Set(selectedEmployee?.topInsights)].map(
+                  (insight, index) => (
                     <div
+                      key={index}
                       style={{
                         display: "flex",
-                        alignItems: "center",
-                        marginBottom: "10px",
+                        flexDirection: "column", // Stack insights vertically
+                        marginBottom: "20px", // Space between each insight
                       }}
                     >
-                      <TiPin
+                      <div
                         style={{
-                          color: "#FF902F",
-                          marginRight: "10px", // Space between the icon and text
-                          flexShrink: 0, // Prevent the icon from shrinking
+                          display: "flex",
+                          alignItems: "center",
+                          marginBottom: "10px",
                         }}
-                        size={pinIconSize}
-                      />
-                      <div style={{ wordBreak: "break-word" }}>{insight}</div>
+                      >
+                        <TiPin
+                          style={{
+                            color: "#FF902F",
+                            marginRight: "10px", // Space between the icon and text
+                            flexShrink: 0, // Prevent the icon from shrinking
+                          }}
+                          size={pinIconSize}
+                        />
+                        <div style={{ wordBreak: "break-word" }}>{insight}</div>
+                      </div>
                     </div>
-                  </div>
-                )
-              )}
+                  )
+                )}
             </div>
           </div>
           <div style={boxStyle}>
@@ -234,7 +235,8 @@ export const ProjectDetails = ({ selectedEmployee }) => {
             <h3 style={titleStyle}>Latest Insights</h3>
             <hr />
             <div style={{ marginLeft: "15px" }}>
-              {[...new Set(selectedEmployee?.latestInsights)].map(
+              { selectedEmployee?.latestInsights &&
+              [...new Set(selectedEmployee?.latestInsights)].map(
                 (insight, index) => (
                   <div
                     key={index}
@@ -287,14 +289,15 @@ export const ProjectDetails = ({ selectedEmployee }) => {
                 <hr />
                 <div className="experience-box">
                   <div style={{ marginLeft: "15px" }}>
-                    {selectedEmployee?.latestActivity.map((val, index) => {
+                    { selectedEmployee?.latestActivity &&
+                    selectedEmployee?.latestActivity.map((val, index) => {
                       const entries = Object.entries(val);
                       return entries.map(([key, value], i) => {
                         const isDate =
                           typeof value === "string" &&
                           !isNaN(Date.parse(value));
                         const formattedValue = isDate
-                          ? new Date(value).toLocaleDateString("en-GB") 
+                          ? new Date(value).toLocaleDateString("en-GB")
                           : value;
 
                         return (

@@ -7,18 +7,19 @@ import { ListItem, ProjectDetails } from "../ProfileContent";
 const EditEmployeeProfile = ({ selectedEmployee }) => {
   const personalInfoData = [
     { id: 1, title: "ID", text: selectedEmployee?.employeeId },
-    { id: 2, title: "Passport No.", text: selectedEmployee?.passportNumber },
-    { id: 3, title: "Passport exp.date", text: selectedEmployee?.passportExpDate },
-    { id: 4, title: "Ethnicity", text: selectedEmployee?.ethnicity },
-    { id: 5, title: "Religion", text: selectedEmployee?.religion },
-    { id: 6, title: "Marital status", text: selectedEmployee?.maritalStatus },
+    { id: 2, title: "Date of birth", text: new Date (selectedEmployee?.dateOfBirth).toLocaleDateString("en-GB") },
+    { id: 3, title: "Passport No.", text: selectedEmployee?.passportNumber },
+    { id: 4, title: "Passport exp.date", text: new Date (selectedEmployee?.passportExpDate).toLocaleDateString("en-GB") },
+    { id: 5, title: "Ethnicity", text: selectedEmployee?.ethnicity },
+    { id: 6, title: "Religion", text: selectedEmployee?.religion },
+    { id: 7, title: "Marital status", text: selectedEmployee?.maritalStatus },
     {
-      id: 7,
+      id: 8,
       title: "Employment status of spouse",
       text: selectedEmployee?.spouseInfo?.employmentStatus,
     },
     {
-      id: 8,
+      id: 9,
       title: "No. of children",
       text: selectedEmployee?.childrenInfo?.length,
     },

@@ -16,8 +16,7 @@ export const fetchEmployee = async (employeeId) => {
   try {
     const response = await client.get(`/getEmployee/${employeeId}`);
     if (response.status === 200) {
-      const employee = response.data;
-      const result = employee[0]
+      const result = response.data;      
       return result;
     }
   } catch (error) {
@@ -146,7 +145,7 @@ export const addSonEvents = async ({ employeeId, childName, eventType, startDate
     selectedEndDate.setDate(selectedEndDate.getDate() + 1);  // Adjust date if needed
 
     const response = await client.post("/addSonEvent", {
-      id,
+      employeeId,
       childName,
       eventType,  // e.g., "Sick Leave", "Vacation"
       startDate: selectedStartDate,
