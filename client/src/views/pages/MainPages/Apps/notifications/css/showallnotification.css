@@ -1,77 +1,101 @@
+
 .postpone-container {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: #29293d;
-  border: 1px solid #555;
-  border-radius: 8px;
-  padding: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  background-color: #f9f9f9;
+  border: 1px solid #dcdcdc;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
   z-index: 9999;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
-  max-width: 90%; /* Prevents overflow on smaller screens */
+  gap: 12px;
+  max-width: 90%;
 }
 
 /* DatePicker styling */
 .custom-datepicker {
-  background-color: #29293d;
-  color: white;
-  border: 1px solid #555;
-  border-radius: 5px;
-  padding: 8px;
+  background-color: #ffffff;
+  color: #333;
+  border: 1px solid #cccccc;
+  border-radius: 8px;
+  padding: 10px;
   font-size: 14px;
-  width: 100%; /* Ensures input adapts to the screen */
+  width: 100%;
 }
 
 .custom-calendar {
-  background-color: #1f1f2e;
-  border: 1px solid #555;
-  border-radius: 8px;
-  color: white;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  background-color: #ffffff;
+  border: 1px solid #dcdcdc;
+  border-radius: 12px;
+  color: #333;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .custom-calendar .react-datepicker__day {
-  color: white;
+  color: #555;
   font-size: 14px;
   padding: 8px;
 }
 
 .custom-calendar .react-datepicker__day--selected {
-  background-color: #ffc502;
-  color: black;
+  background-color: #ffc107;
+  color: #fff;
   border-radius: 50%;
 }
 
 .custom-calendar .react-datepicker__day:hover {
-  background-color: #555;
-  color: white;
+  background-color: #f1f1f1;
+  color: #333;
   border-radius: 50%;
 }
 
 /* Confirm button styling */
 .postpone-confirm-btn {
-  background-color: #ffc502;
+  background-color: #ffc107;
   border: none;
-  border-radius: 5px;
-  color: black;
-  padding: 8px 16px;
+  border-radius: 8px;
+  color: #333;
+  padding: 10px 18px;
   font-size: 14px;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
-  width: 100%; /* Ensures adaptability to smaller screens */
+  width: 100%;
 }
 
 .postpone-confirm-btn:hover {
-  background-color: #e6b800;
+  background-color: #e6a800;
 }
 
 /* Responsiveness for medium screens */
 @media (max-width: 768px) {
+  .postpone-container {
+    padding: 16px;
+    gap: 10px;
+  }
+
+  .custom-datepicker {
+    font-size: 13px;
+    padding: 8px;
+  }
+
+  .custom-calendar .react-datepicker__day {
+    font-size: 13px;
+    padding: 7px;
+  }
+
+  .postpone-confirm-btn {
+    font-size: 13px;
+    padding: 8px 14px;
+  }
+}
+
+/* Responsiveness for small screens */
+@media (max-width: 480px) {
   .postpone-container {
     padding: 12px;
     gap: 8px;
@@ -89,53 +113,31 @@
 
   .postpone-confirm-btn {
     font-size: 12px;
-    padding: 6px 12px;
-  }
-}
-
-/* Responsiveness for small screens */
-@media (max-width: 480px) {
-  .postpone-container {
-    padding: 10px;
-    gap: 6px;
-  }
-
-  .custom-datepicker {
-    font-size: 10px;
-    padding: 5px;
-  }
-
-  .custom-calendar .react-datepicker__day {
-    font-size: 10px;
-    padding: 5px;
-  }
-
-  .postpone-confirm-btn {
-    font-size: 10px;
-    padding: 5px 10px;
+    padding: 6px 10px;
   }
 }
 
 .notifications-container {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  background-color: #1f1f2e;
-  padding: 15px;
-  border-radius: 8px;
-  width: 100%; /* Makes it responsive */
-  max-width: 1200px; /* Sets a maximum width */
-  margin: 0 auto; /* Centers the container */
+  gap: 12px;
+  background-color: #c72b2b;
+  padding: 20px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  box-shadow: 0 6px 20px rgb(29, 16, 16);
 }
 
 .notification-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 24px;
-  background-color: #29293d;
-  border-radius: 8px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 25px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
   position: relative;
   cursor: pointer;
   transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
@@ -143,51 +145,51 @@
 }
 
 .notification-item:hover {
-  background-color: #3a3a50;
-  transform: scale(1.01);
+  background-color: #f1f1f1;
+  transform: scale(1.02);
 }
 
 .priority-indicator {
-  padding: 4px 8px;
-  border-radius: 10px;
-  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 13px;
   font-weight: bold;
   text-align: center;
-  min-width: 70px;
+  min-width: 80px;
 }
 
 .priority-indicator.High {
-  background-color: #ff4d4d;
+  background-color: #ff6b6b;
   color: white;
 }
 
 .priority-indicator.Medium {
   background-color: #ffd966;
-  color: black;
+  color: #333;
 }
 
 .priority-indicator.Low {
-  background-color: #90ee90;
-  color: black;
+  background-color: #a8e6a8;
+  color: #333;
 }
 
 .notification-message {
   flex: 1;
-  margin: 0 8px;
-  color: white;
+  margin: 0 12px;
+  color: #333;
   font-size: 14px;
-  line-height: 1.3;
+  line-height: 1.5;
   word-wrap: break-word;
 }
 
 .notification-message p {
-  margin: 5px 0;
+  margin: 6px 0;
 }
 
 .notification-date {
   display: flex;
   align-items: center;
-  color: #a1a1b5;
+  color: #999;
   font-size: 12px;
   gap: 6px;
   position: absolute;
@@ -196,12 +198,12 @@
 }
 
 .notification-date i {
-  color: #a1a1b5;
+  color: #999;
 }
 
 .notification-icons {
   display: flex;
-  gap: 8px;
+  gap: 10px;
   align-items: center;
 }
 
@@ -224,21 +226,21 @@
 
 .notification-image {
   border-radius: 50%;
-  width: 25px;
-  height: 25px;
+  width: 28px;
+  height: 28px;
   margin-right: 15px;
 }
 
 /* Responsive styles for medium screens */
 @media (max-width: 768px) {
   .notifications-container {
-    padding: 10px;
+    padding: 16px;
   }
 
   .notification-item {
     flex-direction: column;
     align-items: flex-start;
-    padding: 10px;
+    padding: 12px;
   }
 
   .priority-indicator {
@@ -247,12 +249,12 @@
   }
 
   .notification-message {
-    font-size: 12px;
+    font-size: 13px;
   }
 
   .notification-icons {
     justify-content: flex-start;
-    margin-top: 8px;
+    margin-top: 10px;
   }
 
   .notification-date {
@@ -264,33 +266,33 @@
 /* Responsive styles for small screens */
 @media (max-width: 480px) {
   .notifications-container {
-    padding: 8px;
+    padding: 12px;
   }
 
   .notification-item {
-    padding: 8px;
+    padding: 10px;
   }
 
   .priority-indicator {
-    font-size: 10px;
-    padding: 2px 6px;
+    font-size: 11px;
+    padding: 4px 8px;
   }
 
   .notification-message {
-    font-size: 10px;
+    font-size: 12px;
   }
 
   .icon {
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
   }
 
   .notification-image {
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
   }
 
   .notification-date {
-    font-size: 10px;
+    font-size: 11px;
   }
 }

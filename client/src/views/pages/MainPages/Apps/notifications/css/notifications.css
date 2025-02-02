@@ -1,132 +1,132 @@
 .ant-modal-content {
-    width: 870px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    margin-left: -100px;
-    background-color: #1f1f2e; /* Luxurious background color */
-    border-radius: 15px; /* Rounded corners */
-    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.5); /* Shadow effect */
-    border: 1px solid #555; /* Thin border */
+  width: 870px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-left: -100px;
+  background-color: #ffffff; /* רקע לבן יוקרתי */
+  border-radius: 15px; /* פינות מעוגלות */
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1); /* צל עדין */
+  border: 1px solid #e0e0e0; /* גבול דק */
+}
+
+/* Inner content container */
+.modal-content-inner {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+/* Responsive Design for Medium Screens */
+@media (max-width: 768px) {
+  .ant-modal-content {
+    width: 90%;
+    margin-left: 0;
   }
 
-  /* Inner content container */
   .modal-content-inner {
+    flex-wrap: wrap;
+  }
+}
+
+/* Responsive Design for Small Screens */
+@media (max-width: 480px) {
+  .ant-modal-content {
     width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     padding: 20px;
+    margin-left: 0;
   }
 
-  /* Responsive Design for Medium Screens */
-  @media (max-width: 768px) {
-    .ant-modal-content {
-      width: 90%;
-      margin-left: 0;
-    }
-
-    .modal-content-inner {
-      flex-wrap: wrap;
-    }
-  }
-
-  /* Responsive Design for Small Screens */
-  @media (max-width: 480px) {
-    .ant-modal-content {
-      width: 100%;
-      padding: 20px;
-      margin-left: 0;
-    }
-
-    .modal-content-inner {
-      flex-direction: column;
-      gap: 15px;
-    }
-  }
-
-  /* Notifications container */
-  .notifications-container {
-    display: flex;
+  .modal-content-inner {
     flex-direction: column;
-    padding: 20px;
-    background-color: #29293d; /* Dark background */
-    border-radius: 15px;
-    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3); /* Luxurious effect */
-    color: white;
+    gap: 15px;
   }
+}
 
-  /* Upper bar */
-  .upper-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #555; /* Separator line */
-  }
+/* Notifications container */
+.notifications-container {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  background-color: #f9f9f9; /* רקע לבן */
+  border-radius: 15px;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1); /* אפקט צל עדין */
+  color: #333333; /* צבע טקסט כהה */
+}
 
-  /* Filter and Sort Containers */
-  .filter-container {
-    display: flex;
-    gap: 20px;
-  }
+/* Upper bar */
+.upper-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e0e0e0; /* קו תחתון מפריד */
+}
 
-  .filter-select,
-  .sort-select {
-    border-radius: 10px; /* Rounded corners */
-    padding: 10px;
-    background-color: #f7b500;
-    border: none;
-    color: #1f1f2e; /* Dark text color */
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
+/* Filter and Sort Containers */
+.filter-container {
+  display: flex;
+  gap: 20px;
+}
 
-  .filter-select:hover,
-  .sort-select:hover {
-    background-color: #e6a400;
-  }
+.filter-select,
+.sort-select {
+  border-radius: 10px; /* פינות מעוגלות */
+  padding: 10px;
+  background-color: #ffd966; /* צבע זהוב */
+  border: none;
+  color: #333333; /* צבע טקסט כהה */
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
 
-  /* Pagination Controls */
-  .pagination-controls {
-    display: flex;
-    justify-content: space-between;
-    margin: 20px 0;
-  }
+.filter-select:hover,
+.sort-select:hover {
+  background-color: #f1c40f; /* גוון זהוב כהה יותר */
+}
 
-  .pagination-controls button {
-    background: linear-gradient(45deg, #ffa500, #f7941d); /* Gradient effect */
-    color: white;
-    border: none;
-    border-radius: 10px;
-    padding: 12px 24px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: transform 0.2s ease, background-color 0.3s ease;
-  }
+/* Pagination Controls */
+.pagination-controls {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0;
+}
 
-  .pagination-controls button:hover {
-    background: linear-gradient(45deg, #f7941d, #ffa500);
-    transform: scale(1.05); /* Zoom effect */
-  }
+.pagination-controls button {
+  background: linear-gradient(45deg, #ffd966, #f7b500); /* אפקט גרדיאנט */
+  color: #ffffff; /* צבע טקסט לבן */
+  border: none;
+  border-radius: 10px;
+  padding: 12px 24px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: transform 0.2s ease, background-color 0.3s ease;
+}
 
-  .pagination-controls button:disabled {
-    background: #444; /* Muted color */
-    color: #aaa;
-    cursor: not-allowed;
-  }
+.pagination-controls button:hover {
+  background: linear-gradient(45deg, #f7b500, #ffd966);
+  transform: scale(1.05); /* אפקט זום */
+}
 
-  /* Notifications body */
-  .notifications-body {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
+.pagination-controls button:disabled {
+  background: #e0e0e0; /* צבע ניטרלי */
+  color: #a0a0a0; /* טקסט חיוור */
+  cursor: not-allowed;
+}
 
-  /* Tooltip-like effect for hovering on buttons */
-  button:hover {
-    box-shadow: 0px 4px 8px rgba(255, 165, 0, 0.6); /* Shadow effect */
-  }
+/* Notifications body */
+.notifications-body {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Tooltip-like effect for hovering on buttons */
+button:hover {
+  box-shadow: 0px 4px 8px rgba(247, 196, 15, 0.4); /* אפקט צל עדין */
+}

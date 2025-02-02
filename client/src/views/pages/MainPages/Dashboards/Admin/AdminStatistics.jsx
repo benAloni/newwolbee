@@ -12,7 +12,6 @@ import { fetchEmployees, fetchUserProfilePic } from "../../../../../services";
 import EmployeesWorkingHours from "./EmployeesWorkingHours";
 import CreateEmployeeEvent from "../../../Employees/PersonalEvents/CreateEmployeeEvent";
 import { GrLinkNext } from "react-icons/gr";
-import EmployeeProfile from "../../../Profile/EmployeeProfile";
 export default function AdminStatistics() {
   // states
   const [selectedTeam, setSelectedTeam] = useState("");
@@ -48,7 +47,6 @@ export default function AdminStatistics() {
   const { data: employees } = useQuery({
     queryKey: ["employees"],
     queryFn: fetchEmployees,
-    enabled: !!uid,
   });
   const { data: profileImg } = useQuery({
     queryKey: ["user-profile-pic"],
@@ -211,8 +209,8 @@ export default function AdminStatistics() {
             <div className="members-card">
               {employees &&
                 filteredEmployees?.map((employee) => (
-                  <div key={employee.employeeId} className="profile-img">
-                    <Link to={`/profile/${employee.employeeId}`} className="avatar">
+                  <div key={employee._id} className="profile-img">
+                    <Link to={`/profile/${employee._id}`} className="avatar">
                       <img
                         loading="lazy"
                         src={employee.imageUrl}
@@ -221,10 +219,10 @@ export default function AdminStatistics() {
                       />
                     </Link>
                     <span className="employee-fullname">
-                      <Link to={`/profile/${employee.employeeId}`}>
+                      <Link to={`/profile/${employee._id}`}>
                         {employee.fullName}
                       </Link>
-                    </span>                
+                    </span>
                   </div>
                 ))}
             </div>
@@ -315,7 +313,7 @@ export default function AdminStatistics() {
           </ul>
         </div>
       </div>
-    
+
       <CreateEmployeeEvent />
     </div>
   );
