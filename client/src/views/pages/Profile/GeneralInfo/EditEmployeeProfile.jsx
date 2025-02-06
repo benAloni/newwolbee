@@ -55,11 +55,11 @@ const EditEmployeeProfile = ({ selectedEmployee }) => {
             : "N/A",
         }
       : null,
-    ...(selectedEmployee?.childrenInfo || []).map((child, index) => ({
+    ...(selectedEmployee?.familyMembers || []).map((child, index) => ({
       id: index + 2, //add child Id or _id
-      name: child.fullName,
-      relationship: "Child",
-      dob: new Date(child.dateOfBirth).toLocaleDateString("en-GB"),
+      name: child.name,
+      relationship: child.relationship,
+      dob: child.dateOfBirth ? new Date(child.dateOfBirth).toLocaleDateString() : 'N/A',
     })),
   ].filter(Boolean);
 

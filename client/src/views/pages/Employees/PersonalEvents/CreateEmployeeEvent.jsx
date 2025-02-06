@@ -5,10 +5,13 @@ import VacationModal from "./VacationModal";
 import SickLeaveModal from "./SickLeaveModal";
 import FloatingButton from "../FloatingButton";
 import "./popup.css";
-import { useMutation, useQuery } from '@tanstack/react-query';
-import axios from 'axios';
-import { auth } from '../../../../firebase/firebaseConfig';
+import { useQuery } from '@tanstack/react-query';
 import EmployeesChildren from "./EmployeesChildren";
+import WeddingModal from "./WeddingModal";
+import EngagementModal from "./EngagementModal";
+import ChildsBirthdayModal from "./ChildsBirthdayModal";
+import WeddingAnniversaryModal from "./WeddingAnniversaryModal";
+import { useUpdateVacation, useUpdateSickDay, useAddSickDayForSon } from './useUpdateEvent';
 
 export default function CreateEmployeeEvent() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -16,13 +19,11 @@ export default function CreateEmployeeEvent() {
   const [currentEventType, setCurrentEventType] = useState(null);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
 
-  // States for vacation modal
+  // States for event modal
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const [selectedEndDate, setSelectedEndDate] = useState(null);
   const [selectedPurpose, setSelectedPurpose] = useState(null);
   const [selectedCountry, setSelectedCountry] = useState(null);
-
-  const [fetchCount, setFetchCount] = useState(0);
 
   const { data: employees, isLoading, error } = useQuery({
     queryKey: ["employees"],
@@ -33,30 +34,21 @@ export default function CreateEmployeeEvent() {
       }
       return response.json();
     },
-    enabled: fetchCount < 3,  // Only fetch 3 times
   });
 
-  // Define the events array
   const events = [
-    {
-      id: 1,
-      name: "Vacation Leave",
-      imageUrl: "/path/to/vacation-icon",
-      type: "Vacation",
-    },
-    {
-      id: 2,
-      name: "Sick Leave",
-      imageUrl: "/path/to/sickleave-icon",
-      type: "Sick Leave",
-    },
-    {
-      id: 3,
-      name: "children's of workers",
-      imageUrl: "/path/to/sickleave-icon",
-      type: "children of workers",
-    },
+    { id: 1, name: "Vacation Leave", type: "vacation" },
+    { id: 2, name: "Sick Leave", type: "sickLeave" },
+    { id: 3, name: "Children's of Workers", type: "childrenOfWorkers" },
+    { id: 4, name: "Wedding", type: "wedding" },
+    { id: 5, name: "Engagement", type: "engagement" },
+    { id: 6, name: "Child's Birthday", type: "childsBirthday" },
+    { id: 7, name: "Wedding Anniversary", type: "weddingAnniversary" },
   ];
+
+  const { updateVacationMutation, updateVacation } = useUpdateVacation();
+  const { updateSickDayMutation, updateSickDay } = useUpdateSickDay();
+  const { addSickDayForSonMutation, addSickDayForSon } = useAddSickDayForSon();
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => {
@@ -64,10 +56,6 @@ export default function CreateEmployeeEvent() {
     setCurrentPage("eventSelection");
     setCurrentEventType(null);
     setSelectedEmployee(null);
-    setSelectedStartDate(null);
-    setSelectedEndDate(null);
-    setSelectedPurpose(null);
-    setSelectedCountry(null);
   };
 
   const handleEventClick = (eventType) => {
@@ -80,149 +68,8 @@ export default function CreateEmployeeEvent() {
     setCurrentPage("dateSelection");
   };
 
-  // --------------------VacationMutation---------------------
-  const updateVacationMutation = useMutation({
-    mutationFn: async (vacationData) => {
-      const token = await auth.currentUser.getIdToken(); // Get token from Firebase auth
-      const response = await axios.post(
-        `${process.env.REACT_APP_SERVER_URI}/updateEmployeeVacation`, // Update with your actual API endpoint
-        vacationData,  // Pass the vacationData object directly
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,  // Send token in Authorization header
-          },
-        }
-      );
-      return response.data;
-    },
-    onSuccess: () => {
-      console.log('Vacation updated successfully');
-    },
-    onError: (error) => {
-      console.error('Error updating vacation:', error);
-    },
-  });
-
-  const updateVacation = async () => {
-    try {
-      // Create the start and end dates, and ensure the time is set to midnight (local timezone)
-      const formattedStartDate = new Date(selectedStartDate);
-      const formattedEndDate = new Date(selectedEndDate);
-
-      // Get the local date format (YYYY-MM-DD) without the time zone impact
-      const startDateString = `${formattedStartDate.getFullYear()}-${(formattedStartDate.getMonth() + 1).toString().padStart(2, '0')}-${formattedStartDate.getDate().toString().padStart(2, '0')}`;
-      const endDateString = `${formattedEndDate.getFullYear()}-${(formattedEndDate.getMonth() + 1).toString().padStart(2, '0')}-${formattedEndDate.getDate().toString().padStart(2, '0')}`;
-
-      // Prepare the vacation data object with the relevant fields
-      const vacationData = {
-        id: selectedEmployee.id,
-        purposeOfTrip: selectedPurpose,
-        destination: selectedCountry?.value,
-        startDate: startDateString, // Send the start date in local format
-        endDate: endDateString,     // Send the end date in local format
-      };
-      // Trigger the mutation to send data to the backend
-      await updateVacationMutation.mutateAsync(vacationData);
-
-      // Reset the state after success
-      setSelectedStartDate(null);
-      setSelectedEndDate(null);
-      setSelectedPurpose(null);
-      setSelectedCountry(null);
-
-      closeModal(); // Close the modal after updating
-
-    } catch (error) {
-      console.error("Error updating vacation:", error);
-    }
-  };
-
-  // --------------------SickDayMutation---------------------
-  const updateSickDayMutation = useMutation({
-    mutationFn: async (sickDayData) => {
-      const token = await auth.currentUser.getIdToken(); // Get token from Firebase auth
-      const response = await axios.post(
-        `${process.env.REACT_APP_SERVER_URI}/updateEmployeeSickLeave`, // Update with your actual API endpoint
-        sickDayData,  // Pass the sickDayData object directly
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,  // Send token in Authorization header
-          },
-        }
-      );
-      return response.data;
-    },
-    onSuccess: () => {
-      console.log('Sick Day updated successfully');
-    },
-    onError: (error) => {
-      console.error('Error updating sick day:', error);
-    },
-  });
-
-  const updateSickDay = async () => {
-    try {
-      // Create the start and end dates, and ensure the time is set to midnight (local timezone)
-      const formattedStartDate = new Date(selectedStartDate);
-      const formattedEndDate = new Date(selectedEndDate);
-
-      // Get the local date format (YYYY-MM-DD) without the time zone impact
-      const startDateString = `${formattedStartDate.getFullYear()}-${(formattedStartDate.getMonth() + 1).toString().padStart(2, '0')}-${formattedStartDate.getDate().toString().padStart(2, '0')}`;
-      const endDateString = `${formattedEndDate.getFullYear()}-${(formattedEndDate.getMonth() + 1).toString().padStart(2, '0')}-${formattedEndDate.getDate().toString().padStart(2, '0')}`;
-
-      // Prepare the vacation data object with the relevant fields
-      const sickDayData = {
-        id: selectedEmployee.id,
-        startDate: startDateString, // Send the start date in local format
-        endDate: endDateString,     // Send the end date in local format
-      };
-
-      // Trigger the mutation to send data to the backend
-      await updateSickDayMutation.mutateAsync(sickDayData);
-
-      // Reset the state after success
-      setSelectedStartDate(null);
-      setSelectedEndDate(null);
-
-      closeModal(); // Close the modal after updating
-
-    } catch (error) {
-      console.error("Error updating sick day:", error);
-    }
-  };
-
-  //-------------------- son events---------------
-  
-  const handleAddSickDay = async (selectedSon, startDate, endDate) => {
-
-    try {
-      // Prepare the sick day data
-      const sonEvents = {
-        id: selectedEmployee._id,
-        childName: selectedSon.name,
-        startDate,
-        endDate,
-      };
-  
-      // Get the token fr om Firebase auth
-      const token = await auth.currentUser.getIdToken();
-  
-      // Make the API call to add the sick day event
-      const response = await axios.post(
-        `${process.env.REACT_APP_SERVER_URI}/addSonEvents`, // Use your actual API endpoint here
-        sonEvents,  // Pass the son events data
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,  // Send token in Authorization header
-          },
-        }
-      );
-  
-      console.log('Sick day added:', response.data);  // Log the response data
-      // Optionally update local state if needed
-    } catch (error) {
-      console.error('Error adding sick day:', error);
-    }
+  const handleAddSickDay = (selectedSon, startDate, endDate) => {
+    addSickDayForSon(selectedSon, startDate, endDate, selectedEmployee);
   };
 
   return (
@@ -253,12 +100,6 @@ export default function CreateEmployeeEvent() {
                     key={employee.id}
                     className="employee-item"
                     onClick={() => handleEmployeeClick(employee)}
-                    style={{
-                      padding: "10px",
-                      cursor: "pointer",
-                      border: "1px solid #ccc",
-                      marginBottom: "10px",
-                    }}
                   >
                     <p>{employee.fullName}</p>
                   </div>
@@ -268,7 +109,7 @@ export default function CreateEmployeeEvent() {
           </div>
         )}
 
-        {currentPage === "dateSelection" && currentEventType === "Vacation" && (
+        {currentPage === "dateSelection" && currentEventType === "vacation" && (
           <VacationModal
             employeeName={selectedEmployee?.fullName}
             selectedStartDate={selectedStartDate}
@@ -284,7 +125,7 @@ export default function CreateEmployeeEvent() {
           />
         )}
 
-        {currentPage === "dateSelection" && currentEventType === "Sick Leave" && (
+        {currentPage === "dateSelection" && currentEventType === "sickLeave" && (
           <SickLeaveModal
             employeeName={selectedEmployee?.fullName}
             selectedStartDate={selectedStartDate}
@@ -296,16 +137,54 @@ export default function CreateEmployeeEvent() {
           />
         )}
 
-{currentPage === "dateSelection" && selectedEmployee && (
+        {currentPage === "dateSelection" && currentEventType === "wedding" && (
+          <WeddingModal
+          selectedEmployee={selectedEmployee}
+            selectedWeddingDate={selectedStartDate}
+            setSelectedWeddingDate={setSelectedStartDate}
+            updateWeddingDay={() => {}}
+            closeModal={closeModal}
+          />
+        )}
+
+        {currentPage === "dateSelection" && currentEventType === "engagement" && (
+          <EngagementModal
+          selectedEmployee={selectedEmployee}
+            selectedEngagementDate={selectedStartDate}
+            setSelectedEngagementDate={setSelectedStartDate}
+            updateEngagementDay={() => {}}
+            closeModal={closeModal}
+          />
+        )}
+
+        {currentPage === "dateSelection" && currentEventType === "childsBirthday" && (
+          <ChildsBirthdayModal
+            employeeName={selectedEmployee?.fullName}
+            selectedChildBirthday={selectedStartDate}
+            setSelectedChildBirthday={setSelectedStartDate}
+            updateChildBirthday={() => {}}
+          />
+        )}
+
+        {currentPage === "dateSelection" && currentEventType === "weddingAnniversary" && (
+          <WeddingAnniversaryModal
+          selectedEmployee={selectedEmployee}
+            selectedAnniversaryDate={selectedStartDate}
+            setSelectedAnniversaryDate={setSelectedStartDate}
+            updateAnniversaryDay={() => {}}
+            closeModal={closeModal}
+          />
+        )}
+
+        {currentPage === "dateSelection" && selectedEmployee && (
           <EmployeesChildren
             employeeName={selectedEmployee.fullName}
             familyMembers={selectedEmployee.familyMembers}
             closeModal={closeModal}
-            onAddSickDay={handleAddSickDay} // Pass the handleAddSickDay function
+            onAddSickDay={handleAddSickDay}
             onAddVacation={() => {}}
           />
         )}
-
       </Modal>
     </div>
   );

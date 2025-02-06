@@ -70,6 +70,7 @@ export default function AddFamilyMember({ selectedEmployee }) {
         phone,
       };  
       console.log(familyMemberData);
+
       
       await addMember.mutateAsync(familyMemberData);
   

@@ -6,7 +6,7 @@ import "react-datepicker/dist/react-datepicker.css"; // Import date picker style
 const EmployeesChildren = ({ employeeName, familyMembers, closeModal, onAddSickDay, onAddVacation }) => {
   const [selectedSon, setSelectedSon] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  
+
   // States for the sick day date picker
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
@@ -21,7 +21,7 @@ const EmployeesChildren = ({ employeeName, familyMembers, closeModal, onAddSickD
 
   const handleAddSickDay = () => {
     // Pass the selected son and the dates to the parent function
-    if (startDate && endDate) {
+    if (startDate && endDate && selectedSon) {
       onAddSickDay(selectedSon, startDate, endDate); // Pass the start and end dates
     }
     setShowModal(false);  // Close the modal
@@ -40,7 +40,7 @@ const EmployeesChildren = ({ employeeName, familyMembers, closeModal, onAddSickD
             <div key={index} style={{ marginBottom: '15px' }}>
               <p onClick={() => handleSonClick(son)} style={{ cursor: 'pointer' }}>
                 {son.name}
-              </p> 
+              </p>
             </div>
           ))
         ) : (

@@ -8,6 +8,7 @@ import {
   updateEmployeeSickLeave,
   addFamilyMember,
   addSonEvents,
+  updateEmployeeEvent,
 } from "./api/employees";
 import { fetchUserProfilePic,fetchEmployeesProfilePics } from "./api/profile";
 import { fetchEvents, addEvent } from "./api/calendarEvents";
@@ -21,6 +22,7 @@ import {
 import { fetchHolidaysDetailsOptions } from "./api/holidaysDetails";
 import {saveUserImageUrl} from "./api/userSettings"
 export {
+  updateEmployeeEvent,
   fetchTeams,
   fetchEmployees,
   fetchEmployee,

@@ -13,6 +13,7 @@ import {
   deleteEmployee,
   addFamilyMember,
   addSonEvent,
+  updateEmployeeEvent,
 } from "../controllers/employeesData.js";
 import { getFoodHoliday } from "../controllers/foodHolidays.js";
 import {
@@ -56,7 +57,7 @@ router.get("/getTeams", getTeams);
 //get all employees
 router.get("/getEmployees", getEmployees);
 //get an employee by id
-router.get("/getEmployee/:employeeId", getEmployee)
+router.get("/getEmployee/:employeeId", getEmployee);
 //add new employee
 router.post("/addEmployee", addEmployee);
 //delete an employee
@@ -65,6 +66,8 @@ router.delete("/deleteEmployee", deleteEmployee);
 router.post("/updateEmployeeVacation", updateEmployeeVacation);
 //update employee sick leave 
 router.post("/updateEmployeeSickLeave", updateEmployeeSickLeave)
+
+router.post('/updateEmployeeEvent', updateEmployeeEvent);
 
 router.post("/addFamilyMember", addFamilyMember);
 

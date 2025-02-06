@@ -17,14 +17,15 @@ const EmployeeProfile = () => {
     enabled: !!user && !!employeeId,
   });
 
-
   useEffect(() => {
     if (user) {
+      console.log(data);
       if (data && employeeId) {              
         setSelectedEmployee(data);        
       }
     }
   }, [data, employeeId, user]);
+  
 
   return (
     <>
