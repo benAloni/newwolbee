@@ -114,7 +114,7 @@ const AllEmployees = () => {
           <div className="row">
             {filteredEmployees?.map((employee) => (
               <div
-                key={employee._id}
+                key={employee.employeeId}
                 className="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3"
                 onMouseEnter={(e) =>
                   (e.currentTarget.style.transform = "scale(1.05)")
@@ -127,16 +127,16 @@ const AllEmployees = () => {
                   <div className="profile-img">
                     <Link
                       to={{
-                        pathname: `/profile/${employee._id}`,
+                        pathname: `/profile/${employee.employeeId}`,
                       }}
                       className="avatar"
                       onClick={(event) =>
-                        toggleFavoriteEmployee(event, employee._id)
+                        toggleFavoriteEmployee(event, employee.employeeId)
                       }
                     >
                       <span
                         className={`favorite-star ${
-                          favoriteEmployees.includes(employee._id)
+                          favoriteEmployees.includes(employee.employeeId)
                             ? "active"
                             : ""
                         }`}
@@ -180,7 +180,7 @@ const AllEmployees = () => {
                     </div>
                   </div>
                   <h4 className="user-name m-t-10 mb-0 text-ellipsis">
-                    <Link to={`/profile/${employee._id}`}>
+                    <Link to={`/profile/${employee.employeeId}`}>
                       {employee.fullName}
                     </Link>
                   </h4>

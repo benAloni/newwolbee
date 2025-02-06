@@ -23,6 +23,30 @@ export const fetchEmployee = async (employeeId) => {
     console.log("Error fetching employee :", error);
   }
 };
+export const fetchEmployeeFamilyMembers = async (employeeId) => {
+  try {
+    const response = await client.get(`/employee/${employeeId}/family-members`);
+    if (response.status === 200) {
+      const result = response.data;      
+      return result;
+    }
+  } catch (error) {
+    console.log("Error fetching employee's family members :", error);
+  }
+};
+
+export const fetchEmployeeEmergencyContacts = async (employeeId) => {
+  try {
+    const response = await client.get(`/employee/${employeeId}/emergency-contacts`);
+    if (response.status === 200) {
+      const result = response.data;      
+      return result;
+    }
+  } catch (error) {
+    console.log("Error fetching employee's emergency contacts :", error);
+  }
+};
+
 
 export const addEmployee = async ({ employeeData }) => {    
   try {

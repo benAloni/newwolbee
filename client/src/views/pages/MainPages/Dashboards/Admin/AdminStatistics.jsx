@@ -209,8 +209,8 @@ export default function AdminStatistics() {
             <div className="members-card">
               {employees &&
                 filteredEmployees?.map((employee) => (
-                  <div key={employee._id} className="profile-img">
-                    <Link to={`/profile/${employee._id}`} className="avatar">
+                  <div key={employee.employeeId} className="profile-img">
+                    <Link to={`/profile/${employee.employeeId}`} className="avatar">
                       <img
                         loading="lazy"
                         src={employee.imageUrl}
@@ -219,7 +219,7 @@ export default function AdminStatistics() {
                       />
                     </Link>
                     <span className="employee-fullname">
-                      <Link to={`/profile/${employee._id}`}>
+                      <Link to={`/profile/${employee.employeeId}`}>
                         {employee.fullName}
                       </Link>
                     </span>

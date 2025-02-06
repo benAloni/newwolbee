@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Modal from "react-modal";
 import DatePicker from "react-datepicker";
 import Select from "react-select";
+import CreatableSelect from "react-select/creatable";
 import MainPageEdit from "./MainPageEdit";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import { app, storage } from "../../../firebase/firebaseConfig";
@@ -35,6 +36,20 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
   });
 
   const [employeeProfileImage, setEmployeeProfileImage] = useState(null);
+  const [relationOptions, setRelationOptions] = useState([
+    { value: "Mother", label: "Mother" },
+    { value: "Father", label: "Father" },
+    { value: "Spouse", label: "Spouse" },
+    { value: "Son", label: "Son" },
+    { value: "Daughter", label: "Daughter" },
+    { value: "GrandFather", label: "GrandFather" },
+    { value: "GrandMother", label: "GrandMother" },
+    { value: "Uncle", label: "Uncle" },
+    { value: "Aunt", label: "Aunt" },
+    { value: "Friend", label: "Friend" },
+  ]);
+  const [selectedContactGender, setSelectedContactGender] = useState(null);
+  const [selectedContactRelation, setSelectedContactRelation] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
   const queryClient = useQueryClient();
   const {
@@ -52,6 +67,8 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
   const ethnicityRef = useRef();
   const maritalStatusRef = useRef();
   const teamRef = useRef();
+  const contactRef = useRef();
+  const contactGenderRef = useRef();
 
   const resetForm = () => {
     reset();
@@ -60,6 +77,7 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
     ethnicityRef.current.clearValue();
     maritalStatusRef.current.clearValue();
     teamRef.current.clearValue();
+    contactRef.current.clearValue();
     setChildrenCount(0);
     setSelectedImage(userProfile);
     setEmployeeDates({
@@ -93,6 +111,8 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
         religion: selectedReligion,
         ethnicity: selectedEthnicity,
         maritalStatus: selectedMaritalStatus,
+        contactRelationType: selectedContactRelation,
+        contactGender: selectedContactGender,
         imageUrl: uploadedEmployeeProfileImage,
       };
       const response = await addEmployee({
@@ -486,13 +506,13 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                       </label>
                       <div className="row mb-3">
                         <div className="col-sm-12">
-                          {/* <input
+                          <input
                             className={"form-control"}
                             type="text"
                             name="spouseFullName"
                             {...register("spouseFullName")}
                             placeholder="Employee's Spouse Full Name"
-                          /> */}
+                          />
                         </div>
                       </div>
 
@@ -502,7 +522,7 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                       </label>
                       <div className="row mb-3">
                         <div className="col-sm-12">
-                          {/* <Select
+                          <Select
                             options={[
                               { value: "male", label: "Male" },
                               { value: "female", label: "Female" },
@@ -513,8 +533,8 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                               setValue("genderOfSpouse", selectedOption?.value)
                             }
                             isClearable
-                            name="spouseGender"
-                          /> */}
+                            name="genderOfSpouse"
+                          />
                         </div>
                       </div>
 
@@ -526,27 +546,27 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                       <div className="row mb-3">
                         <div className="col-sm-12">
                           <div className="cal-icon">
-                            {/* <DatePicker
-                              selected={watch("spouseDateOfBirth")}
+                            <DatePicker
+                              selected={watch("spouseDob")}
                               onChange={(date) =>
-                                setValue("spouseDateOfBirth", date)
+                                setValue("spouseDob", date)
                               }
                               className={`form-control ${
-                                errors?.spouseDateOfBirth?.dateOfBirth
+                                errors?.spouseDob?.dateOfBirth
                                   ? "border-danger"
                                   : ""
                               }`}
                               dateFormat="dd-MM-yyyy"
-                              name={"spouseDateOfBirth"}
-                            /> */}
-                            {errors?.spouse?.dateOfBirth && (
+                              name={"spouseDob"}
+                            />
+                            {errors?.spouseDob && (
                               <div className="text-danger">
-                                {errors?.spouse?.dateOfBirth.message}
+                                {errors?.spouseDob?.message}
                               </div>
                             )}
                           </div>
                         </div>
-                      </div>
+                      </div>                   
                       {/* Spouse's Nationality */}
                       <label className="col-form-label">
                         Spouse's Nationality
@@ -554,54 +574,58 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                       </label>
                       <div className="row mb-3">
                         <div className="col-sm-12">
-                          {/* <input
+                          <input
                             className={"form-control"}
                             type="text"
                             name="spouseNationality"
                             {...register("spouseNationality")}
                             placeholder="Spouse's Nationality"
-                          /> */}
+                          />
                         </div>
                       </div>
-                      {/* Spouse's Employment Status */}
-                      <label className="col-form-label">
+                       {/* Spouse's Employment Status */}
+                       <label className="col-form-label">
                         Spouse's Employment Status
                         <span className="text-danger"> *</span>
                       </label>
                       <div className="row mb-3">
                         <div className="col-sm-12">
-                          {/* <input
+                          <input
                             className={"form-control"}
                             type="text"
                             name="spouseEmploymentStatus"
                             {...register("spouseEmploymentStatus")}
                             placeholder="Spouse's Employment Status"
-                          /> */}
+                          />
+                        </div>
+                      </div>
+                      <div className="input-block mb-3 col-sm-8">
+                        <label className="col-form-label">
+                          Wedding Anniversary
+                        </label>
+                        <span className="text-danger"> *</span>
+                        <div className="cal-icon">
+                          <DatePicker
+                            selected={employeeDates.anniversary}
+                            onChange={(date) =>
+                              handleSelectedDate(date, "anniversary")
+                            }
+                            className={`form-control ${
+                              errors.anniversary ? "border-danger" : ""
+                            }`}
+                            dateFormat="dd-MM-yyyy"
+                            name="anniversary"
+                          />
+                          {errors.anniversary && (
+                            <div className="text-danger">
+                              {errors.anniversary}
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
                   )}
-                  <div className="input-block mb-3 col-sm-6">
-                    <label className="col-form-label">
-                      Wedding Anniversary
-                    </label>
-                    <div className="cal-icon">
-                      <DatePicker
-                        selected={employeeDates.anniversary}
-                        onChange={(date) =>
-                          handleSelectedDate(date, "anniversary")
-                        }
-                        className={`form-control ${
-                          errors.anniversary ? "border-danger" : ""
-                        }`}
-                        dateFormat="dd-MM-yyyy"
-                        name="anniversary"
-                      />
-                      {errors.anniversary && (
-                        <div className="text-danger">{errors.anniversary}</div>
-                      )}
-                    </div>
-                  </div>
+
                   <div className="input-block mb-3 col-sm-6">
                     <label className="col-form-label">
                       No. Of Children
@@ -617,7 +641,7 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                       placeholder="Employee's number of children"
                     />
                   </div>
-                
+
                   {Array.from({ length: childrenCount }).map((_, index) => (
                     <div key={index} className="row mb-4">
                       {/* Child Details Header */}
@@ -640,37 +664,41 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                           Child's Full Name{" "}
                           <span className="text-danger"> *</span>
                         </label>
-                        {/* <input
+                        <input
                           className="form-control"
                           type="text"
-                          name={`children[${index}].fullName`}
-                          {...register(`children[${index}].fullName`, {
+                          name={`children[${index}].childFullName`}
+                          {...register(`children[${index}].childFullName`, {
                             required: true,
                           })}
                           placeholder="Child's Full Name"
-                        /> */}
+                        />
                       </div>
                       {/* Child's Gender */}
                       <div className="input-block col-md-4">
                         <label className="col-form-label">
-                          Child's Gender <span className="text-danger"> *</span>
+                          Child's Relation type <span className="text-danger"> *</span>
                         </label>
-                        {/* <Select
+                        <Select
                           options={[
-                            { value: "boy", label: "Boy" },
-                            { value: "girl", label: "Girl" },
-                            { value: "other", label: "Other" },
+                            { value: "Son", label: "Son" },                         
+                            { value: "Daughter", label: "Daughter" },
+                            { value: "Son", label: "Son" },
+                            { value: "Half Son", label: "Half Son" },
+                            { value: "Step Son", label: "Step Son" },
+                            { value: "Half Daughter", label: "Half Daughter" },
+                            { value: "Step Daughter", label: "Step Daughter" },
                           ]}
-                          placeholder="Select child's gender"
+                          placeholder="Select relation type of child"
                           onChange={(selectedOption) =>
                             setValue(
-                              `children[${index}].gender`,
+                              `children[${index}].childRelationType`,
                               selectedOption?.value
                             )
                           }
                           isClearable
-                          name={`children[${index}].gender`}
-                        /> */}
+                          name={`children[${index}].childRelationType`}
+                        />
                       </div>
                       {/* Child's Date of Birth */}
                       <div className="input-block col-md-4">
@@ -679,28 +707,28 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                           <span className="text-danger"> *</span>
                         </label>
                         <div className="cal-icon">
-                          {/* <DatePicker
-                            selected={watch(`children[${index}].dateOfBirth`)}
+                          <DatePicker
+                            selected={watch(`children[${index}].childDob`)}
                             onChange={(date) =>
-                              setValue(`children[${index}].dateOfBirth`, date)
+                              setValue(`children[${index}].childDob`, date)
                             }
                             className={`form-control ${
-                              errors?.children?.[index]?.dateOfBirth
+                              errors?.children?.[index]?.childDob
                                 ? "border-danger"
                                 : ""
                             }`}
                             dateFormat="dd-MM-yyyy"
-                            name={`children[${index}].dateOfBirth`}
-                          /> */}
-                          {errors?.children?.[index]?.dateOfBirth && (
+                            name={`children[${index}].childDob`}
+                          />
+                          {errors?.children?.[index]?.childDob && (
                             <div className="text-danger">
-                              {errors?.children?.[index]?.dateOfBirth.message}
+                              {errors?.children?.[index]?.childDob.message}
                             </div>
                           )}
                         </div>
                       </div>
                     </div>
-                  ))}    
+                  ))}
                   <div className="input-block mb-3 col-sm-6">
                     <label className="col-form-label">
                       Start Day <span className="text-danger">*</span>
@@ -847,16 +875,15 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                       </div>
                     </div>
                   </div>
-                  {/* <div className="col-sm-12">
+                  <div className="col-sm-12">
                     <div className="input-block mb-3">
-                    <div className="col-12">
-                        <h5 className="mb-3">Emergency Contact  Details</h5>
-                      </div>                     
+                      <div className="col-12">
+                        <h5 className="mb-3">Emergency Contact Details</h5>
+                      </div>
                       <div className="row mb-3">
                         <div className="col-sm-4">
                           <label className="col-form-label">
-                            Full Name{" "}
-                            <span className="text-danger">*</span>
+                            Full Name <span className="text-danger">*</span>
                           </label>
                           <input
                             className={`form-control`}
@@ -868,33 +895,70 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                         </div>
                         <div className="col-sm-4">
                           <label className="col-form-label">
-                          Relationship Type{" "}
+                            Relationship Type{" "}
                             <span className="text-danger">*</span>
                           </label>
-                          <input
-                            className={`form-control`}
-                            type="text"
+                          <CreatableSelect
+                            ref={contactRef}
+                            options={relationOptions}
+                            value={selectedContactRelation}
+                            placeholder="Select relationship type"
+                            onChange={(selectedOption) =>
+                              setSelectedContactRelation(selectedOption)
+                            }
+                            onCreateOption={(inputValue) => {
+                              if (!inputValue) return;
+
+                              const newOption = {
+                                value: inputValue,
+                                label: inputValue,
+                              };
+                              setRelationOptions((prev) => [
+                                ...prev,
+                                inputValue,
+                              ]);
+                              setSelectedContactRelation(newOption);
+                            }}
+                            isClearable
                             name="contactRelationType"
-                            {...register("contactRelationType")}
-                            placeholder="Contact's Relation Type"
                           />
                         </div>
                         <div className="col-sm-4">
                           <label className="col-form-label">
-                            Phone Number{" "}
-                            <span className="text-danger">*</span>
+                            Gender <span className="text-danger">*</span>
+                          </label>
+                          <Select
+                            ref={contactGenderRef}
+                            options={[
+                              { value: "male", label: "Male" },
+                              { value: "female", label: "Female" },
+                              { value: "other", label: "Other" },
+                            ]}
+                            placeholder="Select a gender"
+                            onChange={(selectedOption) =>
+                              setSelectedContactGender(
+                                selectedOption ? selectedOption.value : ""
+                              )
+                            }
+                            isClearable
+                            name="contactGender"
+                          />
+                        </div>
+                        <div className="col-sm-4">
+                          <label className="col-form-label">
+                            Phone Number <span className="text-danger">*</span>
                           </label>
                           <input
                             className={`form-control`}
                             type="text"
-                            name="contactPhone"
-                            {...register("contactPhone")}
+                            name="contactPhoneNumber"
+                            {...register("contactPhoneNumber")}
                             placeholder="Contact's Phone Number"
                           />
                         </div>
                       </div>
                     </div>
-                  </div> */}
+                  </div>
 
                   <div className="d-flex justify-content-center mt-5 mb-2 ">
                     <div

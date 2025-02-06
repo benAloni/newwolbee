@@ -8,6 +8,8 @@ import {
   updateEmployeeSickLeave,
   addFamilyMember,
   addSonEvents,
+  fetchEmployeeFamilyMembers,
+  fetchEmployeeEmergencyContacts
 } from "./api/employees";
 import { fetchUserProfilePic,fetchEmployeesProfilePics } from "./api/profile";
 import { fetchEvents, addEvent } from "./api/calendarEvents";
@@ -42,4 +44,6 @@ export {
   fetchEmployeesNotifications,
   updateEmployeeNotification,
   fetchEmployeesProfilePics,
+  fetchEmployeeFamilyMembers,
+  fetchEmployeeEmergencyContacts
 };
