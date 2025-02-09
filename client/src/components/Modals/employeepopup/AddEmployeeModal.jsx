@@ -78,6 +78,7 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
     maritalStatusRef.current.clearValue();
     teamRef.current.clearValue();
     contactRef.current.clearValue();
+    contactGenderRef.current.clearValue();
     setChildrenCount(0);
     setSelectedImage(userProfile);
     setEmployeeDates({
@@ -566,39 +567,7 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                             )}
                           </div>
                         </div>
-                      </div>                   
-                      {/* Spouse's Nationality */}
-                      <label className="col-form-label">
-                        Spouse's Nationality
-                        <span className="text-danger"> *</span>
-                      </label>
-                      <div className="row mb-3">
-                        <div className="col-sm-12">
-                          <input
-                            className={"form-control"}
-                            type="text"
-                            name="spouseNationality"
-                            {...register("spouseNationality")}
-                            placeholder="Spouse's Nationality"
-                          />
-                        </div>
-                      </div>
-                       {/* Spouse's Employment Status */}
-                       <label className="col-form-label">
-                        Spouse's Employment Status
-                        <span className="text-danger"> *</span>
-                      </label>
-                      <div className="row mb-3">
-                        <div className="col-sm-12">
-                          <input
-                            className={"form-control"}
-                            type="text"
-                            name="spouseEmploymentStatus"
-                            {...register("spouseEmploymentStatus")}
-                            placeholder="Spouse's Employment Status"
-                          />
-                        </div>
-                      </div>
+                      </div>                                      
                       <div className="input-block mb-3 col-sm-8">
                         <label className="col-form-label">
                           Wedding Anniversary
@@ -751,7 +720,7 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                     </div>
                   </div>
 
-                  <div className="input-block mb-3 col-sm-6">
+                  <div className="input-block mb-3 col-sm-8">
                     <label className="col-form-label">
                       Interesting Fact <span className="text-danger">*</span>
                     </label>
@@ -930,9 +899,9 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                           <Select
                             ref={contactGenderRef}
                             options={[
-                              { value: "male", label: "Male" },
-                              { value: "female", label: "Female" },
-                              { value: "other", label: "Other" },
+                              { value: "Male", label: "Male" },
+                              { value: "Female", label: "Female" },
+                              { value: "Other", label: "Other" },
                             ]}
                             placeholder="Select a gender"
                             onChange={(selectedOption) =>

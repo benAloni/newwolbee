@@ -1,28 +1,49 @@
-import { React, useId } from "react";
+import { React, useCallback } from "react";
 import { Link } from "react-router-dom";
 import EditPersonalInfoModal from "../../../../components/Modals/EditPersonalInfoModal";
 import AddFamilyMember from "./AddFamilyMember";
 import { ListItem, ProjectDetails } from "../ProfileContent";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  fetchEmployeeFamilyMembers,
+  fetchEmployeeEmergencyContacts,
+} from "../../../../services";
 
 const EditEmployeeProfile = ({ selectedEmployee }) => {
+  const employeeId = selectedEmployee?.employeeId;
+
+  const fetchEmployeeData = async () => {
+    if (!employeeId) return null;
+      const [familyMembers, emergencyContacts] = await Promise.all([
+        fetchEmployeeFamilyMembers(employeeId),
+        fetchEmployeeEmergencyContacts(employeeId),
+      ]);
+      return { familyMembers, emergencyContacts };    
+  };
+
+  const { data } = useQuery({
+    queryKey: ["employee-extensive-data", employeeId],
+    queryFn: fetchEmployeeData,
+    enabled: !!employeeId,
+  });
   const personalInfoData = [
     { id: 1, title: "ID", text: selectedEmployee?.employeeId },
-    { id: 2, title: "Date of birth", text: new Date (selectedEmployee?.dateOfBirth).toLocaleDateString("en-GB") },
+    {
+      id: 2,
+      title: "Date of birth",
+      text: new Date(selectedEmployee?.dateOfBirth).toLocaleDateString("en-GB"),
+    },
     { id: 3, title: "Passport No.", text: selectedEmployee?.passportNumber },
-    { id: 4, title: "Passport exp.date", text: new Date (selectedEmployee?.passportExpDate).toLocaleDateString("en-GB") },
+    {
+      id: 4,
+      title: "Passport exp.date",
+      text: new Date(selectedEmployee?.passportExpDate).toLocaleDateString(
+        "en-GB"
+      ),
+    },
     { id: 5, title: "Ethnicity", text: selectedEmployee?.ethnicity },
     { id: 6, title: "Religion", text: selectedEmployee?.religion },
-    { id: 7, title: "Marital status", text: selectedEmployee?.maritalStatus },
-    {
-      id: 8,
-      title: "Employment status of spouse",
-      text: selectedEmployee?.spouseInfo?.employmentStatus,
-    },
-    {
-      id: 9,
-      title: "No. of children",
-      text: selectedEmployee?.childrenInfo?.length,
-    },
+    { id: 7, title: "Marital status", text: selectedEmployee?.maritalStatus },   
   ].filter((item) => item.text !== undefined && item.text !== null);
 
   const experienceData = [
@@ -42,49 +63,6 @@ const EditEmployeeProfile = ({ selectedEmployee }) => {
       time: "2023 2023 - Present (5 years 2 months)",
     },
   ];
-  const familyInfoData = [
-    selectedEmployee?.spouseInfo
-      ? {
-          id: 1, //add spouse Id or _id
-          name: selectedEmployee.spouseInfo.fullName,
-          relationship: "Spouse",
-          dob: selectedEmployee.spouseInfo.dateOfBirth
-            ? new Date(
-                selectedEmployee.spouseInfo.dateOfBirth
-              ).toLocaleDateString("en-GB")
-            : "N/A",
-        }
-      : null,
-    ...(selectedEmployee?.childrenInfo || []).map((child, index) => ({
-      id: index + 2, //add child Id or _id
-      name: child.fullName,
-      relationship: "Child",
-      dob: new Date(child.dateOfBirth).toLocaleDateString("en-GB"),
-    })),
-  ].filter(Boolean);
-
-  const primaryContactData = [
-    selectedEmployee?.emergencyContact
-      ? {
-          id: 15,
-          name: selectedEmployee.emergencyContact.fullName,
-          relationship: selectedEmployee.emergencyContact.relationshipType,
-          phone: selectedEmployee.emergencyContact.phone || " - ",
-        }
-      : null,
-  ].filter(Boolean);
-
-  const secondaryContactData = [
-    { id: 1, title: "Name", text: "Karen Wills" },
-    { id: 2, title: "Relationship", text: "Brother" },
-    { id: 3, title: "Phone", text: "9876543210, 9876543210" },
-  ];
-  const bankInfoData = [
-    { id: 1, title: "Bank name", text: "ICICI Bank" },
-    { id: 2, title: "Bank account No.", text: "159843014641" },
-    { id: 3, title: "IFSC Code", text: "ICI24504" },
-    { id: 4, title: "PAN No", text: "TC000Y56" },
-  ];
 
   const educationData = [
     {
@@ -101,6 +79,7 @@ const EditEmployeeProfile = ({ selectedEmployee }) => {
     },
     // Add more education info data as needed
   ];
+
   return (
     <>
       <div className="tab-content">
@@ -122,10 +101,10 @@ const EditEmployeeProfile = ({ selectedEmployee }) => {
                     </Link>
                   </h3>
                   <ul className="personal-info">
-                    {personalInfoData.map((item, index) => (
+                    {personalInfoData.map((item) => (
                       <ListItem
                         id={item.id}
-                        key={index}
+                        key={item.id}
                         title={item.title}
                         text={item.text}
                       />
@@ -135,24 +114,7 @@ const EditEmployeeProfile = ({ selectedEmployee }) => {
               </div>
             </div>
           </div>
-          <div className="row">
-            {/* <div className="col-md-6 d-flex">
-              <div className="card profile-box flex-fill">
-                <div className="card-body">
-                  <h3 className="card-title">Bank information</h3>
-                  <ul className="personal-info">
-                    {bankInfoData.map((item, index) => (
-                      <ListItem
-                        id={item.id}
-                        key={index}
-                        title={item.title}
-                        text={item.text}
-                      />
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </div> */}
+          <div className="row">          
             <div className="col-md-6 d-flex">
               <div className="card profile-box flex-fill">
                 <div className="card-body">
@@ -179,11 +141,11 @@ const EditEmployeeProfile = ({ selectedEmployee }) => {
                         </tr>
                       </thead>
                       <tbody>
-                        {familyInfoData.map((item) => (
-                          <tr key={item.id}>
-                            <td>{item.name}</td>
-                            <td>{item.relationship}</td>
-                            <td>{item.dob}</td>
+                        {data?.familyMembers?.map((member) => (
+                          <tr key={member.id}>
+                            <td>{member.fullName}</td>
+                            <td>{member.relationshipType}</td>
+                            <td>{member.dateOfBirth}</td>
                             <td className="text-end">
                               <div className="dropdown dropdown-action">
                                 <Link
@@ -317,11 +279,11 @@ const EditEmployeeProfile = ({ selectedEmployee }) => {
                       </tr>
                     </thead>
                     <tbody>
-                      {primaryContactData.map((contact) => (
+                      {data?.emergencyContacts?.map((contact) => (
                         <tr key={contact.id}>
-                          <td>{contact.name}</td>
-                          <td>{contact.relationship}</td>
-                          <td>{contact.phone}</td>
+                          <td>{contact.fullName}</td>
+                          <td>{contact.relationshipType}</td>
+                          <td>{contact.phoneNumber}</td>
                           <td className="text-end">
                             <div className="dropdown dropdown-action">
                               <Link
@@ -329,7 +291,7 @@ const EditEmployeeProfile = ({ selectedEmployee }) => {
                                 data-bs-toggle="dropdown"
                                 className="action-icon dropdown-toggle"
                                 to="#"
-                                  title="Edit emergency contact"
+                                title="Edit emergency contact"
                               >
                                 <i className="material-icons">more_vert</i>
                               </Link>
