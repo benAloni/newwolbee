@@ -82,6 +82,8 @@ export const updateEmployeeVacation = async ({
     console.log("Error updating employee's vacation:", error);
   }
 };
+
+
 export const updateEmployeeSickLeave = async ({
   id,
   startDate,

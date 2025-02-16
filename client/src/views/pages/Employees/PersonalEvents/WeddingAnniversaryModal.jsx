@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactDatePicker from "react-datepicker";
-import { useUpdateEvent } from "./useUpdateEvent";
+import { useUpdateEvent } from "../../../../services/api/useUpdateEvent";
+import { Modal, Button } from "react-bootstrap";
 
 export default function WeddingAnniversaryModal({
   selectedAnniversaryDate,
@@ -10,6 +11,8 @@ export default function WeddingAnniversaryModal({
 }) {
   const { mutateAsync: updateAnniversaryDay } =
     useUpdateEvent("weddingAnniversary");
+
+  const [showModal, setShowModal] = useState(true);
 
   const handleAnniversaryDateChange = (date) => {
     setSelectedAnniversaryDate(date);
@@ -33,47 +36,52 @@ export default function WeddingAnniversaryModal({
     }
   };
 
+  // Handle modal close
+  const handleCloseModal = () => {
+    setShowModal(false);
+    closeModal();
+  };
+
   return (
-    <div className="sub-modal">
-      <h2>{selectedEmployee.fullname}</h2>
-      <div
-        style={{
-          width: "800px",
-          height: "500px",
-          padding: "20px",
-          textAlign: "center",
-        }}
-      >
-        <h2 style={{ marginTop: "30px", marginBottom: "10px" }}>
-          When is the wedding anniversary?
-        </h2>
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <div style={{ width: "250px" }}>
-            <ReactDatePicker
-              selected={selectedAnniversaryDate}
-              onChange={handleAnniversaryDateChange}
-              dateFormat="yyyy/MM/dd"
-              minDate={new Date()}
-              className="form-control form-control-solid w-250px "
-              placeholderText="Wedding Anniversary Date"
-            />
+    <Modal
+      backdrop="static"
+      keyboard={false}
+      centered
+      show={showModal}
+      onHide={handleCloseModal}
+    >
+      <Modal.Header closeButton>
+        <Modal.Title>
+          Wedding Anniversary Date for {selectedEmployee.fullName}
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <div style={{ textAlign: "center" }}>
+          <h2 style={{ marginTop: "30px", marginBottom: "10px" }}>
+            When is the wedding anniversary?
+          </h2>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <div style={{ width: "250px" }}>
+              <ReactDatePicker
+                selected={selectedAnniversaryDate}
+                onChange={handleAnniversaryDateChange}
+                dateFormat="yyyy/MM/dd"
+                minDate={new Date()} // Prevent selecting past dates
+                className="form-control form-control-solid w-250px"
+                placeholderText="Wedding Anniversary Date"
+              />
+            </div>
           </div>
         </div>
-        <button
-          onClick={handleSubmit}
-          style={{
-            marginTop: "30px",
-            padding: "10px 20px",
-            borderRadius: "5px",
-            border: "1px solid #ccc",
-            backgroundColor: "#4CAF50",
-            color: "white",
-            cursor: "pointer",
-          }}
-        >
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={handleCloseModal}>
+          Close
+        </Button>
+        <Button variant="primary" onClick={handleSubmit}>
           Confirm
-        </button>
-      </div>
-    </div>
+        </Button>
+      </Modal.Footer>
+    </Modal>
   );
 }

@@ -10,6 +10,7 @@ export default function AddFamilyMember({ selectedEmployee }) {
   const [selectedGender, setSelectedGender] = useState(null);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [successMessage, setSuccessMessage] = useState(""); // State to track success message
 
   const relationshipOptions = [
     { value: "son", label: "Son/Daughter" },
@@ -52,10 +53,17 @@ export default function AddFamilyMember({ selectedEmployee }) {
       return response.data;
     },
     onSuccess: () => {
-      console.log('Vacation updated successfully');
+      setSuccessMessage("Family member added successfully!"); // Set the success message
+      setTimeout(() => setSuccessMessage(""), 3000); // Hide the success message after 3 seconds
+      setSelectedRelationship(null)
+      setDob('')
+      setSelectedGender(null)
+      setName('')
+      setPhone('')
     },
     onError: (error) => {
-      console.error('Error updating vacation:', error);
+      setSuccessMessage("Error adding family member!"); // Set the success message
+      console.error('Error adding family member:', error);
     },
   });
 
@@ -71,14 +79,11 @@ export default function AddFamilyMember({ selectedEmployee }) {
       };  
       console.log(familyMemberData);
 
-      
       await addMember.mutateAsync(familyMemberData);
-  
     } catch (error) {
-      console.error("Error updating vacation:", error);
+      console.error("Error adding family member:", error);
     }
   };
-  
 
   return (
     <div id="family_info_modal" className="modal custom-modal fade" role="dialog">
@@ -96,93 +101,106 @@ export default function AddFamilyMember({ selectedEmployee }) {
             </button>
           </div>
           <div className="modal-body">
-              <div className="form-scroll">
-                <div className="card">
-                  <div className="card-body">
-                    <h3 className="card-title">Family Member</h3>
-                    <div className="row">
-                      <div className="col-md-6">
-                        <div className="input-block mb-3">
-                          <label className="col-form-label">
-                            Name <span className="text-danger">*</span>
-                          </label>
-                          <input
-                            className="form-control"
-                            type="text"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            required
-                          />
-                        </div>
+            {successMessage && (
+              <div className="alert alert-success">
+                {successMessage}
+              </div>
+            )}
+            <div className="form-scroll">
+              <div className="card">
+                <div className="card-body">
+                  <h3 className="card-title">Family Member</h3>
+                  <div className="row">
+                    <div className="col-md-6">
+                      <div className="input-block mb-3">
+                        <label className="col-form-label">
+                          Name <span className="text-danger">*</span>
+                        </label>
+                        <input
+                          className="form-control"
+                          type="text"
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
+                          required
+                        />
                       </div>
+                    </div>
 
-                      <div className="col-md-6">
-                        <div className="mb-3">
-                          <label className="col-form-label">
-                            Relationship <span className="text-danger">*</span>
-                          </label>
-                          <Select
-                            options={relationshipOptions}
-                            value={selectedRelationship}
-                            onChange={handleChange}
-                            placeholder="Select a relationship"
-                          />
-                        </div>
+                    <div className="col-md-6">
+                      <div className="mb-3">
+                        <label className="col-form-label">
+                          Relationship <span className="text-danger">*</span>
+                        </label>
+                        <Select
+                          options={relationshipOptions}
+                          value={selectedRelationship}
+                          onChange={handleChange}
+                          placeholder="Select a relationship"
+                        />
                       </div>
+                    </div>
 
-                      <div className="col-md-6">
-                        <div className="mb-3">
-                          <label className="col-form-label">
-                            Gender <span className="text-danger">*</span>
-                          </label>
-                          <Select
-                            options={genderOptions}
-                            value={selectedGender}
-                            onChange={handleGenderChange}
-                            placeholder="Select Gender"
-                          />
-                        </div>
+                    <div className="col-md-6">
+                      <div className="mb-3">
+                        <label className="col-form-label">
+                          Gender <span className="text-danger">*</span>
+                        </label>
+                        <Select
+                          options={genderOptions}
+                          value={selectedGender}
+                          onChange={handleGenderChange}
+                          placeholder="Select Gender"
+                        />
                       </div>
+                    </div>
 
-                      <div className="col-md-6">
-                        <div className="input-block mb-3">
-                          <label className="col-form-label">
-                            Date of birth <span className="text-danger">*</span>
-                          </label>
-                          <input
-                            className="form-control"
-                            type="date"
-                            required
-                            value={dob}
-                            onChange={handleDateChange}
-                          />
-                        </div>
+                    <div className="col-md-6">
+                      <div className="input-block mb-3">
+                        <label className="col-form-label">
+                          Date of birth <span className="text-danger">*</span>
+                        </label>
+                        <input
+                          className="form-control"
+                          type="date"
+                          required
+                          value={dob}
+                          onChange={handleDateChange}
+                        />
                       </div>
+                    </div>
 
-                      <div className="col-md-6">
-                        <div className="input-block mb-3">
-                          <label className="col-form-label">
-                            Phone <span className="text-danger">*</span>
-                          </label>
-                          <input
-                            className="form-control"
-                            type="text"
-                            value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
-                            required
-                          />
-                        </div>
+                    <div className="col-md-6">
+                      <div className="input-block mb-3">
+                        <label className="col-form-label">
+                          Phone <span className="text-danger">*</span>
+                        </label>
+                        <input
+                          className="form-control"
+                          type="text"
+                          value={phone}
+                          onChange={(e) => setPhone(e.target.value)}
+                          required
+                        />
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
+            </div>
 
-              <div className="submit-section">
-                <button className="btn btn-primary submit-btn" onClick={addFamily}>
-                  Submit
-                </button>
-              </div>
+            <div className="submit-section">
+              <button className="btn btn-primary submit-btn" onClick={addFamily}>
+                Submit
+              </button>
+              <button
+                type="button"
+                className="btn btn-secondary submit-btn"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       </div>

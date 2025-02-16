@@ -1,15 +1,20 @@
-import React from 'react'
+import React, { useState } from "react";
 import ReactDatePicker from "react-datepicker";
+import { useUpdateSickDay } from "../../../../services/api/useUpdateEvent";
+import { Modal, Button } from "react-bootstrap";
 
 export default function SickLeaveModal({
-    employeeName,
-    selectedStartDate,
-    selectedEndDate,
-    setSelectedStartDate,
-    setSelectedEndDate,
-    updateSickDay,
-  }) {
- // Handle start date change
+  employeeName,
+  selectedEmployee,
+  closeModal,
+}) {
+  const [selectedStartDate, setSelectedStartDate] = useState(null);
+  const [selectedEndDate, setSelectedEndDate] = useState(null);
+  const { updateSickDay } = useUpdateSickDay();
+
+  const [showModal, setShowModal] = useState(true);
+
+  // Handle start date change
   const handleStartDateChange = (date) => {
     setSelectedStartDate(date);
   };
@@ -19,58 +24,72 @@ export default function SickLeaveModal({
     setSelectedEndDate(date);
   };
 
+  // Handle form submission
+  const handleSubmit = async () => {
+    try {
+      await updateSickDay(selectedEmployee, selectedStartDate, selectedEndDate);
+      closeModal();
+    } catch (error) {
+      console.error("Error updating sick leave:", error);
+    }
+  };
+
+  // Handle modal close
+  const handleCloseModal = () => {
+    setShowModal(false);
+    closeModal();
+  };
 
   return (
-    <div className="sub-modal">
-      <h2>{employeeName}</h2>
-      <div
-        style={{
-          width: "800px",
-          height: "500px",
-          padding: "20px",
-          textAlign: "center",
-        }}
-      >
-        <h2 style={{ marginTop: "30px", marginBottom: "10px" }}>When?</h2>
-        <div style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
-          <div style={{ width: "250px" }}>
-            <ReactDatePicker
-              selected={selectedStartDate}
-              onChange={handleStartDateChange}
-              dateFormat="yyyy/MM/dd" // Only display date without time
-              minDate={new Date()} // Prevent selecting past dates
-              className='form-control form-control-solid w-250px '
-              placeholderText="Start Date"
-            />
-          </div>
-          <div style={{ width: "250px" }}>
-            <ReactDatePicker
-              selected={selectedEndDate}
-              onChange={handleEndDateChange}
-              dateFormat="yyyy/MM/dd" // Only display date without time
-              minDate={selectedStartDate} // Ensure end date is not before start date
-              className='form-control form-control-solid w-250px '
-              placeholderText="End Date"
-            />
+    <Modal
+      show={showModal}
+      onHide={handleCloseModal}
+      backdrop="static"
+      keyboard={false}
+      centered
+    >
+      <Modal.Header closeButton>
+        <Modal.Title>
+          Update Sick Leave for {selectedEmployee.fullName}
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <div style={{ textAlign: "center" }}>
+          <h2 style={{ marginTop: "30px", marginBottom: "10px" }}>When?</h2>
+          <div
+            style={{ display: "flex", gap: "10px", justifyContent: "center" }}
+          >
+            <div style={{ width: "250px" }}>
+              <ReactDatePicker
+                selected={selectedStartDate}
+                onChange={handleStartDateChange}
+                dateFormat="yyyy/MM/dd"
+                minDate={new Date()} // Prevent selecting past dates
+                className="form-control form-control-solid w-250px"
+                placeholderText="Start Date"
+              />
+            </div>
+            <div style={{ width: "250px" }}>
+              <ReactDatePicker
+                selected={selectedEndDate}
+                onChange={handleEndDateChange}
+                dateFormat="yyyy/MM/dd"
+                minDate={selectedStartDate} // Ensure end date is not before start date
+                className="form-control form-control-solid w-250px"
+                placeholderText="End Date"
+              />
+            </div>
           </div>
         </div>
-        <button
-          onClick={() => {
-            updateSickDay(selectedStartDate, selectedEndDate);
-          }}
-          style={{
-            marginTop: "30px",
-            padding: "10px 20px",
-            borderRadius: "5px",
-            border: "1px solid #ccc",
-            backgroundColor: "#4CAF50",
-            color: "white",
-            cursor: "pointer",
-          }}
-        >
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={handleCloseModal}>
+          Close
+        </Button>
+        <Button variant="primary" onClick={handleSubmit}>
           Confirm
-        </button>
-      </div>
-    </div>
+        </Button>
+      </Modal.Footer>
+    </Modal>
   );
-};
+}

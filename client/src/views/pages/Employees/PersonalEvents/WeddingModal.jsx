@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from "react";
 import ReactDatePicker from "react-datepicker";
-import { useUpdateEvent } from './useUpdateEvent';
+import { useUpdateEvent } from "../../../../services/api/useUpdateEvent";
+import { Modal, Button } from "react-bootstrap";
 
 export default function WeddingModal({
   selectedWeddingDate,
@@ -10,65 +11,77 @@ export default function WeddingModal({
 }) {
   const { mutateAsync: updateWeddingDay } = useUpdateEvent("wedding");
 
+  const [showModal, setShowModal] = useState(true);
+
   const handleWeddingDateChange = (date) => {
     setSelectedWeddingDate(date);
-  };  
+  };
 
   const handleSubmit = async () => {
     try {
-      const formattedWeddingDate = new Date(selectedWeddingDate);
-      const weddingDateString = `${formattedWeddingDate.getFullYear()}-${(formattedWeddingDate.getMonth() + 1).toString().padStart(2, '0')}-${formattedWeddingDate.getDate().toString().padStart(2, '0')}`;
-  
       const weddingData = {
         id: selectedEmployee.id,
         eventType: "wedding",
         startDate: selectedWeddingDate,
-        endDate: selectedWeddingDate, 
+        endDate: selectedWeddingDate,
         show: false,
       };
-            
-  console.log(weddingData);
-  
-      await updateWeddingDay(weddingData); 
-      setSelectedWeddingDate(null);
+
+      await updateWeddingDay(weddingData);
+      setSelectedWeddingDate(null); // Reset selected date
       closeModal();
     } catch (error) {
       console.error("Error updating wedding day:", error);
     }
   };
 
+  // Handle modal close
+  const handleCloseModal = () => {
+    setShowModal(false);
+    closeModal();
+  };
+
   return (
-    <div className="sub-modal">
-      <h2>{selectedEmployee.fullname}</h2>
-      <div style={{ width: "800px", height: "500px", padding: "20px", textAlign: "center" }}>
-        <h2 style={{ marginTop: "30px", marginBottom: "10px" }}>When is the wedding?</h2>
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <div style={{ width: "250px" }}>
-            <ReactDatePicker
-              selected={selectedWeddingDate}
-              onChange={handleWeddingDateChange}
-              dateFormat="yyyy/MM/dd"
-              minDate={new Date()}
-              className='form-control form-control-solid w-250px '
-              placeholderText="Wedding Date"
-            />
+    <Modal
+      backdrop="static"
+      keyboard={false}
+      centered
+      show={showModal}
+      onHide={handleCloseModal}
+    >
+      {" "}
+      <Modal.Header closeButton>
+        <Modal.Title>
+          Set Wedding Date for {selectedEmployee.fullName}
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <div style={{ textAlign: "center" }}>
+          <h2 style={{ marginTop: "30px", marginBottom: "10px" }}>
+            When is the wedding?
+          </h2>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <div style={{ width: "250px" }}>
+              <ReactDatePicker
+                selected={selectedWeddingDate}
+                onChange={handleWeddingDateChange}
+                dateFormat="yyyy/MM/dd"
+                minDate={new Date()} // Prevent selecting past dates
+                className="form-control form-control-solid w-250px"
+                placeholderText="Wedding Date"
+              />
+            </div>
           </div>
         </div>
-        <button
-          onClick={handleSubmit}
-          style={{
-            marginTop: "30px",
-            padding: "10px 20px",
-            borderRadius: "5px",
-            border: "1px solid #ccc",
-            backgroundColor: "#4CAF50",
-            color: "white",
-            cursor: "pointer",
-          }}
-        >
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={handleCloseModal}>
+          Close
+        </Button>
+        <Button variant="primary" onClick={handleSubmit}>
           Confirm
-        </button>
-      </div>
-    </div>
+        </Button>
+      </Modal.Footer>
+    </Modal>
   );
 }

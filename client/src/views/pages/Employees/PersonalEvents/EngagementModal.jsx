@@ -1,15 +1,17 @@
-import React from 'react';
+import React, { useState } from "react";
 import ReactDatePicker from "react-datepicker";
-import { useUpdateEvent } from './useUpdateEvent'; // Import the hook
+import { useUpdateEvent } from "../../../../services/api/useUpdateEvent";
+import { Modal, Button } from "react-bootstrap";
 
 export default function EngagementModal({
-    selectedEngagementDate,
-    setSelectedEngagementDate,
-    selectedEmployee,  // Ensure that employee data is passed
-    closeModal,         // Ensure closeModal function is passed
+  selectedEngagementDate,
+  setSelectedEngagementDate,
+  selectedEmployee,
+  closeModal,
 }) {
-  // Get the mutation function using the useUpdateEvent hook
-  const { mutateAsync: updateEngagementDay } = useUpdateEvent("engagement"); // Pass "engagement" as eventType
+  const { mutateAsync: updateEngagementDay } = useUpdateEvent("engagement");
+
+  const [showModal, setShowModal] = useState(true);
 
   // Handle engagement date change
   const handleEngagementDateChange = (date) => {
@@ -20,59 +22,66 @@ export default function EngagementModal({
     try {
       const engagementData = {
         id: selectedEmployee.id,
-        eventType: "engagement", // Set the eventType to "engagement"
+        eventType: "engagement",
         startDate: selectedEngagementDate,
-        endDate: selectedEngagementDate, // Use the same date for engagement day
-        show: false, // Set the event visibility flag here
+        endDate: selectedEngagementDate,
+        show: false,
       };
 
-      await updateEngagementDay(engagementData);  // Pass the structured data with eventFlag
+      await updateEngagementDay(engagementData);
       setSelectedEngagementDate(null);
-      closeModal();  // Close modal after success
+      closeModal();
     } catch (error) {
       console.error("Error updating engagement day:", error);
     }
   };
 
+  // Handle modal close
+  const handleCloseModal = () => {
+    setShowModal(false);
+    closeModal();
+  };
+
   return (
-    <div className="sub-modal">
-      <h2>{selectedEmployee.fullname}</h2>
-      <div
-        style={{
-          width: "800px",
-          height: "500px",
-          padding: "20px",
-          textAlign: "center",
-        }}
-      >
-        <h2 style={{ marginTop: "30px", marginBottom: "10px" }}>When is the engagement?</h2>
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <div style={{ width: "250px" }}>
-            <ReactDatePicker
-              selected={selectedEngagementDate}
-              onChange={handleEngagementDateChange}
-              dateFormat="yyyy/MM/dd" // Only display date without time
-              minDate={new Date()} // Prevent selecting past dates
-              className='form-control form-control-solid w-250px '
-              placeholderText="Engagement Date"
-            />
+    <Modal
+      backdrop="static"
+      keyboard={false}
+      centered
+      show={showModal}
+      onHide={handleCloseModal}
+    >
+      <Modal.Header closeButton>
+        <Modal.Title>
+          Engagement Date for {selectedEmployee.fullName}
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <div style={{ textAlign: "center" }}>
+          <h2 style={{ marginTop: "30px", marginBottom: "10px" }}>
+            When is the engagement?
+          </h2>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <div style={{ width: "250px" }}>
+              <ReactDatePicker
+                selected={selectedEngagementDate}
+                onChange={handleEngagementDateChange}
+                dateFormat="yyyy/MM/dd" // Only display date without time
+                minDate={new Date()} // Prevent selecting past dates
+                className="form-control form-control-solid w-250px"
+                placeholderText="Engagement Date"
+              />
+            </div>
           </div>
         </div>
-        <button
-          onClick={handleSubmit}
-          style={{
-            marginTop: "30px",
-            padding: "10px 20px",
-            borderRadius: "5px",
-            border: "1px solid #ccc",
-            backgroundColor: "#4CAF50",
-            color: "white",
-            cursor: "pointer",
-          }}
-        >
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={handleCloseModal}>
+          Close
+        </Button>
+        <Button variant="primary" onClick={handleSubmit}>
           Confirm
-        </button>
-      </div>
-    </div>
+        </Button>
+      </Modal.Footer>
+    </Modal>
   );
-};
+}
