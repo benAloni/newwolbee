@@ -63,52 +63,6 @@ const EditEmployeeProfile = ({ selectedEmployee }) => {
       time: "2023 2023 - Present (5 years 2 months)",
     },
   ];
-<<<<<<< HEAD
-=======
-  const familyInfoData = [
-    selectedEmployee?.spouseInfo
-      ? {
-          id: 1, //add spouse Id or _id
-          name: selectedEmployee.spouseInfo.fullName,
-          relationship: "Spouse",
-          dob: selectedEmployee.spouseInfo.dateOfBirth
-            ? new Date(
-                selectedEmployee.spouseInfo.dateOfBirth
-              ).toLocaleDateString("en-GB")
-            : "N/A",
-        }
-      : null,
-    ...(selectedEmployee?.familyMembers || []).map((child, index) => ({
-      id: index + 2, //add child Id or _id
-      name: child.name,
-      relationship: child.relationship,
-      dob: child.dateOfBirth ? new Date(child.dateOfBirth).toLocaleDateString() : 'N/A',
-    })),
-  ].filter(Boolean);
-
-  const primaryContactData = [
-    selectedEmployee?.emergencyContact
-      ? {
-          id: 15,
-          name: selectedEmployee.emergencyContact.fullName,
-          relationship: selectedEmployee.emergencyContact.relationshipType,
-          phone: selectedEmployee.emergencyContact.phone || " - ",
-        }
-      : null,
-  ].filter(Boolean);
-
-  const secondaryContactData = [
-    { id: 1, title: "Name", text: "Karen Wills" },
-    { id: 2, title: "Relationship", text: "Brother" },
-    { id: 3, title: "Phone", text: "9876543210, 9876543210" },
-  ];
-  const bankInfoData = [
-    { id: 1, title: "Bank name", text: "ICICI Bank" },
-    { id: 2, title: "Bank account No.", text: "159843014641" },
-    { id: 3, title: "IFSC Code", text: "ICI24504" },
-    { id: 4, title: "PAN No", text: "TC000Y56" },
-  ];
->>>>>>> 2ad3f7c487675acd3e875feeb5cb3e3a428d787d
 
   const educationData = [
     {

@@ -91,7 +91,7 @@ export const updateEmployeeVacation = async ({
   const selectedEndDate = new Date(endDate)
   selectedEndDate.setDate(selectedEndDate.getDate() + 1)
   try {
-    const response = await client.post("/updateEmployeeVacation", {
+    const response = await client.post("/employee/create-vacation", {
       id,
       purposeOfTrip,
       destination,

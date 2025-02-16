@@ -63,7 +63,7 @@ router.post("/addEmployee", addEmployee);
 //delete an employee
 router.delete("/deleteEmployee", deleteEmployee);
 //add Update employee
-router.post("/updateEmployeeVacation", updateEmployeeVacation);
+router.post("/employee/create-vacation", updateEmployeeVacation);
 //update employee sick leave 
 router.post("/updateEmployeeSickLeave", updateEmployeeSickLeave)
 

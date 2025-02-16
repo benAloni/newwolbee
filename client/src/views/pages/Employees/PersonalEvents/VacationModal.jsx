@@ -4,26 +4,26 @@ import ReactDatePicker from "react-datepicker";
 import Select from "react-select";
 import axios from "axios";
 import "react-datepicker/dist/react-datepicker.css";
-import { useUpdateVacation } from "../../../../services/api/useUpdateEvent";
+// import { useUpdateVacation } from "../../../../services/api/useUpdateEvent";
+import { updateEmployeeVacation } from "../../../../services";
 
-const VacationModal = ({ employeeName, closeModal, selectedEmployee }) => {
+const VacationModal = ({ closeModal, selectedEmployee }) => {
   const [countryOptions, setCountryOptions] = useState([]);
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const [selectedEndDate, setSelectedEndDate] = useState(null);
   const [selectedPurpose, setSelectedPurpose] = useState(null);
   const [selectedCountry, setSelectedCountry] = useState(null);
-  const { updateVacation } = useUpdateVacation();
+  // const { updateVacation } = useUpdateVacation();
 
   const [showModal, setShowModal] = useState(true); // Modal visibility state
-
-  // Fetch countries dynamically when the component mounts
+ 
   useEffect(() => {
     const fetchCountries = async () => {
       try {
         const response = await axios.get("https://restcountries.com/v3.1/all");
         const countries = response.data.map((country) => ({
-          value: country.cca2, // Use the country code (alpha-2)
-          label: country.name.common, // Common name of the country
+          value: country.cca2, 
+          label: country.name.common, 
         }));
 
         const sortedCountries = countries.sort((a, b) =>
@@ -56,23 +56,23 @@ const VacationModal = ({ employeeName, closeModal, selectedEmployee }) => {
 
   const handleSubmit = async () => {
     try {
-      await updateVacation(
-        selectedEmployee,
-        selectedPurpose,
-        selectedCountry,
-        selectedStartDate,
-        selectedEndDate
-      );
-
-      // Reset the form data after submission
-      setSelectedStartDate(null);
-      setSelectedEndDate(null);
-      setSelectedPurpose(null);
-      setSelectedCountry(null);
+      const vacationData = {
+        id: selectedEmployee?.id,
+        purposeOfTrip: selectedPurpose,
+        destination: selectedCountry?.value,
+        startDate: selectedStartDate, 
+        endDate: selectedEndDate, 
+      }
+      await updateEmployeeVacation(vacationData)
       closeModal();
     } catch (error) {
       console.error("Error updating vacation:", error);
     }
+
+          setSelectedStartDate(null);
+          setSelectedEndDate(null);
+          setSelectedPurpose(null);
+          setSelectedCountry(null);
   };
 
   // Handle modal close
@@ -132,7 +132,7 @@ const VacationModal = ({ employeeName, closeModal, selectedEmployee }) => {
               <ReactDatePicker
                 selected={selectedStartDate}
                 onChange={handleStartDateChange}
-                dateFormat="yyyy/MM/dd"
+                dateFormat="dd/MM/yyyy"
                 minDate={new Date()}
                 className="form-control form-control-solid w-250px "
                 placeholderText="Start Date"
@@ -142,7 +142,7 @@ const VacationModal = ({ employeeName, closeModal, selectedEmployee }) => {
               <ReactDatePicker
                 selected={selectedEndDate}
                 onChange={handleEndDateChange}
-                dateFormat="yyyy/MM/dd"
+                dateFormat="dd/MM/yyyy"
                 minDate={selectedStartDate}
                 className="form-control form-control-solid w-250px "
                 placeholderText="End Date"
