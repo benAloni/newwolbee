@@ -1,84 +1,151 @@
-import React, { useState } from 'react';
-import { Modal, Button } from 'react-bootstrap';
-import DatePicker from 'react-datepicker'; // For date picking
-import "react-datepicker/dist/react-datepicker.css"; // Import date picker styles
+import React, { useState, useEffect } from "react";
+import { Modal, Button } from "react-bootstrap";
+import Select from "react-select";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { useAddEventForSon } from "../../../../services/api/useUpdateEvent";
 
-const EmployeesChildren = ({ employeeName, familyMembers, closeModal, onAddSickDay, onAddVacation }) => {
+const EmployeesChildren = ({
+  employeeName,
+  familyMembers,
+  closeModal,
+  selectedEmployee,
+  setCurrentPage,
+}) => {
   const [selectedSon, setSelectedSon] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  
-  // States for the sick day date picker
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+  const [eventType, setEventType] = useState(null);
 
-  // Filter the family members to get only the sons
-  const sons = familyMembers?.filter(member => member.relationship === "son") || [];
+  const { addEventForSon } = useAddEventForSon();
+
+  // Filter family members for sons
+  const sons =
+    familyMembers?.filter((member) => member.relationship === "son") || [];
+
+  // Reset selectedSon when selectedEmployee changes
+  useEffect(() => {
+    setSelectedSon(null); // Clear the selected son when the employee changes
+  }, [selectedEmployee]);
 
   const handleSonClick = (son) => {
-    setSelectedSon(son);  // Set the selected son
-    setShowModal(true);    // Show the modal for adding sick day
+    setSelectedSon(son);
+    setShowModal(true); // Show modal after selecting a son
   };
 
-  const handleAddSickDay = () => {
-    // Pass the selected son and the dates to the parent function
-    if (startDate && endDate) {
-      onAddSickDay(selectedSon, startDate, endDate); // Pass the start and end dates
+  const handleAddEvent = async () => {
+    if (startDate && endDate && selectedSon && eventType) {
+      try {
+        await addEventForSon(
+          selectedSon,
+          startDate,
+          endDate,
+          selectedEmployee,
+          eventType.value
+        );
+        setShowModal(false); // Close modal after successful event creation
+      } catch (error) {
+        console.error("Error adding event:", error);
+      }
     }
-    setShowModal(false);  // Close the modal
+  };
+
+  const handleGoBackModal = () => {
+    setCurrentPage("employeeSelection"); // Go back to employee selection page
   };
 
   const handleCloseModal = () => {
-    setShowModal(false);  // Close the modal
+    setShowModal(false);
+    closeModal(); // Close the modal when finished
   };
 
   return (
     <div>
-      <h3>{employeeName}'s Sons</h3>
-      <div>
-        {sons.length > 0 ? (
-          sons.map((son, index) => (
-            <div key={index} style={{ marginBottom: '15px' }}>
-              <p onClick={() => handleSonClick(son)} style={{ cursor: 'pointer' }}>
-                {son.name}
-              </p> 
+      {selectedSon === null ? (
+        <div className="employee-list">
+          {sons.length > 0 ? (
+            sons.map((son, index) => (
+              <div key={index} className="employee-sons">
+                <p onClick={() => handleSonClick(son)}>{son.name}</p>
+              </div>
+            ))
+          ) : (
+            <div>
+              <p>No sons found for this employee.</p>
+              <Button variant="secondary" onClick={handleGoBackModal}>
+                Go Back
+              </Button>
             </div>
-          ))
-        ) : (
-          <p>No sons found for this employee.</p>
-        )}
-      </div>
+          )}
+        </div>
+      ) : null}
 
-      {/* Sick Day Modal */}
+      {/* Modal for adding event when a son is selected */}
       {showModal && selectedSon && (
-        <Modal show={showModal} onHide={handleCloseModal}>
+        <Modal
+          backdrop="static"
+          keyboard={false}
+          centered
+          show={showModal}
+          onHide={handleCloseModal}
+        >
           <Modal.Header closeButton>
-            <Modal.Title>Add Sick Day for {selectedSon.name}</Modal.Title>
+            <Modal.Title>Add Event for {selectedSon.name}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <div>
               <label>Start Date:</label>
               <DatePicker
                 selected={startDate}
-                onChange={date => setStartDate(date)}
+                onChange={(date) => setStartDate(date)}
                 dateFormat="yyyy-MM-dd"
                 placeholderText="Select start date"
                 className="form-control"
               />
             </div>
-            <div style={{ marginTop: '10px' }}>
+            <div style={{ marginTop: "10px" }}>
               <label>End Date:</label>
               <DatePicker
                 selected={endDate}
-                onChange={date => setEndDate(date)}
+                onChange={(date) => setEndDate(date)}
                 dateFormat="yyyy-MM-dd"
                 placeholderText="Select end date"
                 className="form-control"
               />
             </div>
+            <div style={{ marginTop: "10px" }}>
+              <label>Event:</label>
+              <Select
+                options={[
+                  { value: "sickday", label: "Sick Day" },
+                  { value: "birthday", label: "Birthday" },
+                  { value: "schoolGraduation", label: "School Graduation" },
+                  {
+                    value: "dischargeFromMilitaryService",
+                    label: "Discharge from Military Service",
+                  },
+                  { value: "militaryDraftDay", label: "Military Draft Day" },
+                  {
+                    value: "startingFirstGrade",
+                    label: "Starting First Grade",
+                  },
+                ]}
+                value={eventType}
+                onChange={(selectedOption) => setEventType(selectedOption)}
+                placeholder="Select an event"
+                isClearable
+                isSearchable
+              />
+            </div>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleCloseModal}>Close</Button>
-            <Button variant="primary" onClick={handleAddSickDay}>Add Sick Day</Button>
+            <Button variant="secondary" onClick={handleCloseModal}>
+              Close
+            </Button>
+            <Button variant="primary" onClick={handleAddEvent}>
+              Add Event
+            </Button>
           </Modal.Footer>
         </Modal>
       )}

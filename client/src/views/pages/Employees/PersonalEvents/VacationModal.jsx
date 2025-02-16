@@ -1,22 +1,20 @@
 import React, { useState, useEffect } from "react";
+import { Modal, Button } from "react-bootstrap";
 import ReactDatePicker from "react-datepicker";
 import Select from "react-select";
 import axios from "axios";
 import "react-datepicker/dist/react-datepicker.css";
+import { useUpdateVacation } from "../../../../services/api/useUpdateEvent";
 
-const VacationModal = ({
-  employeeName,
-  selectedStartDate,
-  selectedEndDate,
-  selectedPurpose,
-  selectedCountry,
-  setSelectedStartDate,
-  setSelectedEndDate,
-  setSelectedPurpose,
-  setSelectedCountry,
-  updateVacation,
-}) => {
+const VacationModal = ({ employeeName, closeModal, selectedEmployee }) => {
   const [countryOptions, setCountryOptions] = useState([]);
+  const [selectedStartDate, setSelectedStartDate] = useState(null);
+  const [selectedEndDate, setSelectedEndDate] = useState(null);
+  const [selectedPurpose, setSelectedPurpose] = useState(null);
+  const [selectedCountry, setSelectedCountry] = useState(null);
+  const { updateVacation } = useUpdateVacation();
+
+  const [showModal, setShowModal] = useState(true); // Modal visibility state
 
   // Fetch countries dynamically when the component mounts
   useEffect(() => {
@@ -28,7 +26,6 @@ const VacationModal = ({
           label: country.name.common, // Common name of the country
         }));
 
-        // Sort countries alphabetically by country name
         const sortedCountries = countries.sort((a, b) =>
           a.label.localeCompare(b.label)
         );
@@ -57,134 +54,157 @@ const VacationModal = ({
     setSelectedPurpose(purpose);
   };
 
+  const handleSubmit = async () => {
+    try {
+      await updateVacation(
+        selectedEmployee,
+        selectedPurpose,
+        selectedCountry,
+        selectedStartDate,
+        selectedEndDate
+      );
+
+      // Reset the form data after submission
+      setSelectedStartDate(null);
+      setSelectedEndDate(null);
+      setSelectedPurpose(null);
+      setSelectedCountry(null);
+      closeModal();
+    } catch (error) {
+      console.error("Error updating vacation:", error);
+    }
+  };
+
+  // Handle modal close
+  const handleCloseModal = () => {
+    setShowModal(false);
+    closeModal();
+  };
+
   return (
-    <div className="sub-modal">
-      <h2>{employeeName}</h2>
-      <div
-        style={{
-          width: "800px",
-          height: "500px",
-          padding: "20px",
-          textAlign: "center",
-        }}
-      >
-        <h2 style={{ marginBottom: "20px" }}>Purpose</h2>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            gap: "15px",
-            flexWrap: "wrap",
-          }}
-        >
+    <Modal
+      backdrop="static"
+      keyboard={false}
+      centered
+      show={showModal}
+      onHide={handleCloseModal}
+    >
+      <Modal.Header closeButton>
+        <Modal.Title>Add Vacation for {selectedEmployee.fullName}</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <div style={{ textAlign: "center" }}>
+          <h2 style={{ marginTop: "30px", marginBottom: "10px" }}>Where to?</h2>
+          <Select
+            options={countryOptions}
+            value={selectedCountry}
+            onChange={setSelectedCountry}
+            placeholder="Select a country"
+            isClearable
+            isSearchable
+            styles={{
+              container: (provided) => ({
+                ...provided,
+                margin: "0 auto",
+                maxWidth: "300px",
+              }),
+              control: (provided) => ({
+                ...provided,
+                borderRadius: "5px",
+                borderColor: "#ccc",
+                boxShadow: "none",
+                "&:hover": {
+                  borderColor: "#aaa",
+                },
+              }),
+              menu: (provided) => ({
+                ...provided,
+                borderRadius: "5px",
+              }),
+            }}
+          />
+
+          <h2 style={{ marginTop: "30px", marginBottom: "10px" }}>When?</h2>
           <div
-            onClick={() => handlePurposeSelection("business trip")}
+            style={{ display: "flex", gap: "10px", justifyContent: "center" }}
+          >
+            <div style={{ width: "250px" }}>
+              <ReactDatePicker
+                selected={selectedStartDate}
+                onChange={handleStartDateChange}
+                dateFormat="yyyy/MM/dd"
+                minDate={new Date()}
+                className="form-control form-control-solid w-250px "
+                placeholderText="Start Date"
+              />
+            </div>
+            <div style={{ width: "250px" }}>
+              <ReactDatePicker
+                selected={selectedEndDate}
+                onChange={handleEndDateChange}
+                dateFormat="yyyy/MM/dd"
+                minDate={selectedStartDate}
+                className="form-control form-control-solid w-250px "
+                placeholderText="End Date"
+              />
+            </div>
+          </div>
+          <br />
+          <h2 style={{ marginBottom: "20px" }}>Purpose</h2>
+          <div
             style={{
-              padding: "20px",
-              borderRadius: "10px",
-              border:
-                selectedPurpose === "business trip"
-                  ? "3px solid green"
-                  : "3px solid #ccc", // Adding thickness to the border
-              cursor: "pointer",
-              width: "150px",
-              textAlign: "center",
-              transition: "border 0.3s ease", // Smooth transition effect for border change
+              display: "flex",
+              justifyContent: "center",
+              gap: "15px",
+              flexWrap: "wrap",
             }}
           >
-            Business
-          </div>
-          <div
-            onClick={() => handlePurposeSelection("pleasure")}
-            style={{
-              padding: "20px",
-              borderRadius: "10px",
-              border:
-                selectedPurpose === "pleasure"
-                  ? "3px solid green"
-                  : "3px solid #ccc", // Adding thickness to the border
-              cursor: "pointer",
-              width: "150px",
-              textAlign: "center",
-              transition: "border 0.3s ease", // Smooth transition effect for border change
-            }}
-          >
-            Pleasure
-          </div>
-        </div>
-
-        <h2 style={{ marginTop: "30px", marginBottom: "10px" }}>When?</h2>
-        <div style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
-          <div style={{ width: "250px" }}>
-            <ReactDatePicker
-              selected={selectedStartDate}
-              onChange={handleStartDateChange}
-              dateFormat="yyyy/MM/dd" // Only display date without time
-              minDate={new Date()} // Prevent selecting past dates
-              className='form-control form-control-solid w-250px '
-              placeholderText="Start Date"
-            />
-          </div>
-          <div style={{ width: "250px" }}>
-            <ReactDatePicker
-              selected={selectedEndDate}
-              onChange={handleEndDateChange}
-              dateFormat="yyyy/MM/dd" // Only display date without time
-              minDate={selectedStartDate} // Ensure end date is not before start date
-              className='form-control form-control-solid w-250px '
-              placeholderText="End Date"
-            />
+            <div
+              onClick={() => handlePurposeSelection("business trip")}
+              style={{
+                padding: "20px",
+                borderRadius: "10px",
+                border:
+                  selectedPurpose === "business trip"
+                    ? "3px solid green"
+                    : "3px solid #ccc",
+                cursor: "pointer",
+                width: "150px",
+                textAlign: "center",
+                transition: "border 0.3s ease",
+              }}
+            >
+              Business
+            </div>
+            <div
+              onClick={() => handlePurposeSelection("pleasure")}
+              style={{
+                padding: "20px",
+                borderRadius: "10px",
+                border:
+                  selectedPurpose === "pleasure"
+                    ? "3px solid green"
+                    : "3px solid #ccc",
+                cursor: "pointer",
+                width: "150px",
+                textAlign: "center",
+                transition: "border 0.3s ease",
+              }}
+            >
+              Pleasure
+            </div>
           </div>
         </div>
-
-        <h2 style={{ marginTop: "30px", marginBottom: "10px" }}>Where to?</h2>
-        <Select
-          options={countryOptions} // Use the sorted list of countries
-          value={selectedCountry}
-          onChange={setSelectedCountry}
-          placeholder="Select a country"
-          isClearable
-          isSearchable
-          styles={{
-            container: (provided) => ({
-              ...provided,
-              margin: "0 auto",
-              maxWidth: "300px",
-            }),
-            control: (provided) => ({
-              ...provided,
-              borderRadius: "5px",
-              borderColor: "#ccc",
-              boxShadow: "none",
-              "&:hover": {
-                borderColor: "#aaa",
-              },
-            }),
-            menu: (provided) => ({
-              ...provided,
-              borderRadius: "5px",
-            }),
-          }}
-        />
-
-        <button
-          onClick={() => {
-            updateVacation(selectedStartDate, selectedEndDate);
-          }}
-          style={{
-            marginTop: "30px",
-            padding: "10px 20px",
-            borderRadius: "5px",
-            border: "1px solid #ccc",
-            backgroundColor: "#4CAF50",
-            color: "white",
-            cursor: "pointer",
-          }}
-        >
-          Confirm
-        </button>
-      </div>
-    </div>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={handleCloseModal}>
+          Close
+        </Button>
+        <Button variant="primary" onClick={handleSubmit}>
+          Add Event
+        </Button>
+      </Modal.Footer>
+    </Modal>
   );
 };
 

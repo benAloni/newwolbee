@@ -68,6 +68,7 @@ const employeeSchema = new mongoose.Schema({
   phone: {
     type: String,
     required: [true, "Please provide Phone Number"],
+    
   },
   maritalStatus: {
     type: String,
@@ -83,6 +84,7 @@ const employeeSchema = new mongoose.Schema({
     dateOfBirth: {
       type: Date,
     },
+    
     nationality: { type: String },
     employmentStatus: { type: String },
   },
@@ -92,11 +94,13 @@ const employeeSchema = new mongoose.Schema({
         relationship: { type: String },
         gender: { type: String },
         dateOfBirth: { type: Date },
+        show: { type: Boolean },
         phone: { type: Number },
         childrenEvents: [{ 
           typeOfEvent: { type: String },
           startDate: { type: Date },
-          endDate: { type: Date }
+          endDate: { type: Date },
+          show: { type: Boolean },
         }],
       },
     ],
@@ -155,6 +159,26 @@ const employeeSchema = new mongoose.Schema({
       endDate: { type: Date },
     },
   ],
+
+  wedding: [
+    {
+      startDate: { type: Date },
+      show: { type: Boolean },
+  }
+],
+engagement: [
+    {
+      startDate: { type: Date },
+      show: { type: Boolean },
+  }
+],
+weddingAnniversary  : [
+    {
+      startDate: { type: Date },
+      show: { type: Boolean },
+  }
+],
+
   remainingSickLeaveDays: {
     type: Number,
   },

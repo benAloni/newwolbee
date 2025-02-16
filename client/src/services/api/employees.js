@@ -16,11 +16,10 @@ export const fetchEmployee = async (employeeId) => {
   try {
     const response = await client.get(`/getEmployee/${employeeId}`);
     if (response.status === 200) {
-      const result = response.data;      
-      return result;
+      return response.data;
     }
   } catch (error) {
-    console.log("Error fetching employee :", error);
+    console.log("Error fetching employee:", error);
   }
 };
 export const fetchEmployeeFamilyMembers = async (employeeId) => {
@@ -46,6 +45,7 @@ export const fetchEmployeeEmergencyContacts = async (employeeId) => {
     console.log("Error fetching employee's emergency contacts :", error);
   }
 };
+
 
 
 export const addEmployee = async ({ employeeData }) => {    
@@ -106,6 +106,8 @@ export const updateEmployeeVacation = async ({
     console.log("Error updating employee's vacation:", error);
   }
 };
+
+
 export const updateEmployeeSickLeave = async ({
   id,
   startDate,
@@ -123,7 +125,6 @@ export const updateEmployeeSickLeave = async ({
       endDate:selectedEndDate,
     });
     if (response.status === 200) {
-      // const result = response.data;
       return response;
     }
   } catch (error) {
@@ -151,7 +152,6 @@ export const addFamilyMember = async ({
       phone,
     });
     if (response.status === 200) {
-      // const result = response.data;
       return response;
     }
   } catch (error) {
@@ -171,7 +171,7 @@ export const addSonEvents = async ({ employeeId, childName, eventType, startDate
     const response = await client.post("/addSonEvent", {
       employeeId,
       childName,
-      eventType,  // e.g., "Sick Leave", "Vacation"
+      eventType,
       startDate: selectedStartDate,
       endDate: selectedEndDate,
     });
@@ -181,5 +181,28 @@ export const addSonEvents = async ({ employeeId, childName, eventType, startDate
     }
   } catch (error) {
     console.log("Error adding son's event:", error);
+  }
+};
+
+
+export const updateEmployeeEvent = async ({ eventType, id, startDate, endDate }) => {
+  const selectedStartDate = new Date(startDate);
+  selectedStartDate.setDate(selectedStartDate.getDate() + 1); 
+  
+  const selectedEndDate = new Date(endDate);
+  selectedEndDate.setDate(selectedEndDate.getDate() + 1);
+
+  try {
+    const response = await client.post(`/updateEmployeeEvent/${eventType}`, {
+      id,
+      startDate: selectedStartDate,
+      endDate: selectedEndDate,
+    });
+
+    if (response.status === 200) {
+      return response;
+    }
+  } catch (error) {
+    console.error(`Error updating employee's ${eventType}:`, error);
   }
 };

@@ -5,26 +5,27 @@ import VacationModal from "./VacationModal";
 import SickLeaveModal from "./SickLeaveModal";
 import FloatingButton from "../FloatingButton";
 import "./popup.css";
-import { useMutation, useQuery } from '@tanstack/react-query';
-import axios from 'axios';
-import { auth } from '../../../../firebase/firebaseConfig';
+import { useQuery } from "@tanstack/react-query";
 import EmployeesChildren from "./EmployeesChildren";
+import WeddingModal from "./WeddingModal";
+import EngagementModal from "./EngagementModal";
+import WeddingAnniversaryModal from "./WeddingAnniversaryModal";
 
 export default function CreateEmployeeEvent() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState("eventSelection");
   const [currentEventType, setCurrentEventType] = useState(null);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [page, setPage] = useState(1);
 
-  // States for vacation modal
   const [selectedStartDate, setSelectedStartDate] = useState(null);
-  const [selectedEndDate, setSelectedEndDate] = useState(null);
-  const [selectedPurpose, setSelectedPurpose] = useState(null);
-  const [selectedCountry, setSelectedCountry] = useState(null);
 
-  const [fetchCount, setFetchCount] = useState(0);
-
-  const { data: employees, isLoading, error } = useQuery({
+  const {
+    data: employees,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ["employees"],
     queryFn: async () => {
       const response = await fetch("/api/employees");
@@ -33,29 +34,15 @@ export default function CreateEmployeeEvent() {
       }
       return response.json();
     },
-    enabled: fetchCount < 3,  // Only fetch 3 times
   });
 
-  // Define the events array
   const events = [
-    {
-      id: 1,
-      name: "Vacation Leave",
-      imageUrl: "/path/to/vacation-icon",
-      type: "Vacation",
-    },
-    {
-      id: 2,
-      name: "Sick Leave",
-      imageUrl: "/path/to/sickleave-icon",
-      type: "Sick Leave",
-    },
-    {
-      id: 3,
-      name: "children's of workers",
-      imageUrl: "/path/to/sickleave-icon",
-      type: "children of workers",
-    },
+    { id: 1, name: "Vacation Leave", type: "vacation" },
+    { id: 2, name: "Sick Leave", type: "sickLeave" },
+    { id: 3, name: "Children of Employees", type: "childrenOfWorkers" },
+    { id: 4, name: "Wedding", type: "wedding" },
+    { id: 5, name: "Engagement", type: "engagement" },
+    { id: 6, name: "Wedding Anniversary", type: "weddingAnniversary" },
   ];
 
   const openModal = () => setIsModalOpen(true);
@@ -64,10 +51,6 @@ export default function CreateEmployeeEvent() {
     setCurrentPage("eventSelection");
     setCurrentEventType(null);
     setSelectedEmployee(null);
-    setSelectedStartDate(null);
-    setSelectedEndDate(null);
-    setSelectedPurpose(null);
-    setSelectedCountry(null);
   };
 
   const handleEventClick = (eventType) => {
@@ -80,233 +63,166 @@ export default function CreateEmployeeEvent() {
     setCurrentPage("dateSelection");
   };
 
-  // --------------------VacationMutation---------------------
-  const updateVacationMutation = useMutation({
-    mutationFn: async (vacationData) => {
-      const token = await auth.currentUser.getIdToken(); // Get token from Firebase auth
-      const response = await axios.post(
-        `${process.env.REACT_APP_SERVER_URI}/updateEmployeeVacation`, // Update with your actual API endpoint
-        vacationData,  // Pass the vacationData object directly
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,  // Send token in Authorization header
-          },
-        }
-      );
-      return response.data;
-    },
-    onSuccess: () => {
-      console.log('Vacation updated successfully');
-    },
-    onError: (error) => {
-      console.error('Error updating vacation:', error);
-    },
-  });
+  // Filter employees based on search query
+  const filteredEmployees = employees?.filter((employee) =>
+    employee.fullName.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
-  const updateVacation = async () => {
-    try {
-      // Create the start and end dates, and ensure the time is set to midnight (local timezone)
-      const formattedStartDate = new Date(selectedStartDate);
-      const formattedEndDate = new Date(selectedEndDate);
+  // Limit to 12 employees and paginate them (4 per row)
+  const employeesPerPage = 12;
+  const startIndex = (page - 1) * employeesPerPage;
+  const displayedEmployees = filteredEmployees?.slice(
+    startIndex,
+    startIndex + employeesPerPage
+  );
 
-      // Get the local date format (YYYY-MM-DD) without the time zone impact
-      const startDateString = `${formattedStartDate.getFullYear()}-${(formattedStartDate.getMonth() + 1).toString().padStart(2, '0')}-${formattedStartDate.getDate().toString().padStart(2, '0')}`;
-      const endDateString = `${formattedEndDate.getFullYear()}-${(formattedEndDate.getMonth() + 1).toString().padStart(2, '0')}-${formattedEndDate.getDate().toString().padStart(2, '0')}`;
-
-      // Prepare the vacation data object with the relevant fields
-      const vacationData = {
-        id: selectedEmployee.id,
-        purposeOfTrip: selectedPurpose,
-        destination: selectedCountry?.value,
-        startDate: startDateString, // Send the start date in local format
-        endDate: endDateString,     // Send the end date in local format
-      };
-      // Trigger the mutation to send data to the backend
-      await updateVacationMutation.mutateAsync(vacationData);
-
-      // Reset the state after success
-      setSelectedStartDate(null);
-      setSelectedEndDate(null);
-      setSelectedPurpose(null);
-      setSelectedCountry(null);
-
-      closeModal(); // Close the modal after updating
-
-    } catch (error) {
-      console.error("Error updating vacation:", error);
-    }
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+    setPage(1); // Reset to first page on search change
   };
 
-  // --------------------SickDayMutation---------------------
-  const updateSickDayMutation = useMutation({
-    mutationFn: async (sickDayData) => {
-      const token = await auth.currentUser.getIdToken(); // Get token from Firebase auth
-      const response = await axios.post(
-        `${process.env.REACT_APP_SERVER_URI}/updateEmployeeSickLeave`, // Update with your actual API endpoint
-        sickDayData,  // Pass the sickDayData object directly
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,  // Send token in Authorization header
-          },
-        }
-      );
-      return response.data;
-    },
-    onSuccess: () => {
-      console.log('Sick Day updated successfully');
-    },
-    onError: (error) => {
-      console.error('Error updating sick day:', error);
-    },
-  });
-
-  const updateSickDay = async () => {
-    try {
-      // Create the start and end dates, and ensure the time is set to midnight (local timezone)
-      const formattedStartDate = new Date(selectedStartDate);
-      const formattedEndDate = new Date(selectedEndDate);
-
-      // Get the local date format (YYYY-MM-DD) without the time zone impact
-      const startDateString = `${formattedStartDate.getFullYear()}-${(formattedStartDate.getMonth() + 1).toString().padStart(2, '0')}-${formattedStartDate.getDate().toString().padStart(2, '0')}`;
-      const endDateString = `${formattedEndDate.getFullYear()}-${(formattedEndDate.getMonth() + 1).toString().padStart(2, '0')}-${formattedEndDate.getDate().toString().padStart(2, '0')}`;
-
-      // Prepare the vacation data object with the relevant fields
-      const sickDayData = {
-        id: selectedEmployee.id,
-        startDate: startDateString, // Send the start date in local format
-        endDate: endDateString,     // Send the end date in local format
-      };
-
-      // Trigger the mutation to send data to the backend
-      await updateSickDayMutation.mutateAsync(sickDayData);
-
-      // Reset the state after success
-      setSelectedStartDate(null);
-      setSelectedEndDate(null);
-
-      closeModal(); // Close the modal after updating
-
-    } catch (error) {
-      console.error("Error updating sick day:", error);
-    }
-  };
-
-  //-------------------- son events---------------
-  
-  const handleAddSickDay = async (selectedSon, startDate, endDate) => {
-
-    try {
-      // Prepare the sick day data
-      const sonEvents = {
-        id: selectedEmployee._id,
-        childName: selectedSon.name,
-        startDate,
-        endDate,
-      };
-  
-      // Get the token fr om Firebase auth
-      const token = await auth.currentUser.getIdToken();
-  
-      // Make the API call to add the sick day event
-      const response = await axios.post(
-        `${process.env.REACT_APP_SERVER_URI}/addSonEvents`, // Use your actual API endpoint here
-        sonEvents,  // Pass the son events data
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,  // Send token in Authorization header
-          },
-        }
-      );
-  
-      console.log('Sick day added:', response.data);  // Log the response data
-      // Optionally update local state if needed
-    } catch (error) {
-      console.error('Error adding sick day:', error);
-    }
+  const handlePageChange = (newPage) => {
+    setPage(newPage);
   };
 
   return (
     <div>
       <FloatingButton onClick={openModal} />
+      
+        <Modal
+          backdrop="static"
+          keyboard={false}
+          centered
+          show={isModalOpen}
+          onHide={closeModal}
+          className="modelsize"
+        >
+          <button onClick={closeModal} className="buttonXStyle">
+            X
+          </button>
 
-      <Modal show={isModalOpen} onHide={closeModal}>
-        {currentPage === "eventSelection" && (
-          <div className="button-container">
-            {events.map((event) => (
-              <EventButton
-                key={event.id}
-                event={event}
-                onClick={() => handleEventClick(event.type)}
+          {currentPage === "eventSelection" && (
+            <div className="button-container">
+              <h1>Please choose type of event</h1>
+              <br />
+              {events.map((event) => (
+                <div className="button-wrapper" key={event.id}>
+                  <button onClick={() => handleEventClick(event.type)}>
+                    {event.name}
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {currentPage === "employeeSelection" && (
+            <div>
+              <input
+                className="search-input"
+                type="text"
+                value={searchQuery}
+                onChange={handleSearchChange}
+                placeholder="Search by Name"
               />
-            ))}
-          </div>
-        )}
+              {isLoading && <p>Loading employees...</p>}
+              {error && <p>Failed to load employees</p>}
+              {!isLoading && filteredEmployees && (
+                <div className="employee-list">
+                  {displayedEmployees.map((employee) => (
+                    <div
+                      key={employee.id}
+                      className="employee-names"
+                      onClick={() => handleEmployeeClick(employee)}
+                    >
+                      <img
+                        src={
+                          employee.avatar ||
+                          "https://thumb.ac-illust.com/b1/b170870007dfa419295d949814474ab2_t.jpeg"
+                        }
+                        alt={`${employee.fullName}'s avatar`}
+                      />{" "}
+                      <p>{employee.fullName}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
 
-        {currentPage === "employeeSelection" && (
-          <div>
-            {isLoading && <p>Loading employees...</p>}
-            {error && <p>Failed to load employees: {error.message}</p>}
-            {!isLoading && employees && (
-              <div className="employee-list">
-                {employees.map((employee) => (
-                  <div
-                    key={employee.id}
-                    className="employee-item"
-                    onClick={() => handleEmployeeClick(employee)}
-                    style={{
-                      padding: "10px",
-                      cursor: "pointer",
-                      border: "1px solid #ccc",
-                      marginBottom: "10px",
-                    }}
-                  >
-                    <p>{employee.fullName}</p>
-                  </div>
-                ))}
+              <div className="pagination">
+                <button
+                  onClick={() => handlePageChange(page - 1)}
+                  disabled={page === 1}
+                >
+                  Previous
+                </button>
+                <button
+                  onClick={() => handlePageChange(page + 1)}
+                  disabled={page * employeesPerPage >= filteredEmployees.length}
+                >
+                  Next
+                </button>
               </div>
+            </div>
+          )}
+
+          {currentPage === "dateSelection" &&
+            currentEventType === "vacation" && (
+              <VacationModal
+                employeeName={selectedEmployee?.fullName}
+                closeModal={closeModal}
+                selectedEmployee={selectedEmployee}
+              />
             )}
-          </div>
-        )}
 
-        {currentPage === "dateSelection" && currentEventType === "Vacation" && (
-          <VacationModal
-            employeeName={selectedEmployee?.fullName}
-            selectedStartDate={selectedStartDate}
-            selectedEndDate={selectedEndDate}
-            selectedPurpose={selectedPurpose}
-            selectedCountry={selectedCountry}
-            setSelectedStartDate={setSelectedStartDate}
-            setSelectedEndDate={setSelectedEndDate}
-            setSelectedPurpose={setSelectedPurpose}
-            setSelectedCountry={setSelectedCountry}
-            updateVacation={updateVacation}
-            closeModal={closeModal}
-          />
-        )}
+          {currentPage === "dateSelection" &&
+            currentEventType === "sickLeave" && (
+              <SickLeaveModal
+                employeeName={selectedEmployee?.fullName}
+                closeModal={closeModal}
+                selectedEmployee={selectedEmployee}
+              />
+            )}
 
-        {currentPage === "dateSelection" && currentEventType === "Sick Leave" && (
-          <SickLeaveModal
-            employeeName={selectedEmployee?.fullName}
-            selectedStartDate={selectedStartDate}
-            selectedEndDate={selectedEndDate}
-            setSelectedStartDate={setSelectedStartDate}
-            setSelectedEndDate={setSelectedEndDate}
-            updateSickDay={updateSickDay}
-            closeModal={closeModal}
-          />
-        )}
+          {currentPage === "dateSelection" &&
+            currentEventType === "wedding" && (
+              <WeddingModal
+                selectedEmployee={selectedEmployee}
+                selectedWeddingDate={selectedStartDate}
+                setSelectedWeddingDate={setSelectedStartDate}
+                closeModal={closeModal}
+              />
+            )}
 
-{currentPage === "dateSelection" && selectedEmployee && (
-          <EmployeesChildren
-            employeeName={selectedEmployee.fullName}
-            familyMembers={selectedEmployee.familyMembers}
-            closeModal={closeModal}
-            onAddSickDay={handleAddSickDay} // Pass the handleAddSickDay function
-            onAddVacation={() => {}}
-          />
-        )}
+          {currentPage === "dateSelection" &&
+            currentEventType === "engagement" && (
+              <EngagementModal
+                selectedEmployee={selectedEmployee}
+                selectedEngagementDate={selectedStartDate}
+                setSelectedEngagementDate={setSelectedStartDate}
+                closeModal={closeModal}
+              />
+            )}
 
-      </Modal>
+          {currentPage === "dateSelection" &&
+            currentEventType === "weddingAnniversary" && (
+              <WeddingAnniversaryModal
+                selectedEmployee={selectedEmployee}
+                selectedAnniversaryDate={selectedStartDate}
+                setSelectedAnniversaryDate={setSelectedStartDate}
+                closeModal={closeModal}
+              />
+            )}
+
+          {currentPage === "dateSelection" &&
+            currentEventType === "childrenOfWorkers" && (
+              <EmployeesChildren
+                employeeName={selectedEmployee.fullName}
+                familyMembers={selectedEmployee.familyMembers}
+                closeModal={closeModal}
+                selectedEmployee={selectedEmployee}
+                setCurrentPage={setCurrentPage}
+              />
+            )}
+        </Modal>
     </div>
   );
 }
