@@ -7,21 +7,22 @@ import "react-datepicker/dist/react-datepicker.css";
 import { updateEmployeeVacation } from "../../../../services";
 import Swal from "sweetalert2";
 
+
 const VacationModal = ({ closeModal, selectedEmployee }) => {
   const [countryOptions, setCountryOptions] = useState([]);
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const [selectedEndDate, setSelectedEndDate] = useState(null);
   const [selectedPurpose, setSelectedPurpose] = useState(null);
   const [selectedCountry, setSelectedCountry] = useState(null);
-  const [showModal, setShowModal] = useState(true); 
- 
+  const [showModal, setShowModal] = useState(true);
+
   useEffect(() => {
     const fetchCountries = async () => {
       try {
         const response = await axios.get("https://restcountries.com/v3.1/all");
         const countries = response.data.map((country) => ({
-          value: country.cca2, 
-          label: country.name.common, 
+          value: country.cca2,
+          label: country.name.common,
         }));
 
         const sortedCountries = countries.sort((a, b) =>
@@ -58,26 +59,26 @@ const VacationModal = ({ closeModal, selectedEmployee }) => {
         employeeId: selectedEmployee?.employeeId,
         purposeOfTrip: selectedPurpose,
         destination: selectedCountry?.label,
-        startDate: selectedStartDate, 
-        endDate: selectedEndDate, 
-      }      
-     const response = await updateEmployeeVacation(vacationData)
-      if(response.status === 200) {
+        startDate: selectedStartDate,
+        endDate: selectedEndDate,
+      };
+      const response = await updateEmployeeVacation(vacationData);
+      if (response.status === 200) {
         Swal.fire(
-                  "Success!",
-                  `${selectedEmployee?.fullName}'s vacation has been created successfully!`,
-                  "success"
-                );
+          "Success!",
+          `${selectedEmployee?.fullName}'s vacation has been created successfully!`,
+          "success"
+        );
         closeModal();
       }
     } catch (error) {
       console.error("Error updating vacation:", error);
     }
 
-          setSelectedStartDate(null);
-          setSelectedEndDate(null);
-          setSelectedPurpose(null);
-          setSelectedCountry(null);
+    setSelectedStartDate(null);
+    setSelectedEndDate(null);
+    setSelectedPurpose(null);
+    setSelectedCountry(null);
   };
 
   // Handle modal close

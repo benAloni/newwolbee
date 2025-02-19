@@ -4,9 +4,7 @@ export const fetchEmployees = async () => {
   try {
     const response = await client.get("/getEmployees");
     if (response.status === 200) {
-      const result = response.data;   
-      console.log(result);
-               
+      const result = response.data;                  
       return result;
     }
   } catch (error) {
@@ -47,8 +45,6 @@ export const fetchEmployeeEmergencyContacts = async (employeeId) => {
     console.log("Error fetching employee's emergency contacts :", error);
   }
 };
-
-
 
 export const addEmployee = async ({ employeeData }) => {    
   try {
@@ -108,10 +104,8 @@ export const updateEmployeeVacation = async ({
     console.log("Error updating employee's vacation:", error);
   }
 };
-
-
 export const updateEmployeeSickLeave = async ({
-  id,
+  employeeId,
   startDate,
   endDate,
 }) => {
@@ -122,7 +116,7 @@ export const updateEmployeeSickLeave = async ({
   selectedEndDate.setDate(selectedEndDate.getDate() + 1)
   try {
     const response = await client.post("/employee/create-sick-leave", {
-      id,
+      employeeId,
       startDate: selectedStartDate,
       endDate:selectedEndDate,
     });

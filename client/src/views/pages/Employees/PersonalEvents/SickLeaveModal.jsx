@@ -1,13 +1,11 @@
 import React, { useState } from "react";
 import ReactDatePicker from "react-datepicker";
 import { useUpdateSickDay } from "../../../../services/api/useUpdateEvent";
+import { updateEmployeeSickLeave } from "../../../../services";
 import { Modal, Button } from "react-bootstrap";
+import Swal from "sweetalert2";
 
-export default function SickLeaveModal({
-  employeeName,
-  selectedEmployee,
-  closeModal,
-}) {
+export default function SickLeaveModal({ selectedEmployee, closeModal }) {
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const [selectedEndDate, setSelectedEndDate] = useState(null);
   const { updateSickDay } = useUpdateSickDay();
@@ -22,18 +20,30 @@ export default function SickLeaveModal({
   // Handle end date change
   const handleEndDateChange = (date) => {
     setSelectedEndDate(date);
+    // updateSickDay;
   };
 
   // Handle form submission
   const handleSubmit = async () => {
     try {
-      await updateSickDay(selectedEmployee, selectedStartDate, selectedEndDate);
-      closeModal();
+      const data = {
+        employeeId: selectedEmployee?.employeeId,
+        startDate: selectedStartDate,
+        endDate: selectedEndDate,
+      };
+      const response = await updateEmployeeSickLeave(data);
+      if (response.status === 200) {
+        Swal.fire(
+          "Success!",
+          `${selectedEmployee?.fullName}'s sick leave has been created successfully!`,
+          "success"
+        );
+        closeModal();
+      }
     } catch (error) {
       console.error("Error updating sick leave:", error);
     }
-  };
-
+  }; 
   // Handle modal close
   const handleCloseModal = () => {
     setShowModal(false);
@@ -63,7 +73,7 @@ export default function SickLeaveModal({
               <ReactDatePicker
                 selected={selectedStartDate}
                 onChange={handleStartDateChange}
-                dateFormat="yyyy/MM/dd"
+                dateFormat="dd/MM/YYYY"
                 minDate={new Date()} // Prevent selecting past dates
                 className="form-control form-control-solid w-250px"
                 placeholderText="Start Date"
@@ -73,7 +83,7 @@ export default function SickLeaveModal({
               <ReactDatePicker
                 selected={selectedEndDate}
                 onChange={handleEndDateChange}
-                dateFormat="yyyy/MM/dd"
+                dateFormat="dd/MM/YYYY"
                 minDate={selectedStartDate} // Ensure end date is not before start date
                 className="form-control form-control-solid w-250px"
                 placeholderText="End Date"
