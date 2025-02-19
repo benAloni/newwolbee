@@ -22,7 +22,7 @@ import {
   deleteCompanyEvent,
 } from "./api/companyEvents";
 import { fetchHolidaysDetailsOptions, fetchInternationalFoodDays } from "./api/holidaysDetails";
-import {saveUserImageUrl} from "./api/userSettings"
+import { useGetTeamsQuery } from "./queries/teamsQuery.js";
 export {
   updateEmployeeEvent,
   fetchTeams,
@@ -47,5 +47,6 @@ export {
   fetchEmployeesProfilePics,
   fetchEmployeeFamilyMembers,
   fetchEmployeeEmergencyContacts,
-  fetchInternationalFoodDays
+  fetchInternationalFoodDays,
+  useGetTeamsQuery
 };

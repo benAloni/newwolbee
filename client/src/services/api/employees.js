@@ -127,8 +127,6 @@ export const updateEmployeeSickLeave = async ({
     console.log("Error updating employee's sick leave:", error);
   }
 };
-
-
 export const addFamilyMember = async ({
   id,
   name,

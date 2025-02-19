@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import AddEmployeeModal from "../../../components/Modals/employeepopup/AddEmployeeModal";
 import Breadcrumbs from "../../../components/Breadcrumbs";
 import EmployeeListFilter from "../../../components/EmployeeListFilter";
-import { fetchEmployees, fetchTeams } from "../../../services";
+import { fetchEmployees, useGetTeamsQuery } from "../../../services";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Loading } from "../../../layout";
 import DeleteEmployeeModal from "../../../components/Modals/DeleteEmployeeModal";
@@ -19,7 +19,7 @@ const AllEmployees = () => {
   const queryClient = useQueryClient();
   const user = useSelector((state) => state.auth.user);
   const uid = useSelector((state) => state.auth?.user.uid);
-
+  const { data: teams } = useGetTeamsQuery();
   // need to add loading
   useEffect(() => {
     if (user && user.role) {
@@ -34,11 +34,6 @@ const AllEmployees = () => {
   const { data: employees, isLoading } = useQuery({
     queryKey: ["employees"],
     queryFn: fetchEmployees,
-  });
-
-  const { data: teams } = useQuery({
-    queryKey: ["teams"],
-    queryFn: fetchTeams,
   });
 
   useEffect(() => {

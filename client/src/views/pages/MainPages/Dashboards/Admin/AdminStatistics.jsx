@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useQueryClient, useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import Select from "react-select";
-import { fetchTeams } from "../../../../../services";
+import { useGetTeamsQuery } from "../../../../../services";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { userProfile } from "../../../../../imgs";
@@ -26,7 +26,7 @@ export default function AdminStatistics() {
   const [filteredEmployees, setFilteredEmployees] = useState([]);
 
   const queryClient = useQueryClient();
-
+  const { data: teams } = useGetTeamsQuery();
   useEffect(() => {
     const today = new Date();
     const hours = today.getHours(); // Get the current hour (0-23)
@@ -52,10 +52,6 @@ export default function AdminStatistics() {
     queryKey: ["user-profile-pic"],
     queryFn: () => fetchUserProfilePic(uid),
     enabled: !!uid,
-  });
-  const { data: teams } = useQuery({
-    queryKey: ["teams"],
-    queryFn: fetchTeams,
   });
 
   useEffect(() => {
@@ -206,26 +202,29 @@ export default function AdminStatistics() {
         {/* Members Card */}
         <div className="data-container">
           <h3 className="h3">Members</h3>
-            <div className="members-card">
-              {employees &&
-                filteredEmployees?.map((employee) => (
-                  <div key={employee.employeeId} className="profile-img">
-                    <Link to={`/profile/${employee.employeeId}`} className="avatar">
-                      <img
-                        loading="lazy"
-                        src={employee.imageUrl}
-                        alt={employee.fullName}
-                        className="employee-image"
-                      />
+          <div className="members-card">
+            {employees &&
+              filteredEmployees?.map((employee) => (
+                <div key={employee.employeeId} className="profile-img">
+                  <Link
+                    to={`/profile/${employee.employeeId}`}
+                    className="avatar"
+                  >
+                    <img
+                      loading="lazy"
+                      src={employee.imageUrl}
+                      alt={employee.fullName}
+                      className="employee-image"
+                    />
+                  </Link>
+                  <span className="employee-fullname">
+                    <Link to={`/profile/${employee.employeeId}`}>
+                      {employee.fullName}
                     </Link>
-                    <span className="employee-fullname">
-                      <Link to={`/profile/${employee.employeeId}`}>
-                        {employee.fullName}
-                      </Link>
-                    </span>
-                  </div>
-                ))}
-            </div>
+                  </span>
+                </div>
+              ))}
+          </div>
         </div>
 
         {/* Team Satisfaction Card */}
@@ -262,7 +261,7 @@ export default function AdminStatistics() {
         {/* Employees Over 100% Hours */}
         <div className="data-container members-hours-card">
           <h3 className="h3">Employees Over 100% Hours</h3>
-            <EmployeesWorkingHours employees={employees} />
+          <EmployeesWorkingHours employees={employees} />
         </div>
 
         {/* Conversations 1:1 */}
@@ -289,7 +288,7 @@ export default function AdminStatistics() {
           <div className="card-header">
             <h3 className="card-title">Upcoming Birthdays</h3>
             <span className="next-button" onClick={handleSeeAllClick}>
-            <GrLinkNext />
+              <GrLinkNext />
             </span>
           </div>
           <ul className="birthday-list">
