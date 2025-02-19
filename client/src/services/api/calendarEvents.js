@@ -14,19 +14,6 @@ export const fetchEvents = async () => {
   };
 
 
-export const addEvent = async (eventData) => {
-    try {
-      const response = await client.post("/addEvents", {
-        eventData,
-      });
-      if (response.status === 200) {
-        const result = response.data;
-        return result;
-      }
-    } catch (error) {
-      console.log("Error adding new event :", error);
-    }
-  };
 
 
 

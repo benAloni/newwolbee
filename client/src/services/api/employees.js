@@ -4,7 +4,9 @@ export const fetchEmployees = async () => {
   try {
     const response = await client.get("/getEmployees");
     if (response.status === 200) {
-      const result = response.data;            
+      const result = response.data;   
+      console.log(result);
+               
       return result;
     }
   } catch (error) {

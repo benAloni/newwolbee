@@ -79,4 +79,14 @@ export const getHolidaysFromApi = async () => {
   });
   return formattedHolidays;
 };
-
+export const fetchInternationalFoodDays = async () => {
+  try {
+    const response = await client.get("/international-food-days")
+    if (response.status === 200) {
+      const result = response.data;
+      return result;
+    }
+  } catch (error) {
+    console.error("Error fetching international food days", error);
+  }
+}

@@ -5,20 +5,20 @@ import React, {
   useCallback,
   useMemo,
 } from "react";
-import { Link } from "react-router-dom";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid/index.js";
 import timeGridPlugin from "@fullcalendar/timegrid/index.js";
 import interactionPlugin from "@fullcalendar/interaction/index.js";
 import rrulePlugin from "@fullcalendar/rrule";
 import Hol from "./Hol";
-import axios from "axios";
 import CalendarEventsPopup from "../../../../../components/Modals/calendar/calendarEventsPopup";
-import { useSelector } from "react-redux";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import "./calen.css";
-import { fetchEvents, fetchEmployees } from "../../../../../services";
-import { auth } from "../../../../../firebase/firebaseConfig";
+import {
+  fetchEvents,
+  fetchEmployees,
+  fetchInternationalFoodDays,
+} from "../../../../../services";
 
 const Calendar = () => {
   const [events, setEvents] = useState([]);
@@ -27,51 +27,45 @@ const Calendar = () => {
   const [countryCode, setCountryCode] = useState("IL"); // Default country code
   const [countryHolidays, setCountryHolidays] = useState({}); // Store holidays by country
   const [showHolidays, setShowHolidays] = useState(false);
-  const linkRef = useRef(null);
   const calendarRef = useRef(null);
-  const user = useSelector((state) => state.auth.user);
 
-  const queryClient = useQueryClient();
 
   const fetchCalendarData = async () => {
-    const token = await auth.currentUser.getIdToken();
-    const [eventsResponse, foodHolidaysResponse, employeesResponse] =
+    const [internationalFoodDays, employees] =
       await Promise.all([
-        fetchEvents(),
-        axios.get(`${process.env.REACT_APP_SERVER_URI}/getFoodHoliday`, {
-          headers: { Authorization: `Bearer ${token}` },
-        }),
+        // fetchEvents(),
+        fetchInternationalFoodDays(),
         fetchEmployees(),
       ]);
 
     return {
-      events: eventsResponse,
-      foodHolidays: foodHolidaysResponse.data,
-      employees: employeesResponse,
+      // events,
+      internationalFoodDays,
+      employees,
     };
+    
   };
 
   const { data, error, isLoading } = useQuery({
     queryKey: ["calendarData"],
     queryFn: fetchCalendarData,
-    staleTime: 60000, // 60 seconds
-    refetchInterval: 60000, // Refetch every 60 seconds
-    refetchOnWindowFocus: true,
+    // refetchOnWindowFocus: true,
   });
 
   const handleCountryChange = (event) => {
     setCountryCode(event.target.value);
   };
 
+
   useEffect(() => {
     if (data && !isLoading) {
-      const newEvents = data.events.map((val) => ({
-        title: val.title,
-        start: val.start,
-        className: val.className || "default-class",
-      }));
+      // const newEvents = data.events.map((val) => ({
+      //   title: val.title,
+      //   start: val.start,
+      //   className: val.className || "default-class",
+      // }));
 
-      const foodHolidayEvents = data.foodHolidays.map((val) => ({
+      const internationalFoodDays = data.internationalFoodDays.map((val) => ({
         title: val.name,
         img: val.img,
         className: "bg-pink",
@@ -80,77 +74,75 @@ const Calendar = () => {
           dtstart: val.date,
         },
       }));
+      console.log(data?.employees);
+      const employeeBirthdayEvents = data.employees.map((employee) => ({
+        title: `${employee.fullName}'s birthday`,
+        className: "bg-purple",
+        rrule: {
+          freq: "YEARLY",
+          dtstart: new Date(employee.dateOfBirth),
+        },
+      })) || [];
 
-      const employeeBirthdayEvents = data.employees.map((employee) => {
-        return {
-          title: `${employee.fullName}'s birthday`,
-          className: "bg-purple",
-          rrule: {
-            freq: "YEARLY",
-            dtstart: new Date(employee.dateOfBirth),
-          },
-        };
-      });
-
-      const employeeVacationEvents = data.employees.flatMap((employee) => {
-        if (employee.vacation && employee.vacation.length > 0) {
-          return employee.vacation.flatMap((vacation) => [
-            {
-              title: `${employee.fullName} is off to ${
-                employee.gender === "female" ? "her" : "his"
-              } ${
-                vacation.purposeOfTrip === "pleasure"
-                  ? `trip in ${vacation.destination}`
-                  : `${vacation.purposeOfTrip} in ${vacation.destination}`
-              } `,
-              className: "bg-purple",
-              start: vacation.startDate,
-              end: vacation.startDate,
-            },
-            {
-              title: `${employee.fullName} is back from ${
-                employee.gender === "female" ? "her" : "him"
-              } ${
-                vacation.purposeOfTrip === "pleasure"
-                  ? `trip in ${vacation.destination}`
-                  : `${vacation.purposeOfTrip} in ${vacation.destination}`
-              } `,
-              className: "bg-purple",
-              start: vacation.endDate,
-              end: vacation.endDate,
-            },
-          ]);
-        } else {
-          return [];
-        }
-      });
-      const employeeSickLeaveDates = data.employees.flatMap((employee) => {
-        if (employee.sickLeave && employee.sickLeave.length > 0) {
-          return employee.sickLeave.flatMap((sickLeave) => [
-            {
-              title: `${employee.fullName} is currently in sick leave and won't be available today`,
-              className: "bg-danger",
-              start: sickLeave.startDate,
-              end: sickLeave.startDate,
-            },
-            {
-              title: `${employee.fullName} is back to work from sick leave `,
-              className: "bg-danger",
-              start: sickLeave.endDate,
-              end: sickLeave.endDate,
-            },
-          ]);
-        } else {
-          return [];
-        }
-      });
+      // const employeeVacationEvents = data.employees.flatMap((employee) => {
+      //   if (employee.vacation && employee.vacation.length > 0) {
+      //     return employee.vacation.flatMap((vacation) => [
+      //       {
+      //         title: `${employee.fullName} is off to ${
+      //           employee.gender === "female" ? "her" : "his"
+      //         } ${
+      //           vacation.purposeOfTrip === "pleasure"
+      //             ? `trip in ${vacation.destination}`
+      //             : `${vacation.purposeOfTrip} in ${vacation.destination}`
+      //         } `,
+      //         className: "bg-purple",
+      //         start: vacation.startDate,
+      //         end: vacation.startDate,
+      //       },
+      //       {
+      //         title: `${employee.fullName} is back from ${
+      //           employee.gender === "female" ? "her" : "him"
+      //         } ${
+      //           vacation.purposeOfTrip === "pleasure"
+      //             ? `trip in ${vacation.destination}`
+      //             : `${vacation.purposeOfTrip} in ${vacation.destination}`
+      //         } `,
+      //         className: "bg-purple",
+      //         start: vacation.endDate,
+      //         end: vacation.endDate,
+      //       },
+      //     ]);
+      //   } else {
+      //     return [];
+      //   }
+      // });
+      // const employeeSickLeaveDates = data.employees.flatMap((employee) => {
+      //   if (employee.sickLeave && employee.sickLeave.length > 0) {
+      //     return employee.sickLeave.flatMap((sickLeave) => [
+      //       {
+      //         title: `${employee.fullName} is currently in sick leave and won't be available today`,
+      //         className: "bg-danger",
+      //         start: sickLeave.startDate,
+      //         end: sickLeave.startDate,
+      //       },
+      //       {
+      //         title: `${employee.fullName} is back to work from sick leave `,
+      //         className: "bg-danger",
+      //         start: sickLeave.endDate,
+      //         end: sickLeave.endDate,
+      //       },
+      //     ]);
+      //   } else {
+      //     return [];
+      //   }
+      // });
 
       setEvents((prevEvents) => [
-        ...employeeVacationEvents,
-        ...employeeSickLeaveDates,
-        ...newEvents,
+        // ...employeeVacationEvents,
+        // ...employeeSickLeaveDates,
+        // ...newEvents,
         ...employeeBirthdayEvents,
-        ...foodHolidayEvents,
+        ...internationalFoodDays,
         // Include existing holidays from countryHolidays state
         ...Object.values(countryHolidays).flat(),
       ]);
@@ -158,8 +150,8 @@ const Calendar = () => {
       setTimeout(() => {
         setShowHolidays(true);
       }, 20);
+    
     }
-
     if (error) {
       console.error("Error fetching data", error);
       alert("Error fetching data");

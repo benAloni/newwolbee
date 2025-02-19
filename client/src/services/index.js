@@ -13,7 +13,7 @@ import {
   updateEmployeeEvent
 } from "./api/employees";
 import { fetchUserProfilePic,fetchEmployeesProfilePics } from "./api/profile";
-import { fetchEvents, addEvent } from "./api/calendarEvents";
+import { fetchEvents } from "./api/calendarEvents";
 import { fetchNotifications, fetchEmployeesNotifications, updateEmployeeNotification } from "./api/notifications";
 import {
   fetchCompanyEvents,
@@ -21,7 +21,7 @@ import {
   updateCompanyEvent,
   deleteCompanyEvent,
 } from "./api/companyEvents";
-import { fetchHolidaysDetailsOptions } from "./api/holidaysDetails";
+import { fetchHolidaysDetailsOptions, fetchInternationalFoodDays } from "./api/holidaysDetails";
 import {saveUserImageUrl} from "./api/userSettings"
 export {
   updateEmployeeEvent,
@@ -35,7 +35,6 @@ export {
   addSonEvents,
   fetchUserProfilePic,
   fetchEvents,
-  addEvent,
   fetchNotifications,
   deleteEmployee,
   fetchCompanyEvents,
@@ -47,5 +46,6 @@ export {
   updateEmployeeNotification,
   fetchEmployeesProfilePics,
   fetchEmployeeFamilyMembers,
-  fetchEmployeeEmergencyContacts
+  fetchEmployeeEmergencyContacts,
+  fetchInternationalFoodDays
 };
