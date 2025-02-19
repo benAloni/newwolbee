@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Modal, Button } from "react-bootstrap";
-import EventButton from "../EventButton";
+import { fetchEmployees } from "../../../../services/api/employees";
 import VacationModal from "./VacationModal";
 import SickLeaveModal from "./SickLeaveModal";
 import FloatingButton from "../FloatingButton";
 import "./popup.css";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery,useQueryClient } from "@tanstack/react-query";
 import EmployeesChildren from "./EmployeesChildren";
 import WeddingModal from "./WeddingModal";
 import EngagementModal from "./EngagementModal";
@@ -18,22 +18,14 @@ export default function CreateEmployeeEvent() {
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [page, setPage] = useState(1);
+  const queryClient = useQueryClient(); // Add this at the top
+
 
   const [selectedStartDate, setSelectedStartDate] = useState(null);
 
-  const {
-    data: employees,
-    isLoading,
-    error,
-  } = useQuery({
+  const { data: employees, isLoading } = useQuery({
     queryKey: ["employees"],
-    queryFn: async () => {
-      const response = await fetch("/api/employees");
-      if (!response.ok) {
-        throw new Error("Failed to fetch employees");
-      }
-      return response.json();
-    },
+    queryFn: fetchEmployees,
   });
 
   const events = [
@@ -45,7 +37,9 @@ export default function CreateEmployeeEvent() {
     { id: 6, name: "Wedding Anniversary", type: "weddingAnniversary" },
   ];
 
-  const openModal = () => setIsModalOpen(true);
+  const openModal = () => {
+    setIsModalOpen(true);
+  }
   const closeModal = () => {
     setIsModalOpen(false);
     setCurrentPage("eventSelection");
@@ -59,7 +53,7 @@ export default function CreateEmployeeEvent() {
   };
 
   const handleEmployeeClick = (employee) => {
-    setSelectedEmployee(employee);
+    setSelectedEmployee(employee); // Select the employee from the list
     setCurrentPage("dateSelection");
   };
 
@@ -85,144 +79,150 @@ export default function CreateEmployeeEvent() {
     setPage(newPage);
   };
 
+  // Function to refresh family members for the selected employee
+  const refreshFamilyMembers = (newMember) => {
+    setSelectedEmployee((prevEmployee) => ({
+      ...prevEmployee,
+      familyMembers: [...(prevEmployee.familyMembers || []), newMember], // Add the new member
+    }));
+  };
+
   return (
     <div>
       <FloatingButton onClick={openModal} />
-      
-        <Modal
-          backdrop="static"
-          keyboard={false}
-          centered
-          show={isModalOpen}
-          onHide={closeModal}
-          className="modelsize"
-        >
-          <button onClick={closeModal} className="buttonXStyle">
-            X
-          </button>
 
-          {currentPage === "eventSelection" && (
-            <div className="button-container">
-              <h1>Please choose type of event</h1>
-              <br />
-              {events.map((event) => (
-                <div className="button-wrapper" key={event.id}>
-                  <button onClick={() => handleEventClick(event.type)}>
-                    {event.name}
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
+      <Modal
+        backdrop="static"
+        keyboard={false}
+        centered
+        show={isModalOpen}
+        onHide={closeModal}
+        className="modelsize"
+      >
+        <button onClick={closeModal} className="buttonXStyle">
+          X
+        </button>
 
-          {currentPage === "employeeSelection" && (
-            <div>
-              <input
-                className="search-input"
-                type="text"
-                value={searchQuery}
-                onChange={handleSearchChange}
-                placeholder="Search by Name"
-              />
-              {isLoading && <p>Loading employees...</p>}
-              {error && <p>Failed to load employees</p>}
-              {!isLoading && filteredEmployees && (
-                <div className="employee-list">
-                  {displayedEmployees.map((employee) => (
-                    <div
-                      key={employee.id}
-                      className="employee-names"
-                      onClick={() => handleEmployeeClick(employee)}
-                    >
-                      <img
-                        src={
-                          employee.avatar ||
-                          "https://thumb.ac-illust.com/b1/b170870007dfa419295d949814474ab2_t.jpeg"
-                        }
-                        alt={`${employee.fullName}'s avatar`}
-                      />{" "}
-                      <p>{employee.fullName}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              <div className="pagination">
-                <button
-                  onClick={() => handlePageChange(page - 1)}
-                  disabled={page === 1}
-                >
-                  Previous
-                </button>
-                <button
-                  onClick={() => handlePageChange(page + 1)}
-                  disabled={page * employeesPerPage >= filteredEmployees.length}
-                >
-                  Next
+        {currentPage === "eventSelection" && (
+          <div className="button-container">
+            <h1>Please choose type of event</h1>
+            <br />
+            {events.map((event) => (
+              <div className="button-wrapper" key={event.id}>
+                <button onClick={() => handleEventClick(event.type)}>
+                  {event.name}
                 </button>
               </div>
+            ))}
+          </div>
+        )}
+
+        {currentPage === "employeeSelection" && (
+          <div>
+            <input
+              className="search-input"
+              type="text"
+              value={searchQuery}
+              onChange={handleSearchChange}
+              placeholder="Search by Name"
+            />
+            {isLoading && <p>Loading employees...</p>}
+            {!isLoading && filteredEmployees && (
+              <div className="employee-list">
+                {displayedEmployees.map((employee) => (
+                  <div
+                    key={employee.id}
+                    className="employee-names"
+                    onClick={() => handleEmployeeClick(employee)}
+                  >
+                    <img
+                      src={
+                        employee.avatar ||
+                        "https://thumb.ac-illust.com/b1/b170870007dfa419295d949814474ab2_t.jpeg"
+                      }
+                      alt={`${employee.fullName}'s avatar`}
+                    />{" "}
+                    <p>{employee.fullName}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+            <div className="pagination">
+              <button
+                onClick={() => handlePageChange(page - 1)}
+                disabled={page === 1}
+              >
+                Previous
+              </button>
+              <button
+                onClick={() => handlePageChange(page + 1)}
+                disabled={page * employeesPerPage >= filteredEmployees.length}
+              >
+                Next
+              </button>
             </div>
+          </div>
+        )}
+
+        {currentPage === "dateSelection" &&
+          currentEventType === "vacation" && (
+            <VacationModal
+              employeeName={selectedEmployee?.fullName}
+              closeModal={closeModal}
+              selectedEmployee={selectedEmployee}
+            />
           )}
 
-          {currentPage === "dateSelection" &&
-            currentEventType === "vacation" && (
-              <VacationModal
-                employeeName={selectedEmployee?.fullName}
-                closeModal={closeModal}
-                selectedEmployee={selectedEmployee}
-              />
-            )}
+        {currentPage === "dateSelection" &&
+          currentEventType === "sickLeave" && (
+            <SickLeaveModal
+              employeeName={selectedEmployee?.fullName}
+              closeModal={closeModal}
+              selectedEmployee={selectedEmployee}
+            />
+          )}
 
-          {currentPage === "dateSelection" &&
-            currentEventType === "sickLeave" && (
-              <SickLeaveModal
-                employeeName={selectedEmployee?.fullName}
-                closeModal={closeModal}
-                selectedEmployee={selectedEmployee}
-              />
-            )}
+        {currentPage === "dateSelection" &&
+          currentEventType === "wedding" && (
+            <WeddingModal
+              selectedEmployee={selectedEmployee}
+              selectedWeddingDate={selectedStartDate}
+              setSelectedWeddingDate={setSelectedStartDate}
+              closeModal={closeModal}
+            />
+          )}
 
-          {currentPage === "dateSelection" &&
-            currentEventType === "wedding" && (
-              <WeddingModal
-                selectedEmployee={selectedEmployee}
-                selectedWeddingDate={selectedStartDate}
-                setSelectedWeddingDate={setSelectedStartDate}
-                closeModal={closeModal}
-              />
-            )}
+        {currentPage === "dateSelection" &&
+          currentEventType === "engagement" && (
+            <EngagementModal
+              selectedEmployee={selectedEmployee}
+              selectedEngagementDate={selectedStartDate}
+              setSelectedEngagementDate={setSelectedStartDate}
+              closeModal={closeModal}
+            />
+          )}
 
-          {currentPage === "dateSelection" &&
-            currentEventType === "engagement" && (
-              <EngagementModal
-                selectedEmployee={selectedEmployee}
-                selectedEngagementDate={selectedStartDate}
-                setSelectedEngagementDate={setSelectedStartDate}
-                closeModal={closeModal}
-              />
-            )}
+        {currentPage === "dateSelection" &&
+          currentEventType === "weddingAnniversary" && (
+            <WeddingAnniversaryModal
+              selectedEmployee={selectedEmployee}
+              selectedAnniversaryDate={selectedStartDate}
+              setSelectedAnniversaryDate={setSelectedStartDate}
+              closeModal={closeModal}
+            />
+          )}
 
-          {currentPage === "dateSelection" &&
-            currentEventType === "weddingAnniversary" && (
-              <WeddingAnniversaryModal
-                selectedEmployee={selectedEmployee}
-                selectedAnniversaryDate={selectedStartDate}
-                setSelectedAnniversaryDate={setSelectedStartDate}
-                closeModal={closeModal}
-              />
-            )}
-
-          {currentPage === "dateSelection" &&
-            currentEventType === "childrenOfWorkers" && (
-              <EmployeesChildren
-                employeeName={selectedEmployee.fullName}
-                familyMembers={selectedEmployee.familyMembers}
-                closeModal={closeModal}
-                selectedEmployee={selectedEmployee}
-                setCurrentPage={setCurrentPage}
-              />
-            )}
-        </Modal>
+        {currentPage === "dateSelection" &&
+          currentEventType === "childrenOfWorkers" && (
+            <EmployeesChildren
+              employeeName={selectedEmployee.fullName}
+              familyMembers={selectedEmployee.familyMembers}
+              selectedEmployee={selectedEmployee}
+              setCurrentPage={setCurrentPage}
+              refreshFamilyMembers={refreshFamilyMembers} // Pass the refresh function
+            />
+          )}
+      </Modal>
     </div>
   );
 }

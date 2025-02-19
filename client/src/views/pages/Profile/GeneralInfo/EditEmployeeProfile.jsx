@@ -1,10 +1,11 @@
-import { React, useId } from "react";
+import { React, useId, useState } from "react";
 import { Link } from "react-router-dom";
 import EditPersonalInfoModal from "../../../../components/Modals/EditPersonalInfoModal";
 import AddFamilyMember from "./AddFamilyMember";
 import { ListItem, ProjectDetails } from "../ProfileContent";
 
 const EditEmployeeProfile = ({ selectedEmployee }) => {
+  const sons = null
   const personalInfoData = [
     { id: 1, title: "ID", text: selectedEmployee?.employeeId },
     { id: 2, title: "Date of birth", text: new Date (selectedEmployee?.dateOfBirth).toLocaleDateString("en-GB") },
@@ -74,33 +75,6 @@ const EditEmployeeProfile = ({ selectedEmployee }) => {
       : null,
   ].filter(Boolean);
 
-  const secondaryContactData = [
-    { id: 1, title: "Name", text: "Karen Wills" },
-    { id: 2, title: "Relationship", text: "Brother" },
-    { id: 3, title: "Phone", text: "9876543210, 9876543210" },
-  ];
-  const bankInfoData = [
-    { id: 1, title: "Bank name", text: "ICICI Bank" },
-    { id: 2, title: "Bank account No.", text: "159843014641" },
-    { id: 3, title: "IFSC Code", text: "ICI24504" },
-    { id: 4, title: "PAN No", text: "TC000Y56" },
-  ];
-
-  const educationData = [
-    {
-      id: 1,
-      name: "International College of Arts and Science (UG)",
-      description: "Bsc Computer Science",
-      time: "2020 - 2023",
-    },
-    {
-      id: 2,
-      name: "International College of Arts and Science (PG)",
-      description: "Msc Computer Science",
-      time: "2021 - 2023",
-    },
-    // Add more education info data as needed
-  ];
   return (
     <>
       <div className="tab-content">
@@ -136,37 +110,13 @@ const EditEmployeeProfile = ({ selectedEmployee }) => {
             </div>
           </div>
           <div className="row">
-            {/* <div className="col-md-6 d-flex">
-              <div className="card profile-box flex-fill">
-                <div className="card-body">
-                  <h3 className="card-title">Bank information</h3>
-                  <ul className="personal-info">
-                    {bankInfoData.map((item, index) => (
-                      <ListItem
-                        id={item.id}
-                        key={index}
-                        title={item.title}
-                        text={item.text}
-                      />
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </div> */}
+
             <div className="col-md-6 d-flex">
               <div className="card profile-box flex-fill">
                 <div className="card-body">
                   <h3 className="card-title">
+                              <AddFamilyMember selectedEmployee={selectedEmployee} sons={sons} />
                     Family Information{" "}
-                    <Link
-                      to="#"
-                      className="edit-icon"
-                      data-bs-toggle="modal"
-                      data-bs-target="#family_info_modal"
-                      title="Add a family member"
-                    >
-                      <i className="fa fa-user-plus" />
-                    </Link>
                   </h3>
                   <div className="table-responsive">
                     <table className="table table-nowrap">
@@ -215,43 +165,6 @@ const EditEmployeeProfile = ({ selectedEmployee }) => {
             </div>
           </div>
           <div className="row">
-            {/* <div className="col-md-6 d-flex">
-              <div className="card profile-box flex-fill">
-                <div className="card-body">
-                  <h3 className="card-title">
-                    Education Information{" "}
-                    <Link
-                      to="#"
-                      className="edit-icon"
-                      data-bs-toggle="modal"
-                      data-bs-target="#education_info"
-                    >
-                      <i className="fa fa-pencil" />
-                    </Link>
-                  </h3>
-                  <div className="experience-box">
-                    <ul className="experience-list">
-                      {educationData.map((item) => (
-                        <li key={item.id}>
-                          <div className="experience-user">
-                            <div className="before-circle" />
-                          </div>
-                          <div className="experience-content">
-                            <div className="timeline-content">
-                              <Link to="/" className="name">
-                                {item.name}
-                              </Link>
-                              <div>{item.description}</div>
-                              <span className="time">{item.time}</span>
-                            </div>
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div> */}
 
             <div className="col-md-6 d-flex">
               <div className="card profile-box flex-fill">
@@ -353,14 +266,8 @@ const EditEmployeeProfile = ({ selectedEmployee }) => {
           </div>
         </div>
         <ProjectDetails selectedEmployee={selectedEmployee} />
-        {/* Bank Statutory Tab */}
-
-        {/* Bank Statutory Tab */}
-        {/*  Bank Tab */}
       </div>
-      {/* Model Popup*/}
       <EditPersonalInfoModal selectedEmployee={selectedEmployee} />
-      <AddFamilyMember selectedEmployee={selectedEmployee} />
     </>
   );
 };
