@@ -1,4 +1,4 @@
-import { React, useCallback } from "react";
+import { React, useId, useState,useCallback } from "react";
 import { Link } from "react-router-dom";
 import EditPersonalInfoModal from "../../../../components/Modals/EditPersonalInfoModal";
 import AddFamilyMember from "./AddFamilyMember";
@@ -26,6 +26,7 @@ const EditEmployeeProfile = ({ selectedEmployee }) => {
     queryFn: fetchEmployeeData,
     enabled: !!employeeId,
   });
+  const sons = null
   const personalInfoData = [
     { id: 1, title: "ID", text: selectedEmployee?.employeeId },
     {
@@ -119,16 +120,8 @@ const EditEmployeeProfile = ({ selectedEmployee }) => {
               <div className="card profile-box flex-fill">
                 <div className="card-body">
                   <h3 className="card-title">
+                              <AddFamilyMember selectedEmployee={selectedEmployee} sons={sons} />
                     Family Information{" "}
-                    <Link
-                      to="#"
-                      className="edit-icon"
-                      data-bs-toggle="modal"
-                      data-bs-target="#family_info_modal"
-                      title="Add a family member"
-                    >
-                      <i className="fa fa-user-plus" />
-                    </Link>
                   </h3>
                   <div className="table-responsive">
                     <table className="table table-nowrap">
@@ -177,43 +170,6 @@ const EditEmployeeProfile = ({ selectedEmployee }) => {
             </div>
           </div>
           <div className="row">
-            {/* <div className="col-md-6 d-flex">
-              <div className="card profile-box flex-fill">
-                <div className="card-body">
-                  <h3 className="card-title">
-                    Education Information{" "}
-                    <Link
-                      to="#"
-                      className="edit-icon"
-                      data-bs-toggle="modal"
-                      data-bs-target="#education_info"
-                    >
-                      <i className="fa fa-pencil" />
-                    </Link>
-                  </h3>
-                  <div className="experience-box">
-                    <ul className="experience-list">
-                      {educationData.map((item) => (
-                        <li key={item.id}>
-                          <div className="experience-user">
-                            <div className="before-circle" />
-                          </div>
-                          <div className="experience-content">
-                            <div className="timeline-content">
-                              <Link to="/" className="name">
-                                {item.name}
-                              </Link>
-                              <div>{item.description}</div>
-                              <span className="time">{item.time}</span>
-                            </div>
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div> */}
 
             <div className="col-md-6 d-flex">
               <div className="card profile-box flex-fill">
@@ -315,14 +271,8 @@ const EditEmployeeProfile = ({ selectedEmployee }) => {
           </div>
         </div>
         <ProjectDetails selectedEmployee={selectedEmployee} />
-        {/* Bank Statutory Tab */}
-
-        {/* Bank Statutory Tab */}
-        {/*  Bank Tab */}
       </div>
-      {/* Model Popup*/}
       <EditPersonalInfoModal selectedEmployee={selectedEmployee} />
-      <AddFamilyMember selectedEmployee={selectedEmployee} />
     </>
   );
 };
