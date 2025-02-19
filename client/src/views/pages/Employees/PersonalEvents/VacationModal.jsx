@@ -4,8 +4,8 @@ import ReactDatePicker from "react-datepicker";
 import Select from "react-select";
 import axios from "axios";
 import "react-datepicker/dist/react-datepicker.css";
-// import { useUpdateVacation } from "../../../../services/api/useUpdateEvent";
 import { updateEmployeeVacation } from "../../../../services";
+import Swal from "sweetalert2";
 
 const VacationModal = ({ closeModal, selectedEmployee }) => {
   const [countryOptions, setCountryOptions] = useState([]);
@@ -13,9 +13,7 @@ const VacationModal = ({ closeModal, selectedEmployee }) => {
   const [selectedEndDate, setSelectedEndDate] = useState(null);
   const [selectedPurpose, setSelectedPurpose] = useState(null);
   const [selectedCountry, setSelectedCountry] = useState(null);
-  // const { updateVacation } = useUpdateVacation();
-
-  const [showModal, setShowModal] = useState(true); // Modal visibility state
+  const [showModal, setShowModal] = useState(true); 
  
   useEffect(() => {
     const fetchCountries = async () => {
@@ -57,14 +55,21 @@ const VacationModal = ({ closeModal, selectedEmployee }) => {
   const handleSubmit = async () => {
     try {
       const vacationData = {
-        id: selectedEmployee?.id,
+        employeeId: selectedEmployee?.employeeId,
         purposeOfTrip: selectedPurpose,
-        destination: selectedCountry?.value,
+        destination: selectedCountry?.label,
         startDate: selectedStartDate, 
         endDate: selectedEndDate, 
+      }      
+     const response = await updateEmployeeVacation(vacationData)
+      if(response.status === 200) {
+        Swal.fire(
+                  "Success!",
+                  `${selectedEmployee?.fullName}'s vacation has been created successfully!`,
+                  "success"
+                );
+        closeModal();
       }
-      await updateEmployeeVacation(vacationData)
-      closeModal();
     } catch (error) {
       console.error("Error updating vacation:", error);
     }

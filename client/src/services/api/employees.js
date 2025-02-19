@@ -81,7 +81,7 @@ export const deleteEmployee = async (id) => {
   }
 };
 export const updateEmployeeVacation = async ({
-  id,
+  employeeId,
   purposeOfTrip,
   destination,
   startDate,
@@ -94,7 +94,7 @@ export const updateEmployeeVacation = async ({
   selectedEndDate.setDate(selectedEndDate.getDate() + 1)
   try {
     const response = await client.post("/employee/create-vacation", {
-      id,
+      employeeId,
       purposeOfTrip,
       destination,
       startDate: selectedStartDate,
@@ -121,7 +121,7 @@ export const updateEmployeeSickLeave = async ({
   const selectedEndDate = new Date(endDate)
   selectedEndDate.setDate(selectedEndDate.getDate() + 1)
   try {
-    const response = await client.post("/updateEmployeeSickLeave", {
+    const response = await client.post("/employee/create-sick-leave", {
       id,
       startDate: selectedStartDate,
       endDate:selectedEndDate,
