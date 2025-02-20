@@ -18,8 +18,6 @@ export default function CreateEmployeeEvent() {
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [page, setPage] = useState(1);
-  const queryClient = useQueryClient(); // Add this at the top
-
 
   const [selectedStartDate, setSelectedStartDate] = useState(null);
 
@@ -167,7 +165,6 @@ export default function CreateEmployeeEvent() {
         {currentPage === "dateSelection" &&
           currentEventType === "vacation" && (
             <VacationModal
-              employeeName={selectedEmployee?.fullName}
               closeModal={closeModal}
               selectedEmployee={selectedEmployee}
             />
@@ -176,7 +173,6 @@ export default function CreateEmployeeEvent() {
         {currentPage === "dateSelection" &&
           currentEventType === "sickLeave" && (
             <SickLeaveModal
-              employeeName={selectedEmployee?.fullName}
               closeModal={closeModal}
               selectedEmployee={selectedEmployee}
             />
@@ -215,7 +211,6 @@ export default function CreateEmployeeEvent() {
         {currentPage === "dateSelection" &&
           currentEventType === "childrenOfWorkers" && (
             <EmployeesChildren
-              employeeName={selectedEmployee.fullName}
               familyMembers={selectedEmployee.familyMembers}
               selectedEmployee={selectedEmployee}
               setCurrentPage={setCurrentPage}

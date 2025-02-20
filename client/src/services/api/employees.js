@@ -179,24 +179,23 @@ export const addSonEvents = async ({ employeeId, childName, eventType, startDate
 };
 
 
-export const updateEmployeeEvent = async ({ eventType, id, startDate, endDate }) => {
-  const selectedStartDate = new Date(startDate);
-  selectedStartDate.setDate(selectedStartDate.getDate() + 1); 
+export const updateEmployeeEventMarriageEvent = async (engagementData) => {
+  const eventDate = new Date(engagementData.eventDate);
+  eventDate.setDate(eventDate.getDate() + 1); 
   
-  const selectedEndDate = new Date(endDate);
-  selectedEndDate.setDate(selectedEndDate.getDate() + 1);
-
   try {
-    const response = await client.post(`/updateEmployeeEvent/${eventType}`, {
-      id,
-      startDate: selectedStartDate,
-      endDate: selectedEndDate,
+    const response = await client.post("/employee/create-marriage-event", {
+      employeeId: engagementData.employeeId,
+      eventType: engagementData.eventType,
+      eventDate,
+      spouseFullName: engagementData.spouseFullName,
+      spouseGender: engagementData.spouseGender,
     });
 
     if (response.status === 200) {
       return response;
     }
   } catch (error) {
-    console.error(`Error updating employee's ${eventType}:`, error);
+    console.error(`Error updating employee's ${engagementData.eventType}: event`, error);
   }
 };

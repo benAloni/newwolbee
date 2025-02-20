@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import ReactDatePicker from "react-datepicker";
 import { useUpdateEvent } from "../../../../services/api/useUpdateEvent";
 import { Modal, Button } from "react-bootstrap";
+import Swal from "sweetalert2";
+import Select from "react-select";
+import { useForm } from "react-hook-form";
 
 export default function WeddingModal({
   selectedWeddingDate,
@@ -12,12 +15,21 @@ export default function WeddingModal({
   const { mutateAsync: updateWeddingDay } = useUpdateEvent("wedding");
 
   const [showModal, setShowModal] = useState(true);
+  const [selectedGender, setSelectedGender] = useState("");
+  const {
+      register,
+      handleSubmit,
+      reset,
+      setValue,
+      watch,
+      formState: { errors, isSubmitting },
+    } = useForm();
 
   const handleWeddingDateChange = (date) => {
-    setSelectedWeddingDate(date);
+    setSelectedWeddingDate(date.toISOString());
   };
 
-  const handleSubmit = async () => {
+  const onSubmit = async () => {
     try {
       const weddingData = {
         id: selectedEmployee.id,
@@ -27,9 +39,16 @@ export default function WeddingModal({
         show: false,
       };
 
-      await updateWeddingDay(weddingData);
-      setSelectedWeddingDate(null); // Reset selected date
-      closeModal();
+      const response = await updateWeddingDay(weddingData);
+      if (response.status === 200) {
+        Swal.fire(
+          "Success!",
+          `${selectedEmployee?.fullName}'s wedding has been created successfully!`,
+          "success"
+        );
+        closeModal();
+        setSelectedWeddingDate(null);
+      }
     } catch (error) {
       console.error("Error updating wedding day:", error);
     }
@@ -51,15 +70,13 @@ export default function WeddingModal({
     >
       {" "}
       <Modal.Header closeButton>
-        <Modal.Title>
-          Set Wedding Date for {selectedEmployee.fullName}
-        </Modal.Title>
+        <Modal.Title>{selectedEmployee.fullName}'s Wedding Details</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <div style={{ textAlign: "center" }}>
-          <h2 style={{ marginTop: "30px", marginBottom: "10px" }}>
+          <label style={{ marginTop: "30px", marginBottom: "10px" }}>
             When is the wedding?
-          </h2>
+          </label>
           <div style={{ display: "flex", justifyContent: "center" }}>
             <div style={{ width: "250px" }}>
               <ReactDatePicker
@@ -78,7 +95,7 @@ export default function WeddingModal({
         <Button variant="secondary" onClick={handleCloseModal}>
           Close
         </Button>
-        <Button variant="primary" onClick={handleSubmit}>
+        <Button variant="primary" onClick={handleSubmit(onSubmit)}>
           Confirm
         </Button>
       </Modal.Footer>

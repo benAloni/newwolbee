@@ -10,7 +10,7 @@ import {
   addSonEvents,
   fetchEmployeeFamilyMembers,
   fetchEmployeeEmergencyContacts,
-  updateEmployeeEvent
+  updateEmployeeEventMarriageEvent
 } from "./api/employees";
 import { fetchUserProfilePic,fetchEmployeesProfilePics } from "./api/profile";
 import { fetchEvents } from "./api/calendarEvents";
@@ -24,7 +24,6 @@ import {
 import { fetchHolidaysDetailsOptions, fetchInternationalFoodDays } from "./api/holidaysDetails";
 import { useGetTeamsQuery } from "./queries/teamsQuery.js";
 export {
-  updateEmployeeEvent,
   fetchTeams,
   fetchEmployees,
   fetchEmployee,
@@ -48,5 +47,6 @@ export {
   fetchEmployeeFamilyMembers,
   fetchEmployeeEmergencyContacts,
   fetchInternationalFoodDays,
-  useGetTeamsQuery
+  useGetTeamsQuery, 
+  updateEmployeeEventMarriageEvent,
 };

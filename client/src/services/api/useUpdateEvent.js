@@ -8,7 +8,7 @@ const useUpdateEvent = (eventType) => {
     mutationFn: async (eventData) => {
       const token = await auth.currentUser.getIdToken();
       const response = await axios.post(
-        `${process.env.REACT_APP_SERVER_URI}/updateEmployeeEvent`,  // Make sure this is correct
+        `${process.env.REACT_APP_SERVER_URI}/employee/create-marriage-event`,  
         eventData,
         {
           headers: {

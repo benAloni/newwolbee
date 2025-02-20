@@ -9,9 +9,7 @@ import Project from "../../views/pages/Employees/Projects/Project.jsx";
 
 import ClientProfile from "../../views/pages/Profile/ClientProfile.jsx";
 import EmployeeProfile from "../../views/pages/Profile/EmployeeProfile.jsx";
-import EmployeeList from "../../views/pages/Employees/EmployeeList.jsx";
 import Assets from "../../views/pages/Administration/Assets/index.jsx";
-import DealsDashboard from "../../views/pages/MainPages/Dashboards/DealsDashboard/index.jsx";
 import CompanyEvents from "../../views/pages/Authentication/CompanyEvents.jsx";
 import RetentionStatistics from "../../views/pages/MainPages/Dashboards/Admin/RetentionStatistics.jsx";
 import BirthdayPresentPage from "../../views/pages/MainPages/Apps/notifications/mainNotifications/ShowNotifications/BirthdayPresentPage.jsx";
@@ -98,16 +96,7 @@ const AppContainer = () => {
       path: "profile/:employeeId",
       element: <EmployeeProfile />,
     },
-    {
-      id: 64,
-      path: "employees-list",
-      element: <EmployeeList />,
-    },
-   {
-      id: 122,
-      path: "deals-dashboard",
-      element: <DealsDashboard />,
-    },
+  
     {
       id: 132,
       path: "retention-statistics",
