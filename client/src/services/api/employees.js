@@ -2,7 +2,7 @@ import { client } from "../axiosClient/axiosClientApi";
 
 export const fetchEmployees = async () => {
   try {
-    const response = await client.get("/getEmployees");
+    const response = await client.get("/employees");
     if (response.status === 200) {
       const result = response.data;                  
       return result;
@@ -14,7 +14,7 @@ export const fetchEmployees = async () => {
 
 export const fetchEmployee = async (employeeId) => {
   try {
-    const response = await client.get(`/getEmployee/${employeeId}`);
+    const response = await client.get(`/employee/${employeeId}`);
     if (response.status === 200) {
       return response.data;
     }
@@ -48,7 +48,7 @@ export const fetchEmployeeEmergencyContacts = async (employeeId) => {
 
 export const addEmployee = async ({ employeeData }) => {    
   try {
-    const response = await client.post("/addEmployee", {
+    const response = await client.post("/employee", {
       employeeData,
     });
     if (response.status === 200) {
@@ -66,7 +66,7 @@ export const addEmployee = async ({ employeeData }) => {
 };
 export const deleteEmployee = async (id) => {
   try {
-    const response = await client.delete("/deleteEmployee", {
+    const response = await client.delete("/employee", {
       data: { id },
     });
     if (response.status === 200) {

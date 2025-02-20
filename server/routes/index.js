@@ -53,15 +53,15 @@ router.post("/create-account", fillUserInfo);
 // //login
 router.post("/login", verifyAuthentication);
 //get Teams
-router.get("/getTeams", getTeams);
+router.get("/teams", getTeams);
 //get all employees
-router.get("/getEmployees", getEmployees);
+router.get("/employees", getEmployees);
 //get an employee by id
-router.get("/getEmployee/:employeeId", getEmployee);
+router.get("/employee/:employeeId", getEmployee);
 //add new employee
-router.post("/addEmployee", addEmployee);
+router.post("/employee", addEmployee);
 //delete an employee
-router.delete("/deleteEmployee", deleteEmployee);
+router.delete("/employee", deleteEmployee);
 //add Update employee
 router.post("/employee/create-vacation", updateEmployeeVacation);
 //update employee sick leave 
