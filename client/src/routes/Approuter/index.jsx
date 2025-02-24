@@ -7,7 +7,11 @@ import CreateAccount from "../../views/pages/Authentication/CreateAccount";
 import ChangePassword from "../../views/pages/Authentication/ChangePassword";
 import ForgotPassword from "../../views/pages/Authentication/ForgotPassword";
 import ProtectedRoutes from "./ProtectedRoutes";
-import PublicRoutes from "./PublicRoutes";
+import PublicRoutes from "./PublicRoutes"; 
+import Questionnaire from "../../views/pages/Employees/form/Questionnaire.jsx";
+
+
+
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -25,15 +29,20 @@ const AppRouter = () => {
       <BrowserRouter>
         <ScrollToTop />
         <Routes>
-          <Route element={<PublicRoutes />}>
+            <Route path="/questionnaire" element={<Questionnaire />} />
+            
+            <Route element={<PublicRoutes />}>
             <Route path="/" element={<Login />} />
             <Route path="/change-password" element={<ChangePassword />} />
             <Route path="/register" element={<Register />} />
             <Route path="/create-account" element={<CreateAccount />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
+           
           </Route>
           <Route element={<ProtectedRoutes />}>
             <Route path="/*" element={<AppContainer />} />
+            {/* <Route path="/questionnaire" element={<Questionnaire />} /> */}
+
           </Route>
         </Routes>
       </BrowserRouter>
