@@ -14,11 +14,13 @@ import { useDispatch } from "react-redux";
 import { useQueryClient } from "@tanstack/react-query";
 import logo from "./logo.png";
 
+
 const SideBar = () => {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
+  
 
   const pathname = location.pathname;
   const [sidebarData, setSidebarData] = useState([]);
@@ -107,27 +109,29 @@ const SideBar = () => {
     >
       <div className="sidebar-inner slimscroll" style={{ overflow: false }}>
         <div id="sidebar-menu" className="sidebar-menu">
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              padding: "20px",
-            }}
-          >
-            <img
-              src={logo}
-              alt="logo"
-              style={{
-                width: "70px" /* גודל התמונה */,
-                height: "70px" /* גובה התמונה */,
-                borderRadius: "50%" /* עיגול לתמונה */,
-                objectFit: "cover" /* שומר על פרופורציות התמונה */,
-                // border: '2px solid #000', /* קו מסביב לתמונה */
-                display: "block",
-              }}
-            />
-          </div>
+        <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        padding: "20px",
+        cursor: "pointer",
+      }}
+      onClick={() => navigate("/manager-dashboard")}
+    >
+      <img
+        src={logo}
+        alt="logo"
+        style={{
+          width: "70px",
+          height: "70px",
+          borderRadius: "50%",
+          objectFit: "cover",
+          display: "block",
+        }}
+      />
+    </div>
+  
 
           <Scrollbars
             autoHide={false}

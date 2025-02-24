@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useQueryClient, useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import Select from "react-select";
-import { useGetTeamsQuery } from "../../../../../services";
+import { fetchTeams } from "../../../../../services";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { userProfile } from "../../../../../imgs";
@@ -12,6 +12,9 @@ import { fetchEmployees, fetchUserProfilePic } from "../../../../../services";
 import EmployeesWorkingHours from "./EmployeesWorkingHours";
 import CreateEmployeeEvent from "../../../Employees/PersonalEvents/CreateEmployeeEvent";
 import { GrLinkNext } from "react-icons/gr";
+import "./AdminStatistics.css"
+
+
 export default function AdminStatistics() {
   // states
   const [selectedTeam, setSelectedTeam] = useState("");
@@ -26,7 +29,7 @@ export default function AdminStatistics() {
   const [filteredEmployees, setFilteredEmployees] = useState([]);
 
   const queryClient = useQueryClient();
-  const { data: teams } = useGetTeamsQuery();
+
   useEffect(() => {
     const today = new Date();
     const hours = today.getHours(); // Get the current hour (0-23)
@@ -52,6 +55,10 @@ export default function AdminStatistics() {
     queryKey: ["user-profile-pic"],
     queryFn: () => fetchUserProfilePic(uid),
     enabled: !!uid,
+  });
+  const { data: teams } = useQuery({
+    queryKey: ["teams"],
+    queryFn: fetchTeams,
   });
 
   useEffect(() => {
@@ -184,6 +191,8 @@ export default function AdminStatistics() {
           <h1 className="greeting">
             {greeting}, {username ? ` ${username} ` : "User"}
           </h1>
+          <br></br>
+         
           <div className="newSelect">
             <Select
               options={teams?.map((team) => ({
@@ -201,30 +210,27 @@ export default function AdminStatistics() {
       <div className="dashboard-statistics">
         {/* Members Card */}
         <div className="data-container">
-          <h3 className="h3">Members</h3>
-          <div className="members-card">
-            {employees &&
-              filteredEmployees?.map((employee) => (
-                <div key={employee.employeeId} className="profile-img">
-                  <Link
-                    to={`/profile/${employee.employeeId}`}
-                    className="avatar"
-                  >
-                    <img
-                      loading="lazy"
-                      src={employee.imageUrl}
-                      alt={employee.fullName}
-                      className="employee-image"
-                    />
-                  </Link>
-                  <span className="employee-fullname">
-                    <Link to={`/profile/${employee.employeeId}`}>
-                      {employee.fullName}
+          <h3 className="h3">Team Members</h3>
+            <div className="members-card">
+              {employees &&
+                filteredEmployees?.map((employee) => (
+                  <div key={employee._id} className="profile-img">
+                    <Link to={`/profile/${employee._id}`} className="avatar">
+                      <img
+                        loading="lazy"
+                        src={employee.imageUrl}
+                        alt={employee.fullName}
+                        className="employee-image"
+                      />
                     </Link>
-                  </span>
-                </div>
-              ))}
-          </div>
+                    <span className="employee-fullname">
+                      <Link to={`/profile/${employee._id}`}>
+                        {employee.fullName}
+                      </Link>
+                    </span>
+                  </div>
+                ))}
+            </div>
         </div>
 
         {/* Team Satisfaction Card */}
@@ -261,12 +267,12 @@ export default function AdminStatistics() {
         {/* Employees Over 100% Hours */}
         <div className="data-container members-hours-card">
           <h3 className="h3">Employees Over 100% Hours</h3>
-          <EmployeesWorkingHours employees={employees} />
+            <EmployeesWorkingHours employees={employees} />
         </div>
 
         {/* Conversations 1:1 */}
         <div className="data-container">
-          <h3 className="h3">Conversations 1:1</h3>
+          <h3 className="h3">1:1 Conversations </h3>
           <div className="progress-circle">
             <CircularProgressbar
               value={percentage}
@@ -287,13 +293,29 @@ export default function AdminStatistics() {
         <div className="data-container birthday-card">
           <div className="card-header">
             <h3 className="card-title">Upcoming Birthdays</h3>
-            <span className="next-button" onClick={handleSeeAllClick}>
-              <GrLinkNext />
-            </span>
+            {/* <span className="next-button" onClick={handleSeeAllClick}>
+            <GrLinkNext />
+            </span> */}
           </div>
           <ul className="birthday-list">
             {employeesFormattedBirthdays().map((employee, index) => (
               <li key={index} className="birthday-item">
+               <div key={employee._id} className="profile-img">
+                    <Link to={`/profile/${employee._id}`} className="avatar">
+                      <img
+                        loading="lazy"
+                        src={employee.imageUrl}
+                        alt={employee.fullName}
+                        className="employee-image"
+                      />
+                    </Link>
+                    <span className="employee-fullname">
+                      <Link to={`/profile/${employee._id}`}>
+                  
+                      </Link>
+                    </span>
+                  </div>
+              
                 <span className="birthday-date">
                   {new Date(employee.birthdayThisYear).toLocaleDateString(
                     "en-GB",
@@ -303,10 +325,10 @@ export default function AdminStatistics() {
                     }
                   )}
                 </span>
+
+
                 <span className="employee-fullName">{employee.fullName}</span>
-                <div className="employee-interesting-fact">
-                  {employee.interestingFact}
-                </div>
+               
               </li>
             ))}
           </ul>

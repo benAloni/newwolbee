@@ -33,7 +33,7 @@ const EmployeesWorkingHours = () => {
     }
   };
 
-  const { data: employees , isLoading } = useQuery({
+  const { data: employees, isLoading } = useQuery({
     queryKey: ['employees'],
     queryFn: getEmployees,
   });
@@ -45,17 +45,21 @@ const EmployeesWorkingHours = () => {
   useEffect(() => {    
     if (employees?.length > 0) {      
       const filtered = employees.filter((employee) =>
-        employee.fullName.includes(searchTerm)
+        employee.fullName.toLowerCase().includes(searchTerm.toLowerCase())
       );
       setFilteredEmployees(filtered);
     }
   }, [searchTerm, employees]);
 
   const maxPerformance = Math.max(...filteredEmployees.map((e) => e.performance || 0), 0);
-  const percentageData = filteredEmployees.map((employee) => ({
-    ...employee,
-    percentage: maxPerformance ? Math.round(((employee.performance || 0) / maxPerformance) * 110) : 0,
-  }));
+
+  // Calculate percentages and filter only employees who exceeded 100%
+  const percentageData = filteredEmployees
+    .map((employee) => ({
+      ...employee,
+      percentage: maxPerformance ? Math.round(((employee.performance || 0) / maxPerformance) * 110) : 0,
+    }))
+    .filter((employee) => employee.percentage > 100); // Displays only employees who exceeded 100%
 
   // Component styling
   const sectionStyle = {
@@ -76,7 +80,7 @@ const EmployeesWorkingHours = () => {
     border: '1px solid #ccc',
     width: '100%',
     fontSize: '0.9rem',
-    height:"25px"
+    height: "25px",
   };
 
   const chartStyle = {
@@ -86,9 +90,8 @@ const EmployeesWorkingHours = () => {
     alignItems: 'center',
     maxHeight: '180px',
     overflowY: 'auto', 
-    scrollbarWidth: 'none', //For Firefox
+    scrollbarWidth: 'none',
     msOverflowStyle: 'none',
-    
   };
 
   const listItemStyle = {
@@ -98,10 +101,23 @@ const EmployeesWorkingHours = () => {
     justifyContent: 'space-between', 
   };
 
+  const labelContainerStyle = {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '10px',
+    flex: 1,
+  };
+
+  const avatarStyle = {
+    width: '30px',
+    height: '30px',
+    borderRadius: '50%',
+    objectFit: 'cover',
+    border: '1px solid #ddd',
+  };
+
   const labelStyle = {
-    marginRight: '0.5rem',
     fontWeight: 'bold',
-    flex: 1, 
   };
 
   const barContainerStyle = {
@@ -110,7 +126,6 @@ const EmployeesWorkingHours = () => {
     borderRadius: '0.3rem',
     overflow: 'hidden',
     backgroundColor: '#e0e0e0',
-    
   };
 
   const barStyle = (percentage) => ({
@@ -131,24 +146,25 @@ const EmployeesWorkingHours = () => {
         <p>Loading...</p>
       ) : (
         <>
-          <input
-            type="text"
-            placeholder="Search by full name..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            style={searchStyle}
-          />
-          <ul style={chartStyle}>
-            {percentageData.map((employee) => (
-              <li key={employee.id} style={listItemStyle}>
-                <span style={labelStyle}>{employee.fullName}</span>
-                <div style={barContainerStyle}>
-                  <div style={barStyle(employee.percentage)}></div>
-                </div>
-                <span style={percentageStyle}>{employee.percentage}%</span>
-              </li>
-            ))}
-          </ul>
+       
+          {percentageData.length > 0 ? (
+            <ul style={chartStyle}>
+              {percentageData.map((employee) => (
+                <li key={employee.id} style={listItemStyle}>
+                  <div style={labelContainerStyle}>
+                    <img src={employee.imageUrl} alt={employee.fullName} style={avatarStyle} />
+                    <span style={labelStyle}>{employee.fullName}</span>
+                  </div>
+                  <div style={barContainerStyle}>
+                    <div style={barStyle(employee.percentage)}></div>
+                  </div>
+                  <span style={percentageStyle}>{employee.percentage}%</span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>No employees exceeded 100% hours</p>
+          )}
         </>
       )}
     </section>
