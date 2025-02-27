@@ -13,7 +13,7 @@ import {
   deleteObject,
 } from "firebase/storage";
 import Swal from "sweetalert2";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import {
   addEmployee,
   fetchTeams,
@@ -23,19 +23,21 @@ import { userProfile } from "../../../imgs";
 import { useSelector } from "react-redux";
 
 const AddEmployeeModal = ({ onEmployeeAdded }) => {
-  const [selectedGender, setSelectedGender] = useState("");
-  const [selectedMaritalStatus, setSelectedMaritalStatus] = useState("");
-  const [selectedTeam, setSelectedTeam] = useState("");
-  const [selectedReligion, setSelectedReligion] = useState("");
-  const [childrenCount, setChildrenCount] = useState(0);
-  const [selectedEthnicity, setSelectedEthnicity] = useState("");
-  const [employeeDates, setEmployeeDates] = useState({
+  const defaultValues = {
     dateOfBirth: null,
     startDay: null,
     anniversary: null,
-  });
-
+    spouseDob: null,
+  };
+  const [childrenCount, setChildrenCount] = useState(0);
+  const [selectedMaritalStatus, setSelectedMaritalStatus] = useState("");
+  const [selectedOption, setSelectedOption] = useState(null);
   const [employeeProfileImage, setEmployeeProfileImage] = useState(null);
+  const genderOptions = [
+    { value: "Male", label: "Male" },
+    { value: "Female", label: "Female" },
+    { value: "Other", label: "Other" },
+  ];
   const [relationOptions, setRelationOptions] = useState([
     { value: "Mother", label: "Mother" },
     { value: "Father", label: "Father" },
@@ -48,9 +50,9 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
     { value: "Aunt", label: "Aunt" },
     { value: "Friend", label: "Friend" },
   ]);
-  const [selectedContactGender, setSelectedContactGender] = useState(null);
   const [selectedContactRelation, setSelectedContactRelation] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
+
   const queryClient = useQueryClient();
   const {
     register,
@@ -58,46 +60,24 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
     reset,
     setValue,
     watch,
+    control,
     formState: { errors, isSubmitting },
-  } = useForm();
+  } = useForm({ defaultValues });
   const uid = useSelector((state) => state.auth?.user.uid);
   const employeeId = watch("employeeId");
-  const genderRef = useRef();
-  const religionRef = useRef();
-  const ethnicityRef = useRef();
-  const maritalStatusRef = useRef();
-  const teamRef = useRef();
   const contactRef = useRef();
-  const contactGenderRef = useRef();
-
+  const maritalStatusRef = useRef();
   const resetForm = () => {
     reset();
-    genderRef.current.clearValue();
-    religionRef.current.clearValue();
-    ethnicityRef.current.clearValue();
-    maritalStatusRef.current.clearValue();
-    teamRef.current.clearValue();
-    contactRef.current.clearValue();
-    contactGenderRef.current.clearValue();
+    setSelectedOption(null);
     setChildrenCount(0);
+    contactRef.current.clearValue();
     setSelectedImage(userProfile);
-    setEmployeeDates({
-      dateOfBirth: null,
-      startDay: null,
-      anniversary: null,
-    });
   };
 
   const { data: teams } = useQuery({
     queryKey: ["teams"],
     queryFn: fetchTeams,
-  });
-
-  const customStyles = (error) => ({
-    control: (provided) => ({
-      ...provided,
-      borderColor: error ? "red" : provided.borderColor,
-    }),
   });
 
   const onSubmit = async (data) => {
@@ -106,16 +86,11 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
       let formData;
       formData = {
         ...data,
-        ...employeeDates,
-        team: selectedTeam,
-        gender: selectedGender,
-        religion: selectedReligion,
-        ethnicity: selectedEthnicity,
         maritalStatus: selectedMaritalStatus,
         contactRelationType: selectedContactRelation,
-        contactGender: selectedContactGender,
         imageUrl: uploadedEmployeeProfileImage,
       };
+
       const response = await addEmployee({
         employeeData: formData,
       });
@@ -141,11 +116,10 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
     }
   };
 
-  const handleSelectedDate = (date, name) => {
-    setEmployeeDates((prevData) => ({
-      ...prevData,
-      [name]: date ? date.toISOString() : "",
-    }));
+  const convertToISOString = (date) => {
+    return date
+      ? new Date(date.getTime() - date.getTimezoneOffset() * 60000)
+      : "";
   };
 
   const handleChildrenChange = (e) => {
@@ -286,19 +260,19 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                   </div>
                   <div className="input-block mb-3 col-sm-6">
                     <label className="col-form-label">
-                      Email <span className="text-danger">*</span>
+                      Company Email <span className="text-danger">*</span>
                     </label>
                     <input
                       className={`form-control ${
-                        errors.email ? "border-danger" : ""
+                        errors.companyEmail ? "border-danger" : ""
                       }`}
                       type="email"
-                      name="email"
-                      {...register("email")}
+                      name="companyEmail"
+                      {...register("companyEmail")}
                       placeholder="Employee's email"
                     />
-                    {errors.email && (
-                      <div className="text-danger">{errors.email}</div>
+                    {errors.companyEmail && (
+                      <div className="text-danger">{errors.companyEmail}</div>
                     )}
                   </div>
                   <div className="col-sm-6">
@@ -325,23 +299,26 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                     <label className="col-form-label">
                       Team <span className="text-danger">*</span>
                     </label>
-                    <Select
-                      styles={customStyles(errors.team)}
-                      ref={teamRef}
-                      options={teams?.map((team) => ({
-                        value: team.name,
-                        label: team.name,
-                      }))}
-                      placeholder="Select a team"
-                      onChange={(selectedOption) =>
-                        setSelectedTeam(
-                          selectedOption ? selectedOption.value : ""
-                        )
-                      }
-                      isClearable
+                    <Controller
                       name="team"
+                      control={control}
+                      render={({ field }) => (
+                        <Select
+                          {...field}
+                          options={teams?.map((team) => ({
+                            value: team.name,
+                            label: team.name,
+                          }))}
+                          value={selectedOption}
+                          onChange={(selected) => {
+                            setSelectedOption(selected);
+                            field.onChange(selected);
+                          }}
+                          isClearable
+                          placeholder="Select a team"
+                        />
+                      )}
                     />
-
                     {errors.team && (
                       <div className="text-danger">{errors.team}</div>
                     )}
@@ -352,17 +329,25 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                       Date Of Birth <span className="text-danger">*</span>
                     </label>
                     <div className="cal-icon">
-                      <DatePicker
-                        selected={employeeDates.dateOfBirth}
-                        onChange={(date) =>
-                          handleSelectedDate(date, "dateOfBirth")
-                        }
-                        className={`form-control ${
-                          errors.dateOfBirth ? "border-danger" : ""
-                        }`}
-                        dateFormat="dd-MM-yyyy"
-                        name="dateOfBirth"
-                      />
+                      {
+                        <Controller
+                          control={control}
+                          name="dateOfBirth"
+                          render={({ field }) => (
+                            <DatePicker
+                              className={`form-control ${
+                                errors.dateOfBirth ? "border-danger" : ""
+                              }`}
+                              placeholderText="Select date"
+                              onChange={(date) =>
+                                field.onChange(convertToISOString(date))
+                              }
+                              selected={field.value}
+                              dateFormat="dd/MM/yyyy"
+                            />
+                          )}
+                        />
+                      }
                       {errors.dateOfBirth && (
                         <div className="text-danger">{errors.dateOfBirth}</div>
                       )}
@@ -372,79 +357,88 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                     <label className="col-form-label">
                       Religion <span className="text-danger">*</span>
                     </label>
-                    <Select
-                      ref={religionRef}
-                      options={[
-                        { value: "Jewish", label: "Jewish" },
-                        { value: "Christian", label: "Christian" },
-                        { value: "Druze", label: "Druze" },
-                        { value: "Muslim", label: "Muslim" },
-                        { value: "Hindu", label: "Hindu" },
-                        { value: "Buddhist", label: "Buddhist" },
-                        { value: "Atheist", label: "Atheist" },
-                        { value: "Other", label: "Other" },
-                      ]}
-                      placeholder="Select religion"
-                      onChange={(selectedOption) =>
-                        setSelectedReligion(
-                          selectedOption ? selectedOption.value : ""
-                        )
-                      }
-                      isClearable
+                    <Controller
                       name="religion"
+                      control={control}
+                      render={({ field }) => (
+                        <Select
+                          options={[
+                            { value: "Jewish", label: "Jewish" },
+                            { value: "Christian", label: "Christian" },
+                            { value: "Druze", label: "Druze" },
+                            { value: "Muslim", label: "Muslim" },
+                            { value: "Hindu", label: "Hindu" },
+                            { value: "Buddhist", label: "Buddhist" },
+                            { value: "Atheist", label: "Atheist" },
+                            { value: "Other", label: "Other" },
+                          ]}
+                          {...field}
+                          value={selectedOption}
+                          onChange={(selected) => {
+                            setSelectedOption(selected);
+                            field.onChange(selected);
+                          }}
+                          placeholder="Select a religion"
+                          isClearable
+                        />
+                      )}
                     />
                   </div>
                   <div className="input-block mb-3 col-sm-6">
                     <label className="col-form-label">
                       Ethnicity <span className="text-danger">*</span>
                     </label>
-
-                    <Select
-                      ref={ethnicityRef}
-                      options={[
-                        { value: "Ethiopian", label: "Ethiopian" },
-                        { value: "Druze", label: "Druze" },
-                        { value: "Russian", label: "Russian" },
-                        { value: "Ukrainian", label: "Ukrainian" },
-                        { value: "Georgian", label: "Georgian" },
-                        { value: "Belarusian", label: "Belarusian" },
-                        { value: "Azerbaijani", label: "Azerbaijani" },
-                        { value: "Romanian", label: "Romanian" },
-                        { value: "Hungarian", label: "Hungarian" },
-                        { value: "Italian", label: "Italian" },
-                        { value: "Polish", label: "Polish" },
-                        { value: "German", label: "German" },
-                        { value: "Tripolitan", label: "Tripolitan" },
-                        { value: "Syrian", label: "Syrian" },
-                        { value: "Iraqi", label: "Iraqi" },
-                        { value: "Persian", label: "Persian" },
-                        { value: "Yemeni", label: "Yemeni" },
-                        { value: "Moroccan", label: "Moroccan" },
-                        { value: "Mexican", label: "Mexican" },
-                        { value: "Hindu", label: "Hindu" },
-                        { value: "Other", label: "Other" },
-                      ]}
-                      placeholder="Select ethnicity"
-                      onChange={(selectedOption) =>
-                        setSelectedEthnicity(
-                          selectedOption ? selectedOption.value : ""
-                        )
-                      }
-                      isClearable
+                    <Controller
                       name="ethnicity"
+                      control={control}
+                      render={({ field }) => (
+                        <Select
+                          options={[
+                            { value: "Ethiopian", label: "Ethiopian" },
+                            { value: "Druze", label: "Druze" },
+                            { value: "Russian", label: "Russian" },
+                            { value: "Ukrainian", label: "Ukrainian" },
+                            { value: "Georgian", label: "Georgian" },
+                            { value: "Belarusian", label: "Belarusian" },
+                            { value: "Azerbaijani", label: "Azerbaijani" },
+                            { value: "Romanian", label: "Romanian" },
+                            { value: "Hungarian", label: "Hungarian" },
+                            { value: "Italian", label: "Italian" },
+                            { value: "Polish", label: "Polish" },
+                            { value: "German", label: "German" },
+                            { value: "Tripolitan", label: "Tripolitan" },
+                            { value: "Syrian", label: "Syrian" },
+                            { value: "Iraqi", label: "Iraqi" },
+                            { value: "Persian", label: "Persian" },
+                            { value: "Yemeni", label: "Yemeni" },
+                            { value: "Moroccan", label: "Moroccan" },
+                            { value: "Mexican", label: "Mexican" },
+                            { value: "Hindu", label: "Hindu" },
+                            { value: "Other", label: "Other" },
+                          ]}
+                          {...field}
+                          value={selectedOption}
+                          onChange={(selected) => {
+                            setSelectedOption(selected);
+                            field.onChange(selected);
+                          }}
+                          placeholder="Select ethnicity"
+                          isClearable
+                        />
+                      )}
                     />
                   </div>
                   <div className="input-block mb-3 col-sm-6">
                     <label className="col-form-label">
-                      Address <span className="text-danger">*</span>
+                      City Of Residence <span className="text-danger">*</span>
                     </label>
                     <input
                       className={`form-control ${
                         errors.address ? "border-danger" : ""
                       }`}
-                      type="text"
+                      type="cityOfResidence"
                       name="address"
-                      {...register("address")}
+                      {...register("cityOfResidence")}
                       placeholder="Employee's address"
                     />
                     {errors.address && (
@@ -455,21 +449,21 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                     <label className="col-form-label">
                       Gender <span className="text-danger">*</span>
                     </label>
-                    <Select
-                      ref={genderRef}
-                      options={[
-                        { value: "male", label: "Male" },
-                        { value: "female", label: "Female" },
-                        { value: "other", label: "Other" },
-                      ]}
-                      placeholder="Select a gender"
-                      onChange={(selectedOption) =>
-                        setSelectedGender(
-                          selectedOption ? selectedOption.value : ""
-                        )
-                      }
-                      isClearable
+                    <Controller
                       name="gender"
+                      control={control}
+                      render={({ field }) => (
+                        <Select
+                          options={genderOptions}
+                          {...field}
+                          value={selectedOption}
+                          onChange={(selected) => {
+                            setSelectedOption(selected);
+                            field.onChange(selected);
+                          }}
+                          isClearable
+                        />
+                      )}
                     />
                   </div>
                   <div className="input-block mb-3 col-sm-6">
@@ -500,7 +494,6 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                       <div className="col-12">
                         <h5 className="mb-3">Spouse Details</h5>
                       </div>
-                      {/* Spouse's Full Name */}
                       <label className="col-form-label">
                         Spouse's Full Name
                         <span className="text-danger"> *</span>
@@ -517,29 +510,27 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                         </div>
                       </div>
 
-                      {/* Spouse's Gender */}
                       <label className="col-form-label">
                         Spouse's Gender <span className="text-danger"> *</span>
                       </label>
                       <div className="row mb-3">
                         <div className="col-sm-12">
-                          <Select
-                            options={[
-                              { value: "male", label: "Male" },
-                              { value: "female", label: "Female" },
-                              { value: "other", label: "Other" },
-                            ]}
-                            placeholder="Select spouse's gender"
-                            onChange={(selectedOption) =>
-                              setValue("genderOfSpouse", selectedOption?.value)
-                            }
-                            isClearable
-                            name="genderOfSpouse"
+                          <Controller
+                            name="spouseGender"
+                            control={control}
+                            render={({ field }) => (
+                              <Select
+                                options={genderOptions}
+                                onChange={(selectedOption) =>
+                                  field.onChange(selectedOption?.value || "")
+                                }
+                                isClearable
+                              />
+                            )}
                           />
                         </div>
                       </div>
 
-                      {/* Spouse's Date of Birth */}
                       <label className="col-form-label">
                         Spouse's Date of Birth{" "}
                         <span className="text-danger"> *</span>
@@ -547,18 +538,22 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                       <div className="row mb-3">
                         <div className="col-sm-12">
                           <div className="cal-icon">
-                            <DatePicker
-                              selected={watch("spouseDob")}
-                              onChange={(date) =>
-                                setValue("spouseDob", date)
-                              }
-                              className={`form-control ${
-                                errors?.spouseDob?.dateOfBirth
-                                  ? "border-danger"
-                                  : ""
-                              }`}
-                              dateFormat="dd-MM-yyyy"
-                              name={"spouseDob"}
+                            <Controller
+                              control={control}
+                              name="spouseDob"
+                              render={({ field }) => (
+                                <DatePicker
+                                  placeholderText="Select date"
+                                  onChange={(date) =>
+                                    field.onChange(convertToISOString(date))
+                                  }
+                                  selected={watch("spouseDob")}
+                                  dateFormat="dd/MM/yyyy"
+                                  className={`form-control ${
+                                    errors.startDay ? "border-danger" : ""
+                                  }`}
+                                />
+                              )}
                             />
                             {errors?.spouseDob && (
                               <div className="text-danger">
@@ -567,23 +562,29 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                             )}
                           </div>
                         </div>
-                      </div>                                      
+                      </div>
                       <div className="input-block mb-3 col-sm-8">
                         <label className="col-form-label">
                           Wedding Anniversary
                         </label>
                         <span className="text-danger"> *</span>
                         <div className="cal-icon">
-                          <DatePicker
-                            selected={employeeDates.anniversary}
-                            onChange={(date) =>
-                              handleSelectedDate(date, "anniversary")
-                            }
-                            className={`form-control ${
-                              errors.anniversary ? "border-danger" : ""
-                            }`}
-                            dateFormat="dd-MM-yyyy"
+                          <Controller
+                            control={control}
                             name="anniversary"
+                            render={({ field }) => (
+                              <DatePicker
+                                placeholderText="Select date"
+                                onChange={(date) =>
+                                  field.onChange(convertToISOString(date))
+                                }
+                                selected={field.value}
+                                dateFormat="dd/MM/yyyy"
+                                className={`form-control ${
+                                  errors.startDay ? "border-danger" : ""
+                                }`}
+                              />
+                            )}
                           />
                           {errors.anniversary && (
                             <div className="text-danger">
@@ -646,11 +647,12 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                       {/* Child's Gender */}
                       <div className="input-block col-md-4">
                         <label className="col-form-label">
-                          Child's Relation type <span className="text-danger"> *</span>
+                          Child's Relation type{" "}
+                          <span className="text-danger"> *</span>
                         </label>
                         <Select
                           options={[
-                            { value: "Son", label: "Son" },                         
+                            { value: "Son", label: "Son" },
                             { value: "Daughter", label: "Daughter" },
                             { value: "Son", label: "Son" },
                             { value: "Half Son", label: "Half Son" },
@@ -703,16 +705,20 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                       Start Day <span className="text-danger">*</span>
                     </label>
                     <div className="cal-icon">
-                      <DatePicker
-                        selected={employeeDates.startDay}
-                        onChange={(date) =>
-                          handleSelectedDate(date, "startDay")
-                        }
-                        className={`form-control ${
-                          errors.startDay ? "border-danger" : ""
-                        }`}
-                        dateFormat="dd-MM-yyyy"
+                      <Controller
+                        control={control}
                         name="startDay"
+                        render={({ field }) => (
+                          <DatePicker
+                            placeholderText="Select date"
+                            onChange={(e) => field.onChange(e)}
+                            selected={field.value}
+                            dateFormat="dd/MM/yyyy"
+                            className={`form-control ${
+                              errors.startDay ? "border-danger" : ""
+                            }`}
+                          />
+                        )}
                       />
                       {errors.startDay && (
                         <div className="text-danger">{errors.startDay}</div>
@@ -734,14 +740,14 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                   </div>
                   <div className="input-block mb-3 col-sm-8">
                     <label className="col-form-label">
-                      Favorite Singer <span className="text-danger">*</span>
+                      Favorite Singers <span className="text-danger">*</span>
                     </label>
                     <input
                       className={`form-control`}
                       type="text"
-                      name="favoriteSinger"
-                      {...register("favoriteSinger")}
-                      placeholder={`favorite singer`}
+                      name="favoriteSingers"
+                      {...register("favoriteSingers")}
+                      placeholder={`favorite singers`}
                     />
                   </div>
                   <div className="col-sm-12">
@@ -896,21 +902,22 @@ const AddEmployeeModal = ({ onEmployeeAdded }) => {
                           <label className="col-form-label">
                             Gender <span className="text-danger">*</span>
                           </label>
-                          <Select
-                            ref={contactGenderRef}
-                            options={[
-                              { value: "Male", label: "Male" },
-                              { value: "Female", label: "Female" },
-                              { value: "Other", label: "Other" },
-                            ]}
-                            placeholder="Select a gender"
-                            onChange={(selectedOption) =>
-                              setSelectedContactGender(
-                                selectedOption ? selectedOption.value : ""
-                              )
-                            }
-                            isClearable
+                          <Controller
                             name="contactGender"
+                            control={control}
+                            render={({ field }) => (
+                              <Select
+                                options={genderOptions}
+                                {...field}
+                                value={selectedOption}
+                                onChange={(selected) => {
+                                  setSelectedOption(selected);
+                                  field.onChange(selected);
+                                }}
+                                placeholder="Select gender"
+                                isClearable
+                              />
+                            )}
                           />
                         </div>
                         <div className="col-sm-4">
