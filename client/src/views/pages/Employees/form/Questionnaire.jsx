@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiLogOut } from "react-icons/fi";
@@ -62,9 +63,9 @@ const Questionnaire = () => {
 
   return (
     <div className="page1" >
-      <div className="page">
+      <div className="page2">
         <h1 className="title">Employee Questionnaire</h1>
-        <div className="content">
+        <div className="content-page">
           {questions.map((question, index) => (
             <div key={index} className="question-card">
               <p className="question-text">{question}</p>

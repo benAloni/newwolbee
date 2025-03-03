@@ -12,7 +12,7 @@ import { fetchEmployees, fetchUserProfilePic } from "../../../../../services";
 import EmployeesWorkingHours from "./EmployeesWorkingHours";
 import CreateEmployeeEvent from "../../../Employees/PersonalEvents/CreateEmployeeEvent";
 import { GrLinkNext } from "react-icons/gr";
-import "./AdminStatistics.css"
+import { useGetTeamsQuery } from "../../../../../services";
 
 
 export default function AdminStatistics() {
@@ -29,6 +29,7 @@ export default function AdminStatistics() {
   const [filteredEmployees, setFilteredEmployees] = useState([]);
 
   const queryClient = useQueryClient();
+  const { data: teams } = useGetTeamsQuery();
 
   useEffect(() => {
     const today = new Date();
@@ -56,10 +57,7 @@ export default function AdminStatistics() {
     queryFn: () => fetchUserProfilePic(uid),
     enabled: !!uid,
   });
-  const { data: teams } = useQuery({
-    queryKey: ["teams"],
-    queryFn: fetchTeams,
-  });
+  
 
   useEffect(() => {
     if (employees) {
@@ -215,7 +213,7 @@ export default function AdminStatistics() {
               {employees &&
                 filteredEmployees?.map((employee) => (
                   <div key={employee._id} className="profile-img">
-                    <Link to={`/profile/${employee._id}`} className="avatar">
+                    <Link to={`/profile/${employee.employeeId}`} className="avatar">
                       <img
                         loading="lazy"
                         src={employee.imageUrl}
@@ -224,7 +222,7 @@ export default function AdminStatistics() {
                       />
                     </Link>
                     <span className="employee-fullname">
-                      <Link to={`/profile/${employee._id}`}>
+                      <Link to={`/profile/${employee.employeeId}`}>
                         {employee.fullName}
                       </Link>
                     </span>
