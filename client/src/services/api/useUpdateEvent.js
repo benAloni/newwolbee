@@ -6,15 +6,9 @@ import { auth } from '../../firebase/firebaseConfig';
 const useUpdateEvent = (eventType) => {
   const updateEventMutation = useMutation({
     mutationFn: async (eventData) => {
-      const token = await auth.currentUser.getIdToken();
       const response = await axios.post(
         `${process.env.REACT_APP_SERVER_URI}/employee/create-marriage-event`,  
-        eventData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        eventData
       );
       return response.data;
     },
@@ -34,15 +28,9 @@ const useUpdateEvent = (eventType) => {
 const useUpdateVacation = () => {
   const addVacationForEmployeeMutation = useMutation({
     mutationFn: async (vacationData) => {
-      const token = await auth.currentUser.getIdToken();
       const response = await axios.post(
         `${process.env.REACT_APP_SERVER_URI}/employee/create-vacation`,
-        vacationData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        vacationData
       );
       return response.data;
     },
@@ -68,6 +56,7 @@ const useUpdateVacation = () => {
 
   return { addVacationForEmployeeMutation, updateVacation };
 };
+
 
 
 
@@ -98,23 +87,17 @@ const useUpdateVacation = () => {
 const useUpdateSickDay = () => {
   const updateSickDayMutation = useMutation({
     mutationFn: async (sickDayData) => {
-      const token = await auth.currentUser.getIdToken();
       const response = await axios.post(
         `${process.env.REACT_APP_SERVER_URI}/employee/create-sick-leave`,
-        sickDayData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        sickDayData
       );
       return response.data;
     },
     onSuccess: () => {
-      console.log('sickDay added successfully');
+      console.log('Sick day added successfully');
     },
     onError: (error) => {
-      console.error('Error adding sickDay:', error);
+      console.error('Error adding sick day:', error);
     },
   });
 
@@ -135,15 +118,9 @@ const useUpdateSickDay = () => {
 const useAddEventForSon = () => {
   const addEventForSonMutation = useMutation({
     mutationFn: async (sonEventData) => {
-      const token = await auth.currentUser.getIdToken();
       const response = await axios.post(
         `${process.env.REACT_APP_SERVER_URI}/addSonEvents`,
-        sonEventData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        sonEventData
       );
       return response.data;
     },
@@ -169,4 +146,4 @@ const useAddEventForSon = () => {
   return { addEventForSonMutation, addEventForSon };
 };
 
-export { useUpdateVacation, useUpdateSickDay, useAddEventForSon,useUpdateEvent };
+export { useUpdateVacation, useUpdateSickDay, useAddEventForSon, useUpdateEvent };
