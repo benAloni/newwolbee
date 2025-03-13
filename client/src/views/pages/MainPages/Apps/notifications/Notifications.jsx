@@ -5,7 +5,7 @@ import ShowAllNotifications from "./mainNotifications/ShowAllNotifications";
 import HeaderNotifications from "./mainNotifications/HeaderNotifications";
 import ShowNewNotifications from "./mainNotifications/ShowNewNotifications";
 import "./css/notifications.css";
-
+import { useParams } from "react-router-dom";
 import ShowHolidaysNotifications from "./mainNotifications/ShowNotifications/ShowHolidaysNotifications";
 import { userProfile } from "../../../../../imgs";
 import {
@@ -21,6 +21,8 @@ import { getHolidaysFromApi } from "../../../../../services/api/holidaysDetails"
 
 const Notifications = () => {
   const navigate = useNavigate();
+   const {numOfDaysPrior} = useParams();
+  const daysPrior = numOfDaysPrior || "3"
   //-------Modals states--------------------------------------------
   const [homeMeetingModal, setHomeMeetingModal] = useState(false);
   const [employeeWorkRoutineModal, setEmployeeWorkRoutineModal] = useState(false);

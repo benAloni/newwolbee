@@ -36,7 +36,7 @@ const useUpdateVacation = () => {
     mutationFn: async (vacationData) => {
       const token = await auth.currentUser.getIdToken();
       const response = await axios.post(
-        `${process.env.REACT_APP_SERVER_URI}/updateEmployeeVacation`,
+        `${process.env.REACT_APP_SERVER_URI}/employee/create-vacation`,
         vacationData,
         {
           headers: {
@@ -100,7 +100,7 @@ const useUpdateSickDay = () => {
     mutationFn: async (sickDayData) => {
       const token = await auth.currentUser.getIdToken();
       const response = await axios.post(
-        `${process.env.REACT_APP_SERVER_URI}/updateEmployeeSickLeave`,
+        `${process.env.REACT_APP_SERVER_URI}/employee/create-sick-leave`,
         sickDayData,
         {
           headers: {
