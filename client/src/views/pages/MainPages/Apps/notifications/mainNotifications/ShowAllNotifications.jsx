@@ -14,7 +14,10 @@ const ShowAllNotifications = ({
   notifications,
 }) => {
   const navigate = useNavigate();
-  const [hoveredIcon, setHoveredIcon] = useState({ snooze: null, dismiss: null });
+  const [hoveredIcon, setHoveredIcon] = useState({
+    snooze: null,
+    dismiss: null,
+  });
   const [isPostponeBtnClicked, setIsPostponeBtnClicked] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const queryClient = useQueryClient();
@@ -26,8 +29,8 @@ const ShowAllNotifications = ({
       if (notification) {
         const updatedData = {
           id: notification._id,
-          hasBeenDismissed: false,
-          hasBeenHandled: notification.hasBeenHandled,
+          dismissed: false,
+          handled:notification.handled,
           reminderDate,
           archived: true,
         };
@@ -59,7 +62,9 @@ const ShowAllNotifications = ({
       {displayedNotifications.map((notification) => (
         <div
           key={notification._id}
-          className={`notification-item ${notification.dismissed ? "dismissed" : ""}`}
+          className={`notification-item ${
+            notification.dismissed ? "dismissed" : ""
+          }`}
         >
           <div className={`priority-indicator ${notification.priority}`}>
             {notification.priority}
@@ -71,12 +76,11 @@ const ShowAllNotifications = ({
             <p>{notification.message}</p>
           </div>
           <div className="notification-date">
-            <i className="fa fa-clock-o" aria-hidden="true"></i>
-            <span>{new Date(notification.date).toLocaleString()}</span>
+            <span>{new Date(notification.createdAt).toLocaleDateString('en-GB')}</span>
           </div>
-          {notification.image && (
+          {notification.imageUrl && (
             <img
-              src={notification.image}
+              src={notification.imageUrl}
               alt="employee"
               className="notification-image"
             />
@@ -100,16 +104,15 @@ const ShowAllNotifications = ({
               />
               {isPostponeBtnClicked === notification._id && (
                 <div className="postpone-container">
-                 <DatePicker
-  selected={selectedDate}
-  onChange={handleDatePickerSelect}
-  dateFormat="dd/MM/yyyy"
-  className="custom-datepicker"
-  calendarClassName="custom-calendar"
-  popperPlacement="bottom-start"
-  portalId="root" 
-/>
-
+                  <DatePicker
+                    selected={selectedDate}
+                    onChange={handleDatePickerSelect}
+                    dateFormat="dd/MM/yyyy"
+                    className="custom-datepicker"
+                    calendarClassName="custom-calendar"
+                    popperPlacement="bottom-start"
+                    portalId="root"
+                  />
 
                   <button
                     className="postpone-confirm-btn"
@@ -129,7 +132,9 @@ const ShowAllNotifications = ({
             {/* Delete Button */}
             <div
               className="icon-container"
-              onClick={() => archiveNotificationMutation.mutate({ id: notification._id })}
+              onClick={() =>
+                archiveNotificationMutation.mutate({ id: notification._id })
+              }
               onMouseEnter={() =>
                 setHoveredIcon({ ...hoveredIcon, dismiss: notification._id })
               }

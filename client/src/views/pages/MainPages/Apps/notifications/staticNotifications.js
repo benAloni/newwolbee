@@ -1,6 +1,10 @@
 import nicole from "../../../../../imgs/avatar_4.JPG";
 import jacob from "../../../../../imgs/jacob.jpg";
 import john from "../../../../../imgs/avatar_6.JPG";
+
+const today = new Date()
+today.toLocaleDateString('en-GB')
+
 const staticNotifications = [
   {
     _id: 11,
@@ -15,7 +19,7 @@ const staticNotifications = [
     read: false,
     viewed: false,
     dismissed: false,
-    startDay: "2021-08-24",
+    createdAt: new Date(today),
     date: "1996-09-08",
     image: nicole,
   },
@@ -28,7 +32,7 @@ const staticNotifications = [
       "Tomorrow is the international pizza day. View your options for spoiling your team!",
     className: "bg-pink",
     link: "/task-board",
-    startDay: "2021-08-24",
+    createdAt: new Date(today),
     date: "1996-09-08",
     read: false,
     dismissed: false,
@@ -42,7 +46,7 @@ const staticNotifications = [
     fullName: "Fourth of July",
     message:
       "The Fourth of July celebration is in one month. Ensure there are food options for those with allergies and dietary preferences.",
-    startDay: "2021-08-24",
+    createdAt: new Date(today),
     date: "2024-12-08",
     className: "bg-info",
     read: false,
@@ -56,7 +60,7 @@ const staticNotifications = [
     priorityNumber: 3,
     message: "Note! A meeting was arranged with Nicole when she is at home",
     link: "/departments",
-    startDay: "2021-08-24",
+    createdAt: new Date(today),
     date: "1996-09-08",
     read: false,
     viewed: false,
@@ -71,7 +75,7 @@ const staticNotifications = [
     priorityNumber: 2,
     message:
       "Jacob used over 20 days of sick days in the last quarter. Let him know he has reached his limit.",
-    startDay: "2021-08-24",
+    createdAt: new Date(today),
     date: "1996-09-08",
     read: false,
     viewed: false,
@@ -85,7 +89,7 @@ const staticNotifications = [
     priorityNumber: 2,
     message: "John's work routine has significantly changed.",
     link: "/departments",
-    startDay: "2021-08-24",
+    createdAt: new Date(today),
     date: "1996-09-08",
     read: false,
     dismissed: false,
@@ -101,7 +105,7 @@ const staticNotifications = [
     message:
       "A Maccabi Tel-Aviv Soccer Game is coming up in a week. Wanna find out who from your workers is a fan of the team?",
     link: "/task-board",
-    startDay: "2021-08-24",
+    createdAt: new Date(today),
     date: "1996-09-08",
     read: false,
     viewed: false,
@@ -116,7 +120,7 @@ const staticNotifications = [
     message:
       "John is flying to rome tomorrow - lets make it a real vacation for him.",
     link: "/low-priority-notification",
-    startDay: "2021-08-24",
+    createdAt: new Date(today),
     date: "1996-09-08",
     className: "vacation",
     read: false,

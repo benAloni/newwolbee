@@ -7,151 +7,101 @@ import ShowNewNotifications from "./mainNotifications/ShowNewNotifications";
 import "./css/notifications.css";
 import { useParams } from "react-router-dom";
 import ShowHolidaysNotifications from "./mainNotifications/ShowNotifications/ShowHolidaysNotifications";
-import { userProfile } from "../../../../../imgs";
-import {
-  fetchEmployee,
-  fetchEmployeesNotifications,
-  fetchEmployeesProfilePics,
-  fetchNotifications,
-} from "../../../../../services";
 import staticNotificationsData from "./staticNotifications";
-import { useQuery } from "@tanstack/react-query";
 import NotificationsModals from "../../../../../components/Modals/Notifications/NotificationsModals";
 import { getHolidaysFromApi } from "../../../../../services/api/holidaysDetails";
+import { useGetNotificationsQuery } from "../../../../../services/queries/notificationsQuery";
 
 const Notifications = () => {
   const navigate = useNavigate();
-   const {numOfDaysPrior} = useParams();
-  const daysPrior = numOfDaysPrior || "3"
+  const { numOfDaysPrior } = useParams();
+  const daysPrior = numOfDaysPrior || "3";
   //-------Modals states--------------------------------------------
   const [homeMeetingModal, setHomeMeetingModal] = useState(false);
-  const [employeeWorkRoutineModal, setEmployeeWorkRoutineModal] = useState(false);
+  const [employeeWorkRoutineModal, setEmployeeWorkRoutineModal] =
+    useState(false);
   const [soccerGameModal, setSoccerGameModal] = useState(false);
   const [vacationModal, setVacationModal] = useState(false);
   //------------------------------------------------------------------
   const [viewOption, setViewOption] = useState("All");
   const [currentPage, setCurrentPage] = useState(0); //for tracking current page
   const itemsPerPage = 10;
-  const [notifications, setNotifications] = useState([]);
-  const staticNotifications = staticNotificationsData;
-
+  const [notifications, setNotifications] = useState(staticNotificationsData);
+  const { data, isLoading, error } = useGetNotificationsQuery(daysPrior);
   const [employeeId, setEmployeeId] = useState(null);
 
-  const fetchData = async () => {
-    const [notifications, employeesNotifications] = await Promise.all([
-      fetchNotifications(),
-      getNotificationsWithEmployeesProfilePics(),
-    ]);
-    return [...notifications, ...employeesNotifications];
-  };
-  const getNotificationsWithEmployeesProfilePics = async () => {
-    let employeesNotificationsWithProfilePics;
-    try {
-      const notifications = await fetchEmployeesNotifications();
-      employeesNotificationsWithProfilePics = await Promise.all(
-        notifications?.map(async (notification) => {
-          const employee = await fetchEmployee(notification.eventDetails.employeeId);
-          return {
-            ...notification,
-            imageUrl: employee.imageUrl || userProfile,
-          };
-        })
-      );
-      return employeesNotificationsWithProfilePics;
-    } catch (error) {
-      console.log("Error getting notifications :", error);
-    }
-  };
-  const { data } = useQuery({
-    queryKey: ["allNotificationsData"],
-    queryFn: fetchData,
-  });
-  const fetchHolidaysAndGenerateNotifications = async (data) => {
+  const generateNotifications = async (data) => {
+    if (!data ) return [];
     const today = new Date();
     const formattedHolidays = await getHolidaysFromApi();
 
-    const eventNotifications = data?.flatMap((event) => {
-      const notifications = [];
-      // Birthday Notification
-      if (event.eventDetails?.type === "birthday") {
-        notifications.push({
-          _id: event._id,
-          id: event.eventDetails.employeeId,
-          priority: event.priority,
-          message: event.title,
+    let newNotifications = [];
+
+    for (const event of data) {
+      if (event.eventType === "Birthday") {
+        newNotifications.push({
+          ...event,
+          _id: event.id,
           link: "/events",
           read: false,
-          reminderDate: event.reminderDate,
-          hasBeenHandled: event.hasBeenHandled,
-          hasBeenDismissed: event.hasBeenDismissed,
-          image: event.imageUrl,
-          startDay: event.notificationCreatedAt,
-          date: event.eventDetails.dateOfTheEvent,
           className: "birthday",
         });
       }
-      // Vacation Notification
-      if (event.eventDetails?.type === "vacation") {
-        const vacationStartDate = new Date(event.notificationCreatedAt);
-        vacationStartDate.setDate(vacationStartDate.getDate() - 1); //subtracting by one day cuz notificationCreatedAt is saved in mongo without time zone
-        notifications.push({
-          _id: event._id,
-          id: event.eventDetails.employeeId,
-          priority: event.priority,
-          message: event.title,
+      if (event.eventType === "Vacation") {
+        newNotifications.push({
+          ...event,
+          _id: event.id,
           link: "/events",
           read: false,
-          reminderDate: event.reminderDate,
-          hasBeenHandled: event.hasBeenHandled,
-          hasBeenDismissed: event.hasBeenDismissed,
-          image: event.imageUrl,
-          startDay: vacationStartDate,
-          date: event.eventDetails.dateOfTheEvent,
           className: "vacation",
         });
       }
-      // Holiday Notification
-      if (formattedHolidays.length > 0) {
-        formattedHolidays.forEach((holiday) => {
-          if (event.title === holiday.name) {
-            notifications.push({
-              _id: event._id,
-              priority: "Low",
-              message: `${holiday.name} is coming up on ${new Date(
-                holiday.date
-              ).toLocaleDateString()}`,
-              fullName: holiday.name,
-              link: "/events",
-              title: holiday.name,
-              start: holiday.date,
-              className: event.className,
-              read: false,
-              viewed: false,
-              dismissed: false,
-              startDay: today,
-              description: event.description,
-              underDescription: event.underDescription,
-              options: event.options,
-            });
-          }
-        });
-      }
-      return notifications;
-    });
-
-    if (eventNotifications === undefined) {
-      setNotifications([...staticNotifications]);
-    } else {
-      setNotifications([...staticNotifications, ...eventNotifications]);
     }
+
+    setNotifications((prev) => [...prev, ...newNotifications]);
   };
 
   useEffect(() => {
-    if (notifications) {
-      fetchHolidaysAndGenerateNotifications(data);
-    }
+    const fetchData = async () => {
+      if (data) {
+        try {
+          await generateNotifications(data);
+        } catch (error) {
+          console.error("Error fetching notifications:", error);
+        }
+      }
+    };
+
+    fetchData();
   }, [data]);
 
+
+  // Holiday Notification
+  // if (formattedHolidays.length > 0) {
+  //   formattedHolidays.forEach((holiday) => {
+  //     if (event.title === holiday.name) {
+  //       notifications.push({
+  //         _id: event._id,
+  //         priority: "Low",
+  //         message: `${holiday.name} is coming up on ${new Date(
+  //           holiday.date
+  //         ).toLocaleDateString()}`,
+  //         fullName: holiday.name,
+  //         link: "/events",
+  //         title: holiday.name,
+  //         start: holiday.date,
+  //         className: event.className,
+  //         read: false,
+  //         viewed: false,
+  //         dismissed: false,
+  //         startDay: today,
+  //         description: event.description,
+  //         underDescription: event.underDescription,
+  //         options: event.options,
+  //       });
+  //     }
+  //   });
+  // }
   const [modalOpenNo, setModalOpenNo] = useState(false);
   const [modalOpenYes, setModalOpenYes] = useState(false);
   const [modalContentNo, setModalContentNo] = useState(null);
@@ -177,12 +127,6 @@ const Notifications = () => {
     setNotificationVisible(!isNotificationVisible);
   };
 
-  const rowStyle = {
-    display: "flex",
-    flexWrap: "wrap",
-    justifyContent: "center",
-    gap: "20px",
-  };
   const priorityOrder = { Low: 1, Medium: 2, High: 3 };
   // Sorting notifications based on the selected option
   if (selectedSortingOption === "A-Z") {
@@ -255,7 +199,7 @@ const Notifications = () => {
     const employeeMongoId = notification._id;
     setEmployeeId(employeeMongoId);
     if (notification.className === "birthday") {
-      navigate(`/get-a-birthday-present/${notification.id}`);
+      navigate(`/get-a-birthday-present/${notification.employeeId}`);
     } else if (
       notification.className === "bg-info" &&
       notification.options !== undefined
@@ -301,10 +245,7 @@ const Notifications = () => {
         </div>
       </div>
       <div className="pagination-controls">
-        <button
-          onClick={handlePreviousPage}
-          disabled={currentPage === 0}
-        >
+        <button onClick={handlePreviousPage} disabled={currentPage === 0}>
           ⬅
         </button>
         <button

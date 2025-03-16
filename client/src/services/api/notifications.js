@@ -1,10 +1,12 @@
 import { client } from "../axiosClient/axiosClientApi";
 
-export const fetchNotifications = async (daysPrior) => {
+export const fetchNotifications = async (numOfDaysPrior) => {
   try {
-      const response = await client.get(`/notifications/${daysPrior}`);
+      const response = await client.get(`/notifications/${numOfDaysPrior}`);
       if (response.status === 200) {
-          return response.data;
+        // console.log(response.data.notifications);
+        
+          return response.data.notifications;
       }
   } catch (error) {
       console.log("Error fetching notifications:", error);
