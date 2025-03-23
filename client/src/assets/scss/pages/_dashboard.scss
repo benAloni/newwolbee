@@ -37,10 +37,16 @@
   padding: 0.3vmin;
 }
 span.employee-fullname {
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: #111;
+  text-align: center;
   margin-top: 20px;
   margin-bottom: 20px;
   display: block;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
 }
+
 a{
   color: #000;
 }
@@ -94,7 +100,7 @@ a{
     font-size: 16px;
     text-align: center;
     height: 30vmax;
-    width: 40vmax;
+    width: 45vmax;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -108,7 +114,7 @@ a{
     align-items: center;
     width: 90%;
     overflow-y: auto;
-    padding: 15px;
+    padding: 10px;
     scrollbar-width: none;
   }
   .card-header {
@@ -177,6 +183,7 @@ a{
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    
   }
   .dashboard-statistics {
     grid-template-columns: repeat(2, 1fr);
@@ -291,92 +298,96 @@ a{
     margin-bottom: 15px;
   }
 }
-@media (min-width: 1081px) and (max-width: 1200px) {
-  .admin-dashboard {
+
+
+
+  @media (min-width: 1081px) and (max-width: 1200px) {
+    .admin-dashboard {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      margin: 50px 100px;
+    }
+    .dashboard-statistics {
+      grid-template-columns: repeat(3, 1fr);
+      margin: 0 13%;
+    }
+    .dashboard-header {
+      margin-left: 150px;
+    }
+    .user-profile-container {
+      position: absolute;
+      top: 0;
+      right: 0;
+      margin: 10px;
+    }
+    .user-profile {
+      width: 5vmin;
+      height: 5vmin;
+      border-radius: 50%;
+    }
+    .data-container {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      font-size: 16px;
+      text-align: center;
+      height: 40vmin;
+      width: 50vmin;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .members-card {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 5rem;
+      width: 90%;
+      overflow-y: auto;
+      padding: 15px;
+      scrollbar-width: none;
+    }
+  
+    .members-card::-webkit-scrollbar {
+      display: none;
+    }
+  
+    .h3 {
+      margin-bottom: 10px;
+    }
+    .vacation-card > .h3 {
+      margin-bottom: 30px;
+    }
+    img.employee-image {
+      width: 5vmin;
+      height: 5vmin;
+      margin: 20px;
+    }
+    .progress-circle {
+      width: 20vmin;
+      height: 20vmin;
+      margin-top: 2vmin;
+      padding: 0.3vmin;
+    }
+    .members-hours-card > h3{
+      margin-bottom: 35px;
+    }
+    .card-header {
+      margin-bottom: 15px;
+    }
+    .card-header > .card-title {
+      margin-bottom: 15px;
+    }
+  }
+
+  @media (min-width: 1201px) and (max-width: 3550px) {
+    .admin-dashboard {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin: 50px 100px;
-  }
-  .dashboard-statistics {
-    grid-template-columns: repeat(3, 1fr);
-    margin: 0 13%;
-  }
-  .dashboard-header {
-    margin-left: 150px;
-  }
-  .user-profile-container {
-    position: absolute;
-    top: 0;
-    right: 0;
-    margin: 10px;
-  }
-  .user-profile {
-    width: 5vmin;
-    height: 5vmin;
-    border-radius: 50%;
-  }
-  .data-container {
-    background: white;
-    padding: 15px;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    font-size: 16px;
-    text-align: center;
-    height: 40vmin;
-    width: 50vmin;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .members-card {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 5rem;
-    width: 90%;
-    overflow-y: auto;
-    padding: 15px;
-    scrollbar-width: none;
-  }
-
-  .members-card::-webkit-scrollbar {
-    display: none;
-  }
-
-  .h3 {
-    margin-bottom: 10px;
-  }
-  .vacation-card > .h3 {
-    margin-bottom: 30px;
-  }
-  img.employee-image {
-    width: 5vmin;
-    height: 5vmin;
-    margin: 20px;
-  }
-  .progress-circle {
-    width: 20vmin;
-    height: 20vmin;
-    margin-top: 2vmin;
-    padding: 0.3vmin;
-  }
-  .members-hours-card > h3{
-    margin-bottom: 35px;
-  }
-  .card-header {
-    margin-bottom: 15px;
-  }
-  .card-header > .card-title {
-    margin-bottom: 15px;
-  }
-}
-@media (min-width: 1201px) and (max-width: 3550px) {
-  .admin-dashboard {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    margin: 50px 100px;
+    margin: 50px 135px;
   }
   .dashboard-statistics {
     grid-template-columns: repeat(3, 1fr);
@@ -404,7 +415,7 @@ a{
     font-size: 16px;
     text-align: center;
     height: 40vmin;
-    width: 50vmin;
+    width: 58vmin;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -431,8 +442,8 @@ a{
     margin-bottom: 30px;
   }
   img.employee-image {
-    width: 5vmin;
-    height: 5vmin;
+    width: 7vmin;
+    height: 7vmin;
     margin: 20px;
   }
   .progress-circle {
@@ -449,5 +460,126 @@ a{
   }
   .card-header > .card-title {
     margin-bottom: 15px;
+  }
+}
+
+
+.birthday-profile-img {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.birthday-employee-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ddd;
+  transition: transform 0.3s ease-in-out;
+}
+
+.birthday-employee-image:hover {
+  transform: scale(1.1);
+}
+
+.birthday-employee-fullname {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #333;
+  flex-grow: 1;
+  text-align: left;
+}
+
+
+
+.birthday-card {
+  width: 100%;
+  text-align: center;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.birthday-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 10px;
+}
+
+.birthday-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+}
+
+.birthday-item:last-child {
+  border-bottom: none;
+}
+
+.birthday-date {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #666;
+  margin-right: 12px;
+  margin-left: 20px;
+  
+}
+
+.birthday-profile-img {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.birthday-employee-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ddd;
+  transition: transform 0.3s ease-in-out;
+}
+
+.birthday-employee-image:hover {
+  transform: scale(1.1);
+}
+
+.birthday-employee-fullname {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #333;
+  flex-grow: 1;
+  text-align: left;
+}
+
+
+@media screen and (max-width: 1024px) {
+  .dashboard-statistics {
+      grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .dashboard-statistics {
+      grid-template-columns: 1fr;
+  }
+  .members-card {
+      justify-content: center;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .members-card {
+      flex-direction: column;
+      align-items: center;
   }
 }

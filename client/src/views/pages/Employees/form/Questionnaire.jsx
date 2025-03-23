@@ -64,7 +64,7 @@ const Questionnaire = () => {
   return (
     <div className="page1" >
       <div className="page2">
-        <h1 className="title">Employee Questionnaire</h1>
+        <h1 className="title-questionnaria">Employee Questionnaire</h1>
         <div className="content-page">
           {questions.map((question, index) => (
             <div key={index} className="question-card">
